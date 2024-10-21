@@ -1,5 +1,6 @@
 <script setup>
 import Input from './components/ui/Input.vue';
+import Button from './components/ui/Button.vue';
 
 </script>
 
@@ -11,5 +12,7 @@ import Input from './components/ui/Input.vue';
       <Input label="Nome"/>
       <Input label="Email" type="email" />
       <Input label="Senha" type="password"/>
+
+      <Button size="full">Teste</Button>
   </div>
 </template>
