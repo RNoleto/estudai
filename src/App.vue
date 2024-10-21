@@ -5,11 +5,12 @@ import Button from './components/ui/Button.vue';
 </script>
 
 <template>
-  <div class="w-[400px] m-auto p-4 rounded-md bg-blue-500">
-      <Input label="Nome"/>
-      <Input label="Email" type="email" />
-      <Input label="Senha" type="password"/>
-
-      <Button size="full">Teste</Button>
+  <div class="flex items-center justify-center h-screen">
+    <div class="w-[400px] p-4 rounded-lg border border-black shadow-sm shadow-zinc-200">
+        <Input label="Nome"/>
+        <Input label="Email" type="email" />
+        <Input label="Senha" type="password"/>
+        <Button size="full">Teste</Button>
+    </div>
   </div>
 </template>
