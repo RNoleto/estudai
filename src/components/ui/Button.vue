@@ -8,7 +8,7 @@ const button = tv({
     variants: {
         variant: {
             primary: 'bg-black text-zinc-50 hover:bg-zinc-600 ring-zinc-500',
-            secondary: 'bg-zinc-900 text-zinc-50 hover:bg-zinc-800 ring-zinc-900',
+            secondary: 'bg-zinc-500 text-zinc-50 hover:bg-zinc-400 ring-zinc-900',
             delete: 'bg-red-500 text-red-50 hover:bg-red-600 ring-red-500',
         },
         size: {

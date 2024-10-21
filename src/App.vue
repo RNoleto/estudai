@@ -10,7 +10,8 @@ import Button from './components/ui/Button.vue';
         <Input label="Nome"/>
         <Input label="Email" type="email" />
         <Input label="Senha" type="password"/>
-        <Button size="full">Teste</Button>
+        <Button size="full">Botão 1</Button>
+        <Button size="full" variant="secondary">Botão 2</Button>
     </div>
   </div>
 </template>
