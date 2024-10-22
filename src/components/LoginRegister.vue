@@ -35,16 +35,16 @@ const handleRegister = () => {
     <!-- Container principal -->
     <div class="relative w-[900px] h-[440px] bg-white shadow-lg flex overflow-hidden rounded-lg">
       <!-- Div da imagem -->
-      <div :key="isLoginMode" class="w-full transition-all duration-700" :class="isLoginMode ? 'order-1' : 'order-2'">
+      <div :key="isLoginMode" class="opacity-0 w-full transition-all duration-700" :class="isLoginMode ? 'order-1' : 'order-2'">
         <img :src="isLoginMode ? loginImage : registerImage" alt="Imagem" class="w-full h-full object-cover"/>
       </div>
 
       <!-- Div do formulário com transições separadas -->
-      <div class="w-2/3 p-6" :class="isLoginMode ? 'order-2' : 'order-1'">
+      <div class="flex w-2/3 p-6" :class="isLoginMode ? 'order-2' : 'order-1'">
         <!-- Transição para o formulário de Login -->
-        <transition name="fade-slide-login" mode="out-in">
+        <!-- <transition name="fade-slide-login" mode="out-in"> -->
           <!-- Use v-if diretamente -->
-          <form v-if="isLoginMode" @submit.prevent="handleLogin" key="login" class="h-full flex flex-col justify-center">
+          <form v-if="isLoginMode" @submit.prevent="handleLogin" key="login" class="w-full flex flex-col justify-center">
             <h2 class="text-2xl font-bold mb-4">Login</h2>
             <div class="flex-grow flex flex-col justify-center items-center">
               <div class="w-full">
@@ -59,12 +59,12 @@ const handleRegister = () => {
               </div>
             </div>
           </form>
-        </transition>
+        <!-- </transition> -->
 
         <!-- Transição para o formulário de Cadastro -->
-        <transition name="fade-slide-register" mode="out-in">
+        <!-- <transition name="fade-slide-register" mode="out-in"> -->
           <!-- Use v-if diretamente -->
-          <form v-if="!isLoginMode" @submit.prevent="handleRegister" key="register" class="h-full flex flex-col justify-center">
+          <form v-if="!isLoginMode" @submit.prevent="handleRegister" key="register" class="w-full flex flex-col justify-center">
             <h2 class="text-2xl font-bold mb-4">Cadastro</h2>
             <div class="flex-grow flex flex-col justify-center items-center">
               <div class="w-full">
@@ -80,7 +80,7 @@ const handleRegister = () => {
               </div>
             </div>
           </form>
-        </transition>
+        <!-- </transition> -->
       </div>
     </div>
   </div>
@@ -90,7 +90,7 @@ const handleRegister = () => {
 <style>
 /* Animação de transição horizontal e opacidade para troca de formulários de Login */
 .fade-slide-login-enter-active, .fade-slide-login-leave-active {
-  transition: transform 0.7s ease, opacity 0.7s ease;
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }
 .fade-slide-login-enter-from {
   transform: translateX(-100%); /* O formulário de login entra da direita */
@@ -103,7 +103,7 @@ const handleRegister = () => {
 
 /* Animação de transição horizontal e opacidade para troca de formulários de Cadastro */
 .fade-slide-register-enter-active, .fade-slide-register-leave-active {
-  transition: transform 0.7s ease, opacity 0.7s ease;
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }
 .fade-slide-register-enter-from {
   transform: translateX(100%); /* O formulário de cadastro entra da esquerda */
