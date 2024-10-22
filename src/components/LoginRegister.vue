@@ -35,19 +35,16 @@ const handleRegister = () => {
     <!-- Container principal -->
     <div class="relative w-[900px] h-[440px] bg-white shadow-lg flex overflow-hidden rounded-lg">
       <!-- Div da imagem -->
-      <div :class="[ 
-          'w-full transition-all duration-700',
-          isLoginMode ? 'order-1' : 'order-2'
-        ]">
-        <img :src="isLoginMode ? loginImage : registerImage" alt="Imagem" class="w-full h-full object-cover" />
+      <div :key="isLoginMode" class="w-full transition-all duration-700" :class="isLoginMode ? 'order-1' : 'order-2'">
+        <img :src="isLoginMode ? loginImage : registerImage" alt="Imagem" class="w-full h-full object-cover"/>
       </div>
 
-      <!-- Div do formulário com transição -->
-      <div class="w-2/3 p-6">
-        <transition name="fade" mode="out-in">
-          <!-- Formulário de Login -->
-          <form v-if="isLoginMode" @submit.prevent="handleLogin" key="login"
-            class="h-full flex flex-col justify-center">
+      <!-- Div do formulário com transições separadas -->
+      <div class="w-2/3 p-6" :class="isLoginMode ? 'order-2' : 'order-1'">
+        <!-- Transição para o formulário de Login -->
+        <transition name="fade-slide-login" mode="out-in">
+          <!-- Use v-if diretamente -->
+          <form v-if="isLoginMode" @submit.prevent="handleLogin" key="login" class="h-full flex flex-col justify-center">
             <h2 class="text-2xl font-bold mb-4">Login</h2>
             <div class="flex-grow flex flex-col justify-center items-center">
               <div class="w-full">
@@ -56,16 +53,18 @@ const handleRegister = () => {
                 <div class="flex gap-1 mt-4">
                   <Button size="full" @click="handleLogin">Entrar</Button>
                   <Button size="full" @click="toggleMode" class="text-blue-500">
-                    {{ isLoginMode ? 'Não tenho cadastro' : 'Já tenho uma conta' }}
+                    Não tenho cadastro
                   </Button>
                 </div>
               </div>
             </div>
           </form>
+        </transition>
 
-
-          <!-- Formulário de Cadastro -->
-          <form v-else @submit.prevent="handleRegister" key="register" class="h-full flex flex-col justify-center">
+        <!-- Transição para o formulário de Cadastro -->
+        <transition name="fade-slide-register" mode="out-in">
+          <!-- Use v-if diretamente -->
+          <form v-if="!isLoginMode" @submit.prevent="handleRegister" key="register" class="h-full flex flex-col justify-center">
             <h2 class="text-2xl font-bold mb-4">Cadastro</h2>
             <div class="flex-grow flex flex-col justify-center items-center">
               <div class="w-full">
@@ -75,26 +74,43 @@ const handleRegister = () => {
                 <div class="flex gap-1 mt-4">
                   <Button size="full" @click="handleRegister">Cadastrar</Button>
                   <Button size="full" @click="toggleMode" class="text-blue-500">
-                    {{ isLoginMode ? 'Não tenho cadastro' : 'Já tenho uma conta' }}
+                    Já tenho uma conta
                   </Button>
                 </div>
               </div>
             </div>
           </form>
         </transition>
-
-        <!-- Link para alternar entre Login e Cadastro -->
       </div>
     </div>
   </div>
 </template>
 
+
 <style>
-/* Animação de fade para troca de formulários */
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s ease;
+/* Animação de transição horizontal e opacidade para troca de formulários de Login */
+.fade-slide-login-enter-active, .fade-slide-login-leave-active {
+  transition: transform 0.7s ease, opacity 0.7s ease;
 }
-.fade-enter-from, .fade-leave-to {
+.fade-slide-login-enter-from {
+  transform: translateX(-100%); /* O formulário de login entra da direita */
+  opacity: 0;
+}
+.fade-slide-login-leave-to {
+  transform: translateX(100%); /* O formulário de login sai para a esquerda */
+  opacity: 0;
+}
+
+/* Animação de transição horizontal e opacidade para troca de formulários de Cadastro */
+.fade-slide-register-enter-active, .fade-slide-register-leave-active {
+  transition: transform 0.7s ease, opacity 0.7s ease;
+}
+.fade-slide-register-enter-from {
+  transform: translateX(100%); /* O formulário de cadastro entra da esquerda */
+  opacity: 0;
+}
+.fade-slide-register-leave-to {
+  transform: translateX(-100%); /* O formulário de cadastro sai para a direita */
   opacity: 0;
 }
 </style>
