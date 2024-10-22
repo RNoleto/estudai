@@ -35,46 +35,55 @@ const handleRegister = () => {
     <!-- Container principal -->
     <div class="relative w-[900px] h-[440px] bg-white shadow-lg flex overflow-hidden rounded-lg">
       <!-- Div da imagem -->
-      <div
-        :class="[ 
+      <div :class="[ 
           'w-full transition-all duration-700',
           isLoginMode ? 'order-1' : 'order-2'
-        ]"
-      >
-        <img
-          :src="isLoginMode ? loginImage : registerImage"
-          alt="Imagem"
-          class="w-full h-full object-cover"
-        />
+        ]">
+        <img :src="isLoginMode ? loginImage : registerImage" alt="Imagem" class="w-full h-full object-cover" />
       </div>
 
       <!-- Div do formulário com transição -->
       <div class="w-2/3 p-6">
         <transition name="fade" mode="out-in">
           <!-- Formulário de Login -->
-          <form v-if="isLoginMode" @submit.prevent="handleLogin" key="login">
+          <form v-if="isLoginMode" @submit.prevent="handleLogin" key="login"
+            class="h-full flex flex-col justify-center">
             <h2 class="text-2xl font-bold mb-4">Login</h2>
-            <Input label="Email" type="email" v-model="email" />
-            <Input label="Senha" type="password" v-model="password" />
-            <Button @click="handleLogin">Entrar</Button>
+            <div class="flex-grow flex flex-col justify-center items-center">
+              <div class="w-full">
+                <Input label="Email" type="email" v-model="email" />
+                <Input label="Senha" type="password" v-model="password" />
+                <div class="flex gap-1 mt-4">
+                  <Button size="full" @click="handleLogin">Entrar</Button>
+                  <Button size="full" @click="toggleMode" class="text-blue-500">
+                    {{ isLoginMode ? 'Não tenho cadastro' : 'Já tenho uma conta' }}
+                  </Button>
+                </div>
+              </div>
+            </div>
           </form>
 
+
           <!-- Formulário de Cadastro -->
-          <form v-else @submit.prevent="handleRegister" key="register">
+          <form v-else @submit.prevent="handleRegister" key="register" class="h-full flex flex-col justify-center">
             <h2 class="text-2xl font-bold mb-4">Cadastro</h2>
-            <Input label="Nome" type="text" v-model="name" />
-            <Input label="Email" type="email" v-model="email" />
-            <Input label="Senha" type="password" v-model="password" />
-            <Button @click="handleRegister">Cadastrar</Button>
+            <div class="flex-grow flex flex-col justify-center items-center">
+              <div class="w-full">
+                <Input label="Nome" type="text" v-model="name" />
+                <Input label="Email" type="email" v-model="email" />
+                <Input label="Senha" type="password" v-model="password" />
+                <div class="flex gap-1 mt-4">
+                  <Button size="full" @click="handleRegister">Cadastrar</Button>
+                  <Button size="full" @click="toggleMode" class="text-blue-500">
+                    {{ isLoginMode ? 'Não tenho cadastro' : 'Já tenho uma conta' }}
+                  </Button>
+                </div>
+              </div>
+            </div>
           </form>
         </transition>
 
         <!-- Link para alternar entre Login e Cadastro -->
-        <p class="mt-4">
-          <button @click="toggleMode" class="text-blue-500 hover:underline">
-            {{ isLoginMode ? 'Não tenho cadastro' : 'Já tenho uma conta' }}
-          </button>
-        </p>
       </div>
     </div>
   </div>
