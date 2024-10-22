@@ -35,11 +35,11 @@ const handleRegister = () => {
     <!-- Container principal -->
     <div class="relative w-[900px] h-[440px] bg-white shadow-lg flex overflow-hidden rounded-lg">
       <!-- Div da imagem -->
-       <transition name="fade">
-         <div :key="isLoginMode" class="w-2/3 relative z-10" :class="isLoginMode ? 'order-1' : 'order-2'">
+      <transition name="fade">
+        <div :key="isLoginMode" class="w-2/3 relative z-10" :class="isLoginMode ? 'order-1' : 'order-2'">
            <img :src="isLoginMode ? loginImage : registerImage" alt="Imagem" class="w-full h-full object-cover"/>
-         </div>
-       </transition>
+        </div>
+      </transition>
 
       <!-- Div do formulário com transições separadas -->
       <div class="flex w-2/3 p-6" :class="isLoginMode ? 'order-2' : 'order-1'">
@@ -90,23 +90,6 @@ const handleRegister = () => {
 
 
 <style>
-/* Transição de opacidade para a imagem */
-.fade-enter-active {
-  transition: all 0.7s ease;
-}
-
-.fade-leave-active{
-  transition: all 0.7s ease;
-}
-
-.fade-enter {
-  opacity: 0;
-  display: none;
-}
-
-.fade-leave-to{
-  opacity: 0;
-}
 /* Animação de transição horizontal e opacidade para troca de formulários de Login */
 .fade-slide-login-enter-active, .fade-slide-login-leave-active {
   transition: all 0.7s ease;
