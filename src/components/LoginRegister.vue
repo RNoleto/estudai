@@ -31,7 +31,6 @@ const handleRegister = () => {
 </script>
 
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <!-- Container principal -->
     <div class="relative w-[900px] h-[440px] bg-white shadow-lg flex overflow-hidden rounded-lg">
       <!-- Div da imagem -->
@@ -85,7 +84,6 @@ const handleRegister = () => {
         </transition>
       </div>
     </div>
-  </div>
 </template>
 
 
