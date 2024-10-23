@@ -1,10 +1,26 @@
 <script setup>
+import { ref } from 'vue';
 import Search from '../components/ui/Search.vue';
 import Input from '../components/ui/Input.vue';
 import Timer from '../components/ui/Timer.vue';
 
+import StudySumaryModal from '../layouts/StudySumaryModal.vue';
+
 import { useCurrentDate } from '../composables/useCurrentDate';
 const { formattedDate } = useCurrentDate();
+
+//StudySummaryModal
+const isModalOpen = ref(false);
+const totalStudyTime = ref('00:00'); // Você pode definir valores padrões aqui
+const totalPauses = ref(0);
+
+const openModal = () => {
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+};
 </script>
 
 <template>
@@ -17,12 +33,15 @@ const { formattedDate } = useCurrentDate();
             </div>
         </div>
         <div class="flex gap-2 content-center mt-2">
-            <Search placeholder="Pesquise pela matéria" class="w-1/3"/>
-            <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-2/3"/>
+            <Search placeholder="Pesquise pela matéria" class="w-1/3" />
+            <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-2/3" />
         </div>
         <div class="mt-2 bg-red-200">
             <p>Tela de inicio de estudo</p>
             <Timer />
+            <StudySumaryModal v-if="isModalOpen" :isOpen="isModalOpen" :totalStudyTime="totalStudyTime"
+                :totalPauses="totalPauses" :formattedDate="formattedDate" @onClose="closeModal" />
         </div>
+        <button @click="openModal" class="bg-blue-500 text-white px-4 py-2 rounded">Ver Resumo do Estudo</button>
     </div>
 </template>
