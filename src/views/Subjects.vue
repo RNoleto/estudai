@@ -5,7 +5,7 @@ import Search from '../components/ui/Search.vue';
 </script>
 
 <template>
-    <div class="max-w-[1200px] bg-zinc-300 p-[60px] shadow-sm shadow-zinc-200 rounded-md">
+    
         <h2 class="mb-4 font-bold text-xl">Selecione as matérias que deseja estudar.</h2>
         <Search placeholder="Pesquise a matéria..."/>
         <div class="mt-4 flex flex-wrap gap-2 w-full">
@@ -19,5 +19,5 @@ import Search from '../components/ui/Search.vue';
             <Career icon="basil:book-outline" careerName="Direito Civil"/>
         </div>
         <Button class="float-right">Avançar</Button>
-    </div>
+    
 </template>
