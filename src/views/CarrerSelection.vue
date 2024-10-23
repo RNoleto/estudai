@@ -1,6 +1,6 @@
 <script setup>
-import Career from './ui/Career.vue';
-import Button from './ui/Button.vue';
+import Career from '../components/ui/Career.vue';
+import Button from '../components/ui/Button.vue';
 </script>
 
 <template>

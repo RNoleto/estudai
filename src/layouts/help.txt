@@ -1,0 +1,11 @@
+A pasta layouts/ seria usada para estruturas maiores e específicas que organizam a disposição de várias páginas. Essas estruturas normalmente incluem coisas como cabeçalhos, rodapés, sidebars, e definem o "esqueleto" de uma página. Eles são mais focados em layouts gerais de página do que em componentes individuais menores.
+
+- Para estruturas de página mais amplas.
+- Usada para layouts gerais que podem ser reutilizados em diferentes partes da aplicação.
+- Por exemplo, você pode ter layouts diferentes para o painel de administração e para a área do usuário, e esses layouts incluem cabeçalhos, rodapés, barras laterais, etc.
+
+Exemplo:
+src/
+├── layouts/
+│   ├── AdminLayout.vue  (layout para páginas administrativas)
+│   └── UserLayout.vue   (layout para páginas de usuários comuns)

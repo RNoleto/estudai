@@ -1,8 +1,5 @@
 <script setup>
-import LoginRegister from './components/LoginRegister.vue';
-import CarrerSelection from './components/CarrerSelection.vue';
-import Subjects from './components/Subjects.vue';
-import StudyCycle from './components/StudyCycle.vue';
+import StudyCycle from './views/StudyCycle.vue';
 
 </script>
 

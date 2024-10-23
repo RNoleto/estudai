@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
-import Input from './ui/Input.vue';
-import Button from './ui/Button.vue';
+import Input from '../components/ui/Input.vue';
+import Button from '../components/ui/Button.vue';
 
 // Estado de alternância entre login e cadastro
 const isLoginMode = ref(true);

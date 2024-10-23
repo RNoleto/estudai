@@ -1,7 +1,7 @@
 <script setup>
-import Career from './ui/Career.vue';
-import Button from './ui/Button.vue';
-import Search from './ui/Search.vue';
+import Career from '../components/ui/Career.vue';
+import Button from '../components/ui/Button.vue';
+import Search from '../components/ui/Search.vue';
 </script>
 
 <template>
