@@ -1,18 +1,19 @@
 <script setup>
 import { useTimerStore } from '../../stores/useTimerStore'
+import Button from './Button.vue';
 
 const timerStore = useTimerStore()
 
 </script>
 
 <template>
-  <div class="flex flex-col items-center p-4 border rounded-md shadow-md shadow-black bg-white">
+  <div class="flex flex-col items-center p-4 border rounded-md bg-white">
     <h2 class="text-lg font-bold mb-4">Temporizador</h2>
     <div class="text-2xl font-mono mb-4">{{ timerStore.formattedTime }}</div>
     <div class="flex space-x-2">
-      <button @click="timerStore.start" class="btn" :disabled="timerStore.isRunning">Iniciar</button>
-      <button @click="timerStore.togglePause" class="btn" :disabled="!timerStore.isRunning">{{ timerStore.isPaused ? 'Continuar' : 'Pausar' }}</button>
-      <button @click="timerStore.stop" class="btn">Parar</button>
+      <Button @click="timerStore.start" variant="primary" :disabled="timerStore.isRunning">Iniciar</Button>
+      <Button @click="timerStore.togglePause" variant="secondary" :disabled="!timerStore.isRunning">{{ timerStore.isPaused ? 'Continuar' : 'Pausar' }}</Button>
+      <Button @click="timerStore.stop" variant="delete">Parar</Button>
     </div>
 
     <div class="mt-4">

@@ -21,7 +21,7 @@ import { Icon } from '@iconify/vue';
   const searchTerm = ref('');
   </script>
 <template>
-    <div class="flex bg-zinc-200 items-center border rounded-md p-2 shadow-sm shadow-black hover:bg-zinc-100 group" :class="inputClass">
+    <div class="flex bg-zinc-200 items-center border rounded-md p-2 shadow-sm shadow-zinc-200 hover:bg-zinc-100 group" :class="inputClass">
       <!-- Exibe o ícone de busca apenas se a propriedade `showIcon` for verdadeira -->
       <template v-if="showIcon">
         <Icon icon="ic:baseline-search" class="text-zinc-500 text-sm mr-1 transition-transform duration-200 ease-in-out group-hover:scale-125" />

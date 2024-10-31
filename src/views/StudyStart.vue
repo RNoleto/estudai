@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import Search from '../components/ui/Search.vue';
 import Input from '../components/ui/Input.vue';
 import Timer from '../components/ui/Timer.vue';
+import Button from '../components/ui/Button.vue';
 
 import StudySumaryModal from '../layouts/StudySumaryModal.vue';
 
@@ -42,6 +43,6 @@ const closeModal = () => {
             <StudySumaryModal v-if="isModalOpen" :isOpen="isModalOpen" :totalStudyTime="totalStudyTime"
                 :totalPauses="totalPauses" :formattedDate="formattedDate" @onClose="closeModal" />
         </div>
-        <button @click="openModal" class="bg-blue-500 text-white px-4 py-2 rounded">Ver Resumo do Estudo</button>
+        <Button @click="openModal">Ver Resumo do Estudo</Button>
     </div>
 </template>
