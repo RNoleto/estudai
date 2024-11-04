@@ -30,6 +30,32 @@ const closeModal = () => {
       <div>
         <strong>Total de Pausas:</strong> {{ totalPauses }}
       </div>
+      <!-- Pergunta sobre resolução de questões -->
+      <div class="mt-4">
+        <p>Você resolveu questões?</p>
+        <div class="flex gap-4">
+          <label class="flex items-center">
+            <input type="radio" v-model="questionsResolved" value="yes" class="mr-2">
+            Sim
+          </label>
+          <label class="flex items-center">
+            <input type="radio" v-model="questionsResolved" value="no" class="mr-2">
+            Não
+          </label>
+        </div>
+      </div>
+
+      <!-- Campos adicionais para questões resolvidas -->
+      <div v-if="questionsResolved === 'yes'" class="mt-4">
+        <label class="block mb-2">
+          <span>Quantas questões foram resolvidas?</span>
+          <input type="number" v-model="totalQuestions" min="0" class="mt-1 block w-full border rounded px-2 py-1" />
+        </label>
+        <label class="block mb-2">
+          <span>Quantas questões você acertou?</span>
+          <input type="number" v-model="correctAnswers" min="0" class="mt-1 block w-full border rounded px-2 py-1" />
+        </label>
+      </div>
       <Button 
         variant="primary"
         @click="$emit('onClose')"
