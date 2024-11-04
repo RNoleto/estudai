@@ -33,15 +33,19 @@ const closeModal = () => {
                 <p>{{ formattedDate }}</p>
             </div>
         </div>
-        <div class="flex gap-2 content-center mt-2">
-            <Search placeholder="Pesquise pela matéria" class="w-1/3" />
-            <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-2/3" />
+        <div class="grid grid-cols-3 gap-2 content-center mt-2">
+            <Search placeholder="Pesquise pela matéria" class="col-span-1" />
+            <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="col-span-2" />
         </div>
-        <div class="mt-2 bg-red-200">
-            <p>Tela de inicio de estudo</p>
-            <Timer />
-            <StudySumaryModal v-if="isModalOpen" :isOpen="isModalOpen" :totalStudyTime="totalStudyTime"
-                :totalPauses="totalPauses" :formattedDate="formattedDate" @onClose="closeModal" />
+        <div class="mt-2">
+            <div class="grid grid-cols-3 gap-2">
+                <Timer class="col-span-1" />
+                <div class="bg-white col-span-2 p-4 rounded-md">
+                    <p>Espaço para <span class="font-bold">StudySummaryModal</span> e  informações de estudos realizados no dia: {{ formattedDate }}</p>
+                </div>
+                <StudySumaryModal v-if="isModalOpen" :isOpen="isModalOpen" :totalStudyTime="totalStudyTime"
+                    :totalPauses="totalPauses" :formattedDate="formattedDate" @onClose="closeModal" />
+            </div>
         </div>
         <Button @click="openModal">Ver Resumo do Estudo</Button>
     </div>
