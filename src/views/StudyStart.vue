@@ -1,27 +1,10 @@
 <script setup>
-import { ref } from 'vue';
 import Search from '../components/ui/Search.vue';
 import Input from '../components/ui/Input.vue';
 import Timer from '../components/ui/Timer.vue';
-import Button from '../components/ui/Button.vue';
-
-import StudySumaryModal from '../layouts/StudySumaryModal.vue';
 
 import { useCurrentDate } from '../composables/useCurrentDate';
 const { formattedDate } = useCurrentDate();
-
-//StudySummaryModal
-const isModalOpen = ref(false);
-const totalStudyTime = ref('00:00'); // Você pode definir valores padrões aqui
-const totalPauses = ref(0);
-
-const openModal = () => {
-  isModalOpen.value = true;
-};
-
-const closeModal = () => {
-  isModalOpen.value = false;
-};
 </script>
 
 <template>
@@ -40,13 +23,12 @@ const closeModal = () => {
         <div class="mt-2">
             <div class="grid grid-cols-3 gap-2">
                 <Timer class="col-span-1" />
-                <div class="bg-white col-span-2 p-4 rounded-md">
+                <!-- <div class="bg-white col-span-2 p-4 rounded-md">
                     <p>Espaço para <span class="font-bold">StudySummaryModal</span> e  informações de estudos realizados no dia: {{ formattedDate }}</p>
-                </div>
-                <StudySumaryModal v-if="isModalOpen" :isOpen="isModalOpen" :totalStudyTime="totalStudyTime"
-                    :totalPauses="totalPauses" :formattedDate="formattedDate" @onClose="closeModal" />
+                    <br>
+                    <p>Esse campo fica oculto quando não tem nenhuma informação salva, pegar valores do modal após clicar em "Parar" e salvar no modal.</p>
+                </div> -->
             </div>
         </div>
-        <Button @click="openModal">Ver Resumo do Estudo</Button>
     </div>
 </template>

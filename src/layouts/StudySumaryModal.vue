@@ -1,53 +1,71 @@
 <script setup>
-import { defineProps, defineEmits } from 'vue';
-import { useCurrentDate } from '../composables/useCurrentDate';
+import { computed } from 'vue';
+import { useTimerStore } from '../stores/useTimerStore';
 
 const props = defineProps({
-    isOpen: {
-        type: Boolean,
-        required: true,
-    },
-    totalStudyTime: {
-        type: String,
-        default: '00:00',
-    },
-    totalPauses: {
-        type: Number,
-        default: 0,
-    },
-    formattedDate: {
-        type: String,
-        default: new Date().toLocaleDateString(),
-    },
+  isOpen: Boolean, 
 });
 
-// Usando a composable para obter a data formatada
-const { formattedDate } = useCurrentDate();
+const timerStore = useTimerStore();
 
-// Define a função para emitir o evento de fechamento
-const emit = defineEmits(['onClose']);
+// Computed properties para garantir que os valores estejam atualizados
+const totalStudyTime = computed(() => timerStore.finalFormattedTime);
+const totalPauses = computed(() => timerStore.finalTotalPausesLength);
 
-const close = () => {
-    emit('onClose'); // Emite o evento 'onClose' para o componente pai
+const closeModal = () => {
+  emit('onClose');
 };
 </script>
-<template>
-    <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h3 class="text-lg font-bold mb-4">Resumo do Estudo</h3>
-            <p>Tempo Total: {{ totalStudyTime }}</p>
-            <p>Total de Pausas: {{ totalPauses }}</p>
-            <p>Data: {{ formattedDate }}</p>
 
-            <div class="flex justify-end mt-4">
-                <button @click="close" class="bg-gray-300 text-gray-700 px-4 py-2 rounded">Fechar</button>
-            </div>
-        </div>
+<template>
+  <div v-if="isOpen" class="modal-overlay">
+    <div class="modal-content">
+      <h2 class="text-lg font-bold mb-4">Resumo de Estudo</h2>
+      
+      <!-- Exibindo o tempo total de estudo -->
+      <div>
+        <strong>Tempo Total de Estudo:</strong> {{ totalStudyTime }}
+      </div>
+
+      <!-- Exibindo o número de pausas -->
+      <div>
+        <strong>Total de Pausas:</strong> {{ totalPauses }}
+      </div>
+      <button @click="$emit('onClose')" class="btn mt-4">Fechar</button>
     </div>
+  </div>
 </template>
 
 <style scoped>
-.fixed {
-    position: fixed;
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #0056b3;
 }
 </style>

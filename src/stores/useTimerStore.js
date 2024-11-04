@@ -7,6 +7,9 @@ export const useTimerStore = defineStore('timer', () => {
   const isPaused = ref(false)
   const elapsedTime = ref(0)
   const pauses = ref([])
+  const finalElapsedTime = ref(0)
+  const finalTotalPauseTime = ref(0)
+  const finalTotalPausesLength = ref(0)
   let timerId = null
   let lastPauseDuration = 0
 
@@ -39,6 +42,11 @@ export const useTimerStore = defineStore('timer', () => {
   }
 
   const stop = () => {
+    // Salvar os valores antes de resetar
+    finalElapsedTime.value = elapsedTime.value
+    finalTotalPauseTime.value = totalPauseTime.value
+    finalTotalPausesLength.value = pauses.value.length;
+
     clearInterval(timerId);
     isRunning.value = false;
     isPaused.value = false;
@@ -46,6 +54,7 @@ export const useTimerStore = defineStore('timer', () => {
     console.log(`Pinia - Total de pausas: ${pauses.value.length}`);
     console.log(`Pinia - Tempo total de pausa: ${formatPauseTime(elapsedTime.value)}`);
 
+    // Resetar os valores para o próximo ciclo
     elapsedTime.value = 0;
     pauses.value = [];
 
@@ -67,6 +76,11 @@ export const useTimerStore = defineStore('timer', () => {
     return pauses.value.reduce((total, pause) => total + pause, 0)
   })
 
+  // Computed para os valores finais
+
+  const finalFormattedTime = computed(() => formatPauseTime(finalElapsedTime.value))
+  const finalFormattedPauseTime = computed(() => formatPauseTime(finalTotalPauseTime.value))
+
   return {
     isRunning,
     isPaused,
@@ -78,5 +92,8 @@ export const useTimerStore = defineStore('timer', () => {
     formattedTime,
     formatPauseTime,
     totalPauseTime,
+    finalFormattedTime,
+    finalFormattedPauseTime,
+    finalTotalPausesLength
   }
 })

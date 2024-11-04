@@ -1,9 +1,24 @@
 <script setup>
-import { useTimerStore } from '../../stores/useTimerStore'
+import { ref } from 'vue';
+import { useTimerStore } from '../../stores/useTimerStore';
 import Button from './Button.vue';
+import StudySummaryModal from '../../layouts/StudySumaryModal.vue';
 
-const timerStore = useTimerStore()
+const timerStore = useTimerStore();
+const isModalOpen = ref(false);
 
+const openModal = () => {
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+};
+
+const stopTimer = () => {
+  timerStore.stop();
+  openModal();
+};
 </script>
 
 <template>
@@ -12,8 +27,11 @@ const timerStore = useTimerStore()
     <div class="text-2xl font-mono mb-4">{{ timerStore.formattedTime }}</div>
     <div class="flex space-x-2">
       <Button @click="timerStore.start" variant="primary" :disabled="timerStore.isRunning">Iniciar</Button>
-      <Button @click="timerStore.togglePause" variant="secondary" :disabled="!timerStore.isRunning">{{ timerStore.isPaused ? 'Continuar' : 'Pausar' }}</Button>
-      <Button @click="timerStore.stop" variant="delete">Parar</Button>
+      <Button @click="timerStore.togglePause" variant="secondary" :disabled="!timerStore.isRunning">
+        {{ timerStore.isPaused ? 'Continuar' : 'Pausar' }}
+      </Button>
+      <!-- O botão "Parar" só estará habilitado quando o timer estiver rodando ou pausado -->
+      <Button @click="stopTimer" variant="delete" :disabled="!timerStore.isRunning">Parar</Button>
     </div>
 
     <div class="mt-4">
@@ -30,6 +48,12 @@ const timerStore = useTimerStore()
         <strong>Tempo total: {{ timerStore.formatPauseTime(timerStore.totalPauseTime) }}</strong>
       </div>
     </div>
+
+    <!-- Modal de Resumo de Estudo -->
+    <StudySummaryModal
+      :isOpen="isModalOpen"
+      @onClose="closeModal"
+    />
   </div>
 </template>
 
