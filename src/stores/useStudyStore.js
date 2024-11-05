@@ -9,10 +9,19 @@ export const useStudyStore = defineStore('study', {
             totalQuestions: 0,
             correctAnswers: 0,
         },
+        subject: '',
+        topic: '',
+        subjectList: ['Direito Administrativo', 'Matemática', 'Informática', 'Direito Constitucional'], // Lista de matérias fakes
     }),
     actions: {
         updateStudySummary(summary){
             this.studySummary = summary;
         },
+        setSubject(subject){
+            this.subject = subject;
+        },
+        setTopic(topic){
+            this.topic = topic;
+        }
     },
 });
