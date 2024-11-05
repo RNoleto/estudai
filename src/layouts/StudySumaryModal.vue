@@ -1,12 +1,14 @@
 <script setup>
 import Button from '../components/ui/Button.vue';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { useTimerStore } from '../stores/useTimerStore';
 import { useStudyStore } from '../stores/useStudyStore';
 
 const props = defineProps({
   isOpen: Boolean, 
 });
+
+const emit = defineEmits(['onClose']);
 
 const timerStore = useTimerStore();
 const studyStore = useStudyStore();
@@ -33,7 +35,13 @@ const saveData = () => {
     totalQuestions: questionsResolved.value === 'yes' ? totalQuestions.value : 0,
     correctAnswers: questionsResolved.value === 'yes' ? correctAnswers.value : 0,
   });
-  closeModal();
+
+  // Limpa os campos do formulário após salvar
+  questionsResolved.value = null;
+  totalQuestions.value = 0;
+  correctAnswers.value = 0;
+
+  closeModal(); // Fecha o modal
 }
 </script>
 
@@ -77,7 +85,7 @@ const saveData = () => {
       </div>
       <Button 
         variant="primary"
-        @click="$emit('onClose')"
+        @click="saveData"
         >
         Salvar
       </Button>
