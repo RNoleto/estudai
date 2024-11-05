@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useTimerStore } from '../../stores/useTimerStore';
 import Button from './Button.vue';
-import StudySummaryModal from '../../layouts/StudySumaryModal.vue';
+import StudySummaryModal from '../../layouts/StudySummaryModal.vue';
 
 const timerStore = useTimerStore();
 const isModalOpen = ref(false);
@@ -35,7 +35,7 @@ const stopTimer = () => {
     </div>
 
     <div class="mt-4">
-      <h3 class="text-md font-bold">Pausas:</h3>
+      <h3 v-if="timerStore.pauses.length > 0" class="text-md font-bold">Pausas:</h3>
       <ul>
         <li v-for="(pause, index) in timerStore.pauses" :key="index">
           {{ index + 1 }}ª Pausa - {{ timerStore.formatPauseTime(pause) }}

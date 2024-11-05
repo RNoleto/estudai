@@ -28,20 +28,28 @@ const closeModal = () => {
 
 // Salvando dados no store
 const saveData = () => {
-  studyStore.updateStudySummary({
-    totalStudyTime: totalStudyTime.value,
-    totalPauses: totalPauses.value,
-    questionsResolved: questionsResolved.value,
-    totalQuestions: questionsResolved.value === 'yes' ? totalQuestions.value : 0,
-    correctAnswers: questionsResolved.value === 'yes' ? correctAnswers.value : 0,
-  });
 
-  // Limpa os campos do formulário após salvar
+  if(correctAnswers.value > totalQuestions.value){
+    alert('Total de questões corretas não pode ser maior que total de questões respondidas');
+  } else{
+    studyStore.updateStudySummary({
+      totalStudyTime: totalStudyTime.value,
+      totalPauses: totalPauses.value,
+      questionsResolved: questionsResolved.value,
+      totalQuestions: questionsResolved.value === 'yes' ? totalQuestions.value : 0,
+      correctAnswers: questionsResolved.value === 'yes' ? correctAnswers.value : 0,
+    });
+  
+    clearForm();
+    closeModal();
+  }
+
+}
+
+const clearForm = () => {
   questionsResolved.value = null;
   totalQuestions.value = 0;
   correctAnswers.value = 0;
-
-  closeModal(); // Fecha o modal
 }
 </script>
 
