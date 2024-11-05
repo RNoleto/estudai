@@ -1,21 +1,40 @@
 <script setup>
 import Button from '../components/ui/Button.vue';
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useTimerStore } from '../stores/useTimerStore';
+import { useStudyStore } from '../stores/useStudyStore';
 
 const props = defineProps({
   isOpen: Boolean, 
 });
 
 const timerStore = useTimerStore();
+const studyStore = useStudyStore();
 
 // Computed properties para garantir que os valores estejam atualizados
 const totalStudyTime = computed(() => timerStore.finalFormattedTime);
 const totalPauses = computed(() => timerStore.finalTotalPausesLength);
 
+// Estado do modal
+const questionsResolved = ref(null);
+const totalQuestions = ref(0);
+const correctAnswers = ref(0);
+
 const closeModal = () => {
   emit('onClose');
 };
+
+// Salvando dados no store
+const saveData = () => {
+  studyStore.updateStudySummary({
+    totalStudyTime: totalStudyTime.value,
+    totalPauses: totalPauses.value,
+    questionsResolved: questionsResolved.value,
+    totalQuestions: questionsResolved.value === 'yes' ? totalQuestions.value : 0,
+    correctAnswers: questionsResolved.value === 'yes' ? correctAnswers.value : 0,
+  });
+  closeModal();
+}
 </script>
 
 <template>
@@ -46,13 +65,13 @@ const closeModal = () => {
       </div>
 
       <!-- Campos adicionais para questões resolvidas -->
-      <div v-if="questionsResolved === 'yes'" class="mt-4">
+      <div v-if="questionsResolved === 'yes'" class="flex gap-4 mt-4">
         <label class="block mb-2">
-          <span>Quantas questões foram resolvidas?</span>
+          <span>Questões resolvidas</span>
           <input type="number" v-model="totalQuestions" min="0" class="mt-1 block w-full border rounded px-2 py-1" />
         </label>
         <label class="block mb-2">
-          <span>Quantas questões você acertou?</span>
+          <span>Questões certas</span>
           <input type="number" v-model="correctAnswers" min="0" class="mt-1 block w-full border rounded px-2 py-1" />
         </label>
       </div>
