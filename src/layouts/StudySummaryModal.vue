@@ -84,11 +84,11 @@ const clearForm = () => {
       <div v-if="questionsResolved === 'yes'" class="flex gap-4 mt-4">
         <label class="block mb-2">
           <span>Questões resolvidas</span>
-          <input type="number" v-model="totalQuestions" min="0" class="mt-1 block w-full border rounded px-2 py-1" />
+          <input type="number" v-model="totalQuestions" min="0" class="mt-1 block w-full border rounded px-2 py-1 appearance-none outline-none" />
         </label>
         <label class="block mb-2">
           <span>Questões certas</span>
-          <input type="number" v-model="correctAnswers" min="0" class="mt-1 block w-full border rounded px-2 py-1" />
+          <input type="number" v-model="correctAnswers" min="0" class="mt-1 block w-full border rounded px-2 py-1 appearance-none outline-none" />
         </label>
       </div>
       <Button 
@@ -100,3 +100,15 @@ const clearForm = () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"]{
+  -moz-appearance: textfield;
+}
+</style>

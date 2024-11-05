@@ -9,5 +9,4 @@ import StudyStart from './views/StudyStart.vue';
       <StudyStart/>
     </div>
   </div>
-
 </template>
