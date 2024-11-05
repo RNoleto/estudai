@@ -5,7 +5,7 @@ export const useStudyStore = defineStore('study', {
         studySummary: {
             totalStudyTime: '',
             totalPauses: 0,
-            questionsResolved: 'no',
+            questionsResolved: '',
             totalQuestions: 0,
             correctAnswers: 0,
         },
