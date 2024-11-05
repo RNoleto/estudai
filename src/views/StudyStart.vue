@@ -35,7 +35,7 @@ const studyStore = useStudyStore();
                         <div class="col-span-2">
                             <p>Tempo de estudo: {{ studyStore.studySummary.totalStudyTime }}</p>
                             <p v-if="studyStore.studySummary.totalPauses > 0">Nº de pauses: {{ studyStore.studySummary.totalPauses }}</p>
-                            <div v-if="studyStore.studySummary.questionsResolved === 'yes'">
+                            <div v-if="studyStore.studySummary.questionsResolved === 'yes'" class="flex gap-4">
                                 <p>Questões respondidas: {{ studyStore.studySummary.totalQuestions }}</p>
                                 <p>Acertos: {{ studyStore.studySummary.correctAnswers }}</p>
                             </div>
