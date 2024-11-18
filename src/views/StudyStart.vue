@@ -5,10 +5,13 @@ import Timer from '../components/ui/Timer.vue';
 
 import { useCurrentDate } from '../composables/useCurrentDate';
 import { useStudyStore } from '../stores/useStudyStore';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const { formattedDate } = useCurrentDate();
 const studyStore = useStudyStore();
+
+// Flag para controlar a exibição da lista suspensa
+const showDropdown = ref(false);
 
 // Propriedade computed para filtrar as matérias com base na entrada do usuário
 const filteredSubjects = computed(() => {
@@ -19,9 +22,20 @@ const filteredSubjects = computed(() => {
         : [];
 });
 
+// Atualizar a flag ao digitar no campo de pesquisa
+const handleInputChange = () => {
+    showDropdown.value = filteredSubjects.value.length > 0;
+};
+
 // Função para selecionar uma matéria da lista de sugestões
 const selectSubject = (subject) => {
     studyStore.setSubject(subject);
+    showDropdown.value = false; // Esconde a lista ao selecionar
+};
+
+//Atualizar o tópico diretamente na store
+const updateTopic = (topic) => {
+    studyStore.setTopic(topic);
 };
 </script>
 
@@ -37,10 +51,15 @@ const selectSubject = (subject) => {
         
         <!-- Campo de pesquisa com lista suspensa de matérias -->
         <div class="grid grid-cols-3 gap-2 content-center mt-2 relative">
-            <Search placeholder="Pesquise pela matéria" v-model="studyStore.subject" class="col-span-1" />
+            <Search 
+                placeholder="Pesquise pela matéria" 
+                v-model="studyStore.subject" 
+                class="col-span-1"
+                @input="handleInputChange" 
+            />
             <ul 
-                v-if="filteredSubjects.length" 
-                class="absolute bg-white border mt-1 rounded shadow-lg max-h-32 overflow-y-auto z-10 w-full col-span-1"
+                v-if="showDropdown" 
+                class="absolute bg-white border mt-10 rounded shadow-lg max-h-32 overflow-y-auto z-10 w-[294.66px]"
             >
                 <li
                     v-for="subject in filteredSubjects"
@@ -51,9 +70,9 @@ const selectSubject = (subject) => {
                     {{ subject }}
                 </li>
             </ul>
-            
-            <!-- Campo de input para tópico -->
-            <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="col-span-2" />
+
+            <!-- Campo de input para tópico -->          
+            <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="col-span-2" v-model="studyStore.topic" @input="updateTopic(studyStore.topic)" />
         </div>
         
         <!-- Resumo dos estudos -->
@@ -62,9 +81,9 @@ const selectSubject = (subject) => {
                 <Timer class="col-span-1" />
                 <div class="flex flex-col gap-1 text-xs text-zinc-700 col-span-2" v-if="studyStore.studySummary.totalStudyTime.length > 0">
                     <div class="grid grid-cols-5 border-b rounded-md p-4 bg-white">
-                        <div class="col-span-3">
-                           <p>Matéria: {{ studyStore.subject }}</p> 
-                           <p>Tópico: {{ studyStore.topic }}</p>
+                        <div class="flex flex-col col-span-3 justify-center">
+                           <p class="text-sm">Matéria: <span class="font-bold">{{ studyStore.subject }}</span></p> 
+                           <p class="text-sm">Tópico: <span class="font-bold">{{ studyStore.topic }}</span></p>
                         </div>
                         <div class="col-span-2">
                             <p>Tempo de estudo: {{ studyStore.studySummary.totalStudyTime }}</p>
