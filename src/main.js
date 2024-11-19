@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import './style.css'
 import App from './App.vue'
+import axios from 'axios'
 
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
@@ -14,6 +15,8 @@ const vuetify = createVuetify({
 })
 
 const pinia = createPinia();
+
+axios.defaults.baseURL = 'http://127.0.0.1:8000/api/';
 
 const app = createApp(App);
 

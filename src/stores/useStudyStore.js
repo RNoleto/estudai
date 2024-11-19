@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import axios from 'axios';
 
 export const useStudyStore = defineStore('study', {
     state: () => ({
@@ -11,9 +12,19 @@ export const useStudyStore = defineStore('study', {
         },
         subject: '',
         topic: '',
-        subjectList: ['Direito Administrativo', 'Matemática', 'Informática', 'Direito Constitucional'], // Lista de matérias fakes
+        subjectList: [],
     }),
     actions: {
+        async fetchSubjects() {
+            try {
+                const response = await axios.get('subjects');
+                console.log(response.data); 
+                this.subjectList = Array.isArray(response.data) ? response.data : [];
+            } catch (error) {
+                console.error('Erro ao buscar as matérias:', error);
+                this.subjectList = [];
+            }
+        },
         updateStudySummary(summary){
             this.studySummary = summary;
         },
