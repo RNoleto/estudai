@@ -55,7 +55,7 @@ const updateTopic = (topic) => {
 
         <!-- Campo de pesquisa com lista suspensa de matérias -->
         <div class="grid grid-cols-3 gap-2 content-center mt-2 relative">
-            <Search placeholder="Pesquise pela matéria" v-model="studyStore.subject" class="col-span-1"
+            <!-- <Search placeholder="Pesquise pela matéria" v-model="studyStore.subject" class="col-span-1"
                 @input="handleInputChange" />
             <ul v-if="showDropdown"
                 class="absolute bg-white border mt-10 rounded shadow-lg max-h-32 overflow-y-auto z-10 w-[294.66px]">
@@ -63,7 +63,13 @@ const updateTopic = (topic) => {
                     class="p-2 cursor-pointer hover:bg-gray-200">
                     {{ subject.name }}
                 </li>
-            </ul>
+            </ul> -->
+            <v-combobox 
+                clearable 
+                label="Matérias"
+                v-model="selectedSubject"
+                :items="subjects"
+                variant="solo-inverted"></v-combobox>
 
 
             <!-- Campo de input para tópico -->
