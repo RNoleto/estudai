@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import Input from '../components/ui/Input.vue';
 import Button from '../components/ui/Button.vue';
+import { useUserStore } from '../stores/useUserStore';
 
 // Estado de alternância entre login e cadastro
 const isLoginMode = ref(true);
@@ -10,6 +11,9 @@ const isLoginMode = ref(true);
 const email = ref('');
 const password = ref('');
 const name = ref('');
+
+// Instância do store do usuário
+const userStore = useUserStore();
 
 // Imagens diferentes para login e cadastro
 const loginImage = 'https://images.unsplash.com/photo-1471107191679-f26174d2d41e?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZXN0dWRvfGVufDB8fDB8fHww';
@@ -21,8 +25,12 @@ const toggleMode = () => {
 };
 
 // Funções de login e cadastro
-const handleLogin = () => {
-  console.log('Login:', email.value, password.value);
+const handleLogin = async () => {
+  try {
+    await useUserStore.login({email: email.value, password: password.value});
+  } catch (error) {
+    console.error('Erro ao fazer login:', error);
+  }
 };
 
 const handleRegister = () => {
