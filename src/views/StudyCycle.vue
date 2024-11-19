@@ -14,6 +14,7 @@ const { formattedDate } = useCurrentDate();
             <h2 class="font-bold text-xl">Monte seu ciclo de estudo para hoje</h2>
             <p class="text-sm font-bold">{{ formattedDate }}</p>
         </div>
+        <p class="bg-red-500 w-max">Nome da carreira escolhida</p>
         <Search class="mt-2"/>
         <p class="mt-2">Matérias selecionadas</p>
         <div class="mt-2 flex flex-wrap gap-2">
