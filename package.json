@@ -14,6 +14,7 @@
     "pinia": "^2.2.4",
     "tailwind-variants": "^0.2.1",
     "vue": "^3.5.10",
+    "vue-clerk": "^0.8.6",
     "vuetify": "^3.7.4"
   },
   "devDependencies": {
