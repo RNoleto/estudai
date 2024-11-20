@@ -18,10 +18,10 @@ import Button from '../components/ui/Button.vue'
       <div class="relative h-full w-full">
         <p>Espaço para colocar uma imagem</p>
       </div>
-         <!-- <SignedOut>
+         <SignedOut>
          </SignedOut>
          <SignedIn>
            <UserButton />
-         </SignedIn> -->
+         </SignedIn>
   </div>
 </template> 
