@@ -10,6 +10,8 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
+import router from './router'
+
 const vuetify = createVuetify({
     components,
     directives,
@@ -28,5 +30,6 @@ app.use(clerkPlugin, {
 
 app.use(vuetify)
 app.use(pinia)
+app.use(router);
 
 app.mount('#app');
