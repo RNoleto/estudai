@@ -1,24 +1,27 @@
 <script setup>
 import { SignedIn, SignedOut, SignInButton, UserButton } from 'vue-clerk'
+import Button from '../components/ui/Button.vue'
 
 </script>
 
 <template>
-  <div class="flex w-full h-screen justify-center align-center">
-    <div class="w-full bg-zinc-300 h-full">
-      <!-- Lado Esquerdo -->
-       <div>
-         <SignedOut>
-           <SignInButton />
+  <div class="grid h-full grid-cols-2">
+    <!-- Esquerda -->
+     <div class="flex flex-col h-full justify-center p-8 max-w-[550px] mx-auto">
+      <h1 class="text-4xl font-bold mb-3">Bem-vindo</h1>
+      <p class="mb-8">Ao seu Gerenciador de estudos</p>
+       <SignInButton>
+        <Button variant="primary" size="default">Fazer login ou criar conta</Button>
+       </SignInButton>
+     </div>
+     <!-- Direita -->
+      <div class="relative h-full w-full">
+        <p>Espaço para colocar uma imagem</p>
+      </div>
+         <!-- <SignedOut>
          </SignedOut>
          <SignedIn>
            <UserButton />
-         </SignedIn>
-       </div>
-    </div>
-    <div class="bg-zinc-500 w-full h-full">
-      <!-- Lado Direito -->
-       <p>Lado que vai ficar a imagem</p>
-    </div>
+         </SignedIn> -->
   </div>
 </template> 

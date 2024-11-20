@@ -5,4 +5,4 @@ import Home from './views/Home.vue';
 
 <template>
   <Home/>
-</template> 
+</template>
