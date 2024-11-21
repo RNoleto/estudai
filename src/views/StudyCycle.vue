@@ -27,6 +27,6 @@ const { formattedDate } = useCurrentDate();
             <Career icon="basil:book-outline" careerName="Administração Geral"/>            
             <Career icon="basil:book-outline" careerName="AFO" />
         </div>
-        <Button class="float-right">Avançar</Button>
+        <Button class="float-right" :to="{name: 'Estudar'}">Avançar</Button>
     </div>
 </template>

@@ -1,7 +1,6 @@
 <script setup>
 import { SignedIn, SignedOut, SignInButton, UserButton } from 'vue-clerk'
 import Button from '../components/ui/Button.vue'
-
 </script>
 
 <template>

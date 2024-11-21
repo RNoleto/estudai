@@ -23,6 +23,9 @@ onMounted(async () => {
                 <Career icon="basil:book-outline" :careerName="subject.name" />
             </div>
         </div>
-        <Button class="float-right">Avançar</Button>
+        <div class="flex gap-2">
+            <Button :to="{name:'Carreiras'}">Voltar</Button>
+            <Button :to="{name: 'Ciclo'}">Avançar</Button>
+        </div>
     
 </template>

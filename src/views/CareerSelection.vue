@@ -4,6 +4,8 @@ import { useCareerStore } from '../stores/useCareerStore';
 import Career from '../components/ui/Career.vue';
 import Button from '../components/ui/Button.vue';
 
+import Navbar from '../components/Navbar.vue';
+
 //Acessando o store de carreiras
 const careersStore = useCareerStore();
 
@@ -14,13 +16,18 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="max-w-[1200px] bg-zinc-300 p-[60px] shadow-sm shadow-zinc-200 rounded-md">
-        <h2 class="mb-4 font-bold text-xl">Selecione a sua carreira</h2>
-        <div class="flex flex-wrap gap-2 w-full">
-            <div v-for="career in careersStore.careers" :key="career.id">
-                <Career :icon="career.icon" :careerName="career.name"/>
+    <div class="w-full">
+        <Navbar />
+    </div>
+    <div class="h-screen">
+        <div class="w-full bg-red-400 p-5">
+            <h3>Selecione a sua carreira</h3>
+            <div class="flex gap-2">
+                <div v-for="career in careersStore.careers" :key="career.id">
+                    <Career :icon="career.icon" :careerName="career.name"/>
+                </div>
             </div>
+            <Button :to="{ name: 'Materias'}">Avançar</Button>
         </div>
-    <Button class="float-right">Avançar</Button>
     </div>
 </template>

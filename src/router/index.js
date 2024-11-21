@@ -1,4 +1,4 @@
-import { createMemoryHistory, createRouter } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from '../views/Home.vue'
 import Career from '../views/CareerSelection.vue'
@@ -13,26 +13,30 @@ const routes = [
     },
     {
         path: '/carreira', 
+        name: 'Carreiras',
         component: Career,
     },
     {
         path: '/materias', 
+        name: 'Materias',
         component: Subjects,
     },
     {
-        path: '/ciclo-de-estudos', 
+        path: '/ciclo-de-estudos',
+        name: 'Ciclo', 
         component: StudyCycle,
     },
     {
         path: '/estudar', 
+        name: 'Estudar',
         component: StudyStart,
     }
     
 ]
 
 const router = createRouter({
-    history: createMemoryHistory(),
-    routes,
+    history: createWebHistory(),
+  routes,
 })
 
 export default router;

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { tv } from 'tailwind-variants';
+import { RouterLink } from 'vue-router';
 
 // Definindo os estilos do botão
 const button = tv({
@@ -34,6 +35,10 @@ const props = defineProps({
         type: String,
         default: 'default',
     },
+    to: {
+        type: [String, Object],
+        Required: false,
+    }
 });
 
 // Referência para o botão
@@ -44,11 +49,16 @@ const buttonClass = computed(() => button({ variant: props.variant, size: props.
 </script>
 
 <template>
-    <button
-        ref="buttonRef"
-        :class="buttonClass"
-        v-bind="$attrs"
-    >
-    <slot></slot>
+    <RouterLink v-if="to" :to="to">
+        <button
+            ref="buttonRef"
+            :class="buttonClass"
+            v-bind="$attrs"
+        >
+        <slot></slot>
+        </button>
+    </RouterLink>
+    <button v-else :class="buttonClass">
+        <slot></slot>
     </button>
 </template>
