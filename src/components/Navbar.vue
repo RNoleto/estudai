@@ -1,10 +1,11 @@
 <script setup>
 import { SignedIn, SignedOut, SignInButton, UserButton } from 'vue-clerk'
+
 </script>
 
 <template>
-    <div class="flex justify-between p-4 bg-zinc-500 items-center">
-        <p>Logo</p>
+    <nav class="flex justify-between p-4 items-center bg-gray-800 shadow-sm shadow-zinc-500">
+        <p class="text-white font-bold">Logo</p>
         <UserButton /> 
-    </div>
+    </nav>
 </template>
