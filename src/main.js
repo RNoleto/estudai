@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { clerkPlugin, useAuth } from 'vue-clerk'
+import { clerkPlugin } from 'vue-clerk'
 import './style.css'
 import App from './App.vue'
 import axios from 'axios'
