@@ -6,6 +6,8 @@ import Subjects from '../views/Subjects.vue'
 import StudyCycle from '../views/StudyCycle.vue'
 import StudyStart from '../views/StudyStart.vue'
 
+import Test from '../views/Test.vue'
+
 const routes = [
     {
         path: '/', 
@@ -34,6 +36,11 @@ const routes = [
         name: 'Estudar',
         component: StudyStart,
         meta: { requiresAuth: true },
+    },
+    {
+        path: '/test',
+        name: 'Test',
+        component: Test,
     }
     
 ]
