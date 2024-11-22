@@ -1,41 +1,40 @@
 <script setup>
-import { ref, computed } from 'vue' // Adicione a importação do computed
-import { ComboboxContent, ComboboxInput, ComboboxItem, ComboboxPortal, ComboboxRoot } from 'radix-vue'
+import { ref, computed, onMounted } from 'vue';
+import { useSubjectStore } from '../stores/useSubjectStore'; // Importe o store de matérias
+import { ComboboxContent, ComboboxInput, ComboboxItem, ComboboxPortal, ComboboxRoot } from 'radix-vue';
 
-const people = [
-  { id: 1, name: 'Durward Reynolds' },
-  { id: 2, name: 'Kenton Towne' },
-  { id: 3, name: 'Therese Wunsch' },
-  { id: 4, name: 'Benedict Kessler' },
-  { id: 5, name: 'Katelyn Rohan' },
-]
-const selectedPeople = ref(people[0])
-const searchTerm = ref('')
+// Instanciar o store de matérias
+const subjectStore = useSubjectStore();
 
-const filteredPeople = computed(() =>
-  searchTerm.value === ''
-    ? people
-    : people.filter((person) => {
-      return person.name.toLowerCase().includes(searchTerm.value.toLowerCase())
-    })
-)
+const selectedSubject = ref(null);
+const searchTerm = ref('');
+
+// Filtra as matérias com base no termo de busca
+const filteredSubjects = computed(() => 
+  searchTerm.value === '' 
+    ? subjectStore.subjects 
+    : subjectStore.subjects.filter((subject) => 
+        subject.name.toLowerCase().includes(searchTerm.value.toLowerCase())
+      )
+);
+
+// Chama o fetchSubjects para carregar as matérias quando o componente for montado
+onMounted(async () => {
+  await subjectStore.fetchSubjects();  // Carrega as matérias da API
+});
 </script>
 
 <template>
-  <ComboboxRoot
-    v-model="selectedPeople"
-    v-model:searchTerm="searchTerm"
-  >
-    <ComboboxInput />
+  <ComboboxRoot v-model="selectedSubject" v-model:searchTerm="searchTerm">
+    <ComboboxInput placeholder="Pesquise por uma matéria..." />
     <ComboboxPortal>
       <ComboboxContent>
         <ComboboxItem
-          v-for="person in filteredPeople"
-          :key="person.id"
-          :value="person"
-          :disabled="person.unavailable"
+          v-for="subject in filteredSubjects"
+          :key="subject.id"
+          :value="subject"
         >
-          {{ person.name }}
+          {{ subject.name }}
         </ComboboxItem>
       </ComboboxContent>
     </ComboboxPortal>
