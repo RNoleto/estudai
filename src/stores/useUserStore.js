@@ -33,7 +33,7 @@ export const useUserStore = defineStore('user', {
 
         // Fazendo uma requisição para o backend Laravel para verificar se já existe uma carreira e salvando id da carreira
         const response = await axios.get(`user-career/${this.userId}`);
-        this.career = response.data.id;
+        this.career = response.data.career_id;
 
         return false; // O usuário ainda não tem uma carreira atribuída
       } catch (error) {
@@ -50,13 +50,13 @@ export const useUserStore = defineStore('user', {
       if (hasCareer) {
         console.log("O usuário já possui uma carreira atribuída. Não é possível salvar outra.");
         return;
-      }
-
-      this.career = careerId;
-      const userCareerData = {
+      } 
+        this.career = careerId;
+        const userCareerData = {
         user_id: this.userId,
         career_id: careerId,
       };
+      
 
       try {
         // Fazendo a requisição para o backend Laravel para salvar a carreira
