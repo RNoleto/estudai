@@ -21,16 +21,21 @@ const selectCareer = (career) => {
 // Função para salvar a carreira no banco de dados
 const saveCareer = async () => {
   if (selectedCareer.value) {
-    await userStore.saveUserCareer(selectedCareer.value.id); // Salva a carreira selecionada
+    await userStore.saveUserCareer(selectedCareer.value.id, selectedCareer.value.name); // Passando também o nome
   }
 };
 
 // Configura a carreira inicial com base no userStore.career
 const setInitialSelectedCareer = () => {
-  if (userStore.career) {
-    selectedCareer.value = careersStore.careers.find(
-      (career) => career.id === userStore.career
+  if (userStore.careerId) {
+    const career = careersStore.careers.find(
+      (career) => career.id === userStore.careerId
     );
+    if (career) {
+      selectedCareer.value = career;
+      // Aqui estamos assegurando que o nome da carreira seja mantido
+      userStore.careerName = career.name;
+    }
   }
 };
 
