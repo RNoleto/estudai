@@ -1,24 +1,51 @@
 <script setup>
 import { Icon } from '@iconify/vue';
-import { defineProps } from 'vue';
+import { tv } from 'tailwind-variants';
+import { computed } from 'vue';
 
+// Definindo os estilos do OptionCard usando tv (tailwind-variants)
+const optionCard = tv({
+  base: 'p-2 flex items-center gap-2 rounded-md shadow-sm shadow-black cursor-pointer',
+  variants: {
+    variant: {
+      primary: 'bg-gray-900 text-white hover:bg-blue-600',
+      secondary: 'bg-gray-500 text-white hover:bg-gray-600',
+      selected: 'bg-blue-700 text-white hover:bg-blue-600',
+      disabled: 'bg-gray-300 text-gray-500 cursor-not-allowed',
+    },
+  },
+  defaultVariants: {
+    variant: 'primary',
+  },
+});
+
+// Propriedades do OptionCard
 const props = defineProps({
   icon: {
     type: String,
-    required: true
+    required: true,
   },
   careerName: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
+  variant: {
+    type: String,
+    default: 'primary',
+  },
 });
+
+// Computed para gerar as classes dinâmicas
+const optionCardClass = computed(() => optionCard({ variant: props.variant }));
 </script>
 
 <template>
-  <div class="bg-gray-900 p-2 flex items-center gap-2 rounded-md cursor-pointer shadow-sm shadow-black hover:bg-zinc-400 text-zinc-900 group">
-    <div class="bg-white p-1 rounded-full flex justify-center items-center group-hover:bg-zinc-500">
-      <Icon :icon="icon" class="text-zinc-900 transform-none group-hover:text-white" />
+  <div :class="optionCardClass" :style="{ pointerEvents: variant === 'disabled' ? 'none' : 'auto' }">
+    <!-- Ícone -->
+    <div class="bg-white p-1 rounded-full flex justify-center items-center">
+      <Icon :icon="icon" class="text-zinc-900 transform-none" />
     </div>
-    <p class="text-white group-hover:text-zinc-900">{{ careerName }}</p>
+    <!-- Nome da carreira -->
+    <p class="text-white">{{ careerName }}</p>
   </div>
 </template>
