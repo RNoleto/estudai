@@ -6,6 +6,7 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     userId: null,
     career: null,
+    careerName: null,
   }),
 
   actions: {
@@ -70,6 +71,27 @@ export const useUserStore = defineStore('user', {
       } catch (error) {
         console.error("Erro ao salvar a carreira no banco de dados:", error);
       }
-    }
+    },
+
+    //Função para retornar nome da carreira do usuário do banco de dados
+    async fetchUserCareer() {
+      try {
+        if (!this.userId) {
+          console.error("ID do usuário não encontrado");
+          return;
+        }
+        
+        // Requisição para obter o nome da carreira do usuário
+        const response = await axios.get(`http://localhost:8000/api/user-career/career_name/${this.userId}`);
+        if (response.data) {
+          this.careerName = response.data.career_name;
+          this.career = response.data.career_id; // Armazena também o ID da carreira, caso precise
+        } else {
+          console.log("Usuário não tem uma carreira associada.");
+        }
+      } catch (error) {
+        console.error("Erro ao carregar a carreira do usuário:", error);
+      }
+    },
   },
 });
