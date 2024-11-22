@@ -14,8 +14,7 @@ export const useUserStore = defineStore('user', {
       try {
         const { userId } = await useAuth();
         if (userId) {
-          this.userId = userId; // Armazena o ID do usuário no estado
-          console.log("ID do usuário armazenado no estado:", this.userId);
+          this.userId = userId.value; // Armazena o ID do usuário no estado
         } else {
           console.error("Não foi possível obter o ID do usuário");
         }

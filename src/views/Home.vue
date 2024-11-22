@@ -32,10 +32,10 @@ watchEffect(() => {
        </SignInButton>
      </div>
      <!-- Direita -->
-      <div class="relative w-full">
+      <div class="relative w-full overflow-hidden">
         <!-- <p>Espaço para colocar uma imagem</p> -->
         <div class="w-full h-full">
-          <img src="../../public/img/wallpaper.jpeg" alt="Wallpaper" class="h-full object-cover">
+          <img src="../../public/img/wallpaper.jpeg" alt="Wallpaper" class="w-full h-full object-cover">
         </div>
       </div>
   </div>
