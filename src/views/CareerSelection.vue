@@ -2,9 +2,8 @@
 import { onMounted, ref } from 'vue';
 import { useCareerStore } from '../stores/useCareerStore';
 import { useUserStore } from '../stores/useUserStore';
-import Career from '../components/ui/Career.vue';
-import Button from '../components/ui/Button.vue';
-
+import OptionCard from '../components/ui/OptionCard.vue';
+import Button from '../components/ui/Button.vue'
 import Navbar from '../components/Navbar.vue';
 
 //Instanciar os stores
@@ -12,16 +11,6 @@ const userStore = useUserStore();
 const careersStore = useCareerStore();
 
 const selectedCareer = ref(null);
-
-//Buscar as carreiras assim que o componente for montado
-onMounted(async () => {
-    await careersStore.fetchCareers();
-    await userStore.fetchUserId();
-});
-
-onMounted(() => {
-  userStore.fetchUserId(); // Obtém o ID do usuário autenticado
-});
 
 // Função para selecionar uma carreira
 const selectCareer = (career) => {
@@ -34,6 +23,28 @@ const saveCareer = async () => {
         await userStore.saveUserCareer(selectedCareer.value.id); // Salva a carreira selecionada
     }
 };
+
+// Configura a carreira inicial com base no userStore.career
+const setInitialSelectedCareer = () => {
+    if (userStore.career) {
+        selectedCareer.value = careersStore.careers.find(
+            (career) => career.id === userStore.career
+        );
+    }
+};
+
+
+onMounted(() => {
+  userStore.fetchUserId(); // Obtém o ID do usuário autenticado
+});
+
+//Buscar as carreiras assim que o componente for montado
+onMounted(async () => {
+    await careersStore.fetchCareers();
+    await userStore.checkUserCareer();
+    setInitialSelectedCareer();
+});
+
 </script>
 
 <template>
@@ -41,9 +52,14 @@ const saveCareer = async () => {
     <div class="p-4 flex flex-col gap-4 h-screen">
         <h3 class="text-4xl">Selecione a sua carreira</h3>
         <div class="flex flex-wrap gap-2">
-            <div v-for="career in careersStore.careers" :key="career.id" @click="selectCareer(career)">
-                <Career :icon="career.icon" :careerName="career.name" :class="{'border-2 border-blue-500' : career === selectedCareer }" />
-            </div>
+            <OptionCard 
+                v-for="career in careersStore.careers" 
+                :key="career.id" 
+                @click="selectCareer(career)" 
+                :icon="career.icon" 
+                :careerName="career.name" 
+                :class="{'bg-blue-700': selectedCareer && career.id === selectedCareer.id}" 
+            />
         </div>
         <Button 
             :to="{ name: 'Materias' }"
@@ -54,5 +70,4 @@ const saveCareer = async () => {
             Avançar
         </Button>
     </div>
-
 </template>

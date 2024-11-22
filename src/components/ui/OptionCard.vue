@@ -15,7 +15,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="bg-zinc-900 p-2 flex items-center gap-2 rounded-md cursor-pointer shadow-sm shadow-black hover:bg-zinc-400 text-zinc-900 group">
+  <div class="bg-gray-900 p-2 flex items-center gap-2 rounded-md cursor-pointer shadow-sm shadow-black hover:bg-zinc-400 text-zinc-900 group">
     <div class="bg-white p-1 rounded-full flex justify-center items-center group-hover:bg-zinc-500">
       <Icon :icon="icon" class="text-zinc-900 transform-none group-hover:text-white" />
     </div>

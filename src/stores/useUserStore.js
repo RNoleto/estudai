@@ -31,13 +31,9 @@ export const useUserStore = defineStore('user', {
           return false;
         }
 
-        // Fazendo uma requisição para o backend Laravel para verificar se já existe uma carreira
+        // Fazendo uma requisição para o backend Laravel para verificar se já existe uma carreira e salvando id da carreira
         const response = await axios.get(`user-career/${this.userId}`);
-
-        if (response.status === 200 && response.data) {
-          console.log("Carreira já atribuída ao usuário:", response.data);
-          return true; // O usuário já tem uma carreira salva
-        }
+        this.career = response.data.id;
 
         return false; // O usuário ainda não tem uma carreira atribuída
       } catch (error) {

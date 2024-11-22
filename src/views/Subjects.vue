@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted } from 'vue';
 import { useSubjectStore } from '../stores/useSubjectStore';
-import Career from '../components/ui/Career.vue';
+import OptionCard from '../components/ui/OptionCard.vue';
 import Button from '../components/ui/Button.vue';
 import Search from '../components/ui/Search.vue';
 import Navbar from '../components/Navbar.vue';
@@ -24,7 +24,7 @@ onMounted(async () => {
             <Search placeholder="Pesquise a matéria..."/>
             <div class="flex gap-2">
                 <div v-for="subject in subjectStore.subjects" :key="subject.id">
-                    <Career icon="basil:book-outline" :careerName="subject.name" />
+                    <OptionCard icon="basil:book-outline" :careerName="subject.name" />
                 </div>
             </div>
             <div class="flex gap-2">
