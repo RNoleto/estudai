@@ -47,6 +47,7 @@ onMounted(() => {
 onMounted(async () => {
   await careersStore.fetchCareers();
   await userStore.checkUserCareer();
+  await userStore.fetchUserSubjects();
   setInitialSelectedCareer();
 });
 </script>

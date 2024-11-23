@@ -7,6 +7,7 @@ export const useUserStore = defineStore('user', {
     userId: null,
     careerId: null,
     careerName: null,
+    userSubjects: [],
   }),
 
   actions: {
@@ -68,6 +69,48 @@ async saveUserCareer(careerId, careerName) {
         console.error("Erro ao verificar carreira do usuário:", error);
         return false;
       }
-    }
+    },
+    // Adiciona uma ou mais matérias ao usuário
+    async addUserSubjects(subjectIds) {
+      try {
+        const response = await axios.post('user-subjects', {
+          user_id: this.userId,
+          subject_ids: subjectIds,
+        });
+
+        if (response.status === 200) {
+          this.userSubjects.push(...subjectIds);
+          console.log("Matérias adicionadas com sucesso!");
+        }
+      } catch (error) {
+        console.error("Erro ao adicionar matérias:", error);
+      }
+    },
+    // Remove (desativa) uma matéria do usuário
+    async removeUserSubject(subjectId) {
+      try {
+        const response = await axios.patch('user-subjects/deactivate', {
+          user_id: this.userId,
+          subject_id: subjectId,
+        });
+
+        if (response.status === 200) {
+          this.userSubjects = this.userSubjects.filter(id => id !== subjectId);
+          console.log("Matéria desativada com sucesso!");
+        }
+      } catch (error) {
+        console.error("Erro ao desativar matéria:", error);
+      }
+    },
+    // Carrega as matérias do usuário do backend
+    async fetchUserSubjects() {
+      try {
+        const response = await axios.get(`user-subjects/${this.userId}`);
+        this.userSubjects = response.data.map(subject => subject.subject_id);
+        console.log("Matérias carregadas com sucesso!");
+      } catch (error) {
+        console.error("Erro ao carregar matérias:", error);
+      }
+    },
   },
 });
