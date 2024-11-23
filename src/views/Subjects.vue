@@ -14,7 +14,6 @@ const userStore = useUserStore();
 //Buscar as carreiras assim que o componente for montado
 onMounted(async () => {
     await subjectStore.fetchSubjects();
-    await userStore.fetchUserCareer();
 })
 </script>
 
