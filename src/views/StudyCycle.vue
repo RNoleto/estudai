@@ -10,16 +10,16 @@ const { formattedDate } = useCurrentDate();
 </script>
 
 <template>
-    <div class="w-full">
+    <div class="h-screen">
         <Navbar />
-        <div class="p-4 flex flex-col gap-4 h-screen">
+        <div class="p-4 flex flex-col gap-4">
             <div class="flex items-center justify-between">
                 <h3 class="text-4xl">Monte seu ciclo de estudo para hoje</h3>
                 <p class="text-sm">{{ formattedDate }}</p>
             </div>
             <!-- Carreira escolhida pelo usuario na tela anterior -->
-            <p class="bg-red-500">Nome da carreira escolhida</p> 
-            <Search/>
+            <p class="bg-red-500">Nome da carreira escolhida</p>
+            <Search />
             <p class="bg-red-500">Lista de Matérias selecionadas pelo usuário na tela anterior</p>
             <div class="flex flex-wrap gap-2">
                 <!-- Lista das matérias que serão estudadas hoje -->

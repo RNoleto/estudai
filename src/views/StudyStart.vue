@@ -46,9 +46,9 @@ const updateTopic = (topic) => {
 </script>
 
 <template>
-    <Navbar />
-    <div class="relative h-screen">
-        <div class="p-4 flex flex-col gap-4 h-screen">
+    <div class="h-screen">
+        <Navbar />
+        <div class="p-4 flex flex-col gap-4">
             <div class="flex items-center justify-between">
                 <h3 class="text-4xl">Iniciar estudos</h3>
                 <p>{{ formattedDate }}</p>
@@ -56,14 +56,14 @@ const updateTopic = (topic) => {
             <!-- Campo de pesquisa com lista suspensa de matérias -->
             <div class="grid grid-cols-3 gap-2 content-center relative">
                 <!-- <Search placeholder="Pesquise pela matéria" v-model="studyStore.subject" class="col-span-1"
-                @input="handleInputChange" />
-            <ul v-if="showDropdown"
-                class="absolute bg-white border mt-10 rounded shadow-lg max-h-32 overflow-y-auto z-10 w-[294.66px]">
-                <li v-for="subject in filteredSubjects" :key="subject.id" @click="selectSubject(subject.name)"
-                    class="p-2 cursor-pointer hover:bg-gray-200">
-                    {{ subject.name }}
-                </li>
-            </ul> -->
+                    @input="handleInputChange" />
+                <ul v-if="showDropdown"
+                    class="absolute bg-white border mt-10 rounded shadow-lg max-h-32 overflow-y-auto z-10 w-[294.66px]">
+                    <li v-for="subject in filteredSubjects" :key="subject.id" @click="selectSubject(subject.name)"
+                        class="p-2 cursor-pointer hover:bg-gray-200">
+                        {{ subject.name }}
+                    </li>
+                </ul> -->
                 <v-combobox clearable label="Matérias" v-model="selectedSubject" :items="subjects"
                     variant="solo-inverted"></v-combobox>
 

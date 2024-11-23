@@ -52,26 +52,18 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Navbar />
-  <div class="p-4 flex flex-col gap-4 h-screen">
-    <h3 class="text-4xl">Selecione a sua carreira</h3>
-    <div class="flex flex-wrap gap-2">
-      <OptionCard 
-        v-for="career in careersStore.careers" 
-        :key="career.id" 
-        @click="selectCareer(career)" 
-        :icon="career.icon" 
-        :careerName="career.name"
-        :variant="selectedCareer && career.id === selectedCareer.id ? 'selected' : 'primary'" 
-      />
+  <div class="h-screen">
+    <Navbar />
+    <div class="p-4 flex flex-col gap-4">
+      <h3 class="text-4xl">Selecione a sua carreira</h3>
+      <div class="flex flex-wrap gap-2">
+        <OptionCard v-for="career in careersStore.careers" :key="career.id" @click="selectCareer(career)"
+          :icon="career.icon" :careerName="career.name"
+          :variant="selectedCareer && career.id === selectedCareer.id ? 'selected' : 'primary'" />
+      </div>
+      <Button :to="{ name: 'Materias' }" :disabled="!selectedCareer" class="disabled:opacity-50" @click="saveCareer">
+        Avançar
+      </Button>
     </div>
-    <Button 
-      :to="{ name: 'Materias' }"
-      :disabled="!selectedCareer"
-      class="disabled:opacity-50"
-      @click="saveCareer"
-    >
-      Avançar
-    </Button>
   </div>
 </template>

@@ -14,28 +14,28 @@ const userStore = useUserStore();
 //Buscar as carreiras assim que o componente for montado
 onMounted(async () => {
     await subjectStore.fetchSubjects();
-    await userStore. fetchUserCareer();
+    await userStore.fetchUserCareer();
 })
 </script>
 
 <template>
-    <div class="w-full">
-        <Navbar/>
-        <div class="p-4 flex flex-col gap-4 h-screen">
+    <div class="h-screen">
+        <Navbar />
+        <div class="p-4 flex flex-col gap-4">
             <h3 class="text-4xl">Selecione as matérias que deseja estudar.</h3>
             <p class="text-md">Carreira: {{ userStore.careerName }}</p>
-            <Search placeholder="Pesquise a matéria..."/>
+            <Search placeholder="Pesquise a matéria..." />
             <div class="flex gap-2">
                 <div v-for="subject in subjectStore.subjects" :key="subject.id">
                     <OptionCard icon="basil:book-outline" :careerName="subject.name" />
                 </div>
             </div>
             <div class="flex gap-2">
-                <Button :to="{name:'Carreiras'}">Voltar</Button>
-                <Button :to="{name: 'Ciclo'}">Avançar</Button>
+                <Button :to="{ name: 'Carreiras' }">Voltar</Button>
+                <Button :to="{ name: 'Ciclo' }">Avançar</Button>
             </div>
 
         </div>
     </div>
-    
+
 </template>
