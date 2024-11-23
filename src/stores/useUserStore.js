@@ -106,11 +106,32 @@ async saveUserCareer(careerId, careerName) {
     async fetchUserSubjects() {
       try {
         const response = await axios.get(`user-subjects/${this.userId}`);
-        this.userSubjects = response.data.map(subject => subject.subject_id);
-        console.log("Matérias carregadas com sucesso!");
+        this.userSubjects = response.data.map((subject) => subject.subject_id);
       } catch (error) {
-        console.error("Erro ao carregar matérias:", error);
+        console.error("Erro ao carregar matérias do usuário:", error);
       }
     },
+    async saveUserSubjects(subjectIds) {
+      try {
+        const subjectsToDeactivate = this.userSubjects.filter(
+          (id) => !subjectIds.includes(id)
+        ); // Matérias desmarcadas
+    
+        const payload = {
+          user_id: this.userId,
+          subject_ids: subjectIds, // Todas as matérias selecionadas
+          subjects_to_deactivate: subjectsToDeactivate, // Matérias a desativar
+        };
+    
+        const response = await axios.post('user-subjects', payload);
+    
+        if (response.status === 200) {
+          this.userSubjects = subjectIds; // Atualiza o estado local
+          console.log("Matérias atualizadas com sucesso!");
+        }
+      } catch (error) {
+        console.error("Erro ao salvar matérias do usuário:", error);
+      }
+    }
   },
 });
