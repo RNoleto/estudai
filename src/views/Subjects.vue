@@ -39,7 +39,7 @@ const setInitialSelectedSubjects = () => {
 // Termo de pesquisa
 const searchTerm = ref('');
 
-// Computed para filtrar as matérias com base no termpo de pesquisa
+// Computed para filtrar as matérias com base no termo de pesquisa
 const filteredSubjects = computed(() => {
   if(!searchTerm.value) return subjectStore.subjects;
   return subjectStore.subjects.filter((subject) => 
