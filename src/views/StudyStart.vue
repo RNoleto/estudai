@@ -1,47 +1,52 @@
 <script setup>
-import Search from '../components/ui/Search.vue';
+import { onMounted, ref } from 'vue';
 import Input from '../components/ui/Input.vue';
 import Timer from '../components/ui/Timer.vue';
-
 import Navbar from '../components/Navbar.vue';
 
 import { useCurrentDate } from '../composables/useCurrentDate';
+import { useUserStore } from '../stores/useUserStore';
 import { useStudyStore } from '../stores/useStudyStore';
-import { computed, ref, onMounted } from 'vue';
+import { useSubjectStore } from '../stores/useSubjectStore';
+
+import {
+    ComboboxAnchor,
+    ComboboxContent,
+    ComboboxGroup,
+    ComboboxInput,
+    ComboboxItem,
+    ComboboxItemIndicator,
+    ComboboxLabel,
+    ComboboxRoot,
+    ComboboxTrigger,
+    ComboboxViewport,
+} from 'radix-vue';
+import { Icon } from '@iconify/vue';
 
 const { formattedDate } = useCurrentDate();
 const studyStore = useStudyStore();
+const userStore = useUserStore();
+const subjectStore = useSubjectStore();
 
-onMounted(() => {
-    studyStore.fetchSubjects();
+const selectedSubject = ref(null);
+
+// Carregar as matérias da API
+onMounted(async () => {
+    await subjectStore.fetchSubjects();
 });
 
-// Flag para controlar a exibição da lista suspensa
-const showDropdown = ref(false);
+// Carrega as matérias salvas pelo usuário
+const userSubjects = ref(userStore.userSubjects || []);
 
-// Propriedade computed para filtrar as matérias com base na entrada do usuário
-const filteredSubjects = computed(() => {
-    return studyStore.subject
-        ? studyStore.subjectList.filter(subject =>
-            subject.name.toLowerCase().includes(studyStore.subject.toLowerCase())
-        )
-        : [];
-});
-
-// Atualizar a flag ao digitar no campo de pesquisa
-const handleInputChange = () => {
-    showDropdown.value = filteredSubjects.value.length > 0;
-};
-
-// Função para selecionar uma matéria da lista de sugestões
-const selectSubject = (subjectName) => {
-    studyStore.setSubject(subjectName);
-    showDropdown.value = false; // Esconde a lista ao selecionar
+// Define a matéria selecionada na store
+const handleSubjectSelection = (subject) => {
+    selectedSubject.value = subject;
+    userStore.setSubject(subject.name);
 };
 
 //Atualizar o tópico diretamente na store
 const updateTopic = (topic) => {
-    studyStore.setTopic(topic);
+    userStore.setTopic(topic);
 };
 </script>
 
@@ -55,19 +60,41 @@ const updateTopic = (topic) => {
             </div>
             <!-- Campo de pesquisa com lista suspensa de matérias -->
             <div class="grid grid-cols-3 gap-2 content-center relative">
-                <!-- <Search placeholder="Pesquise pela matéria" v-model="studyStore.subject" class="col-span-1"
-                    @input="handleInputChange" />
-                <ul v-if="showDropdown"
-                    class="absolute bg-white border mt-10 rounded shadow-lg max-h-32 overflow-y-auto z-10 w-[294.66px]">
-                    <li v-for="subject in filteredSubjects" :key="subject.id" @click="selectSubject(subject.name)"
-                        class="p-2 cursor-pointer hover:bg-gray-200">
-                        {{ subject.name }}
-                    </li>
-                </ul> -->
-                <v-combobox clearable label="Matérias" v-model="selectedSubject" :items="subjects"
-                    variant="solo-inverted"></v-combobox>
+                <!-- ComboBox Aqui -->
+                <!-- Campo de seleção de matérias -->
+                <div class="w-full content-center relative">
+                    <ComboboxRoot v-model="selectedSubject" class="relative">
+                        <ComboboxAnchor
+                            class="w-full inline-flex items-center justify-between rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] bg-white text-gray-700 shadow hover:bg-gray-100 outline-none">
+                            <ComboboxInput
+                                class="w-full !bg-transparent outline-none text-gray-700 h-full selection:bg-gray-300"
+                                placeholder="Selecione uma matéria..." />
+                            <ComboboxTrigger>
+                                <Icon icon="radix-icons:chevron-down" class="h-4 w-4 text-gray-700" />
+                            </ComboboxTrigger>
+                        </ComboboxAnchor>
 
+                        <ComboboxContent class="absolute z-10 w-full mt-2 bg-white rounded shadow">
+                            <ComboboxViewport class="p-[5px]">
+                                <ComboboxGroup>
+                                    <ComboboxLabel class="px-[25px] text-xs leading-[25px] text-gray-500">
+                                        Matérias
+                                    </ComboboxLabel>
 
+                                    <ComboboxItem v-for="subject in userSubjects" :key="subject.id"
+                                        class="text-[13px] leading-none text-gray-700 rounded flex items-center h-[25px] px-[25px] relative cursor-pointer hover:bg-gray-200"
+                                        :value="subject" @click="handleSubjectSelection(subject)">
+                                        <ComboboxItemIndicator
+                                            class="absolute left-0 w-[25px] inline-flex items-center justify-center">
+                                            <Icon icon="radix-icons:check" />
+                                        </ComboboxItemIndicator>
+                                        {{ subject.name }}
+                                    </ComboboxItem>
+                                </ComboboxGroup>
+                            </ComboboxViewport>
+                        </ComboboxContent>
+                    </ComboboxRoot>
+                </div>
                 <!-- Campo de input para tópico -->
                 <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="col-span-2"
                     v-model="studyStore.topic" @input="updateTopic(studyStore.topic)" />
