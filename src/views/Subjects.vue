@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useSubjectStore } from '../stores/useSubjectStore';
 import { useUserStore } from '../stores/useUserStore';
 import OptionCard from '../components/ui/OptionCard.vue';
@@ -36,6 +36,17 @@ const setInitialSelectedSubjects = () => {
   );
 };
 
+// Termo de pesquisa
+const searchTerm = ref('');
+
+// Computed para filtrar as matérias com base no termpo de pesquisa
+const filteredSubjects = computed(() => {
+  if(!searchTerm.value) return subjectStore.subjects;
+  return subjectStore.subjects.filter((subject) => 
+  subject.name.toLowerCase().includes(searchTerm.value.toLocaleLowerCase())  
+);
+})
+
 // Buscar matérias e configurar seleção inicial ao montar o componente
 onMounted(async () => {
   await subjectStore.fetchSubjects(); // Carrega todas as matérias disponíveis
@@ -51,10 +62,10 @@ onMounted(async () => {
       <div class="p-4 flex flex-col gap-4">
         <h3 class="text-4xl">Selecione as matérias que deseja estudar.</h3>
         <p class="text-md">Carreira: {{ userStore.careerName }}</p>
-        <Search placeholder="Pesquise a matéria..." />
+        <Search placeholder="Pesquise a matéria..." v-model="searchTerm" />
         <div class="flex flex-wrap gap-2">
           <OptionCard
-            v-for="subject in subjectStore.subjects"
+            v-for="subject in filteredSubjects"
             :key="subject.id"
             :icon="'basil:book-outline'"
             :careerName="subject.name"
