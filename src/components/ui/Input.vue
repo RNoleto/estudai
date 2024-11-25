@@ -33,7 +33,7 @@ const emit = defineEmits(['update:modelValue']);
             :placeholder="placeholder"
             :value="modelValue"
             @input="$emit('update:modelValue', $event.target.value)"
-            class="w-full h-full bg-zinc-100 shadow-sm shadow-zinc-200 inline-flex appearance-none items-center justify-center rounded-md p-2 text-sm leading-none text-zinc-500 outline-none"
+            class="flex bg-zinc-200 items-center border rounded-md p-2 shadow-sm shadow-zinc-200 hover:bg-zinc-100 group"
         />
     </div>
 </template>
