@@ -41,6 +41,12 @@ export const useStudyStore = defineStore('study', {
                 return (state.studySummary.correctAnswers / state.studySummary.totalQuestions) * 100;
             }
             return 0;
+        },
+        incorrectAnswerPercentage: (state) => {
+            if(state.studySummary.questionsResolved === 'yes' && state.studySummary.totalQuestions > 0){
+                return 100 - (state.studySummary.correctAnswers / state.studySummary.totalQuestions) * 100;
+            }
+            return 0;
         }
     }
 });
