@@ -1,9 +1,10 @@
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import Input from '../components/ui/Input.vue';
 import Timer from '../components/ui/Timer.vue';
 import Navbar from '../components/Navbar.vue';
 import ComboBox from '../components/ui/ComboBox.vue';
+import Chart from 'primevue/chart';
 
 import { useCurrentDate } from "../composables/useCurrentDate";
 import { useUserStore } from "../stores/useUserStore";
@@ -16,11 +17,52 @@ const userStore = useUserStore();
 const subjectStore = useSubjectStore();
 
 const selectedSubject = ref(null);
+const chartData = ref();
+const chartOptions = ref(null);
+
+// Atualizar dados do gráfico
+const updateChartData = () => {
+  const correctPercentage =
+    (studyStore.studySummary.correctAnswers / studyStore.studySummary.totalQuestions) *
+    100;
+
+  chartData.value = {
+    labels: ["Acertos", "Erros"],
+    datasets: [
+      {
+        data: [correctPercentage, 100 - correctPercentage],
+        backgroundColor: ["#00C49F", "#FF6384"],
+        hoverBackgroundColor: ["#00B884", "#FF5675"],
+      },
+    ],
+  };
+
+  chartOptions.value = {
+    plugins: {
+      legend: {
+        labels: {
+          color: "#495057",
+        },
+      },
+    },
+    cutout: "60%",
+  };
+};
+// Atualizar dados sempre que necessário
+watch(
+  () => studyStore.studySummary,
+  () => {
+    if (studyStore.studySummary.totalQuestions > 0) updateChartData();
+  },
+  { deep: true }
+);
+
 
 // Carregar as matérias da API
 onMounted(async () => {
   await userStore.fetchUserSubjects();
   await subjectStore.fetchSubjects();
+  if (studyStore.studySummary.totalQuestions > 0) updateChartData();
 });
 
 // Combine userSubjects com nomes de matérias
@@ -94,9 +136,12 @@ const resetFields = () => {
                     <p>Acertos: {{ studyStore.studySummary.correctAnswers }}</p>
                   </div>
                 </div>
-                <div v-if="studyStore.studySummary.questionsResolved === 'yes'" class="text-center">
+                <!-- <div v-if="studyStore.studySummary.questionsResolved === 'yes'" class="text-center">
                   <p>Porcentagem de Acertos:</p>
                   <strong class="text-xl">{{ studyStore.correctAnswerPercentage }}%</strong>
+                </div> -->
+                <div v-if="studyStore.studySummary.totalQuestions > 0" class="col-span-2">
+                  <Chart :type="'doughnut'" :data="chartData" :options="chartOptions" class="w-full md:w-[5rem]" />
                 </div>
               </div>
             </div>
