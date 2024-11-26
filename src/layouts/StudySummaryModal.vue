@@ -13,6 +13,9 @@ const emit = defineEmits(['onClose']);
 const timerStore = useTimerStore();
 const studyStore = useStudyStore();
 
+const subjectName = ref('');
+const topicName = ref('');
+
 // Computed properties para garantir que os valores estejam atualizados
 const totalStudyTime = computed(() => timerStore.finalFormattedTime);
 const totalPauses = computed(() => timerStore.finalTotalPausesLength);
@@ -51,6 +54,17 @@ const clearForm = () => {
   totalQuestions.value = 0;
   correctAnswers.value = 0;
 }
+
+const isFormValid = computed(() => {
+  if (questionsResolved.value === 'yes') {
+    return (
+      totalQuestions.value >= correctAnswers.value &&
+      totalQuestions.value > 0 &&
+      correctAnswers.value >= 0
+    );
+  }
+  return true; // Válido se nenhuma questão foi resolvida.
+});
 </script>
 
 <template>
@@ -93,7 +107,8 @@ const clearForm = () => {
       </div>
       <Button 
         variant="primary"
-        @click="saveData"
+          @click="saveData"
+          :disabled="!isFormValid"
         >
         Salvar
       </Button>
@@ -102,6 +117,10 @@ const clearForm = () => {
 </template>
 
 <style scoped>
+.max-w-sm {
+  width: 90%;
+  max-width: 400px;
+}
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;

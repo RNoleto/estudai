@@ -7,6 +7,13 @@ import StudySummaryModal from '../../layouts/StudySummaryModal.vue';
 const timerStore = useTimerStore();
 const isModalOpen = ref(false);
 
+const props = defineProps({
+  isDisabled: {
+    type: Boolean,
+    default: false,
+  }
+})
+
 const openModal = () => {
   isModalOpen.value = true;
 };
@@ -26,7 +33,7 @@ const stopTimer = () => {
     <h2 class="text-lg font-bold mb-4">Temporizador</h2>
     <div class="text-2xl font-mono mb-4">{{ timerStore.formattedTime }}</div>
     <div class="flex space-x-2">
-      <Button @click="timerStore.start" variant="primary" :disabled="timerStore.isRunning">Iniciar</Button>
+      <Button @click="timerStore.start" variant="primary" :disabled="timerStore.isRunning || props.isDisabled">Iniciar</Button>
       <Button @click="timerStore.togglePause" variant="secondary" :disabled="!timerStore.isRunning">
         {{ timerStore.isPaused ? 'Continuar' : 'Pausar' }}
       </Button>
@@ -50,9 +57,7 @@ const stopTimer = () => {
     </div>
 
     <!-- Modal de Resumo de Estudo -->
-    <StudySummaryModal
-      :isOpen="isModalOpen"
-      @onClose="closeModal"
+    <StudySummaryModal :isOpen="isModalOpen" @onClose="closeModal"
     />
   </div>
 </template>
