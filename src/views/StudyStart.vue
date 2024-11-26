@@ -81,19 +81,22 @@ const resetFields = () => {
                 <p class="text-sm">Matéria: <span class="font-bold">{{ studyStore.subject }}</span></p>
                 <p class="text-sm">Tópico: <span class="font-bold">{{ studyStore.topic }}</span></p>
               </div>
-              <div class="col-span-2">
-                <p>Tempo de estudo: {{ studyStore.studySummary.totalStudyTime }}</p>
-                <p v-if="studyStore.studySummary.totalPauses > 0">
-                  Nº de pauses: {{ studyStore.studySummary.totalPauses }}
-                </p>
-                <div
-                  v-if="studyStore.studySummary.questionsResolved === 'yes'"
-                  class="flex gap-4">
-                  <p>Questões respondidas: {{ studyStore.studySummary.totalQuestions }}</p>
-                  <p>Acertos: {{ studyStore.studySummary.correctAnswers }}</p>
-                  <div v-if="studyStore.studySummary.questionsResolved === 'yes'" class="bg-red-500">
-                    <p><strong>Porcentagem de Acertos:</strong> {{ studyStore.correctAnswerPercentage }}%</p>
+              <div class="flex justify-between col-span-2">
+                <div>
+                  <p>Tempo de estudo: {{ studyStore.studySummary.totalStudyTime }}</p>
+                  <p v-if="studyStore.studySummary.totalPauses > 0">
+                    Nº de pauses: {{ studyStore.studySummary.totalPauses }}
+                  </p>
+                  <div
+                    v-if="studyStore.studySummary.questionsResolved === 'yes'"
+                    class="flex gap-4">
+                    <p>Questões respondidas: {{ studyStore.studySummary.totalQuestions }}</p>
+                    <p>Acertos: {{ studyStore.studySummary.correctAnswers }}</p>
                   </div>
+                </div>
+                <div v-if="studyStore.studySummary.questionsResolved === 'yes'" class="text-center">
+                  <p>Porcentagem de Acertos:</p>
+                  <strong class="text-xl">{{ studyStore.correctAnswerPercentage }}%</strong>
                 </div>
               </div>
             </div>
