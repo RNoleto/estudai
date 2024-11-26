@@ -66,7 +66,7 @@ const isFormValid = computed(() => {
 </script>
 
 <template>
-  <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center bg-zinc-700 bg-opacity-50 backdrop-filter backdrop-blur-sm">
+  <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center bg-zinc-700 bg-opacity-50 backdrop-filter backdrop-blur-sm z-10">
     <div class="bg-white p-5 rounded-lg shadow-lg max-w-sm">
       <h2 class="text-lg font-bold mb-4 uppercase ">Resumo de Estudo</h2>
       <!-- Exibindo o tempo total de estudo -->

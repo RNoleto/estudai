@@ -161,22 +161,23 @@ const handleMouseOut = () => {
       <div>
         <div class="grid grid-cols-3 gap-2">
           <Timer :isDisabled="!isSubjectSelected" class="col-span-1" />
-          <div class="flex flex-col gap-1 text-xs text-zinc-700 col-span-2"
-            v-if="studyStore.studySummary.totalStudyTime.length > 0">
-            <div class="grid grid-cols-5 border-b rounded-md p-4 bg-white">
-              <div class="flex flex-col col-span-3 justify-center">
-                <p class="text-sm">Matéria: <span class="font-bold">{{ studyStore.subject }}</span></p>
-                <p class="text-sm">Tópico: <span class="font-bold">{{ studyStore.topic }}</span></p>
-              </div>
-              <div class="flex justify-between col-span-2">
-                <div class="content-center">
-                  <p>Tempo de estudo: {{ studyStore.studySummary.totalStudyTime }}</p>
-                  <p v-if="studyStore.studySummary.totalPauses > 0">
-                    Nº de pauses: {{ studyStore.studySummary.totalPauses }}
-                  </p>
-                  <div v-if="studyStore.studySummary.questionsResolved === 'yes'" class="flex gap-4">
-                    <p>Questões respondidas: {{ studyStore.studySummary.totalQuestions }}</p>
-                    <p>Acertos: {{ studyStore.studySummary.correctAnswers }}</p>
+          <div class="flex flex-col gap-1 text-xs text-zinc-700 col-span-1"
+              v-if="studyStore.studySummary.totalStudyTime.length > 0">
+              <div class="grid grid-cols-3 border-b rounded-md p-4 bg-white justify-between">
+                <div class="flex flex-col  justify-center">
+                  <p class="text-sm">Matéria: <span class="font-bold">{{ studyStore.subject }}</span></p>
+                  <p class="text-sm">Tópico: <span class="font-bold">{{ studyStore.topic }}</span></p>
+                </div>
+                <div class="flex justify-between ">
+                  <div class="flex flex-col content-center justify-center gap-2">
+                    <p>Tempo de estudo: {{ studyStore.studySummary.totalStudyTime }}</p>
+                    <p v-if="studyStore.studySummary.totalPauses > 0">
+                      Nº de pauses: {{ studyStore.studySummary.totalPauses }}
+                    </p>
+                    <div v-if="studyStore.studySummary.questionsResolved === 'yes'" class="flex gap-1 flex-wrap">
+                      <p>Questões respondidas: {{ studyStore.studySummary.totalQuestions }}</p>
+                      <p>Acertos: {{ studyStore.studySummary.correctAnswers }}</p>
+                    </div>
                   </div>
                 </div>
                 <div v-if="studyStore.studySummary && studyStore.studySummary.totalQuestions > 0"
@@ -197,7 +198,6 @@ const handleMouseOut = () => {
                   </div>
                 </div>
               </div>
-            </div>
           </div>
         </div>
       </div>

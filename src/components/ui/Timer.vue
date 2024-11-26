@@ -29,33 +29,29 @@ const stopTimer = () => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center p-4 border rounded-md bg-white">
-    <h2 class="text-lg font-bold mb-4">Temporizador</h2>
-    <div class="text-2xl font-mono mb-4">{{ timerStore.formattedTime }}</div>
-    <div class="flex space-x-2">
-      <Button @click="timerStore.start" variant="primary" :disabled="timerStore.isRunning || props.isDisabled">Iniciar</Button>
-      <Button @click="timerStore.togglePause" variant="secondary" :disabled="!timerStore.isRunning">
-        {{ timerStore.isPaused ? 'Continuar' : 'Pausar' }}
-      </Button>
-      <!-- O botão "Parar" só estará habilitado quando o timer estiver rodando ou pausado -->
-      <Button @click="stopTimer" variant="delete" :disabled="!timerStore.isRunning">Parar</Button>
+  <div class="grid grid-cols-2 rounded-md bg-white p-4">
+    <div class="flex flex-col items-center">
+      <h2 class="text-lg font-bold mb-4">Temporizador</h2>
+      <div class="text-2xl font-mono mb-4">{{ timerStore.formattedTime }}</div>
+      <div class="flex space-x-2">
+        <Button @click="timerStore.start" variant="primary" :disabled="timerStore.isRunning || props.isDisabled">Iniciar</Button>
+        <Button @click="timerStore.togglePause" variant="secondary" :disabled="!timerStore.isRunning">
+          {{ timerStore.isPaused ? 'Continuar' : 'Pausar' }}
+        </Button>
+        <!-- O botão "Parar" só estará habilitado quando o timer estiver rodando ou pausado -->
+        <Button @click="stopTimer" variant="delete" :disabled="!timerStore.isRunning">Parar</Button>
+      </div>
     </div>
-
-    <div class="mt-4">
-      <h3 v-if="timerStore.pauses.length > 0" class="text-md font-bold">Pausas:</h3>
+    <div class="flex flex-col text-center justify-center p-4 gap-2 border-l border-zinc-100">
+      <!-- <h3 v-if="timerStore.pauses.length > 0" class="text-md font-bold">Pausas:</h3>
       <ul>
         <li v-for="(pause, index) in timerStore.pauses" :key="index">
           {{ index + 1 }}ª Pausa - {{ timerStore.formatPauseTime(pause) }}
         </li>
-      </ul>
-      <div class="mt-2">
-        <strong>Total de pausas: {{ timerStore.pauses.length }}</strong>
-      </div>
-      <div>
-        <strong>Tempo total: {{ timerStore.formatPauseTime(timerStore.totalPauseTime) }}</strong>
-      </div>
+      </ul> -->
+      <strong>Total de pausas: {{ timerStore.pauses.length }}</strong>      
+      <strong>Tempo total: {{ timerStore.formatPauseTime(timerStore.totalPauseTime) }}</strong>
     </div>
-
     <!-- Modal de Resumo de Estudo -->
     <StudySummaryModal :isOpen="isModalOpen" @onClose="closeModal"
     />
