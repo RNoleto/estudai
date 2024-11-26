@@ -91,6 +91,9 @@ const resetFields = () => {
                   class="flex gap-4">
                   <p>Questões respondidas: {{ studyStore.studySummary.totalQuestions }}</p>
                   <p>Acertos: {{ studyStore.studySummary.correctAnswers }}</p>
+                  <div v-if="studyStore.studySummary.questionsResolved === 'yes'" class="bg-red-500">
+                    <p><strong>Porcentagem de Acertos:</strong> {{ studyStore.correctAnswerPercentage }}%</p>
+                  </div>
                 </div>
               </div>
             </div>

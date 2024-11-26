@@ -5,10 +5,10 @@ export const useStudyStore = defineStore('study', {
     state: () => ({
         studySummary: {
             totalStudyTime: '',
-            totalPauses: 0,
+            totalPauses: '',
             questionsResolved: '',
-            totalQuestions: 0,
-            correctAnswers: 0,
+            totalQuestions: '',
+            correctAnswers: '',
         },
         subject: '',
         topic: '',
@@ -35,4 +35,12 @@ export const useStudyStore = defineStore('study', {
             this.topic = topic;
         }
     },
+    getters: {
+        correctAnswerPercentage: (state) => {
+            if (state.studySummary.questionsResolved === 'yes' && state.studySummary.totalQuestions > 0) {
+                return (state.studySummary.correctAnswers / state.studySummary.totalQuestions) * 100;
+            }
+            return 0;
+        }
+    }
 });

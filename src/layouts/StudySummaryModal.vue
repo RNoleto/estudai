@@ -13,8 +13,6 @@ const emit = defineEmits(['onClose']);
 const timerStore = useTimerStore();
 const studyStore = useStudyStore();
 
-const subjectName = ref('');
-const topicName = ref('');
 
 // Computed properties para garantir que os valores estejam atualizados
 const totalStudyTime = computed(() => timerStore.finalFormattedTime);
