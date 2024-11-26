@@ -46,7 +46,7 @@ const userSubjects = computed(() => {
 // Define a matéria selecionada na store
 const handleSubjectSelection = (subject) => {
   selectedSubject.value = subject;
-  userStore.setSubject(subject.name); // Atualiza a store com o nome
+  studyStore.setSubject(subject.name); // Atualiza a store com o nome
 };
 
 // Atualizar o tópico diretamente na store
@@ -69,10 +69,11 @@ const updateTopic = (topic) => {
           <ComboboxRoot v-model="selectedSubject" class="relative">
             <ComboboxAnchor
               class="w-full inline-flex items-center justify-between rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] bg-white text-gray-700 shadow hover:bg-gray-100 outline-none">
+              <ComboboxTrigger class="w-full flex justify-between">
               <ComboboxInput
                 class="w-full !bg-transparent outline-none text-gray-700 h-full selection:bg-gray-300"
-                placeholder="Selecione uma matéria..." />
-              <ComboboxTrigger>
+                :placeholder="selectedSubject ? selectedSubject.name : 'Selecione uma matéria...'" />
+              
                 <Icon icon="radix-icons:chevron-down" class="h-4 w-4 text-gray-700" />
               </ComboboxTrigger>
             </ComboboxAnchor>
