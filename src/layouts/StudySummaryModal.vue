@@ -35,7 +35,6 @@ onMounted(async () => {
 
 // Salvando dados no store
 const saveData = () => {
-
   if(correctAnswers.value > totalQuestions.value){
     alert('Total de questões corretas não pode ser maior que total de questões respondidas');
   } else{
@@ -50,7 +49,6 @@ const saveData = () => {
     clearForm();
     closeModal();
   }
-
 }
 
 const clearForm = () => {

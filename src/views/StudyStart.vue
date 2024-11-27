@@ -24,11 +24,10 @@ const chartInstance = ref(null);
 
 // Atualizar dados do gráfico
 const updateChartData = () => {
-  const correctPercentage =
-    studyStore.studySummary?.totalQuestions > 0
-      ? (studyStore.studySummary.correctAnswers / studyStore.studySummary.totalQuestions) * 100
-      : 0;
-  const incorrectPercentage = 100 - correctPercentage;
+  const correctPercentage = userStore.correctAnswerPercentage;
+  const incorrectPercentage = userStore.incorrectAnswerPercentage;
+
+  console.log("Correct:", correctPercentage, "Incorrect:", incorrectPercentage);
 
   chartData.value = {
     labels: ["Acertos", "Erros"],
@@ -60,9 +59,9 @@ const updateChartData = () => {
 };
 // Atualizar dados sempre que necessário
 watch(
-  () => studyStore.studySummary,
+  () => userStore.userStudyRecords,
   () => {
-    if (studyStore.studySummary.totalQuestions > 0) updateChartData();
+    if (userStore.userStudyRecords.length > 0) updateChartData();
   },
   { deep: true }
 );
@@ -72,7 +71,7 @@ watch(
 onMounted(async () => {
   await userStore.fetchUserSubjects();
   await subjectStore.fetchSubjects();
-  if (studyStore.studySummary.totalQuestions > 0) updateChartData();
+  if (userStore.questionsResolved > 0) updateChartData();
 });
 
 // Combine userSubjects com nomes de matérias
@@ -127,14 +126,13 @@ const handleMouseMove = (event) => {
     }
   }
 };
-
 // Função para resetar ao sair do mouse (voltar para a porcentagem inicial)
 const handleMouseOut = () => {
   const acertos = document.getElementById('acertos');
-  acertos.classList.remove('hidden');
+  acertos?.classList.remove('hidden');
 
   const erros = document.getElementById('erros');
-  erros.classList.add('hidden');
+  erros?.classList.add('hidden');
 };
 </script>
 
@@ -161,43 +159,43 @@ const handleMouseOut = () => {
       <div>
         <div class="grid grid-cols-3 gap-2">
           <Timer :isDisabled="!isSubjectSelected" class="col-span-1" />
-          <div class="flex flex-col gap-1 text-xs text-zinc-700 col-span-1"
-              v-if="studyStore.studySummary.totalStudyTime.length > 0">
-              <div class="grid grid-cols-3 border-b rounded-md p-4 bg-white justify-between">
-                <div class="flex flex-col  justify-center">
-                  <p class="text-sm">Matéria: <span class="font-bold">{{ studyStore.subject }}</span></p>
-                  <p class="text-sm">Tópico: <span class="font-bold">{{ studyStore.topic }}</span></p>
-                </div>
-                <div class="flex justify-between ">
-                  <div class="flex flex-col content-center justify-center gap-2">
-                    <p>Tempo de estudo: {{ studyStore.studySummary.totalStudyTime }}</p>
-                    <p v-if="studyStore.studySummary.totalPauses > 0">
-                      Nº de pauses: {{ studyStore.studySummary.totalPauses }}
-                    </p>
-                    <div v-if="studyStore.studySummary.questionsResolved === 'yes'" class="flex gap-1 flex-wrap">
-                      <p>Questões respondidas: {{ studyStore.studySummary.totalQuestions }}</p>
-                      <p>Acertos: {{ studyStore.studySummary.correctAnswers }}</p>
-                    </div>
+          <div class="flex flex-col gap-1 text-xs text-zinc-700 col-span-1" v-if="userStore.userStudyRecords.length > 0"
+            v-for="record in userStore.userStudyRecords" :key="record.id">
+            <div class="grid grid-cols-3 border-b rounded-md p-4 bg-white justify-between">
+              <div class="flex flex-col  justify-center">
+                <p class="text-sm">Matéria: <span class="font-bold">{{ record.subjectName }}</span></p>
+                <p class="text-sm">Tópico: <span class="font-bold">{{ record.topic }}</span></p>
+              </div>
+              <div class="flex justify-between ">
+                <div class="flex flex-col content-center justify-center gap-2">
+                  <p>Tempo de estudo: {{ record.studyTime }}</p>
+                  <p v-if="record.totalPauses > 0">
+                    Nº de pauses: {{ record.totalPauses }}
+                  </p>
+                  <div v-if="record.questionsResolved > 0" class="flex gap-1 flex-wrap">
+                    <p>Questões respondidas: {{ record.questionsResolved }}</p>
+                    <p>Acertos: {{ record.correctAnswers }}</p>
+                    <p>Erros: {{ record.incorrectAnswers }}</p>
                   </div>
                 </div>
-                <div v-if="studyStore.studySummary && studyStore.studySummary.totalQuestions > 0"
-                  class="relative flex justify-center">
-                  <!-- Gráfico -->
+              </div>
+              <div v-if="record.questionsResolved > 0" class="relative flex justify-center">
+                <!-- Gráfico -->
                   <Chart :type="'doughnut'" :data="chartData" :options="chartOptions" class="md:w-[10rem]"
                     @mousemove="handleMouseMove" @mouseout="handleMouseOut" ref="chartInstance" />
                   <!-- Texto centralizado -->
                   <div class="absolute bottom-5">
-                    <div id="acertos" class="text-[#00B884] flex flex-col text-center">
-                      <strong class="text-xl">{{ studyStore.correctAnswerPercentage.toFixed(1) }}%</strong>
-                      <p class="text-sm">Acertos</p>
-                    </div>
-                    <div class="hidden text-[#FF5675] flex flex-col text-center" id="erros">
-                      <strong class="text-xl">{{ studyStore.incorrectAnswerPercentage.toFixed(1) }}%</strong>
-                      <p class="text-sm">Erros</p>
-                    </div>
+                    <div class="text-[#00B884] flex flex-col text-center" id="acertos">
+                    <strong class="text-xl">{{ userStore.correctAnswerPercentage.toFixed(1) }}%</strong>
+                    <p class="text-sm">Acertos</p>
+                  </div>
+                  <div class="text-[#FF5675] flex flex-col text-center hidden" id="erros">
+                    <strong class="text-xl">{{ userStore.incorrectAnswerPercentage.toFixed(1) }}%</strong>
+                    <p class="text-sm">Erros</p>
                   </div>
                 </div>
               </div>
+            </div>
           </div>
         </div>
       </div>
