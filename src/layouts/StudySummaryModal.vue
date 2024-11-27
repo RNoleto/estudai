@@ -1,8 +1,9 @@
 <script setup>
 import Button from '../components/ui/Button.vue';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useTimerStore } from '../stores/useTimerStore';
 import { useStudyStore } from '../stores/useStudyStore';
+import { useUserStore } from '../stores/useUserStore';
 
 const props = defineProps({
   isOpen: Boolean, 
@@ -12,6 +13,7 @@ const emit = defineEmits(['onClose']);
 
 const timerStore = useTimerStore();
 const studyStore = useStudyStore();
+const userStore = useUserStore();
 
 
 // Computed properties para garantir que os valores estejam atualizados
@@ -26,6 +28,10 @@ const correctAnswers = ref(0);
 const closeModal = () => {
   emit('onClose');
 };
+
+onMounted(async () => {
+  await userStore.fetchUserStudyRecords();
+});
 
 // Salvando dados no store
 const saveData = () => {

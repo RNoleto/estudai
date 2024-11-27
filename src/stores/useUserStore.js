@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', {
     careerId: null,
     careerName: null,
     userSubjects: [],
+    userStudyRecords: [],
   }),
 
   actions: {
@@ -132,6 +133,15 @@ async saveUserCareer(careerId, careerName) {
       } catch (error) {
         console.error("Erro ao salvar matérias do usuário:", error);
       }
-    }
+    },
+    // Função para retornar os dados de estudo do usuário
+    async fetchUserStudyRecords() {
+      try {
+          const response = await axios.get(`user-study-records/user/${this.userId}`);
+          console.log('Dados de estudo do usuário:', response.data);
+      } catch (error) {
+          console.error('Erro ao buscar dados de estudo do usuário');
+      }
+  },
   },
 });
