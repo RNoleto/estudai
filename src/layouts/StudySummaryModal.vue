@@ -27,6 +27,7 @@ const correctAnswers = ref(0);
 
 const closeModal = () => {
   emit('onClose');
+  console.log('onClose Modal');
 };
 
 onMounted(async () => {

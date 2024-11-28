@@ -1,30 +1,22 @@
 <script setup>
-import { ref } from 'vue';
 import { useTimerStore } from '../../stores/useTimerStore';
 import Button from './Button.vue';
-import StudySummaryModal from '../../layouts/StudySummaryModal.vue';
+
 
 const timerStore = useTimerStore();
-const isModalOpen = ref(false);
 
 const props = defineProps({
   isDisabled: {
     type: Boolean,
     default: false,
   }
-})
+});
 
-const openModal = () => {
-  isModalOpen.value = true;
-};
-
-const closeModal = () => {
-  isModalOpen.value = false;
-};
+const emit = defineEmits(['timerStopped']);
 
 const stopTimer = () => {
   timerStore.stop();
-  openModal();
+  emit('timerStopped');
 };
 </script>
 
@@ -43,18 +35,9 @@ const stopTimer = () => {
       </div>
     </div>
     <div class="flex flex-col text-center justify-center p-4 gap-2 border-l border-zinc-100">
-      <!-- <h3 v-if="timerStore.pauses.length > 0" class="text-md font-bold">Pausas:</h3>
-      <ul>
-        <li v-for="(pause, index) in timerStore.pauses" :key="index">
-          {{ index + 1 }}ª Pausa - {{ timerStore.formatPauseTime(pause) }}
-        </li>
-      </ul> -->
       <strong>Total de pausas: {{ timerStore.pauses.length }}</strong>      
       <strong>Tempo total: {{ timerStore.formatPauseTime(timerStore.totalPauseTime) }}</strong>
     </div>
-    <!-- Modal de Resumo de Estudo -->
-    <StudySummaryModal :isOpen="isModalOpen" @onClose="closeModal"
-    />
   </div>
 </template>
 

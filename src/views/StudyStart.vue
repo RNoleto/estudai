@@ -2,6 +2,7 @@
 import { onMounted, ref, computed, watch } from 'vue';
 import Input from '../components/ui/Input.vue';
 import Timer from '../components/ui/Timer.vue';
+import StudySummaryModal from '../layouts/StudySummaryModal.vue';
 import Navbar from '../components/Navbar.vue';
 import ComboBox from '../components/ui/ComboBox.vue';
 import Chart from 'primevue/chart';
@@ -19,8 +20,17 @@ const subjectStore = useSubjectStore();
 const selectedSubject = ref(null);
 const chartData = ref();
 const chartOptions = ref(null);
-const percentageData = ref({ acertos: 0, erros: 0 });
 const chartInstance = ref(null);
+const isOpen = ref(false);
+
+// Trecho responsavel pelo StudySummaryModal
+const handleTimerStopped = () => {
+  isOpen.value = true;
+};
+
+const handleCloseModal = () => {
+  isOpen.value = false;
+}
 
 // Atualizar dados do gráfico
 const updateChartData = () => {
@@ -150,15 +160,15 @@ const handleMouseOut = () => {
           <ComboBox :options="userSubjects" :placeholder="'Selecione uma matéria...'" v-model="selectedSubject"
             @select="handleSubjectSelection" />
         </div>
-
         <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="col-span-2"
           v-model="studyStore.topic" />
       </div>
-
       <!-- Resumo dos estudos -->
       <div>
         <div class="grid grid-cols-3 gap-2">
-          <Timer :isDisabled="!isSubjectSelected" class="col-span-1" />
+          <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" class="col-span-1" />
+          <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal"/>
+
           <div class="flex flex-col gap-1 text-xs text-zinc-700 col-span-1" v-if="userStore.userStudyRecords.length > 0"
             v-for="record in userStore.userStudyRecords" :key="record.id">
             <div class="grid grid-cols-3 border-b rounded-md p-4 bg-white justify-between">
