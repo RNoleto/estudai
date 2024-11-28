@@ -27,7 +27,6 @@ const correctAnswers = ref(0);
 
 const closeModal = () => {
   emit('onClose');
-  console.log('onClose Modal');
 };
 
 onMounted(async () => {
@@ -39,7 +38,7 @@ const saveData = () => {
   if(correctAnswers.value > totalQuestions.value){
     alert('Total de questões corretas não pode ser maior que total de questões respondidas');
   } else{
-    studyStore.updateStudySummary({
+    userStore.saveUserStudyRecord({
       totalStudyTime: totalStudyTime.value,
       totalPauses: totalPauses.value,
       questionsResolved: questionsResolved.value,

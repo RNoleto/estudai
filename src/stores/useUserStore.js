@@ -3,6 +3,8 @@ import { useAuth } from 'vue-clerk';
 import axios from 'axios';
 
 import { useSubjectStore } from './useSubjectStore';
+import { useTimerStore } from './useTimerStore';
+import { useStudyStore } from './useStudyStore';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -169,7 +171,52 @@ async checkUserCareer() {
       } catch (error) {
           console.error('Erro ao buscar registros de estudo do usuário:', error);
       }
-    }, 
+    },
+    //Função para salvar o historico de estudo do usuário
+    async saveUserStudyRecord(newRecord) {
+      const timerStore = useTimerStore();
+      const studyStore = useStudyStore();
+
+      if(!this.userId) {
+        console.error("ID do usuário não encontrado.")
+        return;
+      }
+
+      try {
+        const payload = {
+          user_id: this.userId,
+          subject_id: newRecord.subjectId,
+          topic: studyStore.topic,
+          study_time: timerStore.finalFormattedTime,
+          total_pauses: timerStore.finalTotalPausesLength,
+          questions_resolved: studyStore.studySummary.questionsResolved.value, //Testando aqui
+          correct_answers: newRecord.correctAnswers,
+          incorrect_answers: newRecord.incorrectAnswers,
+        };
+
+        const response = await axios.post('user-study-records', payload);
+
+        if (response.status === 201) {
+          // Adiciona o novo registro ao estado local
+          const savedRecord = response.data;
+          this.userStudyRecords.push({
+            id: savedRecord.id,
+            subjectId: savedRecord.subject_id,
+            topic: savedRecord.topic,
+            studyTime: savedRecord.study_time,
+            totalPauses: savedRecord.total_pauses,
+            questionsResolved: savedRecord.questions_resolved,
+            correctAnswers: savedRecord.correct_answers,
+            incorrectAnswers: savedRecord.incorrect_answers,
+            createdAt: savedRecord.created_at,
+            updatedAt: savedRecord.updated_at,
+          });
+          console.log("Registro de estudo salvo com sucesso!");
+        }
+      } catch (error) {
+        console.error("Console no Pinia. Erro ao salvar registro de estudo do usuário:", error);
+      }
+    },
   },
   getters: {
     combinedSubjects(state) {
