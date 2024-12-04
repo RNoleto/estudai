@@ -174,6 +174,7 @@ async checkUserCareer() {
     },
     //Função para salvar o historico de estudo do usuário
     async saveUserStudyRecord(newRecord) {
+      console.log("Função saveUserStudyRecord foi chamada!"); // Confirmação inicial
       const timerStore = useTimerStore();
       const studyStore = useStudyStore();
 
@@ -185,28 +186,35 @@ async checkUserCareer() {
       try {
         const payload = {
           user_id: this.userId,
-          subject_id: newRecord.subjectId,
+          subject_id: newRecord.subjectId, //Erro aqui
           topic: studyStore.topic,
-          study_time: timerStore.finalFormattedTime,
+          study_time: timerStore.elapsedTime, // Corrigir aqui
           total_pauses: timerStore.finalTotalPausesLength,
-          questions_resolved: studyStore.studySummary.questionsResolved.value, //Testando aqui
-          correct_answers: newRecord.correctAnswers,
-          incorrect_answers: newRecord.incorrectAnswers,
+          questions_resolved: studySummaryData.questionsResolved, //Feito
+          correct_answers: studySummaryData.correctAnswers, //Erro aqui
+          incorrect_answers: studyStore.incorrectAnswers, //Erro aqui
         };
+
+        // Exibir o payload no console
+        console.log("Payload enviado para o backend:", payload);
 
         const response = await axios.post('user-study-records', payload);
 
         if (response.status === 201) {
           // Adiciona o novo registro ao estado local
           const savedRecord = response.data;
+
+          // Exibir o savedRecord no console
+          console.log("Registro salvo retornado pelo backend:", savedRecord);
+
           this.userStudyRecords.push({
             id: savedRecord.id,
             subjectId: savedRecord.subject_id,
             topic: savedRecord.topic,
             studyTime: savedRecord.study_time,
             totalPauses: savedRecord.total_pauses,
-            questionsResolved: savedRecord.questions_resolved,
-            correctAnswers: savedRecord.correct_answers,
+            questionsResolved: newRecord.totalQuestions.value, 
+            correctAnswers: newRecord.correctAnswers.value, // Teste aqui, pegando valor de StudyStore
             incorrectAnswers: savedRecord.incorrect_answers,
             createdAt: savedRecord.created_at,
             updatedAt: savedRecord.updated_at,

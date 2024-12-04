@@ -24,7 +24,6 @@ const totalPauses = computed(() => timerStore.finalTotalPausesLength);
 const questionsResolved = ref(null);
 const totalQuestions = ref(0);
 const correctAnswers = ref(0);
-
 const closeModal = () => {
   emit('onClose');
 };
@@ -38,13 +37,19 @@ const saveData = () => {
   if(correctAnswers.value > totalQuestions.value){
     alert('Total de questões corretas não pode ser maior que total de questões respondidas');
   } else{
-    userStore.saveUserStudyRecord({
+    const newRecord  = {
       totalStudyTime: totalStudyTime.value,
       totalPauses: totalPauses.value,
       questionsResolved: questionsResolved.value,
       totalQuestions: questionsResolved.value === 'yes' ? totalQuestions.value : 0,
       correctAnswers: questionsResolved.value === 'yes' ? correctAnswers.value : 0,
-    });
+    };
+
+    // Logando os dados no console
+    console.log('Dados de studySummaryModal:', newRecord);
+
+    // Salvando os dados no userStore
+    userStore.saveUserStudyRecord(newRecord); // passando valores para useUserStore
   
     clearForm();
     closeModal();
