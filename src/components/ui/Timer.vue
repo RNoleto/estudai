@@ -21,7 +21,7 @@ const stopTimer = () => {
 </script>
 
 <template>
-  <div class="grid grid-cols-2 rounded-md bg-white p-4">
+  <div class="grid grid-cols-2 rounded-md bg-white p-4 shadow">
     <div class="flex flex-col items-center">
       <h2 class="text-lg font-bold mb-4">Temporizador</h2>
       <div class="text-2xl font-mono mb-4">{{ timerStore.formattedTime }}</div>

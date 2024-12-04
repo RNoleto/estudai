@@ -173,31 +173,32 @@ const handleMouseOut = () => {
           </div>
           <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
 
+          <!-- Cards com informações de estudos registrados pelo usuário -->
           <div class="col-span-2">
-            <div class="grid grid-cols-2 gap-2">
+            <div class="grid grid-cols-3 gap-2">
               <div class="flex flex-col gap-1 text-xs text-zinc-700 col-span-1 border-b rounded-md bg-white p-4 overflow-hidden" v-if="userStore.userStudyRecords.length > 0"
                 v-for="record in userStore.userStudyRecords" :key="record.id">
-                <div class="flex flex-col justify-center">
-                  <p class="text-sm">Matéria: <span class="font-bold">{{ record.subjectName }}</span></p>
-                  <p class="text-sm">Tópico: <span class="font-bold">{{ record.topic }}</span></p>
+                <div class="flex flex-col justify-center gap-1">
+                  <p><span class="font-bold">Matéria:</span> {{ record.subjectName }}</p>
+                  <p><span class="font-bold">Tópico:</span> {{ record.topic }}</p>
                 </div>
                 <div class="flex justify-between">
                   <div class="flex">
-                    <div class="flex flex-col justify-center gap-2">
-                      <p>Tempo de estudo: {{ record.studyTime }}</p>
+                    <div class="flex flex-col justify-center gap-1">
+                      <p><span class="font-bold">Tempo de estudo:</span> {{ record.studyTime }}</p>
                       <p v-if="record.totalPauses > 0">
-                        Nº de pauses: {{ record.totalPauses }}
+                        <span class="font-bold">Nº de pauses:</span> {{ record.totalPauses }}
                       </p>
-                      <div v-if="record.questionsResolved > 0" class="flex gap-1 flex-wrap">
-                        <p>Questões respondidas: {{ record.questionsResolved }}</p>
-                        <p>Acertos: {{ record.correctAnswers }}</p>
-                        <p>Erros: {{ record.incorrectAnswers }}</p>
+                      <div v-if="record.questionsResolved > 0" class="flex flex-col gap-1">
+                        <p><span class="font-bold">Questões respondidas:</span> {{ record.questionsResolved }}</p>
+                        <p><span class="font-bold">Acertos:</span> {{ record.correctAnswers }}</p>
+                        <p><span class="font-bold">Erros: </span> {{ record.incorrectAnswers }}</p>
                       </div>
                     </div>
                   </div>
+                  <!-- Gráfico -->
                   <div v-if="record.questionsResolved > 0" class="relative flex justify-center">
-                    <!-- Gráfico -->
-                    <Chart :type="'doughnut'" :data="chartData" :options="chartOptions" class="md:w-[10rem]"
+                    <Chart :type="'doughnut'" :data="chartData" :options="chartOptions" class="md:w-[10rem] mt-[-60px]"
                       ref="chartInstance" />
                     <div class="absolute bottom-5">
                       <div class="text-[#00B884] flex flex-col text-center" id="acertos">
