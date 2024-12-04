@@ -12,7 +12,11 @@ import { useUserStore } from "../stores/useUserStore";
 import { useStudyStore } from "../stores/useStudyStore";
 import { useSubjectStore } from "../stores/useSubjectStore";
 
+import { useTimeFormatter } from '../composables/useTimeFormatter';
+
 const { formattedDate } = useCurrentDate();
+const { formatStudyTime } = useTimeFormatter();
+
 const studyStore = useStudyStore();
 const userStore = useUserStore();
 const subjectStore = useSubjectStore();
@@ -32,14 +36,12 @@ const handleCloseModal = () => {
   isOpen.value = false;
 }
 
-// Atualizar dados do gráfico
-const updateChartData = () => {
-  const correctPercentage = userStore.correctAnswerPercentage;
-  const incorrectPercentage = userStore.incorrectAnswerPercentage;
+// Gera os dados do gráfico para cada registro
+const getChartData = (record) => {
+  const correctPercentage = userStore.getCorrectAnswerPercentage(record);
+  const incorrectPercentage = userStore.getIncorrectAnswerPercentage(record);
 
-  // console.log("Correct:", correctPercentage, "Incorrect:", incorrectPercentage);
-
-  chartData.value = {
+  return {
     labels: ["Acertos", "Erros"],
     datasets: [
       {
@@ -49,8 +51,12 @@ const updateChartData = () => {
       },
     ],
   };
+};
+// Gera as opções do gráfico para cada registro
+const getChartOptions = (record) => {
+  const correctPercentage = userStore.getCorrectAnswerPercentage(record);
 
-  chartOptions.value = {
+  return {
     plugins: {
       legend: {
         display: false, // Oculta a legenda
@@ -109,43 +115,6 @@ const resetFields = () => {
   studyStore.setTopic(''); // Adicione uma ação ou getter para o tópico, se necessário
 };
 
-// Função para atualizar a porcentagem com base na posição do mouse
-const handleMouseMove = (event) => {
-  if (!chartInstance.value) return;
-
-  const chart = chartInstance.value.chart;
-
-  const activePoints = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, false);
-  if (activePoints.length) {
-    const firstPoint = activePoints[0];
-    const value = chart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
-    const total = chart.data.datasets[firstPoint.datasetIndex].data.reduce((acc, val) => acc + val, 0);
-    // const percentage = (value / total) * 100;
-
-    // Atualiza a porcentagem de acertos e erros dependendo de qual parte do gráfico o mouse está
-    if (firstPoint.index === 0) {
-      const acertos = document.getElementById('acertos');
-      acertos.classList.remove('hidden');
-
-      const erros = document.getElementById('erros');
-      erros.classList.add('hidden');
-    } else {
-      const erros = document.getElementById('erros');
-      erros.classList.remove('hidden');
-
-      const acertos = document.getElementById('acertos');
-      acertos.classList.add('hidden');
-    }
-  }
-};
-// Função para resetar ao sair do mouse (voltar para a porcentagem inicial)
-const handleMouseOut = () => {
-  const acertos = document.getElementById('acertos');
-  acertos?.classList.remove('hidden');
-
-  const erros = document.getElementById('erros');
-  erros?.classList.add('hidden');
-};
 </script>
 
 <template>
@@ -176,8 +145,10 @@ const handleMouseOut = () => {
           <!-- Cards com informações de estudos registrados pelo usuário -->
           <div class="col-span-2">
             <div class="grid grid-cols-3 gap-2">
-              <div class="flex flex-col gap-1 text-xs text-zinc-700 col-span-1 border-b rounded-md bg-white p-4 overflow-hidden" v-if="userStore.userStudyRecords.length > 0"
-                v-for="record in userStore.userStudyRecords" :key="record.id">
+              <div
+                class="flex flex-col gap-1 text-xs text-zinc-700 col-span-1 border-b rounded-md bg-white p-4 overflow-hidden"
+                v-if="userStore.userStudyRecords.length > 0" v-for="record in userStore.userStudyRecords"
+                :key="record.id">
                 <div class="flex flex-col justify-center gap-1">
                   <p><span class="font-bold">Matéria:</span> {{ record.subjectName }}</p>
                   <p><span class="font-bold">Tópico:</span> {{ record.topic }}</p>
@@ -185,7 +156,7 @@ const handleMouseOut = () => {
                 <div class="flex justify-between">
                   <div class="flex">
                     <div class="flex flex-col justify-center gap-1">
-                      <p><span class="font-bold">Tempo de estudo:</span> {{ record.studyTime }}</p>
+                      <p><span class="font-bold">Tempo de estudo:</span> {{ formatStudyTime(record.studyTime) }}</p>
                       <p v-if="record.totalPauses > 0">
                         <span class="font-bold">Nº de pauses:</span> {{ record.totalPauses }}
                       </p>
@@ -198,15 +169,16 @@ const handleMouseOut = () => {
                   </div>
                   <!-- Gráfico -->
                   <div v-if="record.questionsResolved > 0" class="relative flex justify-center">
-                    <Chart :type="'doughnut'" :data="chartData" :options="chartOptions" class="md:w-[10rem] mt-[-60px]"
-                      ref="chartInstance" />
+                    <Chart :type="'doughnut'" :data="getChartData(record)" :options="getChartOptions(record)"
+                      class="md:w-[10rem] mt-[-60px]" ref="chartInstance" />
                     <div class="absolute bottom-5">
                       <div class="text-[#00B884] flex flex-col text-center" id="acertos">
                         <strong class="text-xl">{{ userStore.getCorrectAnswerPercentage(record).toFixed(1) }}%</strong>
                         <p class="text-sm">Acertos</p>
                       </div>
                       <div class="text-[#FF5675] flex flex-col text-center hidden" id="erros">
-                        <strong class="text-xl">{{ userStore.getIncorrectAnswerPercentage(record).toFixed(1) }}%</strong>
+                        <strong class="text-xl">{{ userStore.getIncorrectAnswerPercentage(record).toFixed(1)
+                          }}%</strong>
                         <p class="text-sm">Erros</p>
                       </div>
                     </div>
