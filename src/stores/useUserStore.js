@@ -117,14 +117,14 @@ export const useUserStore = defineStore('user', {
 
         const payload = {
           user_id: this.userId,
-          subject_ids: subjectIds, 
+          subject_ids: subjectIds,
           subjects_to_deactivate: subjectsToDeactivate,
         };
 
         const response = await axios.post('user-subjects', payload);
 
         if (response.status === 200) {
-          this.userSubjects = subjectIds; 
+          this.userSubjects = subjectIds;
         }
       } catch (error) {
         console.error("Erro ao salvar matérias do usuário:", error);
@@ -180,12 +180,12 @@ export const useUserStore = defineStore('user', {
 
       const timeParts = newRecord.totalStudyTime.split(':'); // Divide a string em horas e minutos
       const studyTimeInMinutes = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]); // Converte para minutos
-      
+
       try {
         const payload = {
-          user_id : this.userId,
+          user_id: this.userId,
           subject_id: studyStore.subject,
-          topic : studyStore.topic, //falta aqui
+          topic: studyStore.topic, //falta aqui
           questions_resolved: newRecord.totalQuestions,
           correct_answers: newRecord.correctAnswers,
           incorrect_answers: newRecord.totalQuestions - newRecord.correctAnswers,
@@ -200,6 +200,23 @@ export const useUserStore = defineStore('user', {
         console.error("Erro ao salvar no dados de estudos banco de dados:", error);
       }
     },
+    getCorrectAnswerPercentage(record) {
+      const { questionsResolved, correctAnswers } = record;
+
+      if (questionsResolved > 0) {
+        return (correctAnswers / questionsResolved) * 100;
+      }
+      return 0; // Retorna 0 caso não haja perguntas resolvidas
+    },
+    getIncorrectAnswerPercentage(record) {
+      const { questionsResolved, correctAnswers } = record;
+
+      if (questionsResolved > 0) {
+        const incorrectAnswers = questionsResolved - correctAnswers;
+        return (incorrectAnswers / questionsResolved) * 100;
+      }
+      return 0; // Retorna 0 caso não haja perguntas resolvidas
+    }
   },
   getters: {
     combinedSubjects(state) {
