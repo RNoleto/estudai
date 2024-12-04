@@ -18,20 +18,20 @@ export const useStudyStore = defineStore('study', {
         async fetchSubjects() {
             try {
                 const response = await axios.get('subjects');
-                console.log(response.data); 
+                console.log(response.data);
                 this.subjectList = Array.isArray(response.data) ? response.data : [];
             } catch (error) {
                 console.error('Erro ao buscar as matérias:', error);
                 this.subjectList = [];
             }
         },
-        updateStudySummary(summary){
+        updateStudySummary(summary) {
             this.studySummary = summary;
         },
-        setSubject(subject){
+        setSubject(subject) {
             this.subject = subject;
         },
-        setTopic(topic){
+        setTopic(topic) {
             this.topic = topic;
         }
     },
@@ -43,7 +43,7 @@ export const useStudyStore = defineStore('study', {
             return 0;
         },
         incorrectAnswerPercentage: (state) => {
-            if(state.studySummary.questionsResolved === 'yes' && state.studySummary.totalQuestions > 0){
+            if (state.studySummary.questionsResolved === 'yes' && state.studySummary.totalQuestions > 0) {
                 return 100 - (state.studySummary.correctAnswers / state.studySummary.totalQuestions) * 100;
             }
             return 0;
