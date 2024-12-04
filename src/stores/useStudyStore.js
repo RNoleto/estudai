@@ -30,6 +30,8 @@ export const useStudyStore = defineStore('study', {
         },
         setSubject(subject) {
             this.subject = subject;
+            console.log("Mudando a matéria:", subject);
+            
         },
         setTopic(topic) {
             this.topic = topic;

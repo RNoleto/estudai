@@ -96,7 +96,7 @@ const userSubjects = computed(() => {
 // Define a matéria selecionada na store
 const handleSubjectSelection = (subject) => {
   selectedSubject.value = subject;
-  studyStore.setSubject(subject.name); // Atualiza a store com o nome
+  studyStore.setSubject(subject.id); // Atualiza a store com o ID
 };
 
 const isSubjectSelected = computed(() => !!selectedSubject.value);

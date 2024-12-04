@@ -74,7 +74,6 @@ export const useUserStore = defineStore('user', {
         return false;
       }
     },
-    // Adiciona uma ou mais matérias ao usuário
     async addUserSubjects(subjectIds) {
       try {
         const response = await axios.post('user-subjects', {
@@ -83,13 +82,11 @@ export const useUserStore = defineStore('user', {
         });
         if (response.status === 200) {
           this.userSubjects.push(...subjectIds);
-          // console.log("Matérias adicionadas com sucesso!");
         }
       } catch (error) {
         console.error("Erro ao adicionar matérias:", error);
       }
     },
-    // Remove (desativa) uma matéria do usuário
     async removeUserSubject(subjectId) {
       try {
         const response = await axios.patch('user-subjects/deactivate', {
@@ -98,7 +95,6 @@ export const useUserStore = defineStore('user', {
         });
         if (response.status === 200) {
           this.userSubjects = this.userSubjects.filter(id => id !== subjectId);
-          // console.log("Matéria desativada com sucesso!");
         }
       } catch (error) {
         console.error("Erro ao desativar matéria:", error);
@@ -121,15 +117,14 @@ export const useUserStore = defineStore('user', {
 
         const payload = {
           user_id: this.userId,
-          subject_ids: subjectIds, // Todas as matérias selecionadas
-          subjects_to_deactivate: subjectsToDeactivate, // Matérias a desativar
+          subject_ids: subjectIds, 
+          subjects_to_deactivate: subjectsToDeactivate,
         };
 
         const response = await axios.post('user-subjects', payload);
 
         if (response.status === 200) {
-          this.userSubjects = subjectIds; // Atualiza o estado local
-          // console.log("Matérias atualizadas com sucesso!");
+          this.userSubjects = subjectIds; 
         }
       } catch (error) {
         console.error("Erro ao salvar matérias do usuário:", error);
@@ -183,46 +178,26 @@ export const useUserStore = defineStore('user', {
         return;
       }
 
+      const timeParts = newRecord.totalStudyTime.split(':'); // Divide a string em horas e minutos
+      const studyTimeInMinutes = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]); // Converte para minutos
+      
       try {
         const payload = {
-          user_id: this.userId,
-          subject_id: newRecord.subjectId, //Erro aqui
-          topic: studyStore.topic,
-          study_time: timerStore.elapsedTime, // Corrigir aqui
-          total_pauses: timerStore.finalTotalPausesLength,
-          questions_resolved: studySummaryData.questionsResolved, //Feito
-          correct_answers: studySummaryData.correctAnswers, //Erro aqui
-          incorrect_answers: studyStore.incorrectAnswers, //Erro aqui
-        };
-
-        // Exibir o payload no console
-        console.log("Payload enviado para o backend:", payload);
+          user_id : this.userId,
+          subject_id: studyStore.subject,
+          topic : studyStore.topic, //falta aqui
+          questions_resolved: newRecord.totalQuestions,
+          correct_answers: newRecord.correctAnswers,
+          incorrect_answers: newRecord.totalQuestions - newRecord.correctAnswers,
+          total_pauses: newRecord.totalPauses,
+          study_time: studyTimeInMinutes,
+        }
 
         const response = await axios.post('user-study-records', payload);
 
-        if (response.status === 201) {
-          // Adiciona o novo registro ao estado local
-          const savedRecord = response.data;
-
-          // Exibir o savedRecord no console
-          console.log("Registro salvo retornado pelo backend:", savedRecord);
-
-          this.userStudyRecords.push({
-            id: savedRecord.id,
-            subjectId: savedRecord.subject_id,
-            topic: savedRecord.topic,
-            studyTime: savedRecord.study_time,
-            totalPauses: savedRecord.total_pauses,
-            questionsResolved: newRecord.totalQuestions.value,
-            correctAnswers: newRecord.correctAnswers.value, // Teste aqui, pegando valor de StudyStore
-            incorrectAnswers: savedRecord.incorrect_answers,
-            createdAt: savedRecord.created_at,
-            updatedAt: savedRecord.updated_at,
-          });
-          console.log("Registro de estudo salvo com sucesso!");
-        }
+        console.log("Dados salvos no banco de dados com sucesso:", response);
       } catch (error) {
-        console.error("Console no Pinia. Erro ao salvar registro de estudo do usuário:", error);
+        console.error("Erro ao salvar no dados de estudos banco de dados:", error);
       }
     },
   },
@@ -233,9 +208,7 @@ export const useUserStore = defineStore('user', {
         .map((id) => subjectStore.subjects.find((subject) => subject.id === id))
         .filter(Boolean);
     },
-    // Percentual de respostas corretas considerando todos os registros de estudo
     correctAnswerPercentage: (state) => {
-      // Filtra os registros com dados válidos e calcula o total de respostas corretas e resolvidas
       const totalQuestionsResolved = state.userStudyRecords.reduce((sum, record) => sum + (record.questionsResolved || 0), 0);
       const totalCorrectAnswers = state.userStudyRecords.reduce((sum, record) => sum + (record.correctAnswers || 0), 0);
 
@@ -244,8 +217,6 @@ export const useUserStore = defineStore('user', {
       }
       return 0; // Retorna 0 caso não haja perguntas resolvidas
     },
-
-    // Percentual de respostas incorretas considerando todos os registros de estudo
     incorrectAnswerPercentage: (state) => {
       const totalQuestionsResolved = state.userStudyRecords.reduce((sum, record) => sum + (record.questionsResolved || 0), 0);
       const totalCorrectAnswers = state.userStudyRecords.reduce((sum, record) => sum + (record.correctAnswers || 0), 0);
@@ -254,7 +225,7 @@ export const useUserStore = defineStore('user', {
       if (totalQuestionsResolved > 0) {
         return (totalIncorrectAnswers / totalQuestionsResolved) * 100;
       }
-      return 0; // Retorna 0 caso não haja perguntas resolvidas
+      return 0;
     }
   }
 });
