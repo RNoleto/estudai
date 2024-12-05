@@ -30,6 +30,7 @@ const isOpen = ref(false);
 // Trecho responsavel pelo StudySummaryModal
 const handleTimerStopped = () => {
   isOpen.value = true;
+  updateChartData();
 };
 
 const handleCloseModal = () => {
@@ -38,6 +39,14 @@ const handleCloseModal = () => {
 
 // Gera os dados do gráfico para cada registro
 const getChartData = (record) => {
+  // Encontrar a matéria com base no ID
+  const subject = userStore.userSubjects.find(subjectId => subjectId === record.subjectId);
+  const subjectName = subject
+    ? subjectStore.subjects.find(subject => subject.id === subject).name
+    : "Matéria não encontrada";
+
+  console.log('Nome da matéria:', subjectName);
+
   const correctPercentage = userStore.getCorrectAnswerPercentage(record);
   const incorrectPercentage = userStore.getIncorrectAnswerPercentage(record);
 
@@ -73,11 +82,21 @@ const getChartOptions = (record) => {
     cutout: "60%", // Espaço interno
   };
 };
+
+const updateChartData = () => {
+  if (!userStore.userStudyRecords || userStore.userStudyRecords.length === 0) return;
+
+  chartData.value = userStore.userStudyRecords.map(record => getChartData(record));
+  chartOptions.value = userStore.userStudyRecords.map(record => getChartOptions(record));
+};
+
 // Atualizar dados sempre que necessário
 watch(
-  () => userStore.userStudyRecords,
-  () => {
-    if (userStore.userStudyRecords.length > 0) updateChartData();
+  () => userStore.userStudyRecords.map(record => record.id), // Monitora apenas alterações nos IDs
+  (newIds, oldIds) => {
+    if (JSON.stringify(newIds) !== JSON.stringify(oldIds)) {
+      updateChartData();
+    }
   },
   { deep: true }
 );
@@ -89,7 +108,10 @@ onMounted(async () => {
   await subjectStore.fetchSubjects();
   await userStore.getCorrectAnswerPercentage;
   await userStore.getIncorrectAnswerPercentage;
-  if (userStore.questionsResolved > 0) updateChartData();
+  // Verifique se os dados estão carregados
+  if (userStore.userSubjects && subjectStore.subjects) {
+    updateChartData();
+  }
 });
 
 // Combine userSubjects com nomes de matérias
@@ -104,7 +126,7 @@ const userSubjects = computed(() => {
 // Define a matéria selecionada na store
 const handleSubjectSelection = (subject) => {
   selectedSubject.value = subject;
-  studyStore.setSubject(subject.id); // Atualiza a store com o ID
+  studyStore.setSubject(subject.id); // Apenas atualiza o ID na store
 };
 
 const isSubjectSelected = computed(() => !!selectedSubject.value);
@@ -147,7 +169,7 @@ const resetFields = () => {
             <div class="grid grid-cols-3 gap-2">
               <div
                 class="flex flex-col gap-1 text-xs text-zinc-700 col-span-1 border-b rounded-md bg-white p-4 overflow-hidden"
-                v-if="userStore.userStudyRecords.length > 0" v-for="record in userStore.userStudyRecords"
+                v-if="userStore.userStudyRecords.length > 0" v-for="(record, index) in userStore.userStudyRecords"
                 :key="record.id">
                 <div class="flex flex-col justify-center gap-1">
                   <p><span class="font-bold">Matéria:</span> {{ record.subjectName }}</p>
@@ -169,20 +191,22 @@ const resetFields = () => {
                   </div>
                   <!-- Gráfico -->
                   <div v-if="record.questionsResolved > 0" class="relative flex justify-center">
-                    <Chart :type="'doughnut'" :data="getChartData(record)" :options="getChartOptions(record)"
-                      class="md:w-[10rem] mt-[-60px]" ref="chartInstance" />
+                    <Chart :key="record.id" :type="'doughnut'" :data="chartData[index]" :options="chartOptions[index]"
+                      class="md:w-[10rem] mt-[-60px]" />
                     <div class="absolute bottom-5">
                       <div class="text-[#00B884] flex flex-col text-center" id="acertos">
                         <strong class="text-xl">{{ userStore.getCorrectAnswerPercentage(record).toFixed(1) }}%</strong>
                         <p class="text-sm">Acertos</p>
                       </div>
-                      <div class="text-[#FF5675] flex flex-col text-center hidden" id="erros">
+                      <div v-if="userStore.getIncorrectAnswerPercentage(record) > 0"
+                        class="text-[#FF5675] flex flex-col text-center hidden" id="erros">
                         <strong class="text-xl">{{ userStore.getIncorrectAnswerPercentage(record).toFixed(1)
                           }}%</strong>
                         <p class="text-sm">Erros</p>
                       </div>
                     </div>
                   </div>
+
                 </div>
               </div>
             </div>

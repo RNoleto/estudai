@@ -8,7 +8,7 @@ import { useStudyStore } from './useStudyStore';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    userId: null,
+    userId: localStorage.getItem('userId') || null, // Recupera do localStorage
     careerId: null,
     careerName: '',
     userSubjects: [],
@@ -22,12 +22,17 @@ export const useUserStore = defineStore('user', {
         const { userId } = await useAuth();
         if (userId) {
           this.userId = userId.value; // Armazena o ID do usuário no estado
+          localStorage.setItem('userId', userId.value); // Persiste no localStorage
         } else {
           console.error("Não foi possível obter o ID do usuário");
         }
       } catch (error) {
         console.error("Erro ao buscar o ID do usuário:", error);
       }
+    },
+    clearUserData() {
+      this.userId = null;
+      localStorage.removeItem('userId'); // Remove do localStorage
     },
     // Função para salvar a carreira do usuário no banco de dados
     async saveUserCareer(careerId, careerName) {
