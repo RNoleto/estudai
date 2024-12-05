@@ -43,7 +43,7 @@ const getChartData = (record) => {
   const subject = userStore.userSubjects.find(subjectId => subjectId === record.subjectId);
   const subjectName = subject
     ? subjectStore.subjects.find(subject => subject.id === subject).name
-    : "Matéria não encontrada";
+    : "Matéria não encontrada componente";
 
   console.log('Nome da matéria:', subjectName);
 
@@ -121,8 +121,7 @@ const userSubjects = computed(() => {
       subjectStore.subjects.find((subject) => subject.id === subjectId)
     )
     .filter(Boolean); // Filtra valores nulos ou indefinidos
-});
-
+  });
 // Define a matéria selecionada na store
 const handleSubjectSelection = (subject) => {
   selectedSubject.value = subject;
