@@ -16,7 +16,6 @@ export const useUserStore = defineStore('user', {
   }),
 
   actions: {
-    // Função para carregar o ID do usuário logado usando o Clerk
     async fetchUserId() {
       try {
         const { userId } = await useAuth();
@@ -34,7 +33,6 @@ export const useUserStore = defineStore('user', {
       this.userId = null;
       localStorage.removeItem('userId'); // Remove do localStorage
     },
-    // Função para salvar a carreira do usuário no banco de dados
     async saveUserCareer(careerId, careerName) {
       this.careerId = careerId;
       this.careerName = careerName; // Salve o nome da carreira também no Pinia
@@ -57,7 +55,6 @@ export const useUserStore = defineStore('user', {
         console.error("Erro ao salvar a carreira no banco de dados:", error);
       }
     },
-    // Função para verificar se o usuário já tem uma carreira salva
     async checkUserCareer() {
       try {
         if (!this.userId) {
@@ -105,7 +102,6 @@ export const useUserStore = defineStore('user', {
         console.error("Erro ao desativar matéria:", error);
       }
     },
-    // Carrega as matérias do usuário do backend
     async fetchUserSubjects() {
       try {
         const response = await axios.get(`user-subjects/${this.userId}`);
@@ -135,7 +131,6 @@ export const useUserStore = defineStore('user', {
         console.error("Erro ao salvar matérias do usuário:", error);
       }
     },
-    //Função para retornar o historico de estudo do usuário
     async fetchUserStudyRecords() {
       if (!this.userId) {
         console.error("ID do usuário não encontrado.");
@@ -144,6 +139,7 @@ export const useUserStore = defineStore('user', {
     
       try {
         const response = await axios.get(`user-study-records/user/${this.userId}`);
+        console.log('Dados retornados da API:', response.data);
         
         if (response.status === 200) {
           const subjectStore = useSubjectStore(); // Obtém o subjectStore para acesso às matérias
@@ -151,25 +147,15 @@ export const useUserStore = defineStore('user', {
           this.userStudyRecords = response.data.map((record) => {
             const subject = subjectStore.subjects.find(sub => sub.id === record.subject_id);
             return {
-              id: record.id,
-              subjectId: record.subject_id,
-              subjectName: subject?.name || "Matéria não encontrada", // Nome da matéria
-              topic: record.topic,
-              studyTime: record.study_time,
-              totalPauses: record.total_pauses,
-              questionsResolved: record.questions_resolved,
-              correctAnswers: record.correct_answers,
-              incorrectAnswers: record.incorrect_answers,
-              createdAt: record.created_at,
-              updatedAt: record.updated_at,
+              ...record,
+              subjectName: subject ? subject.name : "Matéria não encontrada",
             };
           });
         }
       } catch (error) {
-        console.error('Erro ao buscar registros de estudo do usuário:', error);
+        console.error("Erro ao carregar registros de estudo do usuário fetchUserStudyRecords:", error);
       }
     },
-    //Função para salvar o historico de estudo do usuário
     async saveUserStudyRecord(newRecord) {
       console.log("Função saveUserStudyRecord foi chamada!"); // Confirmação inicial
       const timerStore = useTimerStore();

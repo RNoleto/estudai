@@ -30,6 +30,7 @@ onMounted(async () => {
   await Promise.all([
     userStore.fetchUserSubjects(),
     subjectStore.fetchSubjects(),
+    userStore.fetchUserStudyRecords(), // Atualiza os registros com nomes das matérias
   ]);
 
   if (userStore.userSubjects?.length && subjectStore.subjects?.length) {
@@ -49,14 +50,6 @@ const handleCloseModal = () => {
 
 // Gera os dados do gráfico para cada registro
 const getChartData = (record) => {
-  // Encontrar a matéria com base no ID
-  if (!subjectStore.subjects.length) return;
-
-  const subject = subjectStore.subjects.find(subject => subject.id === record.subjectId);
-  const subjectName = subject ? subject.name : "Matéria não encontrada";
-
-  console.log('Nome da matéria front:', subjectName);
-
   const correctPercentage = userStore.getCorrectAnswerPercentage(record);
   const incorrectPercentage = userStore.getIncorrectAnswerPercentage(record);
 
@@ -166,19 +159,20 @@ const isSubjectSelected = computed(() => !!selectedSubject.value);
               <div class="flex justify-between">
                 <div class="flex">
                   <div class="flex flex-col justify-center gap-1">
-                    <p><span class="font-bold">Tempo de estudo:</span> {{ formatStudyTime(record.studyTime) }}</p>
+                    <p><span class="font-bold">Tempo de estudo:</span> {{ formatStudyTime(record.study_time) }}</p>
                     <p v-if="record.totalPauses > 0">
-                      <span class="font-bold">Nº de pauses:</span> {{ record.totalPauses }}
+                      <span class="font-bold">Nº de pauses:</span> {{ record.total_pauses }}
                     </p>
-                    <div v-if="record.questionsResolved > 0" class="flex flex-col gap-1">
-                      <p><span class="font-bold">Questões respondidas:</span> {{ record.questionsResolved }}</p>
-                      <p><span class="font-bold">Acertos:</span> {{ record.correctAnswers }}</p>
-                      <p><span class="font-bold">Erros: </span> {{ record.incorrectAnswers }}</p>
+                    <div v-if="record.questions_resolved > 0" class="flex flex-col gap-1">
+                      <p><span class="font-bold">Questões respondidas:</span> {{ record.questions_resolved }}</p>
+                      <p><span class="font-bold">Acertos:</span> {{ record.correct_answers }}</p>
+                      <p><span class="font-bold">Erros: </span> {{ record.incorrect_answers }}</p>
                     </div>
                   </div>
                 </div>
+                <!-- <pre>{{ record }}</pre> -->
                 <!-- Gráfico -->
-                <div v-if="record.questionsResolved > 0" class="relative flex justify-center">
+                <div v-if="record.questions_resolved > 0" class="relative flex justify-center">
                   <Chart :key="record.id" :type="'doughnut'" :data="chartData[index]" :options="chartOptions[index]"
                     class="md:w-[10rem] mt-[-60px]" />
                   <div class="absolute bottom-5">
