@@ -1,7 +1,7 @@
 <script setup>
 import StudyTimeRecord from '../layouts/StudyTimeRecord.vue';
 import StudyStatisticsRecords from '../layouts/StudyStatisticsRecords.vue';
-import SubjectSummaryLayout from '../layouts/SubjectSummaryLayout.vue';
+import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
 </script>
 
 <template>
@@ -10,7 +10,7 @@ import SubjectSummaryLayout from '../layouts/SubjectSummaryLayout.vue';
         <div class="flex flex-wrap gap-4">
             <StudyTimeRecord/>
             <StudyStatisticsRecords />
-            <SubjectSummaryLayout/>
+            <SubjectSummaryTable />
         </div>
     </div>
 </template>

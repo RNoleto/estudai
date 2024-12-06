@@ -38,7 +38,7 @@ const summarizedData = computed(() => {
 </script>
 
 <template>
-    <table class="border border-gray-300 bg-white shadow-md rounded-lg overflow-hidden w-full">
+    <table class="border border-gray-300 bg-white shadow-md rounded-lg overflow-hidden">
         <thead class="bg-gray-800 text-white">
             <tr>
                 <th class="px-4 py-2 text-left">Matérias</th>
