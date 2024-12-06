@@ -38,7 +38,7 @@ watch(() => props.modelValue, (newVal) => {
 });
 </script>
 <template>
-    <div class="flex bg-zinc-200 items-center border rounded-md p-2 shadow-sm shadow-zinc-200 hover:bg-zinc-100 group" :class="inputClass">
+    <div class="w-full inline-flex items-center justify-between rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] bg-white text-gray-700 shadow hover:bg-gray-100 outline-none group" :class="inputClass">
       <!-- Exibe o ícone de busca apenas se a propriedade `showIcon` for verdadeira -->
       <template v-if="showIcon">
         <Icon icon="ic:baseline-search" class="text-zinc-500 text-sm mr-1 transition-transform duration-200 ease-in-out group-hover:scale-125" />
@@ -47,7 +47,7 @@ watch(() => props.modelValue, (newVal) => {
         v-model="searchTerm"
         :placeholder="placeholder"
         type="text"
-        class="outline-none bg-transparent text-sm text-zinc-500"
+        class="w-full inline-flex leading-none outline-none"
       />
     </div>
   </template>
