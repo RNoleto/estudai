@@ -11,7 +11,7 @@ const userStore = useUserStore();
 // Agrupa e soma os dados por 'subjectName'
 const summarizedData = computed(() => {
     const summary = userStore.userStudyRecords.reduce((acc, record) => {
-        const { subjectName, studyTime, totalPauses, questionsResolved, correctAnswers, incorrectAnswers } = record;
+        const { subjectName, study_time, total_pauses, questions_resolved, correct_answers, incorrect_answers } = record;
 
         if (!acc[subjectName]) {
             acc[subjectName] = {
@@ -24,14 +24,16 @@ const summarizedData = computed(() => {
             };
         }
 
-        acc[subjectName].totalStudyTime += studyTime;
-        acc[subjectName].totalPauses += totalPauses;
-        acc[subjectName].totalQuestionsResolved += questionsResolved;
-        acc[subjectName].totalCorrectAnswers += correctAnswers;
-        acc[subjectName].totalIncorrectAnswers += incorrectAnswers;
+        acc[subjectName].totalStudyTime += study_time;
+        acc[subjectName].totalPauses += total_pauses;
+        acc[subjectName].totalQuestionsResolved += questions_resolved;
+        acc[subjectName].totalCorrectAnswers += correct_answers;
+        acc[subjectName].totalIncorrectAnswers += incorrect_answers;
 
         return acc;
     }, {});
+
+    console.log("Dados de estudos gravados:", summary);
 
     return Object.values(summary);
 });
