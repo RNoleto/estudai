@@ -189,22 +189,14 @@ export const useUserStore = defineStore('user', {
       }
     },
     getCorrectAnswerPercentage(record) {
-      const { questionsResolved, correctAnswers } = record;
-
-      if (questionsResolved > 0) {
-        return (correctAnswers / questionsResolved) * 100;
-      }
-      return 0; // Retorna 0 caso não haja perguntas resolvidas
+      if (!record.questions_resolved || record.questions_resolved === 0) return 0;
+      return (record.correct_answers / record.questions_resolved) * 100;
     },
+    
     getIncorrectAnswerPercentage(record) {
-      const { questionsResolved, correctAnswers } = record;
-
-      if (questionsResolved > 0) {
-        const incorrectAnswers = questionsResolved - correctAnswers;
-        return (incorrectAnswers / questionsResolved) * 100;
-      }
-      return 0; // Retorna 0 caso não haja perguntas resolvidas
-    }
+      if (!record.questions_resolved || record.questions_resolved === 0) return 0;
+      return (record.incorrect_answers / record.questions_resolved) * 100;
+    },
   },
   getters: {
     combinedSubjects(state) {
