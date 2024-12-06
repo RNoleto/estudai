@@ -25,16 +25,19 @@ const chartData = ref();
 const chartOptions = ref(null);
 const isOpen = ref(false);
 
+const isLoading = ref(true);
+
 // Carregar as matérias da API
 onMounted(async () => {
-  await Promise.all([
-    userStore.fetchUserSubjects(),
-    subjectStore.fetchSubjects(),
-    userStore.fetchUserStudyRecords(), // Atualiza os registros com nomes das matérias
-  ]);
-
-  if (userStore.userSubjects?.length && subjectStore.subjects?.length) {
-    updateChartData();
+  try {
+    await Promise.all([
+      userStore.fetchUserSubjects(),
+      subjectStore.fetchSubjects(),
+      userStore.fetchUserStudyRecords(),
+    ]);
+    isLoading.value = false;
+  } catch (error) {
+    console.error("Error loading data: ", error);
   }
 });
 
@@ -87,21 +90,25 @@ const getChartOptions = (record) => {
 };
 
 const updateChartData = () => {
-  if (!userStore.userStudyRecords || userStore.userStudyRecords.length === 0) return;
+  try {
+    if (!userStore.userStudyRecords || userStore.userStudyRecords.length === 0) return;
 
-  chartData.value = userStore.userStudyRecords.map(record => getChartData(record));
-  chartOptions.value = userStore.userStudyRecords.map(record => getChartOptions(record));
+    chartData.value = userStore.userStudyRecords.map(record => getChartData(record));
+    chartOptions.value = userStore.userStudyRecords.map(record => getChartOptions(record));
+  } catch (error) {
+    console.error("Error updating chart data: ", error);
+  }
 };
 
 // Atualizar dados sempre que necessário
 watch(
-  () => userStore.userStudyRecords,
-  (newRecords, oldRecords) => {
-    if (JSON.stringify(newRecords) !== JSON.stringify(oldRecords)) {
+  [() => userStore.userStudyRecords, () => subjectStore.subjects],
+  ([newStudyRecords, newSubjects]) => {
+    if (newStudyRecords && newSubjects) {
       updateChartData();
     }
   },
-  { deep: true }
+  { immediate: true }
 );
 
 // Combine userSubjects com nomes de matérias
@@ -146,7 +153,8 @@ const isSubjectSelected = computed(() => !!selectedSubject.value);
         <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
 
         <!-- Cards com informações de estudos registrados pelo usuário -->
-        <div class="col-span-2">
+         <div v-if="isLoading">Carregando...</div>
+        <div v-else class="col-span-2">
           <div class="grid grid-cols-3 gap-2">
             <div
               class="flex flex-col gap-1 text-xs text-zinc-700 col-span-1 border-b rounded-md bg-white p-4 overflow-hidden"
@@ -173,7 +181,7 @@ const isSubjectSelected = computed(() => !!selectedSubject.value);
                 <!-- <pre>{{ record }}</pre> -->
                 <!-- Gráfico -->
                 <div v-if="record.questions_resolved > 0" class="relative flex justify-center">
-                  <Chart :key="record.id" :type="'doughnut'" :data="chartData[index]" :options="chartOptions[index]"
+                  <Chart v-if="chartData.length > 0" :key="record.id" :type="'doughnut'" :data="chartData[index]" :options="chartOptions[index]"
                     class="md:w-[10rem] mt-[-60px]" />
                   <div class="absolute bottom-5">
                     <div class="text-[#00B884] flex flex-col text-center" id="acertos">

@@ -139,7 +139,6 @@ export const useUserStore = defineStore('user', {
     
       try {
         const response = await axios.get(`user-study-records/user/${this.userId}`);
-        console.log('Dados retornados da API:', response.data);
         
         if (response.status === 200) {
           const subjectStore = useSubjectStore(); // Obtém o subjectStore para acesso às matérias

@@ -1,12 +1,38 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 
 import { useTimeFormatter } from '../composables/useTimeFormatter';
 const { formatStudyTime } = useTimeFormatter();
 
 import { useUserStore } from '../stores/useUserStore';
+import { useSubjectStore } from '../stores/useSubjectStore';
 
 const userStore = useUserStore();
+const subjectStore = useSubjectStore();
+
+// Carregar as matérias da API
+onMounted(async () => {
+  await Promise.all([
+    userStore.fetchUserSubjects(),
+    subjectStore.fetchSubjects(),
+    userStore.fetchUserStudyRecords(), // Atualiza os registros com nomes das matérias
+  ]);
+
+  if (userStore.userSubjects?.length && subjectStore.subjects?.length) {
+    summarizedData;
+  }
+});
+
+// Atualizar dados sempre que necessário
+watch(
+  () => userStore.userStudyRecords,
+  (newRecords, oldRecords) => {
+    if (JSON.stringify(newRecords) !== JSON.stringify(oldRecords)) {
+      summarizedData;
+    }
+  },
+  { deep: true }
+);
 
 // Agrupa e soma os dados por 'subjectName'
 const summarizedData = computed(() => {
@@ -32,8 +58,6 @@ const summarizedData = computed(() => {
 
         return acc;
     }, {});
-
-    console.log("Dados de estudos gravados:", summary);
 
     return Object.values(summary);
 });
