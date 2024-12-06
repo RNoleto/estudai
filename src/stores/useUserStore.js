@@ -149,13 +149,12 @@ export const useUserStore = defineStore('user', {
           const subjectStore = useSubjectStore();
 
           this.userStudyRecords = response.data.map((record) => {
-            const subject = subjectStore.subjects.find(
-              (subject) => subject.id === record.subject_id
-            );
+
+            console.log("Nome da matéria:", this.userStudyRecords);
             return {
               id: record.id,
               subjectId: record.subject_id,
-              subjectName: subject?.name || "Matéria não encontrada", // Nome da matéria obtido do subjectStore
+              subjectName: this.subject?.name || "Matéria não encontrada Pinia", // Nome da matéria obtido do subjectStore
               topic: record.topic,
               studyTime: record.study_time,
               totalPauses: record.total_pauses,
