@@ -8,7 +8,7 @@ const userStore = useUserStore();
 
 // Calcular o total de tempo de estudo
 const totalStudyTime = computed(() => {
-  return userStore.userStudyRecords.reduce((sum, record) => sum + record.studyTime, 0);
+  return userStore.userStudyRecords.reduce((sum, record) => sum + record.study_time, 0);
 });
 </script>
 

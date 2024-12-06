@@ -6,9 +6,9 @@ const userStore = useUserStore();
 
 // Opções para o combobox
 const options = [
-  { label: 'Total de Questões Resolvidas', value: 'questionsResolved' },
-  { label: 'Total de Respostas Corretas', value: 'correctAnswers' },
-  { label: 'Total de Respostas Incorretas', value: 'incorrectAnswers' },
+  { label: 'Total de Questões Resolvidas', value: 'questions_resolved' },
+  { label: 'Total de Respostas Corretas', value: 'correct_answers' },
+  { label: 'Total de Respostas Incorretas', value: 'incorrect_answers' },
 ];
 
 // Estado para a seleção do combobox
@@ -19,7 +19,7 @@ const displayAsPercentage = ref(false);
 
 // Soma o total com base na seleção
 const totalValue = computed(() => {
-  const totalQuestions = userStore.userStudyRecords.reduce((sum, record) => sum + record.questionsResolved, 0);
+  const totalQuestions = userStore.userStudyRecords.reduce((sum, record) => sum + record.questions_resolved, 0);
   const selectedTotal = userStore.userStudyRecords.reduce(
     (sum, record) => sum + record[selectedOption.value],
     0
@@ -52,8 +52,9 @@ const totalValue = computed(() => {
         <p 
           class="text-5xl font-extrabold" 
           :class="{
-            'text-blue-600': selectedOption !== 'incorrectAnswers',
-            'text-red-600': selectedOption === 'incorrectAnswers'
+            'text-blue-600': selectedOption === 'questions_resolved',
+            'text-green-600': selectedOption === 'correct_answers',
+            'text-red-600': selectedOption === 'incorrect_answers'
           }"
         >
           {{ totalValue }}
