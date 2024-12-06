@@ -153,11 +153,31 @@ const isSubjectSelected = computed(() => !!selectedSubject.value);
         <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
 
         <!-- Cards com informações de estudos registrados pelo usuário -->
-         <div v-if="isLoading">Carregando...</div>
-        <div v-else class="col-span-2">
+        <div class="col-span-2">
           <div class="grid grid-cols-3 gap-2">
-            <div
-              class="flex flex-col gap-1 text-xs text-zinc-700 col-span-1 border-b rounded-md bg-white p-4 overflow-hidden"
+            <!-- Exibe animação enquanto carrega -->
+            <div v-if="isLoading" v-for="n in 3" :key="'skeleton-' + n"
+              class="border border-blue-300 shadow-sm rounded-md p-4 animate-pulse h-[172px] content-center">
+              <div class="flex space-x-4">
+                <div class="flex-1 space-y-6">
+                  <div class="h-2 bg-slate-200 rounded w-5/12"></div>
+                  <div class="h-2 bg-slate-200 rounded w-7/12"></div>
+                  <div class="space-y-3">
+                    <div class="grid grid-cols-3 gap-4">
+                      <div class="h-2 bg-slate-200 rounded col-span-1"></div>
+                      <div class="h-2 bg-slate-200 rounded col-span-1"></div>
+                      <div class="h-2 bg-slate-200 rounded col-span-1"></div>
+                    </div>
+                    <div class="h-2 bg-slate-200 rounded"></div>
+                    <div class="h-2 bg-slate-200 rounded"></div>
+                  </div>
+                </div>
+                <div class="rounded-full bg-slate-200 h-[120px] w-[120px]"></div>
+              </div>
+            </div>
+            <!-- Dados Reais -->
+            <div v-else
+              class="shadow-sm flex flex-col gap-1 text-xs text-zinc-700 col-span-1 border-b rounded-md bg-white p-4 overflow-hidden"
               v-if="userStore.userStudyRecords.length > 0" v-for="(record, index) in userStore.userStudyRecords"
               :key="record.id">
               <div class="flex flex-col justify-center gap-1">
@@ -178,11 +198,10 @@ const isSubjectSelected = computed(() => !!selectedSubject.value);
                     </div>
                   </div>
                 </div>
-                <!-- <pre>{{ record }}</pre> -->
                 <!-- Gráfico -->
                 <div v-if="record.questions_resolved > 0" class="relative flex justify-center">
-                  <Chart v-if="chartData.length > 0" :key="record.id" :type="'doughnut'" :data="chartData[index]" :options="chartOptions[index]"
-                    class="md:w-[10rem] mt-[-60px]" />
+                  <Chart v-if="chartData.length > 0" :key="record.id" :type="'doughnut'" :data="chartData[index]"
+                    :options="chartOptions[index]" class="md:w-[10rem] mt-[-60px]" />
                   <div class="absolute bottom-5">
                     <div class="text-[#00B884] flex flex-col text-center" id="acertos">
                       <strong class="text-xl">{{ userStore.getCorrectAnswerPercentage(record).toFixed(1) }}%</strong>
