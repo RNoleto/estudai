@@ -156,7 +156,7 @@ const isSubjectSelected = computed(() => !!selectedSubject.value);
         <div class="col-span-2">
           <div class="grid grid-cols-3 gap-2">
             <!-- Exibe animação enquanto carrega -->
-            <div v-if="isLoading" v-for="n in 3" :key="'skeleton-' + n"
+            <div v-if="isLoading" v-for="n in 6" :key="'skeleton-' + n"
               class="border border-blue-300 shadow-sm rounded-md p-4 animate-pulse h-[172px] content-center">
               <div class="flex space-x-4">
                 <div class="flex-1 space-y-6">
