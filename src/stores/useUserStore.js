@@ -141,20 +141,19 @@ export const useUserStore = defineStore('user', {
         console.error("ID do usuário não encontrado.");
         return;
       }
-
+    
       try {
         const response = await axios.get(`user-study-records/user/${this.userId}`);
-        // console.log('historico de estudos', response.data);
+        
         if (response.status === 200) {
-          const subjectStore = useSubjectStore();
-
+          const subjectStore = useSubjectStore(); // Obtém o subjectStore para acesso às matérias
+    
           this.userStudyRecords = response.data.map((record) => {
-
-            console.log("Nome da matéria:", this.userStudyRecords);
+            const subject = subjectStore.subjects.find(sub => sub.id === record.subject_id);
             return {
               id: record.id,
               subjectId: record.subject_id,
-              subjectName: this.subject?.name || "Matéria não encontrada Pinia", // Nome da matéria obtido do subjectStore
+              subjectName: subject?.name || "Matéria não encontrada", // Nome da matéria
               topic: record.topic,
               studyTime: record.study_time,
               totalPauses: record.total_pauses,
@@ -165,7 +164,6 @@ export const useUserStore = defineStore('user', {
               updatedAt: record.updated_at,
             };
           });
-          // console.log("Registros de estudos carregados com sucesso!")
         }
       } catch (error) {
         console.error('Erro ao buscar registros de estudo do usuário:', error);
