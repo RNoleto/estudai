@@ -139,8 +139,7 @@ const resetFields = () => {
 </script>
 
 <template>
-  <div class="h-screen">
-    <Navbar />
+  <div>
     <div class="p-4 flex flex-col gap-4">
       <div class="flex items-center justify-between">
         <h3 class="text-4xl">Iniciar estudos</h3>

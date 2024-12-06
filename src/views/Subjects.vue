@@ -5,7 +5,6 @@ import { useUserStore } from '../stores/useUserStore';
 import OptionCard from '../components/ui/OptionCard.vue';
 import Button from '../components/ui/Button.vue';
 import Search from '../components/ui/Search.vue';
-import Navbar from '../components/Navbar.vue';
 
 // Acessando os stores
 const subjectStore = useSubjectStore();
@@ -57,8 +56,6 @@ onMounted(async () => {
 
 
 <template>
-    <div class="h-screen">
-      <Navbar />
       <div class="p-4 flex flex-col gap-4">
         <h3 class="text-4xl">Selecione as matérias que deseja estudar.</h3>
         <p class="text-md">Carreira: {{ userStore.careerName }}</p>
@@ -80,6 +77,5 @@ onMounted(async () => {
           </Button>
         </div>
       </div>
-    </div>
   </template>
   

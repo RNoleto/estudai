@@ -2,7 +2,6 @@
 import Button from '../components/ui/Button.vue';
 import Search from '../components/ui/Search.vue';
 import OptionCard from '../components/ui/OptionCard.vue';
-import Navbar from '../components/Navbar.vue';
 import Input from '../components/ui/Input.vue';
 
 import { useCurrentDate } from '../composables/useCurrentDate';
@@ -87,8 +86,6 @@ const deleteCycle = (name) => {
 </script>
 
 <template>
-  <div class="h-screen">
-    <Navbar />
     <div class="p-4 flex flex-col gap-4">
       <div class="flex items-center justify-between">
         <h3 class="text-4xl">Monte seu ciclo de estudo.</h3>
@@ -143,5 +140,4 @@ const deleteCycle = (name) => {
         <Button class="float-right" :to="{ name: 'Estudar' }">Avançar</Button>
       </div>
     </div>
-  </div>
 </template>

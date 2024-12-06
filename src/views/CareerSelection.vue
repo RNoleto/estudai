@@ -53,8 +53,6 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="h-screen">
-    <Navbar />
     <div class="p-4 flex flex-col gap-4">
       <h3 class="text-4xl">Selecione a sua carreira</h3>
       <div class="flex flex-wrap gap-2">
@@ -66,5 +64,4 @@ onMounted(async () => {
         Avançar
       </Button>
     </div>
-  </div>
 </template>

@@ -5,6 +5,7 @@ import Career from '../views/CareerSelection.vue';
 import Subjects from '../views/Subjects.vue';
 import StudyCycle from '../views/StudyCycle.vue';
 import StudyStart from '../views/StudyStart.vue';
+import StudentArea from '../views/StudentArea.vue';
 
 const routes = [
   {
@@ -33,6 +34,12 @@ const routes = [
     path: '/estudar',
     name: 'Estudar',
     component: StudyStart,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/area-do-aluno',
+    name: 'Area do aluno',
+    component: StudentArea,
     meta: { requiresAuth: true },
   },
 ];
