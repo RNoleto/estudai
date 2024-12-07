@@ -88,7 +88,7 @@ router.beforeEach(async (to, from, next) => {
         await userStore.fetchUserSubjects();
         if (userStore.userSubjects.length > 0) {
           // Redireciona para ciclo de estudos
-          next({ path: '/ciclo-de-estudos' });
+          next({ path: '/estudar' });
           return;
         }
         // Redireciona para seleção de matérias
