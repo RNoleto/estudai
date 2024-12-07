@@ -1,12 +1,14 @@
 <script setup>
-import { RouterView } from 'vue-router';
+import { RouterView, useRoute } from 'vue-router';
 import Navbar from './components/Navbar.vue';
+
+const route = useRoute();
 
 </script>
 
 <template>
   <div class="h-screen w-full bg-gray-100">
-      <Navbar />
+      <Navbar v-if="route.path !== '/'" />
       <RouterView/>
   </div>
 </template>
