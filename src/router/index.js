@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuth } from 'vue-clerk';
+import { useUserStore } from '../stores/useUserStore';
 import Home from '../views/Home.vue';
 import Career from '../views/CareerSelection.vue';
 import Subjects from '../views/Subjects.vue';
@@ -51,6 +52,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const { isSignedIn, isLoaded } = useAuth();
+  const userStore = useUserStore();
 
   // Aguarda até que a autenticação esteja carregada
   if (!isLoaded.value) {
@@ -67,9 +69,45 @@ router.beforeEach(async (to, from, next) => {
   // Verifica autenticação para rotas protegidas
   if (to.meta.requiresAuth && !isSignedIn.value) {
     next({ path: '/' });
-  } else {
-    next();
+    return;
   }
+
+  // Verifica se o usuário está logado e precisa de redirecionamento após o login
+  if (isSignedIn.value && to.path === '/') {
+    try {
+      // Carrega o userId
+      if (!userStore.userId) {
+        await userStore.fetchUserId();
+      }
+
+      // Verifica a carreira do usuário
+      const hasCareer = await userStore.checkUserCareer();
+
+      if (hasCareer) {
+        // Carrega as matérias do usuário
+        await userStore.fetchUserSubjects();
+        if (userStore.userSubjects.length > 0) {
+          // Redireciona para ciclo de estudos
+          next({ path: '/ciclo-de-estudos' });
+          return;
+        }
+        // Redireciona para seleção de matérias
+        next({ path: '/materias' });
+        return;
+      }
+
+      // Redireciona para seleção de carreiras
+      next({ path: '/carreiras' });
+      return;
+    } catch (error) {
+      console.error("Erro durante o redirecionamento do usuário:", error);
+      next(); // Continua a navegação em caso de erro
+    }
+  }
+
+  next();
 });
+
+
 
 export default router;
