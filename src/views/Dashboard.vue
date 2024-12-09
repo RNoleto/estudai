@@ -1,7 +1,9 @@
 <script setup>
-import { RouterView } from 'vue-router';
+import { RouterView, useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
+
+const route = useRoute();
 
 const userStore = useUserStore();
 
@@ -29,15 +31,21 @@ const toggleMenu3 = () => (isMenu3Open.value = !isMenu3Open.value);
         <!-- Home da Dashboard -->
         <div>
           <a href="/area-do-aluno"
-          class="flex items-center gap-2 px-4 py-2 mt-4 text-gray-700 hover:bg-gray-100 rounded">
-          <i class="fas fa-home"></i>
+             :class="[
+               'flex items-center gap-2 px-4 py-2 mt-4 rounded',
+               route.path === '/area-do-aluno' ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100'
+             ]">
+            <i class="fas fa-home"></i>
             <span>Home</span>
           </a>
         </div>
         <!-- Estudar da Dashboard -->
         <div>
           <a href="/area-do-aluno/estudar"
-            class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">
+             :class="[
+               'flex items-center gap-2 px-4 py-2 rounded',
+               route.path === '/area-do-aluno/estudar' ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100'
+             ]">
             <i class="fa-solid fa-stopwatch"></i>
             <span>Estudar</span>
           </a>
