@@ -15,7 +15,7 @@ const userStore = useUserStore();
         <div class="flex flex-col gap-2">
             <h2 class="text-4xl font-bold">Área do aluno</h2>
             <p>Carreira: {{ userStore.careerName }}</p>
-            <Button variant="primary" size="default" class="w-[220px]">Editar as minhas informações</Button>
+            <Button variant="primary" size="default" class="w-[220px]"><router-link to="Dashboard">Editar as minhas informações</router-link></Button>
         </div>
         <div class="flex flex-wrap gap-4">
             <StudyTimeRecord/>

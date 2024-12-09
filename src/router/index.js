@@ -7,6 +7,7 @@ import Subjects from '../views/Subjects.vue';
 import StudyCycle from '../views/StudyCycle.vue';
 import StudyStart from '../views/StudyStart.vue';
 import StudentArea from '../views/StudentArea.vue';
+import Dashboard from '../views/Dashboard.vue';
 
 const routes = [
   {
@@ -43,6 +44,12 @@ const routes = [
     component: StudentArea,
     meta: { requiresAuth: true },
   },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard,
+    meta: {requiresAuth: true},
+  }
 ];
 
 const router = createRouter({
