@@ -16,7 +16,7 @@ const userStore = useUserStore();
         <div class="flex flex-wrap gap-2">
             <StudyTimeRecord/>
             <StudyStatisticsRecords />
-            <SubjectSummaryTable class="w-full"/>
+            <SubjectSummaryTable />
         </div>
     </div>
 </template>
