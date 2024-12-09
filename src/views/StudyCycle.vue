@@ -91,7 +91,7 @@ const deleteCycle = (name) => {
 // Função para navegar para a próxima página com base no contexto
 const navigateToNextPage = () => {
   const nextRoute = route.path.startsWith('/area-do-aluno')
-    ? { name: 'DashboardEstudar' } // Rota dentro da Dashboard
+    ? { name: 'Estudar' } // Rota dentro da Dashboard
     : { name: 'Estudar' };         // Rota fora da Dashboard
 
   router.push(nextRoute);

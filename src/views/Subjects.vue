@@ -32,8 +32,8 @@ const saveSubjectsAndNavigate = async () => {
   await userStore.saveUserSubjects(selectedSubjectIds);
 
   const nextRoute = route.path.startsWith('/area-do-aluno')
-    ? { name: 'DashboardCiclo' } // Rota dentro da Dashboard
-    : { name: 'Ciclo' };         // Rota fora da Dashboard
+    ? { name: 'Estudar' } // Rota dentro da Dashboard
+    : { name: 'Estudar' };         // Rota fora da Dashboard
 
   router.push(nextRoute);
 };
