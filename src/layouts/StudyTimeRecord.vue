@@ -13,11 +13,11 @@ const totalStudyTime = computed(() => {
 </script>
 
 <template>
-    <div class="bg-white shadow-md rounded-lg p-6 text-center">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">Tempo Total de Estudo</h2>
-      <p class="text-5xl font-extrabold text-blue-600">
+    <div class="flex  flex-col justify-center bg-white shadow-md rounded-lg text-center p-4 gap-4">
+      <h2 class="text-2xl font-bold text-gray-800">Tempo Total de Estudo</h2>
+      <p class="text-4xl font-extrabold text-blue-600">
         {{ formatStudyTime(totalStudyTime) }}
       </p>
-      <p class="text-sm text-gray-600 mt-4">Parabéns pelo progresso!</p>
+      <p class="text-sm text-gray-600">Parabéns pelo progresso!</p>
     </div>
 </template>
