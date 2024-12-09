@@ -1,7 +1,10 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-
 import { useUserStore } from '../stores/useUserStore';
+
+import StudyTimeRecord from '../layouts/StudyTimeRecord.vue';
+import StudyStatisticsRecords from '../layouts/StudyStatisticsRecords.vue';
+import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
 
 const userStore = useUserStore();
 
@@ -84,6 +87,11 @@ const toggleMenu2 = () => (isMenu2Open.value = !isMenu2Open.value);
       <p class="mt-4 text-gray-600">
         Aqui você pode gerenciar informações e visualizar dados importantes.
       </p>
+      <div class="grid grid-cols-12 gap-2">
+        <StudyTimeRecord class="col-span-2"/>
+        <StudyStatisticsRecords class="col-span-2"/>
+        <SubjectSummaryTable class="col-span-8"/>
+      </div>
     </main>
   </div>
 </template>
