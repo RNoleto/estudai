@@ -10,11 +10,15 @@ import { useSubjectStore } from '../stores/useSubjectStore';
 import { useCycleStore } from '../stores/useCycleStore';
 
 import { onMounted, ref, computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 
 const { formattedDate } = useCurrentDate();
 const userStore = useUserStore();
 const subjectStore = useSubjectStore();
 const cycleStore = useCycleStore();
+
+const router = useRouter();
+const route = useRoute();
 
 // Estado local
 const searchTerm = ref('');
@@ -83,6 +87,15 @@ const editCycle = (cycle) => {
 const deleteCycle = (name) => {
   cycleStore.deleteCycle(name);
 };
+
+// Função para navegar para a próxima página com base no contexto
+const navigateToNextPage = () => {
+  const nextRoute = route.path.startsWith('/area-do-aluno')
+    ? { name: 'DashboardEstudar' } // Rota dentro da Dashboard
+    : { name: 'Estudar' };         // Rota fora da Dashboard
+
+  router.push(nextRoute);
+};
 </script>
 
 <template>
@@ -137,7 +150,7 @@ const deleteCycle = (name) => {
       <div class="flex gap-2">
         <Button class="float-right" :to="{ name: 'Materias' }">Voltar</Button>
         <Button :disabled="!canSaveCycle" @click="saveCycle">Salvar Ciclo</Button>
-        <Button class="float-right" :to="{ name: 'Estudar' }">Avançar</Button>
+        <Button class="float-right" @click="navigateToNextPage">Avançar</Button>
       </div>
     </div>
 </template>
