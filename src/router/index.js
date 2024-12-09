@@ -48,7 +48,22 @@ const routes = [
         path: 'estudar',
         name: 'Estudar',
         component: StudyStart,
-      }
+      },
+      {
+        path: 'carreiras',
+        name: 'DashboardCarreiras',
+        component: Career,
+      },
+      {
+        path: 'materias',
+        name: 'DashboardMaterias',
+        component: Subjects,
+      },
+      {
+        path: 'ciclo-de-estudos',
+        name: 'DashboardCiclo',
+        component: StudyCycle,
+      },
     ]
   }
 ];

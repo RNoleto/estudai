@@ -13,10 +13,12 @@ onMounted(async () => {
 // Estados para controlar a abertura dos menus colapsáveis
 const isMenu1Open = ref(false);
 const isMenu2Open = ref(false);
+const isMenu3Open = ref(false);
 
 // Funções para alternar os estados dos menus
 const toggleMenu1 = () => (isMenu1Open.value = !isMenu1Open.value);
 const toggleMenu2 = () => (isMenu2Open.value = !isMenu2Open.value);
+const toggleMenu3 = () => (isMenu3Open.value = !isMenu3Open.value);
 </script>
 
 <template>
@@ -73,11 +75,23 @@ const toggleMenu2 = () => (isMenu2Open.value = !isMenu2Open.value);
           </div>
         </div>
 
-        <!-- Menu Principal 3 -->
-        <a href="#" class="flex items-center gap-2 px-4 py-2 mt-4 text-gray-700 hover:bg-gray-100 rounded">
-          <i class="fas fa-cog"></i>
-          <span>Configurações</span>
-        </a>
+        <!-- Menu de Configuração -->
+        <div class="mt-4">
+          <button @click="toggleMenu3"
+            class="flex items-center justify-between w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 rounded">
+            <div class="flex items-center gap-2">
+              <i class="fas fa-cog"></i>
+              <span>Configurações</span>
+            </div>
+            <i class="fas" :class="isMenu3Open ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+          </button>
+          <div v-if="isMenu3Open" class="pl-8 mt-2 space-y-2">
+            <a href="#" class="block text-sm text-gray-600 hover:text-gray-900">Minha Carreira</a>
+            <a href="#" class="block text-sm text-gray-600 hover:text-gray-900">Minhas Matérias</a>
+            <a href="#" class="block text-sm text-gray-600 hover:text-gray-900">Meu Ciclo de Estudo</a>
+            <a href="#" class="block text-sm text-gray-600 hover:text-gray-900"><i class="fa-solid fa-crosshairs"></i> Meus Objetivos</a>
+          </div>
+        </div>
       </nav>
     </aside>
     <!-- Conteúdo Principal -->
