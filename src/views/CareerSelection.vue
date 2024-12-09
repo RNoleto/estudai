@@ -70,12 +70,14 @@ onMounted(async () => {
         :variant="selectedCareer && career.id === selectedCareer.id ? 'selected' : 'primary'"
       />
     </div>
-    <Button
-      :disabled="!selectedCareer"
-      class="disabled:opacity-50"
-      @click="saveCareerAndNavigate"
-    >
-      Avançar
-    </Button>
+    <div>
+      <Button
+        :disabled="!selectedCareer"
+        class="disabled:opacity-50"
+        @click="saveCareerAndNavigate"
+      >
+        Avançar
+      </Button>
+    </div>
   </div>
 </template>

@@ -1,8 +1,7 @@
 <script setup>
-import { RouterView, useRoute } from 'vue-router';
+import { RouterView } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
-import { Icon } from '@iconify/vue';
 
 const userStore = useUserStore();
 
