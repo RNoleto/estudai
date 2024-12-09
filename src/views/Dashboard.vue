@@ -2,6 +2,7 @@
 import { RouterView, useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
+import { Icon } from '@iconify/vue';
 
 const userStore = useUserStore();
 
@@ -28,7 +29,9 @@ const toggleMenu2 = () => (isMenu2Open.value = !isMenu2Open.value);
         <div>
           <a href="/area-do-aluno"
             class="flex items-center gap-2 px-4 py-2 mt-4 text-gray-700 hover:bg-gray-100 rounded">
-            <i class="fas fa-cog"></i>
+            <div class="bg-black p-1 rounded-full flex justify-center items-center">
+              <Icon icon="ic:baseline-home" class="text-white transform-none" />
+            </div>
             <span>Home</span>
           </a>
         </div>
@@ -36,7 +39,9 @@ const toggleMenu2 = () => (isMenu2Open.value = !isMenu2Open.value);
         <div>
           <a href="/area-do-aluno/estudar"
             class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">
-            <i class="fas fa-cog"></i>
+            <div class="bg-black p-1 rounded-full flex justify-center items-center">
+              <Icon icon="ic:baseline-access-alarm" class="text-white transform-none"></Icon>
+            </div>
             <span>Estudar</span>
           </a>
         </div>
@@ -51,7 +56,7 @@ const toggleMenu2 = () => (isMenu2Open.value = !isMenu2Open.value);
             <i class="fas" :class="isMenu1Open ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
           </button>
           <div v-if="isMenu1Open" class="pl-8 mt-2 space-y-2">
-            <a href="/area-do-aluno/estudar" class="block text-sm text-gray-600 hover:text-gray-900">Estudar</a>
+            <a href="#" class="block text-sm text-gray-600 hover:text-gray-900">Submenu 1</a>
             <a href="#" class="block text-sm text-gray-600 hover:text-gray-900">Submenu 2</a>
           </div>
         </div>
