@@ -5,6 +5,9 @@ import './style.css'
 import App from './App.vue'
 import axios from 'axios'
 
+import '@fortawesome/fontawesome-free/css/all.min.css'; //Icones
+
+
 
 import router from './router'
 

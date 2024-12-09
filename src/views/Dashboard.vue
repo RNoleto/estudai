@@ -28,10 +28,8 @@ const toggleMenu2 = () => (isMenu2Open.value = !isMenu2Open.value);
         <!-- Home da Dashboard -->
         <div>
           <a href="/area-do-aluno"
-            class="flex items-center gap-2 px-4 py-2 mt-4 text-gray-700 hover:bg-gray-100 rounded">
-            <div class="bg-black p-1 rounded-full flex justify-center items-center">
-              <Icon icon="ic:baseline-home" class="text-white transform-none" />
-            </div>
+          class="flex items-center gap-2 px-4 py-2 mt-4 text-gray-700 hover:bg-gray-100 rounded">
+          <i class="fas fa-home"></i>
             <span>Home</span>
           </a>
         </div>
@@ -39,9 +37,7 @@ const toggleMenu2 = () => (isMenu2Open.value = !isMenu2Open.value);
         <div>
           <a href="/area-do-aluno/estudar"
             class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">
-            <div class="bg-black p-1 rounded-full flex justify-center items-center">
-              <Icon icon="ic:baseline-access-alarm" class="text-white transform-none"></Icon>
-            </div>
+            <i class="fa-solid fa-stopwatch"></i>
             <span>Estudar</span>
           </a>
         </div>
@@ -50,8 +46,8 @@ const toggleMenu2 = () => (isMenu2Open.value = !isMenu2Open.value);
           <button @click="toggleMenu1"
             class="flex items-center justify-between w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 rounded">
             <div class="flex items-center gap-2">
-              <i class="fas fa-home"></i>
-              <span>Início</span>
+              <i class="fa-solid fa-brain"></i>
+              <span>Menu 1</span>
             </div>
             <i class="fas" :class="isMenu1Open ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
           </button>
