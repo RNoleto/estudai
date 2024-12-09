@@ -1,10 +1,7 @@
 <script setup>
+import { RouterView, useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
-
-import StudyTimeRecord from '../layouts/StudyTimeRecord.vue';
-import StudyStatisticsRecords from '../layouts/StudyStatisticsRecords.vue';
-import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
 
 const userStore = useUserStore();
 
@@ -43,8 +40,8 @@ const toggleMenu2 = () => (isMenu2Open.value = !isMenu2Open.value);
             v-if="isMenu1Open"
             class="pl-8 mt-2 space-y-2"
           >
-            <a href="#" class="block text-sm text-gray-600 hover:text-gray-900">Submenu 1</a>
-            <a href="#" class="block text-sm text-gray-600 hover:text-gray-900">Submenu 2</a>
+          <a href="/area-do-aluno" class="block text-sm text-gray-600 hover:text-gray-900">Resumo</a>
+          <a href="/area-do-aluno/estudar" class="block text-sm text-gray-600 hover:text-gray-900">Estudar</a>
           </div>
         </div>
 
@@ -79,19 +76,13 @@ const toggleMenu2 = () => (isMenu2Open.value = !isMenu2Open.value);
         </a>
       </nav>
     </aside>
-
     <!-- Conteúdo Principal -->
     <main class="flex-1 p-6">
-      <h1 class="text-2xl font-semibold text-gray-800">Bem-vindo à Área do Aluno</h1>
-      <h2>Sua carreira: {{ userStore.careerName }}</h2>
+      <!-- <h1 class="text-2xl font-semibold text-gray-800">Bem-vindo!</h1>
       <p class="mt-4 text-gray-600">
         Aqui você pode gerenciar informações e visualizar dados importantes.
-      </p>
-      <div class="grid grid-cols-12 gap-2">
-        <StudyTimeRecord class="col-span-2"/>
-        <StudyStatisticsRecords class="col-span-2"/>
-        <SubjectSummaryTable class="col-span-8"/>
-      </div>
+      </p> -->
+      <router-view />
     </main>
   </div>
 </template>

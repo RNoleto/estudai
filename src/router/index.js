@@ -6,7 +6,8 @@ import Career from '../views/CareerSelection.vue';
 import Subjects from '../views/Subjects.vue';
 import StudyCycle from '../views/StudyCycle.vue';
 import StudyStart from '../views/StudyStart.vue';
-import StudentArea from '../views/StudentArea.vue';
+import DashboardHome from '../views/DashboardHome.vue';
+
 import Dashboard from '../views/Dashboard.vue';
 
 const routes = [
@@ -33,22 +34,22 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/estudar',
-    name: 'Estudar',
-    component: StudyStart,
-    meta: { requiresAuth: true },
-  },
-  {
     path: '/area-do-aluno',
-    name: 'Area do aluno',
-    component: StudentArea,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
     meta: {requiresAuth: true},
+    children: [
+      {
+        path: '',
+        name: 'DashboardHome',
+        component: DashboardHome,
+      },
+      {
+        path: 'estudar',
+        name: 'Estudar',
+        component: StudyStart,
+      }
+    ]
   }
 ];
 
@@ -94,8 +95,8 @@ router.beforeEach(async (to, from, next) => {
         // Carrega as matérias do usuário
         await userStore.fetchUserSubjects();
         if (userStore.userSubjects.length > 0) {
-          // Redireciona para ciclo de estudos
-          next({ path: '/estudar' });
+          // Redireciona para dashboard
+          next({ path: '/area-do-aluno' });
           return;
         }
         // Redireciona para seleção de matérias
