@@ -86,10 +86,7 @@ const toggleMenu2 = () => (isMenu2Open.value = !isMenu2Open.value);
     </aside>
     <!-- Conteúdo Principal -->
     <main class="flex-1 p-6">
-      <!-- <h1 class="text-2xl font-semibold text-gray-800">Bem-vindo!</h1>
-      <p class="mt-4 text-gray-600">
-        Aqui você pode gerenciar informações e visualizar dados importantes.
-      </p> -->
+      <!-- Conteudo a ser carregado na página -->
       <router-view />
     </main>
   </div>
