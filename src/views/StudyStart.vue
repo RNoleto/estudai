@@ -146,15 +146,16 @@ const isSubjectSelected = computed(() => !!selectedSubject.value);
     </div>
     <!-- Resumo dos estudos -->
     <div>
-      <div class="grid grid-cols-3 gap-2">
-        <div class="col-span-1">
+      <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2">
+
+        <div class="col-span-1 md:col-span-2 xl:col-span-1">
           <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" />
         </div>
         <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
 
         <!-- Cards com informações de estudos registrados pelo usuário -->
-        <div class="col-span-2">
-          <div class="grid grid-cols-3 gap-2">
+        <div class="col-span-2 sm:col-span-1 md:col-span-2 xl:col-span-2">
+          <div class="grid grid-cols-3 gap-2 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
             <!-- Exibe animação enquanto carrega -->
             <div v-if="isLoading" v-for="n in 6" :key="'skeleton-' + n"
               class="border border-blue-300 shadow-sm rounded-md p-4 animate-pulse h-[172px] content-center">
