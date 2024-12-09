@@ -5,6 +5,7 @@ import Timer from '../components/ui/Timer.vue';
 import StudySummaryModal from '../layouts/StudySummaryModal.vue';
 import ComboBox from '../components/ui/ComboBox.vue';
 import Chart from 'primevue/chart';
+import EditModal from '../components/EditModal.vue';
 
 import { useCurrentDate } from "../composables/useCurrentDate";
 import { useUserStore } from "../stores/useUserStore";
@@ -127,6 +128,19 @@ const handleSubjectSelection = (subject) => {
 
 const isSubjectSelected = computed(() => !!selectedSubject.value);
 
+const isModalVisible = ref(false);
+const selectedRecord = ref(null);
+
+const openModal = (record) => {
+  selectedRecord.value = { ...record };
+  isModalVisible.value = true;
+};
+
+const updateRecord = (updatedRecord) => {
+  console.log(updatedRecord); // Atualize o item no store ou na API
+  isModalVisible.value = false;
+};
+
 </script>
 
 <template>
@@ -182,6 +196,7 @@ const isSubjectSelected = computed(() => !!selectedSubject.value);
               v-if="userStore.userStudyRecords.length > 0" v-for="(record, index) in userStore.userStudyRecords"
               :key="record.id">
               <div class="flex flex-col justify-center gap-1">
+                <button @click="openModal(record)">Editar</button>
                 <p><span class="font-bold">Matéria:</span> {{ record.subjectName }}</p>
                 <p><span class="font-bold">Tópico:</span> {{ record.topic }}</p>
               </div>
@@ -218,6 +233,8 @@ const isSubjectSelected = computed(() => !!selectedSubject.value);
                 </div>
               </div>
             </div>
+            <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord" @update="updateRecord"
+              @close="isModalVisible = false" />
           </div>
         </div>
       </div>
