@@ -86,9 +86,9 @@ const toggleMenu3 = () => (isMenu3Open.value = !isMenu3Open.value);
             <i class="fas" :class="isMenu3Open ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
           </button>
           <div v-if="isMenu3Open" class="pl-8 mt-2 space-y-2">
-            <a href="/area-do-aluno/carreiras" class="block text-sm text-gray-600 hover:text-gray-900">Minha Carreira</a>
-            <a href="/area-do-aluno/materias" class="block text-sm text-gray-600 hover:text-gray-900">Minhas Matérias</a>
-            <a href="/area-do-aluno/ciclo-de-estudos" class="block text-sm text-gray-600 hover:text-gray-900">Meu Ciclo de Estudo</a>
+            <a href="/area-do-aluno/carreiras" class="block text-sm text-gray-600 hover:text-gray-900"><i class="fa-solid fa-user-astronaut"></i> Minha Carreira</a>
+            <a href="/area-do-aluno/materias" class="block text-sm text-gray-600 hover:text-gray-900"><i class="fa-solid fa-book"></i> Minhas Matérias</a>
+            <a href="/area-do-aluno/ciclo-de-estudos" class="block text-sm text-gray-600 hover:text-gray-900"><i class="fa-solid fa-arrows-spin"></i> Meu Ciclo de Estudo</a>
             <a href="#" class="block text-sm text-gray-600 hover:text-gray-900"><i class="fa-solid fa-crosshairs"></i> Meus Objetivos</a>
           </div>
         </div>
