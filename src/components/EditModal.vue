@@ -1,8 +1,12 @@
 <script setup>
-import { reactive, watch } from 'vue';
+import { reactive, watch, computed } from 'vue';
 
 import { useUserStore } from '../stores/useUserStore';
 import { useTimeFormatter } from '../composables/useTimeFormatter';
+import { useSubjectStore } from '../stores/useSubjectStore';
+
+import ComboBox from '../components/ui/ComboBox.vue';
+
 const { formatStudyTime } = useTimeFormatter();
 
 
@@ -18,7 +22,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update', 'close']);
+
 const userStore = useUserStore();
+const subjectStore = useSubjectStore();
 
 // Inicializa `formData` com valores reativos
 const formData = reactive({
@@ -49,6 +55,9 @@ watch(
   },
   { immediate: true }
 );
+
+// Computed para obter a lista de matérias
+const subjects = computed(() => subjectStore.subjects);
 
 // Emite evento de atualização
 const handleSubmit = () => {
@@ -89,8 +98,14 @@ const saveChanges = async () => {
       <form @submit.prevent="saveChanges">
         <div class="mb-4">
           <label for="subjectName" class="block text-sm font-medium text-gray-700">Matéria</label>
-          <input v-model="formData.subjectName" type="text" id="subjectName"
-            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+          <ComboBox
+            :options="subjects"
+            :placeholder="'Selecione uma matéria...'"
+            v-model="formData.subjectName"
+            class="mt-1 block w-full"
+          />
+          <!-- <input v-model="formData.subjectName" type="text" id="subjectName"
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /> -->
         </div>
         <div class="mb-4">
           <label for="topic" class="block text-sm font-medium text-gray-700">Tópico</label>
