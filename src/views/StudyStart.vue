@@ -155,29 +155,9 @@ const updateRecord = (updatedRecord) => {
         <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
       </div>
       <div class="xl:col-span-4">
-        <div v-if="isLoading" v-for="n in 3" :key="'skeleton-' + n"
-          class="border border-zinc-300 shadow-sm rounded-md p-4 animate-pulse flex items-center gap-4">
-          <!-- Placeholder de loading -->
-          <div class=" flex-1 space-y-6 py-2">
-            <div class="h-2 bg-slate-200 rounded"></div>
-            <div class="h-2 bg-slate-200 rounded"></div>
-            <div class="space-y-3">
-              <div class="grid grid-cols-3 gap-4">
-                <div class="h-2 bg-slate-200 rounded col-span-2"></div>
-                <div class="h-2 bg-slate-200 rounded col-span-2"></div>
-                <div class="h-2 bg-slate-200 rounded col-span-1"></div>
-                <div class="h-2 bg-slate-200 rounded col-span-1"></div>
-                <div class="h-2 bg-slate-200 rounded col-span-1"></div>
-                <div class="h-2 bg-slate-200 rounded col-span-1"></div>
-              </div>
-              <div class="h-2 bg-slate-200 rounded"></div>
-            </div>
-          </div>
-          <div class="rounded-full bg-slate-200 h-[100px] w-[100px]"></div>
-        </div>
         <!-- Exibe os registros de estudo -->
-        <div v-else class="grid gap-2 xl:grid-cols-2">
-          <StudyCard v-for="(record, index) in userStore.userStudyRecords" :key="record.id" :record="record"
+        <div  class="grid gap-2 xl:grid-cols-2">
+          <StudyCard v-for="(record, index) in userStore.userStudyRecords" :key="record.id" :record="record" :isLoading="isLoading"
             :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal" />
           <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord" @update="updateRecord"
             @close="isModalVisible = false" />
