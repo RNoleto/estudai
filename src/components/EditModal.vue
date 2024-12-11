@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, watch } from 'vue';
 
+import { useUserStore } from '../stores/useUserStore';
 import { useTimeFormatter } from '../composables/useTimeFormatter';
 const { formatStudyTime } = useTimeFormatter();
 
@@ -17,9 +18,11 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update', 'close']);
+const userStore = useUserStore();
 
 // Inicializa `formData` com valores reativos
 const formData = reactive({
+  subject_id: null,
   subjectName: '',
   topic: '',
   study_time: 0,
@@ -34,6 +37,7 @@ watch(
   () => props.record,
   (newRecord) => {
     if (newRecord) {
+      formData.subject_id = newRecord.subject_id || null;
       formData.subjectName = newRecord.subjectName || '';
       formData.topic = newRecord.topic || '';
       formData.study_time = newRecord.study_time || 0;
@@ -56,13 +60,33 @@ const handleSubmit = () => {
 const closeModal = () => {
   emit('close');
 };
+
+const saveChanges = async () => {
+  try {
+    const updatedData = {
+      subject_id: formData.subject_id,
+      topic: formData.topic,
+      questions_resolved: formData.questions_resolved,
+      correct_answers: formData.correct_answers,
+      incorrect_answers: formData.questions_resolved - formData.correct_answers,
+      study_time: formData.study_time, // Mantém imutável
+      total_pauses: formData.total_pauses, // Mantém imutável
+    };
+
+    await userStore.updateUserStudyRecord(props.record.id, updatedData); // Certifique-se que este método existe
+    alert("Registro atualizado com sucesso!");
+    closeModal(); // Usa a função já definida para fechar o modal
+  } catch (error) {
+    alert("Ocorreu um erro ao atualizar o registro. Tente novamente.");
+  }
+};
 </script>
 
 <template>
   <div v-if="isVisible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-zinc-600">
     <div class="bg-zinc-100 rounded-lg shadow-lg p-6 w-full max-w-md">
       <h2 class="text-lg font-bold mb-4">Editar Registro</h2>
-      <form @submit.prevent="handleSubmit">
+      <form @submit.prevent="saveChanges">
         <div class="mb-4">
           <label for="subjectName" class="block text-sm font-medium text-gray-700">Matéria</label>
           <input v-model="formData.subjectName" type="text" id="subjectName"

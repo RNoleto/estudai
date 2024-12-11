@@ -187,6 +187,36 @@ export const useUserStore = defineStore('user', {
         console.error("Erro ao salvar no dados de estudos banco de dados:", error);
       }
     },
+    async updateUserStudyRecord(recordId, updatedData) {
+      console.log("Função updateUserStudyRecord foi chamada!"); // Log de controle
+    
+      if (!this.userId) {
+        console.error("ID do usuário não encontrado.");
+        return;
+      }
+    
+      try {
+        const payload = {
+          user_id: this.userId, // Mantém o ID do usuário
+          subject_id: updatedData.subject_id, // Atualiza o ID do assunto
+          topic: updatedData.topic, // Atualiza o tópico, se necessário
+          study_time: updatedData.study_time, // Valor imutável vindo do backend
+          total_pauses: updatedData.total_pauses, // Valor imutável vindo do backend
+          questions_resolved: updatedData.questions_resolved, // Atualiza questões resolvidas
+          correct_answers: updatedData.correct_answers, // Atualiza respostas corretas
+          incorrect_answers: updatedData.incorrect_answers // Atualiza respostas incorretas
+        };
+    
+        const response = await axios.put(`user-study-records/${recordId}`, payload);
+    
+        console.log("Dados atualizados no banco de dados com sucesso:", response.data);
+    
+        return response.data; // Retorna os dados atualizados para uso
+      } catch (error) {
+        console.error("Erro ao atualizar os dados de estudos no banco de dados:", error);
+        throw error; // Lança o erro para ser tratado no componente, se necessário
+      }
+    },
     getCorrectAnswerPercentage(record) {
       if (!record.questions_resolved || record.questions_resolved === 0) return 0;
       return (record.correct_answers / record.questions_resolved) * 100;
