@@ -4,19 +4,14 @@ import Input from '../components/ui/Input.vue';
 import Timer from '../components/ui/Timer.vue';
 import StudySummaryModal from '../layouts/StudySummaryModal.vue';
 import ComboBox from '../components/ui/ComboBox.vue';
-import Chart from 'primevue/chart';
 import EditModal from '../components/EditModal.vue';
 
-import { useCurrentDate } from "../composables/useCurrentDate";
 import { useUserStore } from "../stores/useUserStore";
 import { useStudyStore } from "../stores/useStudyStore";
 import { useSubjectStore } from "../stores/useSubjectStore";
 
-import { useTimeFormatter } from '../composables/useTimeFormatter';
 import StudyCard from '../layouts/StudyCard.vue';
 
-const { formattedDate } = useCurrentDate();
-const { formatStudyTime } = useTimeFormatter();
 
 const studyStore = useStudyStore();
 const userStore = useUserStore();
@@ -147,25 +142,25 @@ const updateRecord = (updatedRecord) => {
 <template>
   <div class="flex flex-col gap-4">
     <h3 class="text-4xl">Iniciar Estudos</h3>
-    <div class="grid gap-2 grid-cols-5">
+    <div class="grid gap-2 grid-cols-6">
       <!-- Campo de pesquisa com lista suspensa de matérias -->
-       <div class="flex gap-2 col-span-5">
+       <div class="flex gap-2 col-span-6">
          <ComboBox :options="userSubjects" :placeholder="'Selecione uma matéria...'" v-model="selectedSubject"
            @select="handleSubjectSelection" class="w-full" />
          <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-full"
            v-model="studyStore.topic" />
        </div>
-       <div class="gap-2 xl:col-span-1 lg:col-span-2 md:col-span-5 sm:col-span-5">
+       <div class="gap-2 xl:col-span-2 lg:col-span-2 md:col-span-5 sm:col-span-5">
          <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" class="w-full" />
          <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
         </div>
-        <div class="xl:col-span-4 lg:col-span-3 md:col-span-5 sm:col-span-5">
+        <div class="xl:col-span-4">
           <div v-if="isLoading" v-for="n in 3" :key="'skeleton-' + n"
             class="border border-zinc-300 shadow-sm rounded-md p-4 animate-pulse">
             <!-- Placeholder de loading -->
           </div>
           <!-- Exibe os registros de estudo -->
-          <div v-else class="grid  gap-2 xl:grid-cols-4  lg:grid-cols-1 md:grid-cols-2">
+          <div v-else class="grid gap-2 xl:grid-cols-2">
             <StudyCard
               v-for="(record, index) in userStore.userStudyRecords" 
               :key="record.id" 
