@@ -37,17 +37,19 @@ const incorrectPercentage = computed(() =>
 
 <template>
   <div class="shadow-sm flex flex-col gap-1 text-xs text-zinc-700 border-b rounded-md bg-white p-4">
-    <div class="flex gap-2 justify-end">
-      <button class="p-1 text-sm text-blue-400" @click="$emit('edit', props.record)"><i class="fa-regular fa-pen-to-square"></i></button>
-      <button class="text-sm text-red-400 p-1"><i class="fa-solid fa-trash"></i></button>
-    </div>
     <!-- Header do card -->
-    <div class="flex flex-col justify-center gap-1">
-      <p><span class="font-bold">Matéria:</span> {{ record.subjectName }}</p>
-      <p><span class="font-bold">Tópico:</span> {{ record.topic }}</p>
+    <div class="flex justify-between">
+      <div class="text-base flex flex-col justify-center gap-1">
+        <p><span class="font-bold">Matéria:</span> {{ record.subjectName }}</p>
+        <p><span class="font-bold">Tópico:</span> {{ record.topic }}</p>
+      </div>
+      <div>
+        <button class="p-1 text-sm text-blue-400" @click="$emit('edit', props.record)"><i class="fa-regular fa-pen-to-square"></i></button>
+        <button class="text-sm text-red-400 p-1"><i class="fa-solid fa-trash"></i></button>
+      </div>
     </div>
     <!-- Conteudo do Card -->
-    <div class="flex justify-between gap-10">
+    <div class="text-sm flex justify-between gap-10">
       <div class="flex flex-col justify-center gap-1">
         <p><span class="font-bold">Tempo de estudo:</span> {{ formatStudyTime(record.study_time) }}</p>
         <p v-if="record.total_pauses > 0">

@@ -21,10 +21,10 @@ const stopTimer = () => {
 </script>
 
 <template>
-  <div class="flex flex-col rounded-md bg-white p-4 shadow">
-    <div class="flex flex-col items-center">
-      <h2 class="w-full text-2xl text-center p-2 mb-4 border-b border-zinc-100">Temporizador</h2>
-      <div class="text-4xl font-mono mb-4">{{ timerStore.formattedTime }}</div>
+  <div class="flex flex-col rounded-md bg-white shadow p-4">
+    <div class="flex flex-col items-center gap-1 py-4">
+      <h2 class="w-full text-2xl text-center border-b border-zinc-100 p-2">Temporizador</h2>
+      <div class="text-4xl font-mono">{{ timerStore.formattedTime }}</div>
       <div class="flex space-x-2">
         <Button @click="timerStore.start" variant="primary" :disabled="timerStore.isRunning || props.isDisabled">Iniciar</Button>
         <Button @click="timerStore.togglePause" variant="secondary" :disabled="!timerStore.isRunning">
@@ -33,7 +33,7 @@ const stopTimer = () => {
         <Button @click="stopTimer" variant="delete" :disabled="!timerStore.isRunning">Parar</Button>
       </div>
     </div>
-    <div class="flex justify-between mt-4 p-2">
+    <div class="flex justify-between py-2">
       <p><strong>Tempo total:</strong> {{ timerStore.formatPauseTime(timerStore.totalPauseTime) }}</p>
       <p><strong>Total de pausas:</strong> {{ timerStore.pauses.length }}</p>      
     </div>
