@@ -38,6 +38,9 @@ const formData = reactive({
   incorrect_answers: 0,
 });
 
+// Variáveis reativas para o modal
+const modalMessage = reactive({ text: '', type: '' }); // Tipo 'success' ou 'error'
+
 // Atualiza `formData` quando `record` muda
 watch(
   () => props.record,
@@ -59,11 +62,11 @@ watch(
 // Computed para obter a lista de matérias
 const subjects = computed(() => subjectStore.subjects);
 
-// Emite evento de atualização
-const handleSubmit = () => {
-  emit('update', { ...formData });
-  closeModal();
-};
+// // Emite evento de atualização
+// const handleSubmit = () => {
+//   emit('update', { ...formData });
+//   closeModal();
+// };
 
 // Fecha o modal
 const closeModal = () => {
@@ -83,11 +86,21 @@ const saveChanges = async () => {
     };
 
     await userStore.updateUserStudyRecord(props.record.id, updatedData); // Certifique-se que este método existe
-    alert("Registro atualizado com sucesso!");
-    closeModal(); // Usa a função já definida para fechar o modal
+    // alert("Registro atualizado com sucesso!");
+    modalMessage.text = 'Registro atualizado com sucesso!';
+    modalMessage.type = 'success'; // Tipo sucesso
+    // closeModal(); // Usa a função já definida para fechar o modal
   } catch (error) {
-    alert("Ocorreu um erro ao atualizar o registro. Tente novamente.");
+    modalMessage.text = 'Ocorreu um erro ao atualizar o registro. Tente novamente.';
+    modalMessage.type = 'error'; // Tipo erro
+    // alert("Ocorreu um erro ao atualizar o registro. Tente novamente.");
   }
+};
+
+// Função para fechar o modal de sucesso
+const closeSuccessModal = () => {
+  modalMessage.text = ''; // Limpa a mensagem
+  closeModal(); // Fecha o modal de edição também
 };
 </script>
 
@@ -152,6 +165,13 @@ const saveChanges = async () => {
           </button>
         </div>
       </form>
+    </div>
+  </div>
+  <!-- Modal de Sucesso ou Erro -->
+  <div v-if="modalMessage.text" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-zinc-600">
+    <div :class="modalMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500'" class="h-[485px] p-6 rounded-lg shadow-lg w-full max-w-md text-white text-center content-center">
+      <p>{{ modalMessage.text }}</p>
+      <button @click="closeSuccessModal" class="mt-4 px-4 py-2 bg-white text-black rounded-md hover:bg-gray-200">Fechar</button>
     </div>
   </div>
 </template>
