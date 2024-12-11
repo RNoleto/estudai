@@ -138,8 +138,8 @@ const saveChanges = async () => {
           </div>
           <div class="mb-4">
             <label for="incorrect_answers" class="block text-sm font-medium text-gray-700">Erradas</label>
-            <input v-model="formData.incorrect_answers" type="number" id="incorrect_answers"
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+            <input v-model="formData.incorrect_answers" type="number" id="incorrect_answers" readonly
+              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100 cursor-not-allowed text-zinc-500" />
           </div>
         </div>
         <div class="flex justify-end gap-2">
@@ -160,7 +160,6 @@ const saveChanges = async () => {
 /* Remove as bordas ao clicar em inputs readonly */
 input[readonly]:focus {
   outline: none;
-  
 }
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
