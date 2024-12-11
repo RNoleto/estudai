@@ -72,7 +72,8 @@ const closeModal = () => {
               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
           </div>
           <div class="mb-4">
-            <label for="correctAnswers" class="block text-sm font-medium text-gray-700">Corretas</label>
+            <label for="correctAnswers" class="block text-s
+            m font-medium text-gray-700">Corretas</label>
             <input v-model="formData.correctAnswers" type="number" id="correctAnswers"
               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
           </div>

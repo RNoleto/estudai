@@ -155,17 +155,17 @@ const updateRecord = (updatedRecord) => {
          <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-full"
            v-model="studyStore.topic" />
        </div>
-       <div class="gap-2 col-span-1">
+       <div class="gap-2 xl:col-span-1 lg:col-span-2 md:col-span-5 sm:col-span-5">
          <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" class="w-full" />
          <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
         </div>
-        <div class="col-span-4">
+        <div class="xl:col-span-4 lg:col-span-3 md:col-span-5 sm:col-span-5">
           <div v-if="isLoading" v-for="n in 3" :key="'skeleton-' + n"
             class="border border-zinc-300 shadow-sm rounded-md p-4 animate-pulse">
             <!-- Placeholder de loading -->
           </div>
           <!-- Exibe os registros de estudo -->
-          <div v-else class="grid grid-cols-4 gap-2">
+          <div v-else class="grid  gap-2 xl:grid-cols-4  lg:grid-cols-1 md:grid-cols-2">
             <StudyCard
               v-for="(record, index) in userStore.userStudyRecords" 
               :key="record.id" 
