@@ -13,6 +13,7 @@ import { useStudyStore } from "../stores/useStudyStore";
 import { useSubjectStore } from "../stores/useSubjectStore";
 
 import { useTimeFormatter } from '../composables/useTimeFormatter';
+import StudyCard from '../layouts/StudyCard.vue';
 
 const { formattedDate } = useCurrentDate();
 const { formatStudyTime } = useTimeFormatter();
@@ -144,100 +145,44 @@ const updateRecord = (updatedRecord) => {
 </script>
 
 <template>
-  <div class="p-4 flex flex-col gap-4">
-    <div class="flex items-center justify-between">
-      <h3 class="text-4xl font-bold">Iniciar estudos</h3>
-      <p>{{ formattedDate }}</p>
-    </div>
-    <!-- Campo de pesquisa com lista suspensa de matérias -->
-    <div class="grid grid-cols-3 gap-2 content-center relative">
-      <div class="w-full content-center relative">
-        <ComboBox :options="userSubjects" :placeholder="'Selecione uma matéria...'" v-model="selectedSubject"
-          @select="handleSubjectSelection" />
-      </div>
-      <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="col-span-2"
-        v-model="studyStore.topic" />
-    </div>
-    <!-- Resumo dos estudos -->
-    <div>
-      <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2">
-
-        <div class="col-span-1 md:col-span-2 xl:col-span-1">
-          <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" />
+  <div class="flex flex-col gap-4">
+    <h3 class="text-4xl">Iniciar Estudos</h3>
+    <div class="grid gap-2 grid-cols-5">
+      <!-- Campo de pesquisa com lista suspensa de matérias -->
+       <div class="flex gap-2 col-span-5">
+         <ComboBox :options="userSubjects" :placeholder="'Selecione uma matéria...'" v-model="selectedSubject"
+           @select="handleSubjectSelection" class="w-full" />
+         <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-full"
+           v-model="studyStore.topic" />
+       </div>
+       <div class="gap-2 col-span-1">
+         <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" class="w-full" />
+         <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
         </div>
-        <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
-
-        <!-- Cards com informações de estudos registrados pelo usuário -->
-        <div class="col-span-2 sm:col-span-1 md:col-span-2 xl:col-span-2">
-          <div class="grid grid-cols-3 gap-2 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-            <!-- Exibe animação enquanto carrega -->
-            <div v-if="isLoading" v-for="n in 6" :key="'skeleton-' + n"
-              class="border border-blue-300 shadow-sm rounded-md p-4 animate-pulse h-[172px] content-center">
-              <div class="flex space-x-4">
-                <div class="flex-1 space-y-6">
-                  <div class="h-2 bg-slate-200 rounded w-5/12"></div>
-                  <div class="h-2 bg-slate-200 rounded w-7/12"></div>
-                  <div class="space-y-3">
-                    <div class="grid grid-cols-3 gap-4">
-                      <div class="h-2 bg-slate-200 rounded col-span-1"></div>
-                      <div class="h-2 bg-slate-200 rounded col-span-1"></div>
-                      <div class="h-2 bg-slate-200 rounded col-span-1"></div>
-                    </div>
-                    <div class="h-2 bg-slate-200 rounded"></div>
-                    <div class="h-2 bg-slate-200 rounded"></div>
-                  </div>
-                </div>
-                <div class="rounded-full bg-slate-200 h-[120px] w-[120px]"></div>
-              </div>
-            </div>
-            <!-- Dados Reais -->
-            <div v-else
-              class="shadow-sm flex flex-col gap-1 text-xs text-zinc-700 col-span-1 border-b rounded-md bg-white p-4 overflow-hidden"
-              v-if="userStore.userStudyRecords.length > 0" v-for="(record, index) in userStore.userStudyRecords"
-              :key="record.id">
-              <div class="flex flex-col justify-center gap-1">
-                <button @click="openModal(record)">Editar</button>
-                <p><span class="font-bold">Matéria:</span> {{ record.subjectName }}</p>
-                <p><span class="font-bold">Tópico:</span> {{ record.topic }}</p>
-              </div>
-              <div class="flex justify-between">
-                <div class="flex">
-                  <div class="flex flex-col justify-center gap-1">
-                    <p><span class="font-bold">Tempo de estudo:</span> {{ formatStudyTime(record.study_time) }}</p>
-                    <p v-if="record.totalPauses > 0">
-                      <span class="font-bold">Nº de pauses:</span> {{ record.total_pauses }}
-                    </p>
-                    <div v-if="record.questions_resolved > 0" class="flex flex-col gap-1">
-                      <p><span class="font-bold">Questões respondidas:</span> {{ record.questions_resolved }}</p>
-                      <p><span class="font-bold">Acertos:</span> {{ record.correct_answers }}</p>
-                      <p><span class="font-bold">Erros: </span> {{ record.incorrect_answers }}</p>
-                    </div>
-                  </div>
-                </div>
-                <!-- Gráfico -->
-                <div v-if="record.questions_resolved > 0" class="relative flex justify-center">
-                  <Chart v-if="chartData.length > 0" :key="record.id" :type="'doughnut'" :data="chartData[index]"
-                    :options="chartOptions[index]" class="md:w-[10rem] mt-[-60px]" />
-                  <div class="absolute bottom-5">
-                    <div class="text-[#00B884] flex flex-col text-center" id="acertos">
-                      <strong class="text-xl">{{ userStore.getCorrectAnswerPercentage(record).toFixed(1) }}%</strong>
-                      <p class="text-sm">Acertos</p>
-                    </div>
-                    <div v-if="userStore.getIncorrectAnswerPercentage(record) > 0"
-                      class="text-[#FF5675] flex flex-col text-center hidden" id="erros">
-                      <strong class="text-xl">{{ userStore.getIncorrectAnswerPercentage(record).toFixed(1)
-                        }}%</strong>
-                      <p class="text-sm">Erros</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord" @update="updateRecord"
-              @close="isModalVisible = false" />
+        <div class="col-span-4">
+          <div v-if="isLoading" v-for="n in 3" :key="'skeleton-' + n"
+            class="border border-zinc-300 shadow-sm rounded-md p-4 animate-pulse">
+            <!-- Placeholder de loading -->
+          </div>
+          <!-- Exibe os registros de estudo -->
+          <div v-else class="grid grid-cols-4 gap-2">
+            <StudyCard
+              v-for="(record, index) in userStore.userStudyRecords" 
+              :key="record.id" 
+              :record="record"
+              :chartData="chartData[index]" 
+              :chartOptions="chartOptions[index]" 
+              @edit="openModal"
+            />
+            <EditModal 
+              v-if="isModalVisible" 
+              :isVisible="isModalVisible" 
+              :record="selectedRecord" 
+              @update="updateRecord"
+              @close="isModalVisible = false" 
+            />
           </div>
         </div>
-      </div>
     </div>
   </div>
 </template>

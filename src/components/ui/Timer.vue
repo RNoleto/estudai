@@ -33,7 +33,7 @@ const stopTimer = () => {
         <Button @click="stopTimer" variant="delete" :disabled="!timerStore.isRunning">Parar</Button>
       </div>
     </div>
-    <div class="flex justify-between mt-4 px-4">
+    <div class="flex justify-between mt-4 p-2">
       <p><strong>Tempo total:</strong> {{ timerStore.formatPauseTime(timerStore.totalPauseTime) }}</p>
       <p><strong>Total de pausas:</strong> {{ timerStore.pauses.length }}</p>      
     </div>
