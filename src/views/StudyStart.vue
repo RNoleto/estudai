@@ -86,12 +86,28 @@ const getChartOptions = (record) => {
   };
 };
 
+const todayStudyRecords = computed(() => {
+  const today = new Date().toISOString().slice(0, 10); // Data de hoje no formato ISO (AAAA-MM-DD)
+
+  return userStore.userStudyRecords.filter((record) => {
+    if (!record.created_at) return false; // Ignora registros sem data
+    try {
+      // Ajuste para o formato vindo do banco de dados
+      const recordDate = new Date(record.created_at.split('.')[0]);
+      return recordDate.toISOString().slice(0, 10) === today;
+    } catch (error) {
+      console.error("Erro ao processar a data do registro:", error);
+      return false; // Ignora registros com erro
+    }
+  });
+});
+
 const updateChartData = () => {
   try {
-    if (!userStore.userStudyRecords || userStore.userStudyRecords.length === 0) return;
+    if (!todayStudyRecords.value || todayStudyRecords.value.length === 0) return;
 
-    chartData.value = userStore.userStudyRecords.map(record => getChartData(record));
-    chartOptions.value = userStore.userStudyRecords.map(record => getChartOptions(record));
+    chartData.value = todayStudyRecords.value.map(record => getChartData(record));
+    chartOptions.value = todayStudyRecords.value.map(record => getChartOptions(record));
   } catch (error) {
     console.error("Error updating chart data: ", error);
   }
@@ -99,11 +115,9 @@ const updateChartData = () => {
 
 // Atualizar dados sempre que necessário
 watch(
-  [() => userStore.userStudyRecords, () => subjectStore.subjects],
-  ([newStudyRecords, newSubjects]) => {
-    if (newStudyRecords && newSubjects) {
-      updateChartData();
-    }
+  todayStudyRecords,
+  () => {
+    updateChartData();
   },
   { immediate: true }
 );
@@ -157,7 +171,7 @@ const updateRecord = (updatedRecord) => {
       <div class="xl:col-span-4">
         <!-- Exibe os registros de estudo -->
         <div  class="grid gap-2 xl:grid-cols-2">
-          <StudyCard v-for="(record, index) in userStore.userStudyRecords" :key="record.id" :record="record" :isLoading="isLoading"
+          <StudyCard v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record" :isLoading="isLoading"
             :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal" />
           <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord" @update="updateRecord"
             @close="isModalVisible = false" />
