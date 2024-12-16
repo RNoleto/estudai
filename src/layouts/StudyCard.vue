@@ -37,6 +37,9 @@ const correctPercentage = computed(() =>
 const incorrectPercentage = computed(() =>
   userStore.getIncorrectAnswerPercentage(props.record).toFixed(1)
 );
+// Variáveis de controle de visibilidade
+const showCorrect = ref(true);
+const showIncorrect = ref(false);
 </script>
 
 <template>
@@ -88,11 +91,11 @@ const incorrectPercentage = computed(() =>
       <div v-if="record.questions_resolved > 0" class="relative flex justify-center">
         <Chart :type="'doughnut'" :data="chartData" :options="chartOptions" class="w-[10rem]" />
         <div class="absolute bottom-5 text-center">
-          <div class="text-[#00B884]">
+          <div v-bind:class="{ 'text-[#00B884]': showCorrect, 'hidden': !showCorrect }">
             <strong class="text-xl">{{ correctPercentage }}%</strong>
             <p class="text-sm">Acertos</p>
           </div>
-          <div v-if="incorrectPercentage > 0" class="text-[#FF5675] hidden">
+          <div v-if="incorrectPercentage > 0" v-bind:class="{ 'text-[#FF5675]': showIncorrect, 'hidden': !showIncorrect }">
             <strong class="text-xl">{{ incorrectPercentage }}%</strong>
             <p class="text-sm">Erros</p>
           </div>

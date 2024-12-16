@@ -12,7 +12,6 @@ import { useSubjectStore } from "../stores/useSubjectStore";
 
 import StudyCard from '../layouts/StudyCard.vue';
 
-
 const studyStore = useStudyStore();
 const userStore = useUserStore();
 const subjectStore = useSubjectStore();
@@ -38,7 +37,7 @@ onMounted(async () => {
   }
 });
 
-// Trecho responsavel pelo StudySummaryModal
+// Trecho responsável pelo StudySummaryModal
 const handleTimerStopped = () => {
   isOpen.value = true;
   updateChartData();
@@ -64,17 +63,30 @@ const getChartData = (record) => {
     ],
   };
 };
+
 // Gera as opções do gráfico para cada registro
 const getChartOptions = (record) => {
   const correctPercentage = userStore.getCorrectAnswerPercentage(record);
+  const incorrectPercentage = userStore.getIncorrectAnswerPercentage(record);
 
   return {
     plugins: {
       legend: {
         display: false, // Oculta a legenda
       },
-      tooltip: {
-        enabled: false, // Desabilita o tooltip padrão
+      tooltip: {    
+        enabled: true, // Habilita o tooltip
+        callbacks: {
+          // Personaliza o conteúdo do tooltip
+          label: (tooltipItem) => {
+            // Verifica a posição do mouse e exibe o valor correto
+            if (tooltipItem.dataIndex === 0) {
+              return `Acertos: ${tooltipItem.raw.toFixed(1)}%`;
+            } else if (tooltipItem.dataIndex === 1) {
+              return `Erros: ${tooltipItem.raw.toFixed(1)}%`;
+            }
+          },
+        },        
       },
       centerText: {
         text: `${correctPercentage.toFixed(1)}%`, // Texto inicial com a porcentagem de acertos
@@ -150,7 +162,6 @@ const updateRecord = (updatedRecord) => {
   console.log(updatedRecord); // Atualize o item no store ou na API
   isModalVisible.value = false;
 };
-
 </script>
 
 <template>
