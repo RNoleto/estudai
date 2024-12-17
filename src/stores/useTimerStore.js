@@ -51,8 +51,8 @@ export const useTimerStore = defineStore('timer', () => {
     isRunning.value = false;
     isPaused.value = false;
 
-    console.log(`Pinia - Total de pausas: ${pauses.value.length}`);
-    console.log(`Pinia - Tempo total de pausa: ${formatPauseTime(elapsedTime.value)}`);
+    // console.log(`Pinia - Total de pausas: ${pauses.value.length}`);
+    // console.log(`Pinia - Tempo total de pausa: ${formatPauseTime(elapsedTime.value)}`);
 
     // Resetar os valores para o próximo ciclo
     elapsedTime.value = 0;

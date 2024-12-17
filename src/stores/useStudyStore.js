@@ -18,7 +18,7 @@ export const useStudyStore = defineStore('study', {
         async fetchSubjects() {
             try {
                 const response = await axios.get('subjects');
-                console.log(response.data);
+                
                 this.subjectList = Array.isArray(response.data) ? response.data : [];
             } catch (error) {
                 console.error('Erro ao buscar as matérias:', error);
@@ -30,7 +30,7 @@ export const useStudyStore = defineStore('study', {
         },
         setSubject(subject) {
             this.subject = subject;
-            console.log("Mudando a matéria:", subject);
+            
             
         },
         setTopic(topic) {
