@@ -14,7 +14,7 @@ const userStore = useUserStore();
             <h3 class="text-4xl font-bold">Resumo dos estudos</h3>
             <p>Carreira: {{ userStore.careerName }}</p>
         </div>
-        <div class="flex flex-wrap gap-2">
+        <div class="flex flex-wrap gap-2 min-h-[250px]">
             <StudyTimeRecord/>
             <StudyStatisticsRecords />
             <SubjectSummaryTable />
