@@ -12,7 +12,7 @@ const userStore = useUserStore();
     <div class="flex flex-col gap-4 p-4">
         <div class="flex flex-col gap-2">
             <h3 class="text-4xl font-bold">Resumo dos estudos</h3>
-            <p>Carreira: {{ userStore.careerName }}</p>
+            <p>Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."  }}</p>
         </div>
         <div class="flex flex-wrap gap-2 min-h-[250px]">
             <StudyTimeRecord/>

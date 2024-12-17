@@ -10,6 +10,10 @@ import { useUserStore } from "../stores/useUserStore";
 import { useStudyStore } from "../stores/useStudyStore";
 import { useSubjectStore } from "../stores/useSubjectStore";
 
+import { useCurrentDate } from '../composables/useCurrentDate';
+
+const { formattedDate } = useCurrentDate();
+
 import StudyCard from '../layouts/StudyCard.vue';
 
 const studyStore = useStudyStore();
@@ -167,6 +171,10 @@ const updateRecord = (updatedRecord) => {
 <template>
   <div class="flex flex-col gap-4">
     <h3 class="text-4xl">Iniciar Estudos</h3>
+    <div class="flex justify-between">
+      <p>Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."  }}</p>
+      <p>{{ formattedDate }}</p>
+    </div>
     <div class="grid gap-2 grid-cols-6">
       <!-- Campo de pesquisa com lista suspensa de matérias -->
       <div class="flex gap-2 col-span-6">
