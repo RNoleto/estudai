@@ -25,7 +25,7 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(['edit']);
+const emits = defineEmits(['edit', 'delete']);
 
 const userStore = useUserStore();
 
@@ -70,8 +70,8 @@ const showIncorrect = ref(false);
         <p><span class="font-bold">Tópico:</span> {{ record.topic }}</p>
       </div>
       <div>
-        <button class="p-1 text-sm text-blue-400" @click="$emit('edit', props.record)"><i class="fa-regular fa-pen-to-square"></i></button>
-        <button class="text-sm text-red-400 p-1"><i class="fa-solid fa-trash"></i></button>
+        <button class="p-1 text-sm text-blue-400" @click="$emit('edit', props.record)"><i class="fa-regular fa-pen-to-square"></i></button> <!-- Edit -->
+        <button class="text-sm text-red-400 p-1"  @click="$emit('delete', props.record)"><i class="fa-solid fa-trash"></i></button> <!-- Delete -->
       </div>
     </div>
     <!-- Conteudo do Card -->

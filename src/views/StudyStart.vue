@@ -5,6 +5,7 @@ import Timer from '../components/ui/Timer.vue';
 import StudySummaryModal from '../layouts/StudySummaryModal.vue';
 import ComboBox from '../components/ui/ComboBox.vue';
 import EditModal from '../components/EditModal.vue';
+import AlertModal from '../components/AlertModal.vue';
 
 import { useUserStore } from "../stores/useUserStore";
 import { useStudyStore } from "../stores/useStudyStore";
@@ -26,6 +27,8 @@ const chartOptions = ref(null);
 const isOpen = ref(false);
 
 const isLoading = ref(true);
+const showConfirmModal = ref(false);
+const recordToDelete = ref(null);
 
 // Carregar as matérias da API
 onMounted(async () => {
@@ -163,9 +166,31 @@ const openModal = (record) => {
 };
 
 const updateRecord = (updatedRecord) => {
-  console.log(updatedRecord); // Atualize o item no store ou na API
   isModalVisible.value = false;
 };
+
+
+// Função para abrir o modal de confirmação
+function openDeleteModal(record) {
+  recordToDelete.value = record;
+  showConfirmModal.value = true;
+}
+
+// Função para deletar o registro
+async function handleDeleteRecord() {
+  if (!recordToDelete.value || !recordToDelete.value.id) return;
+
+  try {
+    await userStore.deleteUserStudyRecord(recordToDelete.value.id);
+    // Recarrega a lista de registros após deletar
+    await userStore.fetchUserStudyRecords();
+  } catch (error) {
+    console.error("Erro ao deletar o registro:", error.message);
+  } finally {
+    showConfirmModal.value = false; // Fecha o modal
+    recordToDelete.value = null; // Reseta o registro selecionado
+  }
+}
 </script>
 
 <template>
@@ -191,11 +216,18 @@ const updateRecord = (updatedRecord) => {
         <!-- Exibe os registros de estudo -->
         <div  class="grid gap-2 xl:grid-cols-2">
           <StudyCard v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record" :isLoading="isLoading"
-            :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal" />
+            :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal" @delete="openDeleteModal(record)" />
           <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord" @update="updateRecord"
             @close="isModalVisible = false" />
         </div>
       </div>
     </div>
   </div>
+  <AlertModal 
+      :visible="showConfirmModal" 
+      title="Deletar Registro"
+      message="Tem certeza que deseja deletar este registro? Esta ação não pode ser desfeita."
+      @confirm="handleDeleteRecord" 
+      @cancel="showConfirmModal = false"
+    />
 </template>

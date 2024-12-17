@@ -49,7 +49,6 @@ export const useUserStore = defineStore('user', {
 
         if (response.status === 200) {
           localStorage.setItem('userCareerData', JSON.stringify(userCareerData));
-          // console.log("Carreira armazenada no banco de dados com sucesso!");
         }
       } catch (error) {
         console.error("Erro ao salvar a carreira no banco de dados:", error);
@@ -136,14 +135,16 @@ export const useUserStore = defineStore('user', {
         console.error("ID do usuário não encontrado.");
         return;
       }
-    
+
       try {
         const response = await axios.get(`user-study-records/user/${this.userId}`);
-        
+
         if (response.status === 200) {
           const subjectStore = useSubjectStore(); // Obtém o subjectStore para acesso às matérias
-    
-          this.userStudyRecords = response.data.map((record) => {
+
+          const activeRecords = response.data.filter(record => record.ativo === true);
+
+          this.userStudyRecords = activeRecords.map((record) => {
             const subject = subjectStore.subjects.find(sub => sub.id === record.subject_id);
             return {
               ...record,
@@ -156,7 +157,6 @@ export const useUserStore = defineStore('user', {
       }
     },
     async saveUserStudyRecord(newRecord) {
-      console.log("Função saveUserStudyRecord foi chamada!"); // Confirmação inicial
       const timerStore = useTimerStore();
       const studyStore = useStudyStore();
 
@@ -182,19 +182,17 @@ export const useUserStore = defineStore('user', {
 
         const response = await axios.post('user-study-records', payload);
 
-        console.log("Dados salvos no banco de dados com sucesso:", response);
       } catch (error) {
         console.error("Erro ao salvar no dados de estudos banco de dados:", error);
       }
     },
     async updateUserStudyRecord(recordId, updatedData) {
-      console.log("Função updateUserStudyRecord foi chamada!"); // Log de controle
-    
+
       if (!this.userId) {
         console.error("ID do usuário não encontrado.");
         return;
       }
-    
+
       try {
         const payload = {
           user_id: this.userId, // Mantém o ID do usuário
@@ -206,22 +204,34 @@ export const useUserStore = defineStore('user', {
           correct_answers: updatedData.correct_answers, // Atualiza respostas corretas
           incorrect_answers: updatedData.incorrect_answers // Atualiza respostas incorretas
         };
-    
+
         const response = await axios.put(`user-study-records/${recordId}`, payload);
-    
-        console.log("Dados atualizados no banco de dados com sucesso:", response.data);
-    
+
         return response.data; // Retorna os dados atualizados para uso
       } catch (error) {
         console.error("Erro ao atualizar os dados de estudos no banco de dados:", error);
         throw error; // Lança o erro para ser tratado no componente, se necessário
       }
     },
+    async deleteUserStudyRecord(recordId) {
+
+      if (!recordId) {
+        console.error("ID do registro de estudo não fornecido.");
+        return;
+      }
+      try {
+        const response = await axios.delete(`user-study-records/${recordId}`);
+        return response.data;
+
+      } catch (error) {
+        console.error("Erro ao deletar o registro de estudo:", error.response?.data || error.message);
+        throw error;
+      }
+    },
     getCorrectAnswerPercentage(record) {
       if (!record.questions_resolved || record.questions_resolved === 0) return 0;
       return (record.correct_answers / record.questions_resolved) * 100;
     },
-    
     getIncorrectAnswerPercentage(record) {
       if (!record.questions_resolved || record.questions_resolved === 0) return 0;
       return (record.incorrect_answers / record.questions_resolved) * 100;
