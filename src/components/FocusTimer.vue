@@ -91,16 +91,10 @@ function stopTimer() {
                     :disabled="!isRunning">
                     Pausar
                 </button>
-                <button @click="stopTimer" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+                <button @click="stopTimer" :disabled="!timerStore.isRunning" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
                     Parar
                 </button>
             </div>
         </div>
-        <pre class="bg-red-500 text-white w-[150px] text-sm flex flex-col gap-2 ml-10">
-            <p>Dados no pinia</p>
-            <p>Tempo Total Formatado: {{ timerStore.finalFormattedTime }}</p>
-            <p>Tempo Total em Minutos: {{ timerStore.finalElapsedTime }}</p>
-            <p>Pausas: {{ timerStore.finalTotalPausesLength }}</p>
-        </pre>
     </div>
 </template>

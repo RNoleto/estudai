@@ -57,6 +57,7 @@ onMounted(async () => {
 // Trecho responsável pelo StudySummaryModal
 const handleTimerStopped = () => {
   isOpen.value = true;
+  isFocus.value = false;
   updateChartData();
 };
 
@@ -253,6 +254,6 @@ const isFocusButtonDisabled = computed(() => !selectedSubject.value);
       @cancel="showConfirmModal = false"
     />
     <div v-if="isFocus">
-      <FocusTimer @close="closeFocus"/>
+      <FocusTimer @close="closeFocus" @timerStopped="handleTimerStopped"/>
   </div>
 </template>
