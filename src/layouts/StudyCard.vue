@@ -43,7 +43,7 @@ const showIncorrect = ref(false);
 </script>
 
 <template>
-  <div v-if="isLoading" class="border border-zinc-300 shadow-sm rounded-md p-4 animate-pulse flex items-center gap-4">
+  <div v-if="isLoading" class="border border-zinc-300 shadow-sm rounded-md p-4 animate-pulse flex items-center gap-4 h-[250px]">
       <!-- Placeholder de loading -->
       <div class="flex-1 space-y-6 py-2">
         <div class="h-2 bg-slate-200 rounded"></div>

@@ -22,7 +22,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-4 p-4">
+    <div class="flex flex-col gap-4 p-2">
         <div class="flex flex-col gap-2">
             <h3 class="text-4xl font-bold">Resumo dos estudos</h3>
             <p>Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."  }}</p>
