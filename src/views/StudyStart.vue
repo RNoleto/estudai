@@ -16,6 +16,15 @@ import { useCurrentDate } from '../composables/useCurrentDate';
 const { formattedDate } = useCurrentDate();
 
 import StudyCard from '../layouts/StudyCard.vue';
+import FocusTimer from '../components/FocusTimer.vue';
+
+function openFocus(){
+  isFocus.value = true;
+}
+
+function closeFocus() {
+  isFocus.value = false;
+}
 
 const studyStore = useStudyStore();
 const userStore = useUserStore();
@@ -25,6 +34,7 @@ const selectedSubject = ref(null);
 const chartData = ref();
 const chartOptions = ref(null);
 const isOpen = ref(false);
+const isFocus = ref(false);
 
 const isLoading = ref(true);
 const showConfirmModal = ref(false);
@@ -141,6 +151,15 @@ watch(
   { immediate: true }
 );
 
+// Watch para desabilitar a rolagem ao abrir o FocusTimer
+watch(isFocus, (newValue) => {
+  if (newValue) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+});
+
 // Combine userSubjects com nomes de matérias
 const userSubjects = computed(() => {
   return userStore.userSubjects
@@ -209,7 +228,7 @@ async function handleDeleteRecord() {
           v-model="studyStore.topic" />
       </div>
       <div class="gap-2 xl:col-span-2 lg:col-span-2 md:col-span-5 sm:col-span-5">
-        <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" class="w-full" />
+        <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @click="openFocus" class="w-full" />
         <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
       </div>
       <div class="xl:col-span-4">
@@ -230,4 +249,7 @@ async function handleDeleteRecord() {
       @confirm="handleDeleteRecord" 
       @cancel="showConfirmModal = false"
     />
+    <div v-if="isFocus">
+      <FocusTimer @close="closeFocus"/>
+  </div>
 </template>

@@ -2,7 +2,6 @@
 import { useTimerStore } from '../../stores/useTimerStore';
 import Button from './Button.vue';
 
-
 const timerStore = useTimerStore();
 
 const props = defineProps({
@@ -12,7 +11,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['timerStopped']);
+const emit = defineEmits(['timerStopped', 'openFocus']);
 
 const stopTimer = () => {
   timerStore.stop();
@@ -21,7 +20,10 @@ const stopTimer = () => {
 </script>
 
 <template>
-  <div class="flex flex-col rounded-md bg-white shadow p-4">
+  <div class="relative flex flex-col rounded-md bg-white shadow p-4">
+    <div @click="openFocus" class="absolute right-4 text-sm p-1 cursor-pointer">
+      <i class="fa-solid fa-arrows-to-circle"></i>
+    </div>
     <div class="flex flex-col items-center gap-1 py-4">
       <h2 class="w-full text-2xl text-center border-b border-zinc-100 p-2">Temporizador</h2>
       <div class="text-4xl font-mono">{{ timerStore.formattedTime }}</div>
