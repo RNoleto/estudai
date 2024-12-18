@@ -94,6 +94,7 @@ export const useTimerStore = defineStore('timer', () => {
     totalPauseTime,
     finalFormattedTime,
     finalFormattedPauseTime,
-    finalTotalPausesLength
+    finalTotalPausesLength,
+    finalElapsedTime
   }
 })

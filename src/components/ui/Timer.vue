@@ -19,7 +19,6 @@ const stopTimer = () => {
 };
 
 const openFocus = () => {
-  console.log("Abrido o componente de FocusTimer")
   emit('openFocus');
 }
 </script>
