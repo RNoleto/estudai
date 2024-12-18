@@ -19,7 +19,7 @@ import StudyCard from '../layouts/StudyCard.vue';
 import FocusTimer from '../components/FocusTimer.vue';
 
 function openFocus(){
-  isFocus.value = true;
+    isFocus.value = true;
 }
 
 function closeFocus() {
@@ -210,6 +210,9 @@ async function handleDeleteRecord() {
     recordToDelete.value = null; // Reseta o registro selecionado
   }
 }
+
+const isFocusButtonDisabled = computed(() => !selectedSubject.value);
+
 </script>
 
 <template>
@@ -228,7 +231,7 @@ async function handleDeleteRecord() {
           v-model="studyStore.topic" />
       </div>
       <div class="gap-2 xl:col-span-2 lg:col-span-2 md:col-span-5 sm:col-span-5">
-        <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @click="openFocus" class="w-full" />
+        <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus" class="w-full" />
         <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
       </div>
       <div class="xl:col-span-4">

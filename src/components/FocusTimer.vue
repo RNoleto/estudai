@@ -1,14 +1,25 @@
 <script setup>
 import { ref } from 'vue';
+import { useTimerStore } from '../stores/useTimerStore'
+
+const timerStore = useTimerStore();
+
+const props = defineProps({
+  isDisabled: {
+    type: Boolean,
+    default: false,
+  }
+});
 
 // Props e eventos
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'timerStopped']);
 
 // Estados do cronômetro
 const hours = ref(0);
 const minutes = ref(0);
 const seconds = ref(0);
 const isRunning = ref(false);
+const pauseCount = ref(0); // Contador de pausas
 let timerInterval = null;
 
 // Função para iniciar o cronômetro
@@ -31,17 +42,23 @@ function startTimer() {
 
 // Função para pausar o cronômetro
 function pauseTimer() {
-  isRunning.value = false;
-  clearInterval(timerInterval);
+  if (isRunning.value) {
+    isRunning.value = false;
+    clearInterval(timerInterval);
+    pauseCount.value++; // Incrementa a contagem de pausas
+  }
 }
 
 // Função para parar e resetar o cronômetro
 function stopTimer() {
-  isRunning.value = false;
-  clearInterval(timerInterval);
-  hours.value = 0;
-  minutes.value = 0;
-  seconds.value = 0;
+    timerStore.stop();
+    emit('timerStopped');
+    isRunning.value = false;
+    clearInterval(timerInterval);
+    hours.value = 0;
+    minutes.value = 0;
+    seconds.value = 0;
+    pauseCount.value = 0; // Reseta a contagem de pausas ao parar o cronômetro
 }
 </script>
 
@@ -53,6 +70,9 @@ function stopTimer() {
     <div class="text-center text-white">
       <div class="text-8xl font-mono mb-8">
         {{ String(hours).padStart(2, '0') }}:{{ String(minutes).padStart(2, '0') }}:{{ String(seconds).padStart(2, '0') }}
+      </div>
+      <div class="text-2xl font-semibold mb-4">
+        Pausas: {{ pauseCount }}
       </div>
       <div class="space-x-4">
         <button 
@@ -77,5 +97,6 @@ function stopTimer() {
         </button>
       </div>
     </div>
+    <pre><p class="bg-red-500 text-white">{{ timerStore.finalTotalPausesLength }}</p></pre>
   </div>
 </template>
