@@ -112,13 +112,21 @@ const isFormValid = computed(() => {
           <input type="number" v-model="correctAnswers" min="0" class="mt-1 block w-full border rounded px-2 py-1 appearance-none outline-none" />
         </label>
       </div>
-      <Button 
-        variant="primary"
-          @click="saveData"
-          :disabled="!isFormValid"
+      <div class="flex justify-between mt-2">
+        <Button 
+          variant="primary"
+            @click="saveData"
+            :disabled="!isFormValid"
         >
-        Salvar
-      </Button>
+          Salvar
+        </Button>
+        <Button
+          variant="secondary"
+          @click="closeModal"
+        >
+          Cancelar
+        </Button>
+      </div>
     </div>
   </div>
 </template>
