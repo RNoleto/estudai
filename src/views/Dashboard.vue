@@ -23,9 +23,9 @@ const toggleMenu3 = () => (isMenu3Open.value = !isMenu3Open.value);
 </script>
 
 <template>
-    <div class="h-screen flex bg-gray-100">
+    <div class="flex bg-gray-100">
       <!-- Sidebar -->
-      <aside class="w-64 bg-white shadow-md">
+      <aside class="min-h-screen w-64 bg-white shadow-md">
         <div class="p-4 text-lg font-bold border-b">Área do Aluno</div>
         <nav class="p-4">
           <!-- Home da Dashboard -->
