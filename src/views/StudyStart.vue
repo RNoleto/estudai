@@ -240,10 +240,10 @@ const isFocusButtonDisabled = computed(() => !selectedSubject.value);
         <div  class="grid gap-2 xl:grid-cols-2">
           <StudyCard v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record" :isLoading="isLoading"
             :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal" @delete="openDeleteModal(record)" />
-          <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord" @update="updateRecord"
+            <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord" @update="updateRecord"
             @close="isModalVisible = false" />
+          </div>
         </div>
-      </div>
     </div>
   </div>
   <AlertModal 

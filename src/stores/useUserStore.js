@@ -142,7 +142,7 @@ export const useUserStore = defineStore('user', {
         if (response.status === 200) {
           const subjectStore = useSubjectStore(); // Obtém o subjectStore para acesso às matérias
 
-          const activeRecords = response.data.filter(record => record.ativo === true);
+          const activeRecords = response.data.filter(record => record.ativo === 1);
 
           this.userStudyRecords = activeRecords.map((record) => {
             const subject = subjectStore.subjects.find(sub => sub.id === record.subject_id);
