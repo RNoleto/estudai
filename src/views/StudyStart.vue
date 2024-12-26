@@ -6,6 +6,8 @@ import StudySummaryModal from '../layouts/StudySummaryModal.vue';
 import ComboBox from '../components/ui/ComboBox.vue';
 import EditModal from '../components/EditModal.vue';
 import AlertModal from '../components/AlertModal.vue';
+import Button from '../components/ui/Button.vue';
+import ManualStudyEntryModal from '../components/ManualStudyEntryModal.vue';
 
 import { useUserStore } from "../stores/useUserStore";
 import { useStudyStore } from "../stores/useStudyStore";
@@ -39,6 +41,7 @@ const isFocus = ref(false);
 const isLoading = ref(true);
 const showConfirmModal = ref(false);
 const recordToDelete = ref(null);
+const isManualEntryModalVisible = ref(false);
 
 // Carregar as matérias da API
 onMounted(async () => {
@@ -214,6 +217,10 @@ async function handleDeleteRecord() {
 
 const isFocusButtonDisabled = computed(() => !selectedSubject.value);
 
+const openManualEntryModal = () => {
+  isManualEntryModalVisible.value = true;
+}
+
 </script>
 
 <template>
@@ -223,13 +230,14 @@ const isFocusButtonDisabled = computed(() => !selectedSubject.value);
       <p>Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."  }}</p>
       <p>{{ formattedDate }}</p>
     </div>
-    <div class="grid gap-2 grid-cols-6">
+    <div class="grid gap-2 grid-cols-6 mt-4">
       <!-- Campo de pesquisa com lista suspensa de matérias -->
       <div class="flex gap-2 col-span-6">
         <ComboBox :options="userSubjects" :placeholder="'Selecione uma matéria...'" v-model="selectedSubject"
           @select="handleSubjectSelection" class="w-full" />
         <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-full"
           v-model="studyStore.topic" />
+        <Button variant="primary" size="sm" class="min-w-max" @click="openManualEntryModal">Inserir Manualmente</Button>
       </div>
       <div class="gap-2 xl:col-span-2 lg:col-span-2 md:col-span-5 sm:col-span-5">
         <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus" class="w-full" />
@@ -256,4 +264,10 @@ const isFocusButtonDisabled = computed(() => !selectedSubject.value);
     <div v-if="isFocus">
       <FocusTimer @close="closeFocus" @timerStopped="handleTimerStopped"/>
   </div>
+  <ManualStudyEntryModal 
+    :isVisible="isManualEntryModalVisible"
+    :selectedSubject="selectedSubject"
+    @onClose="isManualEntryModalVisible = false"
+    @onSave="handleSaveManualEntry"
+  />
 </template>
