@@ -12,7 +12,7 @@ const hasStudyRecords = ref(false);
 onMounted(async () => {
     try {
         await userStore.fetchUserStudyRecords();
-        const activeRecords = userStore.userStudyRecords.filter(record => record.ativo === true);
+        const activeRecords = userStore.userStudyRecords.filter(record => record.ativo === 1);
         hasStudyRecords.value = activeRecords.length > 0;
     } catch (error) {
         console.error(error);

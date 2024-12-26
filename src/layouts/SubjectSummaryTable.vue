@@ -77,7 +77,7 @@ const summarizedData = computed(() => {
 <template>
   <IsLoading v-if="isLoading" />
   
-  <table v-else class="bg-white shadow-md rounded-lg overflow-hidden">
+  <table v-else class="bg-white shadow-md rounded-lg overflow-hidden w-[980px]">
     <thead class="bg-gray-800 text-white">
       <tr>
         <th class="px-4 py-2 text-left">Matérias</th>
