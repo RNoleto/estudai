@@ -221,6 +221,7 @@ const openManualEntryModal = () => {
   isManualEntryModalVisible.value = true;
 }
 
+
 </script>
 
 <template>

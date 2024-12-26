@@ -26,6 +26,7 @@ const totalQuestions = ref(0);
 const correctAnswers = ref(0);
 const closeModal = () => {
   emit('onClose');
+  
 };
 
 onMounted(async () => {
