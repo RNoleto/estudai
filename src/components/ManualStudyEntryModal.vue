@@ -14,6 +14,7 @@ const studyStore = useStudyStore();
 const studyTime = ref('');
 const totalQuestions = ref(0);
 const correctAnswers = ref(0);
+const questionsResolved = ref(null);
 
 const incorrectAnswers = computed(() => totalQuestions.value - correctAnswers.value);
 
@@ -39,31 +40,31 @@ const validateInputs = () => {
 
 
 const handleSave = () => {
-  if (!validateInputs()) return;
+    if (!validateInputs()) return;
 
-  try {
-    const [hours, minutes, seconds] = studyTime.value.split(':').map(Number);
-    
-    // Corrigir o cálculo: agora convertendo tudo para segundos
-    const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+    try {
+        const [hours, minutes, seconds] = studyTime.value.split(':').map(Number);
 
-    const newRecord = {
-      subject_id: props.selectedSubject.id,
-      topic: studyStore.topic,
-      study_time: totalSeconds, // Passando o tempo total em segundos
-      totalQuestions: totalQuestions.value,
-      correctAnswers: correctAnswers.value,
-      incorrectAnswers: incorrectAnswers.value,
-    };
+        // Corrigir o cálculo: agora convertendo tudo para segundos
+        const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
 
-    // Enviar os dados ao método onSave
-    props.onSave(newRecord);
-    props.onClose();
-    alert('Dados salvos com sucesso!');
-  } catch (error) {
-    alert('Ocorreu um erro ao salvar os dados. Tente novamente.');
-    console.error('Error saving study record:', error);
-  }
+        const newRecord = {
+            subject_id: props.selectedSubject.id,
+            topic: studyStore.topic,
+            study_time: totalSeconds, // Passando o tempo total em segundos
+            totalQuestions: totalQuestions.value,
+            correctAnswers: correctAnswers.value,
+            incorrectAnswers: incorrectAnswers.value,
+        };
+
+        // Enviar os dados ao método onSave
+        props.onSave(newRecord);
+        props.onClose();
+        alert('Dados salvos com sucesso!');
+    } catch (error) {
+        alert('Ocorreu um erro ao salvar os dados. Tente novamente.');
+        console.error('Error saving study record:', error);
+    }
 };
 
 </script>
@@ -81,20 +82,37 @@ const handleSave = () => {
                 <input v-model="studyTime"
                     class="mt-1 block w-full border rounded px-2 py-1 appearance-none outline-none" />
             </div>
-            <div class="mb-4">
-                <span>Total de Questões Resolvidas</span>
-                <input type="number" v-model="totalQuestions" placeholder="hh:mm:ss"
-                    class="mt-1 block w-full border rounded px-2 py-1 appearance-none outline-none" />
+
+            <div class="mt-4">
+                <p>Você resolveu questões?</p>
+                <div class="flex gap-4">
+                    <label class="flex items-center">
+                        <input type="radio" v-model="questionsResolved" value="yes" class="mr-2">
+                        Sim
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" v-model="questionsResolved" value="no" class="mr-2">
+                        Não
+                    </label>
+                </div>
             </div>
-            <div class="mb-4">
-                <span>Total de Questões Corretas</span>
-                <input type="number" v-model="correctAnswers" placeholder="Ex.: 10"
-                    class="mt-1 block w-full border rounded px-2 py-1 appearance-none outline-none" />
-            </div>
-            <div class="mb-4">
-                <span>Total de Questões Erradas</span>
-                <input type="number" :value="incorrectAnswers" placeholder="Ex.: 8" disabled
-                    class="mt-1 block w-full border rounded px-2 py-1 appearance-none outline-none" />
+
+            <div v-if="questionsResolved === 'yes'" >
+                <div class="mb-4">
+                    <span>Total de Questões Resolvidas</span>
+                    <input type="number" v-model="totalQuestions" placeholder="hh:mm:ss"
+                        class="mt-1 block w-full border rounded px-2 py-1 appearance-none outline-none" />
+                </div>
+                <div class="mb-4">
+                    <span>Total de Questões Corretas</span>
+                    <input type="number" v-model="correctAnswers" placeholder="Ex.: 10"
+                        class="mt-1 block w-full border rounded px-2 py-1 appearance-none outline-none" />
+                </div>
+                <div class="mb-4">
+                    <span>Total de Questões Erradas</span>
+                    <input type="number" :value="incorrectAnswers" placeholder="Ex.: 8" disabled
+                        class="mt-1 block w-full border rounded px-2 py-1 appearance-none outline-none" />
+                </div>
             </div>
             <div class="flex justify-end gap-2">
                 <Button variant="secondary" @click="handleCancel">Cancelar</Button>
