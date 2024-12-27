@@ -219,8 +219,16 @@ const isFocusButtonDisabled = computed(() => !selectedSubject.value);
 
 const openManualEntryModal = () => {
   isManualEntryModalVisible.value = true;
-}
+};
 
+const handleSaveManualEntry = async (newRecord) => {
+  try {
+    await userStore.saveUserStudyRecord(newRecord);
+    await userStore.fetchUserStudyRecords();
+  } catch (error) {
+    console.error("Erro ao salvar o registro de estudo:", error.message);
+  }
+};
 
 </script>
 
@@ -238,7 +246,7 @@ const openManualEntryModal = () => {
           @select="handleSubjectSelection" class="w-full" />
         <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-full"
           v-model="studyStore.topic" />
-        <Button variant="primary" size="sm" class="min-w-max" @click="openManualEntryModal">Inserir Manualmente</Button>
+        <Button :variant="isSubjectSelected ? 'primary' : 'secondary'" :disabled="!isSubjectSelected" size="sm" class="min-w-max" @click="openManualEntryModal">Inserir Manualmente</Button>
       </div>
       <div class="gap-2 xl:col-span-2 lg:col-span-2 md:col-span-5 sm:col-span-5">
         <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus" class="w-full" />
@@ -268,7 +276,7 @@ const openManualEntryModal = () => {
   <ManualStudyEntryModal 
     :isVisible="isManualEntryModalVisible"
     :selectedSubject="selectedSubject"
-    @onClose="isManualEntryModalVisible = false"
-    @onSave="handleSaveManualEntry"
+    @close="isManualEntryModalVisible = false" 
+    :onSave="handleSaveManualEntry"
   />
 </template>

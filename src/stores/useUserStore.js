@@ -159,33 +159,50 @@ export const useUserStore = defineStore('user', {
     async saveUserStudyRecord(newRecord) {
       const timerStore = useTimerStore();
       const studyStore = useStudyStore();
-
+    
       if (!this.userId) {
-        console.error("ID do usuário não encontrado.")
+        console.error("ID do usuário não encontrado.");
         return;
       }
-
-      const timeParts = newRecord.totalStudyTime.split(':'); // Divide a string em horas e minutos
-      const studyTimeInMinutes = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]); // Converte para minutos
-
+    
+      // Determinar o tempo de estudo (manual ou do timer)
+      let studyTimeInSeconds;
+      if (newRecord.totalStudyTime) {
+        const timeParts = newRecord.totalStudyTime.split(':');
+        const hoursInSeconds = parseInt(timeParts[0]) * 3600; // Converte horas para segundos
+        const minutesInSeconds = parseInt(timeParts[1]) * 60; // Converte minutos para segundos
+        const seconds = parseInt(timeParts[2]) || 0; // Se não houver segundos, assume 0
+    
+        // Soma as partes para obter o total de segundos
+        studyTimeInSeconds = hoursInSeconds + minutesInSeconds + seconds;
+      } else if (newRecord.study_time) {
+        studyTimeInSeconds = Math.floor(newRecord.study_time); // Garantir que é um número inteiro de segundos
+      } else {
+        console.error("Tempo de estudo não fornecido.");
+        return;
+      }
+    
       try {
         const payload = {
           user_id: this.userId,
-          subject_id: studyStore.subject,
-          topic: studyStore.topic, //falta aqui
-          questions_resolved: newRecord.totalQuestions,
-          correct_answers: newRecord.correctAnswers,
-          incorrect_answers: newRecord.totalQuestions - newRecord.correctAnswers,
-          total_pauses: newRecord.totalPauses,
-          study_time: studyTimeInMinutes,
-        }
-
+          subject_id: newRecord.subject_id || studyStore.subject,
+          topic: newRecord.topic || studyStore.topic,
+          questions_resolved: newRecord.totalQuestions || 0,
+          correct_answers: newRecord.correctAnswers || 0,
+          incorrect_answers:
+            newRecord.totalQuestions && newRecord.correctAnswers !== undefined
+              ? newRecord.totalQuestions - newRecord.correctAnswers
+              : 0,
+          total_pauses: newRecord.totalPauses || 0,
+          study_time: studyTimeInSeconds, // Agora em segundos
+        };
+    
         const response = await axios.post('user-study-records', payload);
-
+        console.log('Registro salvo com sucesso:', response.data);
       } catch (error) {
-        console.error("Erro ao salvar no dados de estudos banco de dados:", error);
+        console.error("Erro ao salvar os dados de estudos no banco de dados:", error);
       }
-    },
+    },    
     async updateUserStudyRecord(recordId, updatedData) {
 
       if (!this.userId) {
