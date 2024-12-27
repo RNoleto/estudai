@@ -43,17 +43,20 @@ const handleSave = () => {
 
   try {
     const [hours, minutes, seconds] = studyTime.value.split(':').map(Number);
-    const totalMinutes = hours * 60 + minutes + seconds / 60;
+    
+    // Corrigir o cálculo: agora convertendo tudo para segundos
+    const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
 
     const newRecord = {
       subject_id: props.selectedSubject.id,
       topic: studyStore.topic,
-      study_time: totalMinutes,
+      study_time: totalSeconds, // Passando o tempo total em segundos
       totalQuestions: totalQuestions.value,
       correctAnswers: correctAnswers.value,
       incorrectAnswers: incorrectAnswers.value,
     };
 
+    // Enviar os dados ao método onSave
     props.onSave(newRecord);
     props.onClose();
     alert('Dados salvos com sucesso!');
@@ -62,6 +65,7 @@ const handleSave = () => {
     console.error('Error saving study record:', error);
   }
 };
+
 </script>
 
 <template>

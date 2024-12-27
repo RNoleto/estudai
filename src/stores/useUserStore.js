@@ -165,17 +165,33 @@ export const useUserStore = defineStore('user', {
         return;
       }
     
-      // Determinar o tempo de estudo (manual ou do timer)
-      let studyTimeInSeconds;
+      let studyTimeInSeconds = 0;
+    
+      // Verificar se o tempo de estudo foi passado manualmente
       if (newRecord.totalStudyTime) {
         const timeParts = newRecord.totalStudyTime.split(':');
-        const hoursInSeconds = parseInt(timeParts[0]) * 3600; // Converte horas para segundos
-        const minutesInSeconds = parseInt(timeParts[1]) * 60; // Converte minutos para segundos
-        const seconds = parseInt(timeParts[2]) || 0; // Se não houver segundos, assume 0
+        let hoursInSeconds = 0;
+        let minutesInSeconds = 0;
+        let seconds = 0;
     
-        // Soma as partes para obter o total de segundos
+        // Verificar se o formato é "HH:MM:SS" ou "MM:SS"
+        if (timeParts.length === 3) {
+          // Formato "HH:MM:SS"
+          hoursInSeconds = parseInt(timeParts[0]) * 3600; // Converte horas para segundos
+          minutesInSeconds = parseInt(timeParts[1]) * 60; // Converte minutos para segundos
+          seconds = parseInt(timeParts[2]); // Converte segundos diretamente
+        } else if (timeParts.length === 2) {
+          // Formato "MM:SS"
+          minutesInSeconds = parseInt(timeParts[0]) * 60; // Converte minutos para segundos
+          seconds = parseInt(timeParts[1]); // Converte segundos diretamente
+        }
+
+        console.log("Horas em segundos:", timeParts);
+    
+        // Soma os valores em segundos
         studyTimeInSeconds = hoursInSeconds + minutesInSeconds + seconds;
       } else if (newRecord.study_time) {
+        // Caso o tempo venha diretamente como número (em segundos)
         studyTimeInSeconds = Math.floor(newRecord.study_time); // Garantir que é um número inteiro de segundos
       } else {
         console.error("Tempo de estudo não fornecido.");
@@ -197,12 +213,15 @@ export const useUserStore = defineStore('user', {
           study_time: studyTimeInSeconds, // Agora em segundos
         };
     
+        // Exibe o valor de estudo em segundos para verificar a conversão
+        console.log("Estudo em segundos:", studyTimeInSeconds);
+    
         const response = await axios.post('user-study-records', payload);
         console.log('Registro salvo com sucesso:', response.data);
       } catch (error) {
         console.error("Erro ao salvar os dados de estudos no banco de dados:", error);
       }
-    },    
+    },        
     async updateUserStudyRecord(recordId, updatedData) {
 
       if (!this.userId) {
