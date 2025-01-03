@@ -28,11 +28,13 @@ onMounted(async () => {
 
 <template>
   <IsLoading v-if="isLoading" />    
-  <div v-else class="flex flex-col justify-center bg-white shadow-md rounded-lg text-center p-4 gap-4">
-    <h2 class="text-2xl font-bold text-gray-800">Tempo Total de Estudo</h2>
-    <p class="text-4xl font-extrabold text-blue-600">
-      {{ formatStudyTime(totalStudyTime) }}
-    </p>
-    <p class="text-sm text-gray-600">Parabéns pelo progresso!</p>
+  <div v-else>
+    <div class="flex flex-col justify-center bg-white shadow-md rounded-lg text-center p-4 gap-4 min-h-[250px]">
+      <h2 class="text-2xl font-bold text-gray-800">Tempo Total de Estudo</h2>
+      <p class="text-4xl font-extrabold text-blue-600">
+        {{ formatStudyTime(totalStudyTime) }}
+      </p>
+      <p class="text-sm text-gray-600">Acompanhe o seu progresso!</p>
+    </div>
   </div>
 </template>

@@ -49,25 +49,27 @@ onMounted(async () => {
 
 <template>
   <IsLoading v-if="isLoading" />    
-  <div v-else class="bg-white shadow-md rounded-lg p-6 text-center">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">Estatísticas de Estudo</h2>
-    <select v-model="selectedOption"
-      class="w-full mb-4 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300">
-      <option v-for="option in options" :key="option.value" :value="option.value">
-        {{ option.label }}
-      </option>
-    </select>
-    <div class="flex items-center justify-between mb-4">
-      <label class="text-sm text-gray-600">Exibir como porcentagem</label>
-      <input type="checkbox" v-model="displayAsPercentage" class="form-checkbox text-blue-600" />
+  <div v-else>
+    <div class="bg-white shadow-md rounded-lg p-6 text-center min-h-[250px]">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Estatísticas de Estudo</h2>
+      <select v-model="selectedOption"
+        class="w-full mb-4 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300">
+        <option v-for="option in options" :key="option.value" :value="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+      <div class="flex items-center justify-between mb-4">
+        <label class="text-sm text-gray-600">Exibir como porcentagem</label>
+        <input type="checkbox" v-model="displayAsPercentage" class="form-checkbox text-blue-600" />
+      </div>
+      <!-- Classe condicional para colorir o valor -->
+      <p class="text-5xl font-extrabold" :class="{
+        'text-blue-600': selectedOption === 'questions_resolved',
+        'text-green-600': selectedOption === 'correct_answers',
+        'text-red-600': selectedOption === 'incorrect_answers'
+      }">
+        {{ totalValue }}
+      </p>
     </div>
-    <!-- Classe condicional para colorir o valor -->
-    <p class="text-5xl font-extrabold" :class="{
-      'text-blue-600': selectedOption === 'questions_resolved',
-      'text-green-600': selectedOption === 'correct_answers',
-      'text-red-600': selectedOption === 'incorrect_answers'
-    }">
-      {{ totalValue }}
-    </p>
   </div>
 </template>

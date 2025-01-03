@@ -24,7 +24,7 @@ const openFocus = () => {
 </script>
 
 <template>
-  <div class="relative flex flex-col rounded-md bg-white shadow p-4">
+  <div class="relative flex flex-col rounded-md bg-white shadow p-4 min-h-[250px]">
     <div @click="!props.isDisabled && openFocus()" class="absolute right-4 text-sm p-1 cursor-pointer" :class="{ 'cursor-not-allowed text-gray-400': props.isDisabled }">
       <i class="fa-solid fa-arrows-to-circle"></i>
     </div>
