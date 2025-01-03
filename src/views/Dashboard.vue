@@ -72,7 +72,7 @@ onMounted(async () => {
           <!-- Menu Principal 1 -->
           <div>
             <button @click="toggleMenu1"
-              class="flex gap-1 bg-red-500 items-center justify-between w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 rounded">
+              class="flex gap-1 items-center justify-between w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 rounded">
               <div class="flex items-center gap-2">
                 <i class="fa-solid fa-brain"></i>
                 <span v-if="!isSidebarCollapsed">Menu 1</span>
@@ -88,7 +88,7 @@ onMounted(async () => {
           <!-- Menu Principal 2 -->
           <div class="mt-4">
             <button @click="toggleMenu2"
-              class="flex gap-1 bg-red-500 items-center justify-between w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 rounded">
+              class="flex gap-1 items-center justify-between w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 rounded">
               <div class="flex items-center gap-2">
                 <i class="fas fa-chart-bar"></i>
                 <span v-if="!isSidebarCollapsed">Relatórios</span>
@@ -104,7 +104,7 @@ onMounted(async () => {
           <!-- Menu de Configuração -->
           <div class="mt-4">
             <button @click="toggleMenu3"
-              class="flex gap-1 bg-red-500 items-center justify-between w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 rounded">
+              class="flex gap-1 items-center justify-between w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 rounded">
               <div class="flex items-center gap-2">
                 <i class="fas fa-cog"></i>
                 <span v-if="!isSidebarCollapsed">Configurações</span>
