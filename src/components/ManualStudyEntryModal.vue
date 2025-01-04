@@ -15,15 +15,19 @@ const studyTime = ref('');
 const totalQuestions = ref(0);
 const correctAnswers = ref(0);
 const questionsResolved = ref(null);
+const pause = ref(null);
+const totalPauses = ref('null');
 
 const incorrectAnswers = computed(() => totalQuestions.value - correctAnswers.value);
 
 const resetForm = () => {
+    studyStore.topic = '';
     studyTime.value = '';
     totalQuestions.value = 0;
     correctAnswers.value = 0;
     questionsResolved.value = null;
-    studyStore.topic = '';
+    pause.value = null;
+    totalPauses.value = null;
 };
 
 const validateInputs = () => {
@@ -56,6 +60,7 @@ const handleSave = () => {
             totalQuestions: totalQuestions.value,
             correctAnswers: correctAnswers.value,
             incorrectAnswers: incorrectAnswers.value,
+            totalPauses: pause.value === 'yes' ? parseInt(totalPauses.value, 10) || 0 : 0,
         };
 
         props.onSave(newRecord);
@@ -84,12 +89,8 @@ const handleCancel = () => {
             </div>
             <div class="mb-4">
                 <label for="study-time" class="block font-medium">Tempo de Estudos (hh:mm:ss)</label>
-                <input 
-                    id="study-time"
-                    v-model="studyTime"
-                    placeholder="hh:mm:ss"
-                    class="mt-1 block w-full border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" 
-                />
+                <input id="study-time" v-model="studyTime" placeholder="hh:mm:ss"
+                    class="mt-1 block w-full border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
             <div class="mt-4">
                 <p class="font-medium">Você resolveu questões?</p>
@@ -104,31 +105,41 @@ const handleCancel = () => {
                     </label>
                 </div>
             </div>
-            <div v-if="questionsResolved === 'yes'" class="flex flex-col gap-4 mt-4">
+            <div v-if="questionsResolved === 'yes'" class="flex gap-4 mt-4">
                 <label class="block">
                     <span class="font-medium">Questões Resolvidas</span>
-                    <input 
-                        type="number"
-                        v-model="totalQuestions"
-                        min="0"
-                        placeholder="Ex.: 20"
-                        class="mt-1 block w-full border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" 
-                    />
+                    <input type="number" v-model="totalQuestions" min="0" placeholder="Ex.: 20"
+                        class="mt-1 block w-full border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
                 </label>
                 <label class="block">
                     <span class="font-medium">Questões Certas</span>
-                    <input 
-                        type="number"
-                        v-model="correctAnswers"
-                        min="0"
-                        placeholder="Ex.: 15"
-                        class="mt-1 block w-full border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" 
-                    />
+                    <input type="number" v-model="correctAnswers" min="0" placeholder="Ex.: 15"
+                        class="mt-1 block w-full border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
                 </label>
             </div>
-            <div class="flex justify-end gap-2 mt-6">
-                <Button variant="secondary" @click="handleCancel">Cancelar</Button>
-                <Button variant="primary" @click="handleSave">Salvar</Button>
+            <div class="mt-4">
+                <p class="font-medium">Você fez pausas durante o estudo?</p>
+                <div class="flex gap-4">
+                    <label class="flex items-center">
+                        <input type="radio" v-model="pause" value="yes" class="mr-2">
+                        Sim
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" v-model="pause" value="no" class="mr-2">
+                        Não
+                    </label>
+                </div>
+                <div v-if="pause === 'yes'">
+                    <label class="block mt-4">
+                        <span class="font-medium">Número de Pausas</span>
+                        <input type="number" v-model="totalPauses" min="1" placeholder="Ex.: 3"
+                            class="mt-1 block w-full border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                    </label>
+                </div>
+                <div class="flex justify-end gap-2 mt-6">
+                    <Button variant="secondary" @click="handleCancel">Cancelar</Button>
+                    <Button variant="primary" @click="handleSave">Salvar</Button>
+                </div>
             </div>
         </div>
     </div>
@@ -141,6 +152,7 @@ input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
 input[type="number"] {
     -moz-appearance: textfield;
 }
