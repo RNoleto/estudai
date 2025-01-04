@@ -75,25 +75,36 @@ const closeModal = () => {
 
 const saveChanges = async () => {
   try {
+    // Validação do formato de tempo
+    if (!/^\d{1,2}:\d{2}:\d{2}$/.test(formData.study_time)) {
+      modalMessage.text = 'Por favor, insira o tempo de estudo no formato hh:mm:ss.';
+      modalMessage.type = 'error';
+      return;
+    }
+
+    // Conversão de tempo para segundos
+    const [hours, minutes, seconds] = formData.study_time.split(':').map(Number);
+    const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+    // Validação do número de pauses
+    if (formData.total_pauses < 0) {
+      modalMessage.text = 'O número de pauses deve ser maior ou igual a zero.';
+      modalMessage.type = 'error';
+      return;
+    }
+
+    // Atualização dos dados
     const updatedData = {
-      subject_id: formData.subject_id,
-      topic: formData.topic,
-      questions_resolved: formData.questions_resolved,
-      correct_answers: formData.correct_answers,
-      incorrect_answers: formData.questions_resolved - formData.correct_answers,
-      study_time: formData.study_time, // Mantém imutável
-      total_pauses: formData.total_pauses, // Mantém imutável
+      ...formData,
+      study_time: totalSeconds,
     };
 
-    await userStore.updateUserStudyRecord(props.record.id, updatedData); // Certifique-se que este método existe
-    // alert("Registro atualizado com sucesso!");
+    await userStore.updateUserStudyRecord(props.record.id, updatedData);
     modalMessage.text = 'Registro atualizado com sucesso!';
-    modalMessage.type = 'success'; // Tipo sucesso
-    // closeModal(); // Usa a função já definida para fechar o modal
+    modalMessage.type = 'success';
   } catch (error) {
     modalMessage.text = 'Ocorreu um erro ao atualizar o registro. Tente novamente.';
-    modalMessage.type = 'error'; // Tipo erro
-    // alert("Ocorreu um erro ao atualizar o registro. Tente novamente.");
+    modalMessage.type = 'error';
   }
 };
 
@@ -105,18 +116,15 @@ const closeSuccessModal = () => {
 </script>
 
 <template>
-  <div v-if="isVisible && !modalMessage.text" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-zinc-600">
+  <div v-if="isVisible && !modalMessage.text"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-zinc-600">
     <div class="bg-zinc-100 rounded-lg shadow-lg p-6 w-full max-w-md">
       <h2 class="text-lg font-bold mb-4">Editar Registro</h2>
       <form @submit.prevent="saveChanges">
         <div class="mb-4">
           <label for="subjectName" class="block text-sm font-medium text-gray-700">Matéria</label>
-          <ComboBox
-            :options="subjects"
-            :placeholder="'Selecione uma matéria...'"
-            v-model="formData.subjectName"
-            class="mt-1 block w-full"
-          />
+          <ComboBox :options="subjects" :placeholder="'Selecione uma matéria...'" v-model="formData.subjectName"
+            class="mt-1 block w-full" />
           <!-- <input v-model="formData.subjectName" type="text" id="subjectName"
             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /> -->
         </div>
@@ -128,13 +136,13 @@ const closeSuccessModal = () => {
         <div class="flex gap-4 justify-between">
           <div class="mb-4">
             <label for="study_time" class="block text-sm font-medium text-gray-700">Tempo de estudo</label>
-            <input :value="formatStudyTime(formData.study_time)" type="text" id="study_time" readonly
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100 cursor-not-allowed text-zinc-500" />
+            <input v-model="formData.study_time" type="text" id="study_time" placeholder="hh:mm:ss"
+              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
           </div>
           <div class="mb-4">
             <label for="total_pauses" class="block text-sm font-medium text-gray-700">Nº de pauses</label>
-            <input v-model="formData.total_pauses" type="number" id="total_pauses" readonly
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100 cursor-not-allowed text-zinc-500" />
+            <input v-model="formData.total_pauses" type="number" id="total_pauses" min="0"
+              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
           </div>
         </div>
         <p class="text-center p-4 block text-sm font-medium text-gray-700">Dados de Questões</p>
@@ -168,23 +176,16 @@ const closeSuccessModal = () => {
     </div>
   </div>
   <!-- Modal de Sucesso ou Erro -->
-  <div
-    v-if="modalMessage.text"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-white"
-  >
-    <div
-      :class="modalMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500'"
-      class="rounded-lg shadow-lg p-6 w-full max-w-sm text-center"
-    >
+  <div v-if="modalMessage.text"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-white">
+    <div :class="modalMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500'"
+      class="rounded-lg shadow-lg p-6 w-full max-w-sm text-center">
       <p class="text-lg font-bold">{{ modalMessage.text }}</p>
-      <button
-        @click="closeSuccessModal"
-        class="mt-4 px-4 py-2 bg-white text-black rounded-md hover:bg-gray-200"
-      >
+      <button @click="closeSuccessModal" class="mt-4 px-4 py-2 bg-white text-black rounded-md hover:bg-gray-200">
         Fechar
       </button>
-      </div>
     </div>
+  </div>
 </template>
 
 <style scoped>
@@ -192,6 +193,7 @@ const closeSuccessModal = () => {
 input[readonly]:focus {
   outline: none;
 }
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;

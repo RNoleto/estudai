@@ -2,6 +2,9 @@
 import { ref, computed } from 'vue';
 import Button from './ui/Button.vue';
 import { useStudyStore } from '../stores/useStudyStore';
+import { useTimeFormatter } from '../composables/useTimeFormatter';
+
+const { formatStudyTime } = useTimeFormatter();
 
 const props = defineProps({
     isVisible: Boolean,
