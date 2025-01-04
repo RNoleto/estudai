@@ -105,7 +105,7 @@ const closeSuccessModal = () => {
 </script>
 
 <template>
-  <div v-if="isVisible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-zinc-600">
+  <div v-if="isVisible && !modalMessage.text" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-zinc-600">
     <div class="bg-zinc-100 rounded-lg shadow-lg p-6 w-full max-w-md">
       <h2 class="text-lg font-bold mb-4">Editar Registro</h2>
       <form @submit.prevent="saveChanges">
@@ -168,12 +168,23 @@ const closeSuccessModal = () => {
     </div>
   </div>
   <!-- Modal de Sucesso ou Erro -->
-  <div v-if="modalMessage.text" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-zinc-600">
-    <div :class="modalMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500'" class="h-[485px] p-6 rounded-lg shadow-lg w-full max-w-md text-white text-center content-center">
-      <p>{{ modalMessage.text }}</p>
-      <button @click="closeSuccessModal" class="mt-4 px-4 py-2 bg-white text-black rounded-md hover:bg-gray-200">Fechar</button>
+  <div
+    v-if="modalMessage.text"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-white"
+  >
+    <div
+      :class="modalMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500'"
+      class="rounded-lg shadow-lg p-6 w-full max-w-sm text-center"
+    >
+      <p class="text-lg font-bold">{{ modalMessage.text }}</p>
+      <button
+        @click="closeSuccessModal"
+        class="mt-4 px-4 py-2 bg-white text-black rounded-md hover:bg-gray-200"
+      >
+        Fechar
+      </button>
+      </div>
     </div>
-  </div>
 </template>
 
 <style scoped>
