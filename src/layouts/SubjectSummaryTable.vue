@@ -90,7 +90,7 @@ const summarizedData = computed(() => {
       </thead>
       <tbody>
         <tr v-for="(subject, index) in summarizedData" :key="subject.subjectName"
-          :class="index % 2 === 0 ? 'bg-gray-100' : 'bg-white'" class="border-b last:border-b-0 hover:bg-gray-200">
+          :class="index % 2 === 0 ? 'bg-gray-100' : 'bg-white'" class="text-sm border-b last:border-b-0 hover:bg-gray-200">
           <td class="px-4 py-2 text-gray-700 border">{{ subject.subjectName }}</td>
           <td class="px-4 py-2 text-gray-700 border text-center">{{ formatStudyTime(subject.totalStudyTime) }}</td>
           <td class="px-4 py-2 text-gray-700 border text-center">{{ subject.totalPauses }}</td>

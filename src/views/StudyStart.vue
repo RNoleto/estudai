@@ -37,6 +37,7 @@ const chartData = ref();
 const chartOptions = ref(null);
 const isOpen = ref(false);
 const isFocus = ref(false);
+const showTooltip = ref(false);
 
 const isLoading = ref(true);
 const showConfirmModal = ref(false);
@@ -246,7 +247,10 @@ const handleSaveManualEntry = async (newRecord) => {
           @select="handleSubjectSelection" class="w-full" />
         <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-full"
           v-model="studyStore.topic" />
-        <Button :variant="isSubjectSelected ? 'primary' : 'secondary'" :disabled="!isSubjectSelected" size="sm" class="min-w-max" @click="openManualEntryModal">Inserir Manualmente</Button>
+        <Button :variant="isSubjectSelected ? 'primary' : 'secondary'" :disabled="!isSubjectSelected" size="sm" class="min-w-max" @mouseover="showTooltip = !selectedSubject" @mouseleave="showTooltip = false" @click="openManualEntryModal">Inserir Manualmente</Button>
+        <div v-if="showTooltip && !selectedSubject" class="tooltip">
+          Selecione uma matéria para ativar o botão
+        </div>
       </div>
       <div class="gap-2 xl:col-span-2 lg:col-span-2 md:col-span-5 sm:col-span-5">
         <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus" class="w-full" />
@@ -280,3 +284,19 @@ const handleSaveManualEntry = async (newRecord) => {
     :onSave="handleSaveManualEntry"
   />
 </template>
+
+<style scoped>
+.tooltip {
+  position: absolute;
+  top: 202px;
+  right: 25px;
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+}
+</style>
