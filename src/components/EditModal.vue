@@ -41,6 +41,14 @@ const formData = reactive({
 // Variáveis reativas para o modal
 const modalMessage = reactive({ text: '', type: '' }); // Tipo 'success' ou 'error'
 
+// Função para formatar o tempo de estudo em HH:MM:SS
+function formatTimeToHHMMSS(seconds) {
+  const hours = String(Math.floor(seconds / 3600)).padStart(2, '0');
+  const minutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+  const secs = String(seconds % 60).padStart(2, '0');
+  return `${hours}:${minutes}:${secs}`;
+}
+
 // Atualiza `formData` quando `record` muda
 watch(
   () => props.record,
@@ -49,7 +57,7 @@ watch(
       formData.subject_id = newRecord.subject_id || null;
       formData.subjectName = newRecord.subjectName || '';
       formData.topic = newRecord.topic || '';
-      formData.study_time = newRecord.study_time || 0;
+      formData.study_time = formatTimeToHHMMSS(newRecord.study_time || 0);
       formData.total_pauses = newRecord.total_pauses || 0;
       formData.questions_resolved = newRecord.questions_resolved || 0;
       formData.correct_answers = newRecord.correct_answers || 0;
@@ -125,8 +133,6 @@ const closeSuccessModal = () => {
           <label for="subjectName" class="block text-sm font-medium text-gray-700">Matéria</label>
           <ComboBox :options="subjects" :placeholder="'Selecione uma matéria...'" v-model="formData.subjectName"
             class="mt-1 block w-full" />
-          <!-- <input v-model="formData.subjectName" type="text" id="subjectName"
-            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" /> -->
         </div>
         <div class="mb-4">
           <label for="topic" class="block text-sm font-medium text-gray-700">Tópico</label>
@@ -157,11 +163,11 @@ const closeSuccessModal = () => {
             <input v-model="formData.correct_answers" type="number" id="correct_answers"
               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
           </div>
-          <div class="mb-4">
+          <!-- <div class="mb-4">
             <label for="incorrect_answers" class="block text-sm font-medium text-gray-700">Erradas</label>
             <input v-model="formData.incorrect_answers" type="number" id="incorrect_answers" readonly
               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100 cursor-not-allowed text-zinc-500" />
-          </div>
+          </div> -->
         </div>
         <div class="flex justify-end gap-2">
           <button type="button" @click="closeModal"
