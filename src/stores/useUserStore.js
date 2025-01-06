@@ -19,7 +19,8 @@ export const useUserStore = defineStore('user', {
     async fetchUserId() {
       try {
         const { userId } = await useAuth();
-        if (userId) {
+        if (userId.value !== this.userId) {
+          this.clearUserData();
           this.userId = userId.value; // Armazena o ID do usuário no estado
           localStorage.setItem('userId', userId.value); // Persiste no localStorage
         } else {
@@ -31,6 +32,10 @@ export const useUserStore = defineStore('user', {
     },
     clearUserData() {
       this.userId = null;
+      this.careerId= null;
+      this.careerName = '';
+      this.userSubjects = [];
+      this.userStudyRecords = [];
       localStorage.removeItem('userId'); // Remove do localStorage
     },
     async saveUserCareer(careerId, careerName) {
