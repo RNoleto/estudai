@@ -3,7 +3,6 @@ import { onMounted, ref } from 'vue';
 import StudyTimeRecord from '../layouts/StudyTimeRecord.vue';
 import StudyStatisticsRecords from '../layouts/StudyStatisticsRecords.vue';
 import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
-import StudyChart from '../layouts/StudyChart.vue';
 
 import { useUserStore } from '../stores/useUserStore';
 const userStore = useUserStore();
@@ -32,10 +31,9 @@ onMounted(async () => {
             <p>Você não tem dados de estudos no momento!</p>
         </div>
         <div v-else class="flex flex-wrap gap-2 min-h-[250px]">
-            <StudyTimeRecord/>
-            <StudyStatisticsRecords />
+            <StudyTimeRecord />
+            <StudyStatisticsRecords  />
             <SubjectSummaryTable />
         </div>
-        <StudyChart />
     </div>
 </template>
