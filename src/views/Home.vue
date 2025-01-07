@@ -1,23 +1,8 @@
 <script setup>
-import { SignInButton, useAuth } from 'vue-clerk';
+import { SignInButton } from 'vue-clerk';
+
+//Componentes UI
 import Button from '../components/ui/Button.vue';
-import { useRouter } from 'vue-router';
-import { onMounted, watchEffect } from 'vue';
-
-const { isSignedIn } = useAuth();
-const router = useRouter();
-
-onMounted(() => {
-  if(isSignedIn.value) {
-    router.push({name:'Carreiras'});
-  }
-});
-
-watchEffect(() => {
-  if (isSignedIn.value) {
-    router.push({ name: 'Carreiras' });
-  }
-});
 
 </script>
 
