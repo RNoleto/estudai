@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 import StudyTimeRecord from '../layouts/StudyTimeRecord.vue';
 import StudyStatisticsRecords from '../layouts/StudyStatisticsRecords.vue';
 import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
+import StudyChart from '../layouts/StudyChart.vue';
 
 import { useUserStore } from '../stores/useUserStore';
 const userStore = useUserStore();
@@ -35,5 +36,6 @@ onMounted(async () => {
             <StudyStatisticsRecords />
             <SubjectSummaryTable />
         </div>
+        <StudyChart />
     </div>
 </template>
