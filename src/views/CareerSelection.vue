@@ -44,12 +44,9 @@ const setInitialSelectedCareer = () => {
   }
 };
 
-onMounted(() => {
-  userStore.fetchUserId();
-});
-
 // Buscar as carreiras assim que o componente for montado
 onMounted(async () => {
+  await userStore.fetchUserId();
   await careersStore.fetchCareers();
   await userStore.checkUserCareer();
   await userStore.fetchUserSubjects();

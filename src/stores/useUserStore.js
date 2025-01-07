@@ -8,35 +8,31 @@ import { useStudyStore } from './useStudyStore';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    userId: localStorage.getItem('userId') || null, // Recupera do localStorage
+    userId: null, // Recupera do localStorage
     careerId: null,
     careerName: '',
     userSubjects: [],
     userStudyRecords: [],
   }),
   actions: {
+    async initializeUser() {
+      await this.fetchUserId();
+    },
     async fetchUserId() {
       try {
-        const { userId } = await useAuth();
-        if (this.userId !== userId.value) {
-          this.userId = userId.value; // Armazena o ID do usuário no estado
-          localStorage.setItem('userId', userId.value); // Persiste no localStorage
-        } else {
-          console.error("Não foi possível obter o ID do usuário");
-        }
+        const { userId } = useAuth();
+        this.userId = userId.value; // Armazena o ID do usuário no Pinia
       } catch (error) {
         console.error("Erro ao buscar o ID do usuário:", error);
       }
     },
     clearUserData() {
-      // Limpa as propriedades do usuário no estado
+      // Limpa as propriedades do usuário no Pinia
       this.userId = null;
       this.careerId = null;
       this.careerName = '';
       this.userSubjects = [];
       this.userStudyRecords = [];
-      localStorage.removeItem('userId'); // Remove do localStorage
-      localStorage.removeItem('userCareerData'); // Remove a carreira do localStorage
     },
     async saveUserCareer(careerId, careerName) {
       this.careerId = careerId;
@@ -52,9 +48,6 @@ export const useUserStore = defineStore('user', {
         // Fazendo a requisição para o backend Laravel para salvar a carreira
         const response = await axios.post('user-career', userCareerData);
 
-        if (response.status === 201) {
-          localStorage.setItem('userCareerData', JSON.stringify(userCareerData));
-        }
       } catch (error) {
         console.error("Erro ao salvar a carreira no banco de dados:", error);
       }
@@ -62,7 +55,7 @@ export const useUserStore = defineStore('user', {
     async checkUserCareer() {
       try {
         if (!this.userId) {
-          console.error("ID do usuário não encontrado");
+          console.error("ID do usuário não encontrado em checkUserCareer.");
           return false;
         }
     
@@ -71,14 +64,14 @@ export const useUserStore = defineStore('user', {
         this.careerId = response.data.career_id;
     
         if (!this.careerId) {
-          console.warn("Nenhuma carreira atribuída ao usuário.");
+          console.warn("Nenhuma carreira atribuída ao usuário checkUserCareer.");
           return false;
         }
     
         const response_name = await axios.get(`user-career/career_name/${this.userId}`);
         this.careerName = response_name.data.career_name;
     
-        return true; // O usuário tem uma carreira válida
+        return true;
       } catch (error) {
         console.error("Erro ao verificar carreira do usuário:", error);
         return false;
