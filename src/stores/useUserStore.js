@@ -14,13 +14,11 @@ export const useUserStore = defineStore('user', {
     userSubjects: [],
     userStudyRecords: [],
   }),
-
   actions: {
     async fetchUserId() {
       try {
         const { userId } = await useAuth();
-        if (userId.value !== this.userId) {
-          this.clearUserData();
+        if (this.userId !== userId.value) {
           this.userId = userId.value; // Armazena o ID do usuário no estado
           localStorage.setItem('userId', userId.value); // Persiste no localStorage
         } else {
@@ -31,12 +29,14 @@ export const useUserStore = defineStore('user', {
       }
     },
     clearUserData() {
+      // Limpa as propriedades do usuário no estado
       this.userId = null;
-      this.careerId= null;
+      this.careerId = null;
       this.careerName = '';
       this.userSubjects = [];
       this.userStudyRecords = [];
       localStorage.removeItem('userId'); // Remove do localStorage
+      localStorage.removeItem('userCareerData'); // Remove a carreira do localStorage
     },
     async saveUserCareer(careerId, careerName) {
       this.careerId = careerId;
@@ -52,7 +52,7 @@ export const useUserStore = defineStore('user', {
         // Fazendo a requisição para o backend Laravel para salvar a carreira
         const response = await axios.post('user-career', userCareerData);
 
-        if (response.status === 200) {
+        if (response.status === 201) {
           localStorage.setItem('userCareerData', JSON.stringify(userCareerData));
         }
       } catch (error) {
@@ -65,21 +65,25 @@ export const useUserStore = defineStore('user', {
           console.error("ID do usuário não encontrado");
           return false;
         }
-
+    
         // Fazendo uma requisição para o backend Laravel para verificar se já existe uma carreira
         const response = await axios.get(`user-career/${this.userId}`);
         this.careerId = response.data.career_id;
-
-        // Aqui, garantimos que o nome da carreira seja carregado
+    
+        if (!this.careerId) {
+          console.warn("Nenhuma carreira atribuída ao usuário.");
+          return false;
+        }
+    
         const response_name = await axios.get(`user-career/career_name/${this.userId}`);
         this.careerName = response_name.data.career_name;
-
-        return true; // O usuário tem uma carreira atribuída
+    
+        return true; // O usuário tem uma carreira válida
       } catch (error) {
         console.error("Erro ao verificar carreira do usuário:", error);
         return false;
       }
-    },
+    },    
     async addUserSubjects(subjectIds) {
       try {
         const response = await axios.post('user-subjects', {
