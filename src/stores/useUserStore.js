@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { useAuth } from 'vue-clerk';
+import { getAuthState } from '../services/AuthService';
 import axios from 'axios';
 
 import { useSubjectStore } from './useSubjectStore';
@@ -8,7 +8,7 @@ import { useStudyStore } from './useStudyStore';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    userId: null, // Recupera do localStorage
+    userId: null,
     careerId: null,
     careerName: '',
     userSubjects: [],
@@ -20,11 +20,16 @@ export const useUserStore = defineStore('user', {
     },
     async fetchUserId() {
       try {
-        const { userId } = useAuth();
-        this.userId = userId.value; // Armazena o ID do usuário no Pinia
-        if (this.userId) {
+        const auth = getAuthState();
+        if(auth.userId.value){
+          this.userId = auth.userId.value;
           localStorage.setItem('userId', this.userId);
         }
+        // if (userId) {
+        //   this.userId = userId; // Armazena o ID do usuário no Pinia
+        //   localStorage.setItem('userId', this.userId);
+        //   console.log("userId fetchUserId:", this.userId);
+        // }
       } catch (error) {
         console.error("Erro ao buscar o ID do usuário:", error);
       }
@@ -60,16 +65,11 @@ export const useUserStore = defineStore('user', {
         // Fazendo uma requisição para o backend Laravel para verificar se já existe uma carreira
         const response = await axios.get(`user-career/${this.userId}`);
         this.careerId = response.data.career_id;
-        console.log("CareerId:", this.careerId);
-    
-        // if (!this.careerId) {
-        //   console.warn("Nenhuma carreira atribuída ao usuário checkUserCareer.");
-        //   return false;
-        // }
+        console.log("CareerId em checkUserCareer:", this.careerId);
     
         const response_name = await axios.get(`user-career/career_name/${this.userId}`);
         this.careerName = response_name.data.career_name;
-    
+
         console.log("CareerName:", this.careerName);
         return true;
       } catch (error) {

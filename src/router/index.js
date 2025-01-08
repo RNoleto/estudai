@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { useAuth } from 'vue-clerk';
+import { initializeAuth, getAuthState } from '../services/AuthService';
 import { useUserStore } from '../stores/useUserStore';
 import Home from '../views/Home.vue';
 import Career from '../views/CareerSelection.vue';
@@ -82,14 +82,13 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const { isSignedIn, isLoaded } = useAuth();
-  const userStore = useUserStore();
+  const auth = initializeAuth();
 
   // Aguarda até que a autenticação esteja carregada
-  if (!isLoaded.value) {
-    await new Promise((resolve) => {
+  if (!auth.isLoaded.value) {
+    await new Promise(resolve => {
       const interval = setInterval(() => {
-        if (isLoaded.value) {
+        if (auth.isLoaded.value) {
           clearInterval(interval);
           resolve();
         }
@@ -97,19 +96,18 @@ router.beforeEach(async (to, from, next) => {
     });
   }
 
+  const userStore = useUserStore();
+
   // Verifica autenticação para rotas protegidas
-  if (to.meta.requiresAuth && !isSignedIn.value) {
+  if (to.meta.requiresAuth && !auth.isSignedIn.value) {
     next({ path: '/' });
     return;
   }
 
   // Lógica de redirecionamento após o login
-  if (isSignedIn.value) {
+  if (auth.isSignedIn.value) {
     try {
-      // Inicializa userId se necessário
-      if (!userStore.userId) {
-        await userStore.fetchUserId();
-      }
+      await userStore.fetchUserId();
 
       // Verifica a carreira do usuário
       const hasCareer = await userStore.checkUserCareer();
