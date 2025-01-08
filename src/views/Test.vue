@@ -10,7 +10,6 @@ const localStorageCareerId = ref(null);
 const localStorageCareerName = ref(null);
 
 onMounted(async () => {
-  await userStore.fetchUserId();
   // Recupera os valores do localStorage
   localStorageUserId.value = localStorage.getItem('userId');
   localStorageCareerId.value = localStorage.getItem('careerId');
