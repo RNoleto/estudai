@@ -57,23 +57,20 @@ export const useUserStore = defineStore('user', {
     },
     async checkUserCareer() {
       try {
-        if (!this.userId) {
-          console.error("ID do usuário não encontrado em checkUserCareer.");
-          return false;
-        }
-    
         // Fazendo uma requisição para o backend Laravel para verificar se já existe uma carreira
         const response = await axios.get(`user-career/${this.userId}`);
         this.careerId = response.data.career_id;
+        console.log("CareerId:", this.careerId);
     
-        if (!this.careerId) {
-          console.warn("Nenhuma carreira atribuída ao usuário checkUserCareer.");
-          return false;
-        }
+        // if (!this.careerId) {
+        //   console.warn("Nenhuma carreira atribuída ao usuário checkUserCareer.");
+        //   return false;
+        // }
     
         const response_name = await axios.get(`user-career/career_name/${this.userId}`);
         this.careerName = response_name.data.career_name;
     
+        console.log("CareerName:", this.careerName);
         return true;
       } catch (error) {
         console.error("Erro ao verificar carreira do usuário:", error);

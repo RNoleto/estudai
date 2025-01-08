@@ -103,40 +103,41 @@ router.beforeEach(async (to, from, next) => {
     return;
   }
 
-  // Verifica se o usuário está logado e precisa de redirecionamento após o login
-  if (isSignedIn.value && to.path === '/') {
+  // Lógica de redirecionamento após o login
+  if (isSignedIn.value) {
     try {
-      // Carrega o userId
+      // Inicializa userId se necessário
       if (!userStore.userId) {
         await userStore.fetchUserId();
       }
 
       // Verifica a carreira do usuário
       const hasCareer = await userStore.checkUserCareer();
-
-      if (hasCareer) {
-        // Carrega as matérias do usuário
-        await userStore.fetchUserSubjects();
-        if (userStore.userSubjects.length > 0) {
-          // Redireciona para dashboard
-          next({ path: '/area-do-aluno' });
-          return;
-        }
-        // Redireciona para seleção de matérias
-        next({ path: '/materias' });
+      if (!hasCareer) {
+        next({ path: '/carreiras' }); // Redireciona para carreiras
         return;
       }
 
-      // Redireciona para seleção de carreiras
-      next({ path: '/teste' });
-      return;
+      // Verifica as matérias do usuário
+      await userStore.fetchUserSubjects();
+      if (!userStore.userSubjects.length) {
+        next({ path: '/materias' }); // Redireciona para matérias
+        return;
+      }
+
+      // Redireciona para a página inicial do Dashboard
+      if (to.path === '/') {
+        next({ path: '/area-do-aluno' });
+        return;
+      }
     } catch (error) {
-      console.error("Erro durante o redirecionamento do usuário:", error);
+      console.error("Erro durante a verificação de redirecionamento:", error);
       next(); // Continua a navegação em caso de erro
+      return;
     }
   }
 
-  next();
+  next(); // Permite que a navegação continue
 });
 
 
