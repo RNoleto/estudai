@@ -66,7 +66,6 @@ export const useUserStore = defineStore('user', {
 
         if(!this.careerId){
           console.warn("Usuário sem carreira registrada.");
-          this.careerName = null;
           return false;
         }
     

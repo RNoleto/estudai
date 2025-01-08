@@ -107,9 +107,9 @@ router.beforeEach(async (to, from, next) => {
       await userStore.fetchUserId();
 
       const hasCareer = await userStore.checkUserCareer();
-      if (hasCareer === 0) {
+      if (userStore.careerId === null) {
         console.log("dentro do index:", this.hasCareer);
-        next({ path: '/carreiras' }); // Redireciona para carreiras
+        next({ path: '/teste' }); // Redireciona para carreiras
         return;
       }
 
