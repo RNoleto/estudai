@@ -10,6 +10,9 @@ import DashboardHome from '../views/DashboardHome.vue';
 
 import Dashboard from '../views/Dashboard.vue';
 
+//Teste
+import Test from '../views/Test.vue';
+
 const routes = [
   {
     path: '/',
@@ -32,6 +35,11 @@ const routes = [
     name: 'Ciclo',
     component: StudyCycle,
     meta: { requiresAuth: true },
+  },
+  {
+    path: '/teste',
+    name: 'Teste',
+    component: Test,
   },
   {
     path: '/area-do-aluno',
@@ -120,7 +128,7 @@ router.beforeEach(async (to, from, next) => {
       }
 
       // Redireciona para seleção de carreiras
-      next({ path: '/carreiras' });
+      next({ path: '/teste' });
       return;
     } catch (error) {
       console.error("Erro durante o redirecionamento do usuário:", error);

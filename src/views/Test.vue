@@ -1,42 +1,38 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useSubjectStore } from '../stores/useSubjectStore'; // Importe o store de matérias
-import { ComboboxContent, ComboboxInput, ComboboxItem, ComboboxPortal, ComboboxRoot } from 'radix-vue';
+import { onMounted, ref } from 'vue';
+import { useUserStore } from '../stores/useUserStore';
 
-// Instanciar o store de matérias
-const subjectStore = useSubjectStore();
+const userStore = useUserStore();
 
-const selectedSubject = ref(null);
-const searchTerm = ref('');
+// Variáveis para armazenar os valores do localStorage
+const localStorageUserId = ref(null);
+const localStorageCareerId = ref(null);
+const localStorageCareerName = ref(null);
 
-// Filtra as matérias com base no termo de busca
-const filteredSubjects = computed(() => 
-  searchTerm.value === '' 
-    ? subjectStore.subjects 
-    : subjectStore.subjects.filter((subject) => 
-        subject.name.toLowerCase().includes(searchTerm.value.toLowerCase())
-      )
-);
-
-// Chama o fetchSubjects para carregar as matérias quando o componente for montado
 onMounted(async () => {
-  await subjectStore.fetchSubjects();  // Carrega as matérias da API
+  await userStore.fetchUserId();
+  await userStore.checkUserCareer();
+
+  // Recupera os valores do localStorage
+  localStorageUserId.value = localStorage.getItem('userId');
+  localStorageCareerId.value = localStorage.getItem('careerId');
+  localStorageCareerName.value = localStorage.getItem('careerName');
 });
+
 </script>
 
 <template>
-  <ComboboxRoot v-model="selectedSubject" v-model:searchTerm="searchTerm">
-    <ComboboxInput placeholder="Pesquise por uma matéria..." />
-    <ComboboxPortal>
-      <ComboboxContent>
-        <ComboboxItem
-          v-for="subject in filteredSubjects"
-          :key="subject.id"
-          :value="subject"
-        >
-          {{ subject.name }}
-        </ComboboxItem>
-      </ComboboxContent>
-    </ComboboxPortal>
-  </ComboboxRoot>
+  <div>
+    <h1>Página de teste</h1>
+    <strong>Dados no Pinia</strong>
+    <p>State UserId: {{ userStore.userId }}</p>
+    <p>State CareerId: {{ userStore.careerId }}</p>
+    <p>State CareerName: {{ userStore.careerName }}</p>
+    
+    <strong>Mesmos Dados no LocalStorage</strong>
+    <p>UserId: {{ localStorageUserId }}</p>
+    <p>CareerId: {{ localStorageCareerId }}</p>
+    <p>CareerName: {{ localStorageCareerName }}</p>
+    
+  </div>
 </template>

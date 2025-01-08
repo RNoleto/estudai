@@ -22,6 +22,9 @@ export const useUserStore = defineStore('user', {
       try {
         const { userId } = useAuth();
         this.userId = userId.value; // Armazena o ID do usuário no Pinia
+        if (this.userId) {
+          localStorage.setItem('userId', this.userId);
+        }
       } catch (error) {
         console.error("Erro ao buscar o ID do usuário:", error);
       }
