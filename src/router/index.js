@@ -105,6 +105,8 @@ router.beforeEach(async (to, from, next) => {
   if (auth.isSignedIn.value) {
     try {
       await userStore.fetchUserId();
+      const hasCareer = await userStore.checkUserCareer();
+      await userStore.fetchUserSubjects();
 
       // const hasCareer = await userStore.checkUserCareer();
       // if (userStore.careerId === null) {
@@ -118,9 +120,11 @@ router.beforeEach(async (to, from, next) => {
       //   next({ path: '/materias' }); // Redireciona para matérias se o usuário não tem matérias
       //   return;
       // }
-
+      
       if (to.path === '/') {
-        next({ path: '/area-do-aluno' });
+        console.log("Dentro do index - hasCareer", hasCareer);
+        console.log("Dentro do index - fetchUserSubjects", userStore.userSubjects.length);
+        next({ path: '/teste' });
         return;
       }
     } catch (error) {

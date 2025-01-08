@@ -48,8 +48,8 @@ const setInitialSelectedCareer = () => {
 onMounted(async () => {
   await userStore.fetchUserId();
   await careersStore.fetchCareers();
-  await userStore.checkUserCareer();
-  await userStore.fetchUserSubjects();
+  // await userStore.checkUserCareer();
+  // await userStore.fetchUserSubjects();
   setInitialSelectedCareer();
 });
 </script>
