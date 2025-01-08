@@ -84,7 +84,6 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const auth = initializeAuth();
 
-  // Aguarda até que a autenticação esteja carregada
   if (!auth.isLoaded.value) {
     await new Promise(resolve => {
       const interval = setInterval(() => {
@@ -98,46 +97,40 @@ router.beforeEach(async (to, from, next) => {
 
   const userStore = useUserStore();
 
-  // Verifica autenticação para rotas protegidas
   if (to.meta.requiresAuth && !auth.isSignedIn.value) {
     next({ path: '/' });
     return;
   }
 
-  // Lógica de redirecionamento após o login
   if (auth.isSignedIn.value) {
     try {
       await userStore.fetchUserId();
 
-      // Verifica a carreira do usuário
       const hasCareer = await userStore.checkUserCareer();
-      if (!hasCareer) {
+      if (hasCareer === 0) {
+        console.log("dentro do index:", this.hasCareer);
         next({ path: '/carreiras' }); // Redireciona para carreiras
         return;
       }
 
-      // Verifica as matérias do usuário
       await userStore.fetchUserSubjects();
       if (!userStore.userSubjects.length) {
-        next({ path: '/materias' }); // Redireciona para matérias
+        next({ path: '/materias' }); // Redireciona para matérias se o usuário não tem matérias
         return;
       }
 
-      // Redireciona para a página inicial do Dashboard
       if (to.path === '/') {
         next({ path: '/area-do-aluno' });
         return;
       }
     } catch (error) {
       console.error("Erro durante a verificação de redirecionamento:", error);
-      next(); // Continua a navegação em caso de erro
+      next(); // Continua a navegação em caso de erro inesperado
       return;
     }
   }
 
-  next(); // Permite que a navegação continue
+  next();
 });
-
-
 
 export default router;
