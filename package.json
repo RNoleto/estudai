@@ -13,14 +13,12 @@
     "@iconify/vue": "^4.1.2",
     "axios": "^1.7.7",
     "chart.js": "^4.4.6",
-    "lodash": "^4.17.21",
     "pinia": "^2.2.4",
     "primevue": "^4.2.3",
     "radix-vue": "^1.9.10",
     "tailwind-variants": "^0.2.1",
     "vue": "^3.5.10",
     "vue-clerk": "^0.8.6",
-    "vue-lodash": "^2.1.2",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
