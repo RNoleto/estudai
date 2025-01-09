@@ -50,11 +50,13 @@ const totalStudyTime = computed(() => {
 // Computada para resumir os dados com base nos registros filtrados
 const summarizedData = computed(() => {
   const summary = filteredRecords.value.reduce((acc, record) => {
-    const { subjectName, study_time, total_pauses, questions_resolved, correct_answers, incorrect_answers } = record;
+    const { subject, topic, study_time, total_pauses, questions_resolved, correct_answers, incorrect_answers } = record;
+    const subjectName = subject?.name || 'Matéria não encontrada';
 
     if (!acc[subjectName]) {
       acc[subjectName] = {
         subjectName,
+        topics: [],
         totalStudyTime: 0,
         totalPauses: 0,
         totalQuestionsResolved: 0,
@@ -63,6 +65,17 @@ const summarizedData = computed(() => {
       };
     }
 
+    // Adiciona o tópico estudado
+    acc[subjectName].topics.push({
+      topic,
+      studyTime: study_time,
+      questionsResolved: questions_resolved,
+      correctAnswers: correct_answers,
+      incorrectAnswers: incorrect_answers,
+      pauses: total_pauses,
+    });
+
+    // Atualiza os totais da matéria
     acc[subjectName].totalStudyTime += study_time;
     acc[subjectName].totalPauses += total_pauses;
     acc[subjectName].totalQuestionsResolved += questions_resolved;
@@ -91,19 +104,39 @@ const summarizedData = computed(() => {
     </div>
 
     <!-- Tempo total de estudo no período -->
-    <div class="total-study-time my-5">
+    <div class="my-5">
       <strong>Tempo Total de Estudo no Período:</strong> {{ formatStudyTime(totalStudyTime) }}
     </div>
 
     <!-- Lista resumida -->
-    <div class="mt-10">
-      <div v-for="(subject, index) in summarizedData" :key="subject.subjectName" class="flex flex-wrap gap-2 mb-5">
-        <p><strong>Matéria:</strong> {{ subject.subjectName }}</p>
-        <p><strong>Tempo Total de Estudo:</strong> {{ formatStudyTime(subject.totalStudyTime) }}</p>
-        <p><strong>Total de Pausas:</strong> {{ subject.totalPauses }}</p>
-        <p><strong>Questões Resolvidas:</strong> {{ subject.totalQuestionsResolved }}</p>
-        <p><strong>Respostas Corretas:</strong> {{ subject.totalCorrectAnswers }}</p>
-        <p><strong>Respostas Incorretas:</strong> {{ subject.totalIncorrectAnswers }}</p>
+    <div>
+      <div v-for="(subject, index) in summarizedData" :key="subject.subjectName" class="p-2 mb-5 border border-zinc-300 shadow-sm rounded-md text-zinc-800">
+        <div class="flex justify-between items-center bg-blue-100">
+          <h3 class="text-xl"><strong>{{ subject.subjectName }}</strong></h3>
+          <div class="text-sm">
+            <p>Tempo Total de Estudo: {{ formatStudyTime(subject.totalStudyTime) }}</p>
+            <p>Total de Pausas:  {{ subject.totalPauses }}</p>
+            <p>Questões Resolvidas: {{ subject.totalQuestionsResolved }}</p>
+            <p>Respostas Corretas: {{ subject.totalCorrectAnswers }}</p>
+            <p>Respostas Incorretas: {{ subject.totalIncorrectAnswers }}</p>
+          </div>
+        </div>
+
+        <div class="mt-3 bg-green-100">
+          <h4><strong>Tópicos Estudados: <i class="fas fa-chevron-up"></i></strong></h4>
+          <ul>
+            <li v-for="(topic, idx) in subject.topics" :key="idx" class=" gap-2 ml-4">
+              <strong class="text-md">{{ topic.topic }}</strong>
+              <div class="text-sm flex gap-2 ml-4">
+                <p>Tempo de Estudo: {{ formatStudyTime(topic.studyTime) }}</p>
+                <p>Questões Resolvidas: {{ topic.questionsResolved }}</p>
+                <p>Respostas Corretas: {{ topic.correctAnswers }}</p>
+                <p>Respostas Incorretas: {{ topic.incorrectAnswers }}</p>
+                <p>Quantidade de Pausas: {{ topic.pauses }}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
