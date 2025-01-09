@@ -107,24 +107,20 @@ router.beforeEach(async (to, from, next) => {
       await userStore.fetchUserId();
       const hasCareer = await userStore.checkUserCareer();
       await userStore.fetchUserSubjects();
-
-      // const hasCareer = await userStore.checkUserCareer();
-      // if (userStore.careerId === null) {
-      //   console.log("dentro do index:", this.hasCareer);
-      //   next({ path: '/teste' }); // Redireciona para carreiras
-      //   return;
-      // }
-
-      // await userStore.fetchUserSubjects();
-      // if (!userStore.userSubjects.length) {
-      //   next({ path: '/materias' }); // Redireciona para matérias se o usuário não tem matérias
-      //   return;
-      // }
       
-      if (to.path === '/') {
-        console.log("Dentro do index - hasCareer", hasCareer);
-        console.log("Dentro do index - fetchUserSubjects", userStore.userSubjects.length);
-        next({ path: '/teste' });
+      if (to.path === '/') { 
+
+        if(!hasCareer){
+          next({path: '/carreiras'});
+          return;
+        }
+
+        if(userStore.userSubjects.length <= 0){
+          next({path: '/materias'});
+          return;
+        }
+
+        next({ path: '/area-do-aluno' });
         return;
       }
     } catch (error) {
