@@ -17,6 +17,14 @@ const endDate = ref(null); // Data final do filtro
 // Critério de ordenação: tempo de estudo ou porcentagem de acertos
 const sortBy = ref('studyTime'); // Valor inicial: ordenar por tempo de estudo
 
+// Para controlar qual lista de tópicos está aberta
+const activeTopic = ref(null);
+
+const toggleTopics = (index) => {
+  activeTopic.value = activeTopic.value === index ? null : index;
+};
+
+
 onMounted(async () => {
   try {
     await Promise.all([
@@ -69,6 +77,7 @@ const summarizedData = computed(() => {
     }
 
     acc[subjectName].topics.push({
+      topic: record.topic || 'Tópico não informado',
       studyTime: study_time,
       questionsResolved: questions_resolved,
       correctAnswers: correct_answers,
@@ -95,8 +104,8 @@ const summarizedData = computed(() => {
       subject.accuracyPercentage >= 70
         ? 'bg-green-100'
         : subject.accuracyPercentage > 50
-        ? 'bg-yellow-100'
-        : 'bg-red-100';
+          ? 'bg-yellow-100'
+          : 'bg-red-100';
 
     return subject;
   });
@@ -116,6 +125,12 @@ const getAccuracyPercentage = (correctAnswers, totalQuestions) => {
   if (totalQuestions === 0) return 0; // Evita divisão por zero
   return Math.round((correctAnswers / totalQuestions) * 100);
 };
+
+const getColorClass = (correctAnswers, totalQuestions) => {
+  const percentage = getAccuracyPercentage(correctAnswers, totalQuestions);
+  return percentage >= 70 ? 'bg-green-50' : percentage > 50 ? 'bg-yellow-50' : 'bg-red-50';
+};
+
 </script>
 
 <template>
@@ -144,11 +159,8 @@ const getAccuracyPercentage = (correctAnswers, totalQuestions) => {
 
     <!-- Lista resumida -->
     <div>
-      <div 
-        v-for="(subject, index) in summarizedData" 
-        :key="subject.subjectName"
-        :class="`mb-2 border border-zinc-300 shadow-sm rounded-md text-zinc-800 overflow-hidden ${subject.bgClass}`"
-      >
+      <div v-for="(subject, index) in summarizedData" :key="subject.subjectName"
+        :class="`mb-2 border border-zinc-300 shadow-sm rounded-md text-zinc-800 overflow-hidden ${subject.bgClass}`">
         <!-- Header do card -->
         <div class="flex justify-between gap-2 items-center p-2">
           <h3 class="text-xl"><strong>{{ subject.subjectName }}</strong></h3>
@@ -173,29 +185,47 @@ const getAccuracyPercentage = (correctAnswers, totalQuestions) => {
         <!-- Campos de topicos estudados -->
         <div class="mt-2">
           <div class="shadow-md">
-            <h4 class="ml-2 font-semibold">Tópicos Estudados</h4>
+            <button class="ml-2 font-semibold text-blue-500 hover:text-blue-700 transition-colors duration-200"
+              @click="toggleTopics(index)">
+              Tópicos Estudados
+            </button>
           </div>
-          <ul role="list" class="divide-y divide-zinc-200 mt-2 hidden">
-            <li v-for="(topic, idx) in subject.topics" :key="idx" class="flex justify-between gap-x-6 py-1"
-              :class="idx % 2 === 0 ? 'bg-gray-100' : 'bg-white'">
-              <div class="grid grid-cols-4 w-full justify-between items-center px-4">
-                <div class="col-span-2">
-                  <p class="text-md font-semibold">{{ topic.topic ? topic.topic : 'Tópico não informado' }}</p>
+          <transition name="fade">
+            <ul v-if="activeTopic === index" role="list" class="divide-y divide-zinc-200 mt-2">
+              <li v-for="(topic, idx) in subject.topics" :key="idx" class="flex justify-between gap-x-6 py-1"
+              :class="[idx % 2 === 0 ? 'bg-gray-100' : 'bg-white', getColorClass(topic.correctAnswers, topic.questionsResolved)]">
+                <div class="grid grid-cols-4 w-full justify-between items-center px-4">
+                  <div class="col-span-2">
+                    <p class="text-md font-semibold">{{ topic.topic ? topic.topic : 'Tópico não informado' }}</p>
+                  </div>
+                  <div class="text-sm col-span-1">
+                    <p>Tempo de Estudo: {{ formatStudyTime(topic.studyTime) }}</p>
+                  </div>
+                  <div class="text-sm col-span-1 hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                    <p>Questões Resolvidas: {{ topic.questionsResolved }}</p>
+                    <p>Respostas Corretas: {{ topic.correctAnswers }}</p>
+                    <p>Respostas Incorretas: {{ topic.incorrectAnswers }}</p>
+                    <p>Porcentagem: {{ getAccuracyPercentage(topic.correctAnswers, topic.questionsResolved) }}%</p>
+                  </div>
+                  <!-- <p>Quantidade de Pausas: {{ topic.pauses }}</p> -->
                 </div>
-                <div class="text-sm col-span-1">
-                  <p>Tempo de Estudo: {{ formatStudyTime(topic.studyTime) }}</p>
-                </div>
-                <div class="text-sm col-span-1 hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                  <p>Questões Resolvidas: {{ topic.questionsResolved }}</p>
-                  <p>Respostas Corretas: {{ topic.correctAnswers }}</p>
-                  <p>Respostas Incorretas: {{ topic.incorrectAnswers }}</p>
-                </div>
-                <!-- <p>Quantidade de Pausas: {{ topic.pauses }}</p> -->
-              </div>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </transition>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to, .fade-leave-from {
+  opacity: 1;
+}
+</style>
