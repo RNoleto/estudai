@@ -111,9 +111,10 @@ const summarizedData = computed(() => {
 
     <!-- Lista resumida -->
     <div>
-      <div v-for="(subject, index) in summarizedData" :key="subject.subjectName" class="p-2 mb-5 border border-zinc-300 shadow-sm rounded-md text-zinc-800 bg-zinc-200">
+      <div v-for="(subject, index) in summarizedData" :key="subject.subjectName"
+        class="mb-2 border border-zinc-300 shadow-sm rounded-md text-zinc-800 bg-zinc-200 overflow-hidden">
         <!-- Header do card -->
-        <div class="flex justify-between gap-2 items-center">
+        <div class="flex justify-between gap-2 items-center p-2">
           <h3 class="text-xl"><strong>{{ subject.subjectName }}</strong></h3>
           <div class="text-center">
             <p class="text-xl"><i class="fa-solid fa-stopwatch"></i> Tempo Total de Estudo</p>
@@ -134,15 +135,22 @@ const summarizedData = computed(() => {
         </div>
         <!-- Campos de topicos estudados -->
         <div class="mt-2">
-          <h4 class="font-semibold">Tópicos Estudados</h4>
-          <ul class="grid grid-cols-4 gap-2 ml-2 mt-2">
-            <li v-for="(topic, idx) in subject.topics" :key="idx" class="border border-zinc-300 shadow-sm rounded-md p-2 bg-zinc-50">
-              <p class="font-semibold text-sm leading-[16px] tracking-[-0.5px]">{{ topic.topic ? topic.topic : 'Tópico não informado' }}</p>
-              <div class="text-sm flex flex-col ml-4 mt-1">
-                <p>Tempo de Estudo: {{ formatStudyTime(topic.studyTime) }}</p>
-                <p>Questões Resolvidas: {{ topic.questionsResolved }}</p>
-                <p>Respostas Corretas: {{ topic.correctAnswers }}</p>
-                <p>Respostas Incorretas: {{ topic.incorrectAnswers }}</p>
+          <h4 class="ml-2 font-semibold">Tópicos Estudados</h4>
+          <ul role="list" class="divide-y divide-zinc-200 mt-2">
+            <li v-for="(topic, idx) in subject.topics" :key="idx" class="flex justify-between gap-x-6 py-1"
+              :class="idx % 2 === 0 ? 'bg-gray-100' : 'bg-white'">
+              <div class="grid grid-cols-4 w-full justify-between items-center px-4">
+                <div class="col-span-2">
+                  <p class="text-md font-semibold">{{ topic.topic ? topic.topic : 'Tópico não informado' }}</p>
+                </div>
+                <div class="text-sm col-span-1">
+                  <p>Tempo de Estudo: {{ formatStudyTime(topic.studyTime) }}</p>
+                </div>
+                <div class="text-sm col-span-1 hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                  <p>Questões Resolvidas: {{ topic.questionsResolved }}</p>
+                  <p>Respostas Corretas: {{ topic.correctAnswers }}</p>
+                  <p>Respostas Incorretas: {{ topic.incorrectAnswers }}</p>
+                </div>
                 <!-- <p>Quantidade de Pausas: {{ topic.pauses }}</p> -->
               </div>
             </li>
