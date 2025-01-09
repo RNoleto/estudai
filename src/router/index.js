@@ -6,9 +6,10 @@ import Career from '../views/CareerSelection.vue';
 import Subjects from '../views/Subjects.vue';
 import StudyCycle from '../views/StudyCycle.vue';
 import StudyStart from '../views/StudyStart.vue';
-import DashboardHome from '../views/DashboardHome.vue';
 
 import Dashboard from '../views/Dashboard.vue';
+import DashboardHome from '../views/DashboardHome.vue';
+import StudyHistory from '../views/StudyHistory.vue';
 
 //Teste
 import Test from '../views/Test.vue';
@@ -56,6 +57,11 @@ const routes = [
         path: 'estudar',
         name: 'Estudar',
         component: StudyStart,
+      },
+      {
+        path: 'historico-de-estudos',
+        name: 'Historico',
+        component: StudyHistory,
       },
       {
         path: 'carreiras',
