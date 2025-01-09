@@ -42,6 +42,11 @@ const filteredRecords = computed(() => {
   });
 });
 
+// Computada para calcular o tempo total de estudo no período filtrado
+const totalStudyTime = computed(() => {
+  return filteredRecords.value.reduce((acc, record) => acc + record.study_time, 0);
+});
+
 // Computada para resumir os dados com base nos registros filtrados
 const summarizedData = computed(() => {
   const summary = filteredRecords.value.reduce((acc, record) => {
@@ -83,6 +88,11 @@ const summarizedData = computed(() => {
 
       <label for="end-date">Data final:</label>
       <input id="end-date" type="date" v-model="endDate" />
+    </div>
+
+    <!-- Tempo total de estudo no período -->
+    <div class="total-study-time my-5">
+      <strong>Tempo Total de Estudo no Período:</strong> {{ formatStudyTime(totalStudyTime) }}
     </div>
 
     <!-- Lista resumida -->
