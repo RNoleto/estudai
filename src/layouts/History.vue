@@ -14,6 +14,9 @@ const { formatStudyTime } = useTimeFormatter();
 const startDate = ref(null); // Data inicial do filtro
 const endDate = ref(null); // Data final do filtro
 
+// Critério de ordenação: tempo de estudo ou porcentagem de acertos
+const sortBy = ref('studyTime'); // Valor inicial: ordenar por tempo de estudo
+
 onMounted(async () => {
   try {
     await Promise.all([
@@ -50,7 +53,7 @@ const totalStudyTime = computed(() => {
 // Computada para resumir os dados com base nos registros filtrados
 const summarizedData = computed(() => {
   const summary = filteredRecords.value.reduce((acc, record) => {
-    const { subject, topic, study_time, total_pauses, questions_resolved, correct_answers, incorrect_answers } = record;
+    const { subject, study_time, total_pauses, questions_resolved, correct_answers, incorrect_answers } = record;
     const subjectName = subject?.name || 'Matéria não encontrada';
 
     if (!acc[subjectName]) {
@@ -65,9 +68,7 @@ const summarizedData = computed(() => {
       };
     }
 
-    // Adiciona o tópico estudado
     acc[subjectName].topics.push({
-      topic,
       studyTime: study_time,
       questionsResolved: questions_resolved,
       correctAnswers: correct_answers,
@@ -75,7 +76,6 @@ const summarizedData = computed(() => {
       pauses: total_pauses,
     });
 
-    // Atualiza os totais da matéria
     acc[subjectName].totalStudyTime += study_time;
     acc[subjectName].totalPauses += total_pauses;
     acc[subjectName].totalQuestionsResolved += questions_resolved;
@@ -85,11 +85,37 @@ const summarizedData = computed(() => {
     return acc;
   }, {});
 
-  return Object.values(summary).map(subject => {
-    subject.topics.sort((a, b) => b.studyTime - a.studyTime);
+  const sortedData = Object.values(summary).map(subject => {
+    subject.accuracyPercentage = getAccuracyPercentage(
+      subject.totalCorrectAnswers,
+      subject.totalQuestionsResolved
+    );
+
+    subject.bgClass =
+      subject.accuracyPercentage >= 70
+        ? 'bg-green-100'
+        : subject.accuracyPercentage > 50
+        ? 'bg-yellow-100'
+        : 'bg-red-100';
+
     return subject;
-  }).sort((a, b) => b.totalStudyTime - a.totalStudyTime);
+  });
+
+  // Ordenar com base no critério escolhido
+  return sortedData.sort((a, b) => {
+    if (sortBy.value === 'studyTime') {
+      return b.totalStudyTime - a.totalStudyTime; // Ordenar por tempo de estudo
+    } else if (sortBy.value === 'accuracy') {
+      return b.accuracyPercentage - a.accuracyPercentage; // Ordenar por porcentagem de acertos
+    }
+    return 0;
+  });
 });
+
+const getAccuracyPercentage = (correctAnswers, totalQuestions) => {
+  if (totalQuestions === 0) return 0; // Evita divisão por zero
+  return Math.round((correctAnswers / totalQuestions) * 100);
+};
 </script>
 
 <template>
@@ -102,6 +128,13 @@ const summarizedData = computed(() => {
 
       <label for="end-date">Data final:</label>
       <input id="end-date" type="date" v-model="endDate" />
+
+      <!-- Seleção de critério de ordenação -->
+      <label for="sort-by" class="ml-4">Ordenar por:</label>
+      <select id="sort-by" v-model="sortBy" class="ml-2">
+        <option value="studyTime">Tempo de Estudo</option>
+        <option value="accuracy">Porcentagem de Acertos</option>
+      </select>
     </div>
 
     <!-- Tempo total de estudo no período -->
@@ -111,8 +144,11 @@ const summarizedData = computed(() => {
 
     <!-- Lista resumida -->
     <div>
-      <div v-for="(subject, index) in summarizedData" :key="subject.subjectName"
-        class="mb-2 border border-zinc-300 shadow-sm rounded-md text-zinc-800 bg-zinc-200 overflow-hidden">
+      <div 
+        v-for="(subject, index) in summarizedData" 
+        :key="subject.subjectName"
+        :class="`mb-2 border border-zinc-300 shadow-sm rounded-md text-zinc-800 overflow-hidden ${subject.bgClass}`"
+      >
         <!-- Header do card -->
         <div class="flex justify-between gap-2 items-center p-2">
           <h3 class="text-xl"><strong>{{ subject.subjectName }}</strong></h3>
@@ -124,6 +160,7 @@ const summarizedData = computed(() => {
             <div class="text-center">
               <p class="text-xl">Total de Questões</p>
               <p class="text-4xl font-semibold">{{ subject.totalQuestionsResolved }}</p>
+              <p>{{ subject.accuracyPercentage }}%</p>
             </div>
             <div>
               <!-- <p>Total de Pausas:  {{ subject.totalPauses }}</p>
@@ -135,8 +172,10 @@ const summarizedData = computed(() => {
         </div>
         <!-- Campos de topicos estudados -->
         <div class="mt-2">
-          <h4 class="ml-2 font-semibold">Tópicos Estudados</h4>
-          <ul role="list" class="divide-y divide-zinc-200 mt-2">
+          <div class="shadow-md">
+            <h4 class="ml-2 font-semibold">Tópicos Estudados</h4>
+          </div>
+          <ul role="list" class="divide-y divide-zinc-200 mt-2 hidden">
             <li v-for="(topic, idx) in subject.topics" :key="idx" class="flex justify-between gap-x-6 py-1"
               :class="idx % 2 === 0 ? 'bg-gray-100' : 'bg-white'">
               <div class="grid grid-cols-4 w-full justify-between items-center px-4">
