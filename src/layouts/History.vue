@@ -111,9 +111,9 @@ const summarizedData = computed(() => {
 
     <!-- Lista resumida -->
     <div>
-      <div v-for="(subject, index) in summarizedData" :key="subject.subjectName" class="p-2 mb-5 border border-zinc-300 shadow-sm rounded-md text-zinc-800">
+      <div v-for="(subject, index) in summarizedData" :key="subject.subjectName" class="p-2 mb-5 border border-zinc-300 shadow-sm rounded-md text-zinc-800 bg-zinc-200">
         <!-- Header do card -->
-        <div class="flex justify-between gap-2 items-center bg-blue-100">
+        <div class="flex justify-between gap-2 items-center">
           <h3 class="text-xl"><strong>{{ subject.subjectName }}</strong></h3>
           <div class="text-center">
             <p class="text-xl"><i class="fa-solid fa-stopwatch"></i> Tempo Total de Estudo</p>
@@ -132,18 +132,18 @@ const summarizedData = computed(() => {
             </div>
           </div>
         </div>
-
-        <div class="mt-3 bg-green-100">
-          <h4><strong>Tópicos Estudados <i class="fas fa-chevron-up text-sm"></i></strong></h4>
-          <ul>
-            <li v-for="(topic, idx) in subject.topics" :key="idx" class=" gap-2 ml-4">
-              <strong class="text-md">{{ topic.topic }}</strong>
-              <div class="text-sm flex gap-2 ml-4">
+        <!-- Campos de topicos estudados -->
+        <div class="mt-2">
+          <h4 class="font-semibold">Tópicos Estudados</h4>
+          <ul class="grid grid-cols-4 gap-2 ml-2 mt-2">
+            <li v-for="(topic, idx) in subject.topics" :key="idx" class="border border-zinc-300 shadow-sm rounded-md p-2 bg-zinc-50">
+              <p class="font-semibold text-sm leading-[16px] tracking-[-0.5px]">{{ topic.topic ? topic.topic : 'Tópico não informado' }}</p>
+              <div class="text-sm flex flex-col ml-4 mt-1">
                 <p>Tempo de Estudo: {{ formatStudyTime(topic.studyTime) }}</p>
                 <p>Questões Resolvidas: {{ topic.questionsResolved }}</p>
                 <p>Respostas Corretas: {{ topic.correctAnswers }}</p>
                 <p>Respostas Incorretas: {{ topic.incorrectAnswers }}</p>
-                <p>Quantidade de Pausas: {{ topic.pauses }}</p>
+                <!-- <p>Quantidade de Pausas: {{ topic.pauses }}</p> -->
               </div>
             </li>
           </ul>
