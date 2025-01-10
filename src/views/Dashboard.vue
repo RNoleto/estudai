@@ -56,6 +56,17 @@ onMounted(async () => {
             <span v-if="!isSidebarCollapsed">Home</span>
           </a>
           </div>
+          <!-- Historico de Estudos -->
+          <div>
+            <a href="/area-do-aluno/historico-de-estudos" 
+            :class="[
+              'flex items-center gap-2 px-4 py-2 rounded', 
+              route.path === '/area-do-aluno/historico-de-estudos' ? 'bg--blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100']"
+            >
+            <i class="fa-solid fa-pen-clip"></i>
+              <span v-if="!isSidebarCollapsed">Histórico de Estudo</span>
+            </a>
+          </div>
           <!-- Estudar da Dashboard -->
           <div>
             <a
@@ -68,17 +79,6 @@ onMounted(async () => {
             <i class="fa-solid fa-stopwatch"></i>
             <span v-if="!isSidebarCollapsed">Estudar</span>
           </a>
-          </div>
-          <!-- Historico de Estudos -->
-          <div>
-            <a href="/area-do-aluno/historico-de-estudos" 
-            :class="[
-              'flex items-center gap-2 px-4 py-2 rounded', 
-              route.path === '/area-do-aluno/historico-de-estudos' ? 'bg--blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100']"
-            >
-            <i class="fa-solid fa-pen-clip"></i>
-              <span v-if="!isSidebarCollapsed">Histórico de Estudo</span>
-            </a>
           </div>
           <!-- Menu Principal 1 -->
           <!-- <div>

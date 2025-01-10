@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
 import { useSubjectStore } from '../stores/useSubjectStore';
 import IsLoading from '../components/ui/IsLoading.vue';
@@ -156,6 +156,15 @@ const totalQuestionsAndAccuracy = computed(() => {
     accuracyPercentage,
   };
 });
+
+const totalAccuracyBgClass = computed(() => {
+  const { accuracyPercentage } = totalQuestionsAndAccuracy.value;
+  return accuracyPercentage >= 70
+    ? 'bg-green-100'
+    : accuracyPercentage > 50
+    ? 'bg-yellow-100'
+    : 'bg-red-100';
+});
 </script>
 
 <template>
@@ -187,7 +196,7 @@ const totalQuestionsAndAccuracy = computed(() => {
         <p>Total de questões no período</p>
         <p class="text-xl">{{ totalQuestions }}</p>
       </div>
-      <div class="text-sm border bg-white text-center rounded-md p-4 my-2 shadow-sm">
+      <div :class="`text-sm border text-center rounded-md p-4 my-2 shadow-sm ${totalAccuracyBgClass}`">
         <p>Total de acertos no período</p>
         <p class="text-xl">{{ totalQuestionsAndAccuracy.totalCorrectAnswers }} - ({{ totalQuestionsAndAccuracy.accuracyPercentage }}%)</p>
       </div>
@@ -196,9 +205,9 @@ const totalQuestionsAndAccuracy = computed(() => {
     <!-- Lista resumida -->
     <div>
       <div v-for="(subject, index) in summarizedData" :key="subject.subjectName"
-        :class="`mb-2 border border-zinc-300 shadow-sm rounded-md text-zinc-800 overflow-hidden `">
+        :class="`mb-2 border border-zinc-300 rounded-md text-zinc-800 overflow-hidden `" @click="toggleTopics(index)">
         <!-- Header do card -->
-        <div :class="`grid grid-cols-3 gap-2 items-center p-2 ${subject.bgClass}`">
+        <div :class="`grid grid-cols-3 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`" title="Clique para mostrar os tópicos estudados">
           <h3 class="text-xl"><strong>{{ subject.subjectName }}</strong></h3>
           <div class="text-center">
             <p class="text-xl"><i class="fa-solid fa-stopwatch"></i> Tempo Total de Estudo</p>
@@ -217,12 +226,12 @@ const totalQuestionsAndAccuracy = computed(() => {
               <p>Respostas Incorretas: {{ subject.totalIncorrectAnswers }}</p> -->
             </div>
           </div>
-          <div>
+          <!-- <div>
             <button class="ml-2 font-semibold text-blue-500 hover:text-blue-700 transition-colors duration-200"
               @click="toggleTopics(index)">
               Tópicos Estudados
             </button>
-          </div>
+          </div> -->
         </div>
         <!-- Campos de topicos estudados -->
         <div>
