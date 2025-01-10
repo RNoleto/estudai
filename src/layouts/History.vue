@@ -131,6 +131,31 @@ const getColorClass = (correctAnswers, totalQuestions) => {
   return percentage >= 70 ? 'bg-green-50' : percentage > 50 ? 'bg-yellow-50' : 'bg-red-50';
 };
 
+// Computada para o total de questões no período filtrado
+const totalQuestions = computed(() => {
+  return filteredRecords.value.reduce((acc, record) => acc + record.questions_resolved, 0);
+});
+
+// Computada para o total de acertos no período filtrado
+const totalCorrectAnswers = computed(() => {
+  return filteredRecords.value.reduce((acc, record) => acc + record.correct_answers, 0);
+});
+
+// Computada para calcular o total de questões e acertos no período filtrado
+const totalQuestionsAndAccuracy = computed(() => {
+  const totalQuestions = filteredRecords.value.reduce((sum, record) => sum + record.questions_resolved, 0);
+  const totalCorrectAnswers = filteredRecords.value.reduce((sum, record) => sum + record.correct_answers, 0);
+
+  const accuracyPercentage = totalQuestions === 0
+    ? 0
+    : Math.round((totalCorrectAnswers / totalQuestions) * 100);
+
+  return {
+    totalQuestions,
+    totalCorrectAnswers,
+    accuracyPercentage,
+  };
+});
 </script>
 
 <template>
@@ -153,8 +178,19 @@ const getColorClass = (correctAnswers, totalQuestions) => {
     </div>
 
     <!-- Tempo total de estudo no período -->
-    <div class="my-5">
-      <strong>Tempo Total de Estudo no Período:</strong> {{ formatStudyTime(totalStudyTime) }}
+    <div class="flex gap-2">
+      <div class="text-sm border bg-white text-center rounded-md p-4 my-2 shadow-sm">
+        <p>Tempo total de estudo no período</p> 
+        <p class="text-xl">{{ formatStudyTime(totalStudyTime) }}</p>
+      </div>
+      <div class="text-sm border bg-white text-center rounded-md p-4 my-2 shadow-sm">
+        <p>Total de questões no período</p>
+        <p class="text-xl">{{ totalQuestions }}</p>
+      </div>
+      <div class="text-sm border bg-white text-center rounded-md p-4 my-2 shadow-sm">
+        <p>Total de acertos no período</p>
+        <p class="text-xl">{{ totalQuestionsAndAccuracy.totalCorrectAnswers }} - ({{ totalQuestionsAndAccuracy.accuracyPercentage }}%)</p>
+      </div>
     </div>
 
     <!-- Lista resumida -->
