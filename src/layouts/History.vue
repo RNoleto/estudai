@@ -3,12 +3,14 @@ import { computed, onMounted, ref } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
 import { useSubjectStore } from '../stores/useSubjectStore';
 import IsLoading from '../components/ui/IsLoading.vue';
+import Tooltip from '../components/Tooltip.vue';
 
 import { useTimeFormatter } from '../composables/useTimeFormatter';
 
 const userStore = useUserStore();
 const subjectStore = useSubjectStore();
 const isLoading = ref(true);
+const showTooltip = ref(false); // Controla a visibilidade do tooltip
 const { formatStudyTime } = useTimeFormatter();
 
 const startDate = ref(null); // Data inicial do filtro
@@ -165,6 +167,18 @@ const totalAccuracyBgClass = computed(() => {
     ? 'bg-yellow-100'
     : 'bg-red-100';
 });
+
+const handleMouseEnter = () => {
+  showTooltip.value = true;
+};
+
+const handleMouseLeave = () => {
+  showTooltip.value = false;
+};
+
+const handleClick = () => {
+  showTooltip.value = false; // Oculta o tooltip ao clicar
+};
 </script>
 
 <template>
@@ -185,7 +199,6 @@ const totalAccuracyBgClass = computed(() => {
         <option value="accuracy">Porcentagem de Acertos</option>
       </select>
     </div>
-
     <!-- Tempo total de estudo no período -->
     <div class="flex gap-2">
       <div class="text-sm border bg-white text-center rounded-md p-4 my-2 shadow-sm">
@@ -207,8 +220,14 @@ const totalAccuracyBgClass = computed(() => {
       <div v-for="(subject, index) in summarizedData" :key="subject.subjectName"
         :class="`mb-2 border border-zinc-300 rounded-md text-zinc-800 overflow-hidden `" @click="toggleTopics(index)">
         <!-- Header do card -->
-        <div :class="`grid grid-cols-3 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`" title="Clique para mostrar os tópicos estudados">
-          <h3 class="text-xl"><strong>{{ subject.subjectName }}</strong></h3>
+        <div :class="`grid grid-cols-3 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave" @click="handleClick">
+          <!-- Tooltip Condicional -->
+          <Tooltip v-if="showTooltip" :text="'Clique para mostrar os tópicos estudados'">
+            <h3 class="text-xl font-semibold cursor-pointer">{{ subject.subjectName }}</h3>
+          </Tooltip>
+
+          <h3 v-if="!showTooltip" class="text-xl font-semibold cursor-pointer">{{ subject.subjectName }}</h3>
+                    
           <div class="text-center">
             <p class="text-xl"><i class="fa-solid fa-stopwatch"></i> Tempo Total de Estudo</p>
             <p class="text-4xl">{{ formatStudyTime(subject.totalStudyTime) }}</p>
@@ -264,6 +283,9 @@ const totalAccuracyBgClass = computed(() => {
 </template>
 
 <style scoped>
+.container {
+  overflow: visible;
+}
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s ease;
 }
