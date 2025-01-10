@@ -242,11 +242,10 @@ const handleClick = () => {
         <!-- Campos de topicos estudados -->
         <div>
           <transition name="fade">
-            <ul v-if="activeTopic === index" role="list" class="divide-y divide-zinc-200 ">
-              <li v-for="(topic, idx) in subject.topics" :key="idx" class="flex justify-between gap-x-6 py-1 shadow-inner"
+            <ul v-if="activeTopic === index" role="list" class="divide-y divide-zinc-200">
+              <li v-for="(topic, idx) in subject.topics" :key="idx" class="flex justify-between gap-x-6 py-1"
                 :class="[
-                  idx === 0 ? 'shadow-inner' : '', 
-                  idx % 2 === 0 ? 'bg-gray-100' : 'bg-white', 
+                  idx === 0 ? 'shadow-inner' : '',  
                   getColorClass(topic.correctAnswers, topic.questionsResolved)
                 ]">
                 <div class="grid grid-cols-4 w-full justify-between items-center px-4">
