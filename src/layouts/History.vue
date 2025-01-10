@@ -160,16 +160,16 @@ const getColorClass = (correctAnswers, totalQuestions) => {
     <!-- Lista resumida -->
     <div>
       <div v-for="(subject, index) in summarizedData" :key="subject.subjectName"
-        :class="`mb-2 border border-zinc-300 shadow-sm rounded-md text-zinc-800 overflow-hidden ${subject.bgClass}`">
+        :class="`mb-2 border border-zinc-300 shadow-sm rounded-md text-zinc-800 overflow-hidden `">
         <!-- Header do card -->
-        <div class="flex justify-between gap-2 items-center p-2">
+        <div :class="`grid grid-cols-3 gap-2 items-center p-2 ${subject.bgClass}`">
           <h3 class="text-xl"><strong>{{ subject.subjectName }}</strong></h3>
           <div class="text-center">
             <p class="text-xl"><i class="fa-solid fa-stopwatch"></i> Tempo Total de Estudo</p>
             <p class="text-4xl">{{ formatStudyTime(subject.totalStudyTime) }}</p>
           </div>
           <div class="text-sm">
-            <div class="text-center">
+            <div class="flex flex-col items-end">
               <p class="text-xl">Total de Questões</p>
               <p class="text-4xl font-semibold">{{ subject.totalQuestionsResolved }}</p>
               <p>{{ subject.accuracyPercentage }}%</p>
@@ -181,17 +181,17 @@ const getColorClass = (correctAnswers, totalQuestions) => {
               <p>Respostas Incorretas: {{ subject.totalIncorrectAnswers }}</p> -->
             </div>
           </div>
-        </div>
-        <!-- Campos de topicos estudados -->
-        <div class="mt-2">
-          <div class="shadow-md">
+          <div>
             <button class="ml-2 font-semibold text-blue-500 hover:text-blue-700 transition-colors duration-200"
               @click="toggleTopics(index)">
               Tópicos Estudados
             </button>
           </div>
+        </div>
+        <!-- Campos de topicos estudados -->
+        <div>
           <transition name="fade">
-            <ul v-if="activeTopic === index" role="list" class="divide-y divide-zinc-200 mt-2">
+            <ul v-if="activeTopic === index" role="list" class="divide-y divide-zinc-200">
               <li v-for="(topic, idx) in subject.topics" :key="idx" class="flex justify-between gap-x-6 py-1"
               :class="[idx % 2 === 0 ? 'bg-gray-100' : 'bg-white', getColorClass(topic.correctAnswers, topic.questionsResolved)]">
                 <div class="grid grid-cols-4 w-full justify-between items-center px-4">
