@@ -104,10 +104,10 @@ const summarizedData = computed(() => {
 
     subject.bgClass =
       subject.accuracyPercentage >= 70
-        ? 'bg-green-100'
+        ? 'border border-green-200 bg-green-100'
         : subject.accuracyPercentage > 50
-          ? 'bg-yellow-100'
-          : 'bg-red-100';
+          ? 'border border-yellow-200 bg-yellow-100'
+          : 'border border-red-200 bg-red-100';
 
     return subject;
   });
@@ -130,7 +130,7 @@ const getAccuracyPercentage = (correctAnswers, totalQuestions) => {
 
 const getColorClass = (correctAnswers, totalQuestions) => {
   const percentage = getAccuracyPercentage(correctAnswers, totalQuestions);
-  return percentage >= 70 ? 'bg-green-50' : percentage > 50 ? 'bg-yellow-50' : 'bg-red-50';
+  return percentage >= 70 ? 'border-green-200 bg-green-50' : percentage > 50 ? 'bg-yellow-50' : 'bg-red-50';
 };
 
 // Computada para o total de questões no período filtrado
@@ -162,10 +162,10 @@ const totalQuestionsAndAccuracy = computed(() => {
 const totalAccuracyBgClass = computed(() => {
   const { accuracyPercentage } = totalQuestionsAndAccuracy.value;
   return accuracyPercentage >= 70
-    ? 'bg-green-100'
+    ? 'border-green-200 bg-green-100'
     : accuracyPercentage > 50
-      ? 'bg-yellow-100'
-      : 'bg-red-100';
+      ? 'border-yellow-200 bg-yellow-100'
+      : 'border-red-200 bg-red-100';
 });
 
 const handleMouseEnter = () => {
@@ -219,10 +219,10 @@ const handleClick = () => {
     <!-- Lista resumida -->
     <div>
       <div v-for="(subject, index) in summarizedData" :key="subject.subjectName"
-        :class="`mb-2 border border-zinc-300 rounded-md text-zinc-800 overflow-hidden cursor-pointer`" @click="toggleTopics(index)">
+        :class="`mb-2 border rounded-md text-zinc-800 overflow-hidden cursor-pointer`" @click="toggleTopics(index)">
         <!-- Header do card -->
         <Tooltip text="Clique para mostrar os tópicos estudado">
-        <div :class="`grid grid-cols-3 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`">
+        <div :class="`rounded-md grid grid-cols-3 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`">
             <h3 class="text-xl font-semibold">{{ subject.subjectName }}</h3>
           <div class="text-center">
             <p class="text-xl"><i class="fa-solid fa-stopwatch"></i> Tempo Total de Estudo</p>
