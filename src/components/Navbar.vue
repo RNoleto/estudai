@@ -1,13 +1,13 @@
 <script setup>
 import { UserButton } from 'vue-clerk';
-import { onMounted } from 'vue';
-import { useUserStore } from '../stores/useUserStore';
+// import { onMounted } from 'vue';
+// import { useUserStore } from '../stores/useUserStore';
 
-const userStore = useUserStore();
+// const userStore = useUserStore();
 
-onMounted(() => {
-  userStore.initializeUser(); // Inicializa o usuário, incluindo token e ID
-});
+// onMounted(() => {
+//   userStore.initializeUser(); // Inicializa o usuário, incluindo token e ID
+// });
 </script>
 
 <template>

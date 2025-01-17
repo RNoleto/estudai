@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { getAuthState } from '../services/AuthService';
-import { useAuth } from 'vue-clerk';
+// import { useAuth } from 'vue-clerk';
 import axios from 'axios';
 
 import { useSubjectStore } from './useSubjectStore';
@@ -17,24 +17,24 @@ export const useUserStore = defineStore('user', {
     userStudyRecords: [],
   }),
   actions: {
-    async fetchToken() {
-      const { getToken, isSignedIn } = useAuth();
-      try {
-        if (isSignedIn.value) {
-          const token = await getToken.value();
-          this.token = token;
-          localStorage.setItem('token', token); // Armazena localmente para persistência
-          console.log("Token obtido no useUserStore:", token);
-          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Configura cabeçalhos globais
-        } else {
-          console.warn("Usuário não está autenticado.");
-        }
-      } catch (error) {
-        console.error("Erro ao buscar o token:", error);
-      }
-    },
+    // async fetchToken() {
+    //   const { getToken, isSignedIn } = useAuth();
+    //   try {
+    //     if (isSignedIn.value) {
+    //       const token = await getToken.value();
+    //       this.token = token;
+    //       localStorage.setItem('token', token); // Armazena localmente para persistência
+    //       console.log("Token obtido no useUserStore:", token);
+    //       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Configura cabeçalhos globais
+    //     } else {
+    //       console.warn("Usuário não está autenticado.");
+    //     }
+    //   } catch (error) {
+    //     console.error("Erro ao buscar o token:", error);
+    //   }
+    // },
     async initializeUser() {
-      await this.fetchToken();
+      // await this.fetchToken();
       await this.fetchUserId();
     },
     async fetchUserId() {
@@ -76,13 +76,6 @@ export const useUserStore = defineStore('user', {
     },
     async checkUserCareer() {
       try {
-        if (!this.token) {
-          console.warn("Token não encontrado. Certifique-se de que 'fetchToken' foi chamado.");
-          return false;
-        }
-        // Verifique se o token está configurado no Axios
-        console.log("Token configurado no Axios:", axios.defaults.headers.common['Authorization']);
-
         // Fazendo uma requisição para o backend Laravel para verificar se já existe uma carreira
         const response = await axios.get(`user-career/${this.userId}`);
         this.careerId = response.data?.career_id || null;
