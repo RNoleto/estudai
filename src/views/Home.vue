@@ -7,7 +7,7 @@ import Button from '../components/ui/Button.vue';
 </script>
 
 <template>
-  <div class="h-screen grid grid-cols-2">
+  <div class="h-screen grid md:grid-cols-2">
     <!-- Esquerda -->
      <div class="flex flex-col h-full justify-center p-8 max-w-[550px] mx-auto">
       <h1 class="text-4xl font-bold mb-3">Bem-vindo ao Estudaí.</h1>
@@ -17,7 +17,7 @@ import Button from '../components/ui/Button.vue';
        </SignInButton>
      </div>
      <!-- Direita -->
-      <div class="relative w-full overflow-hidden">
+      <div class="relative w-full overflow-hidden  hidden md:block">
         <!-- <p>Espaço para colocar uma imagem</p> -->
         <div class="w-full h-full">
           <img src="../../public/img/wallpaper.jpeg" alt="Wallpaper" class="w-full h-full object-cover">
@@ -25,3 +25,10 @@ import Button from '../components/ui/Button.vue';
       </div>
   </div>
 </template> 
+
+<!-- 
+sem definição de tamanho -> até 640px
+sm é 640px - 767px
+md é 768px - 1280px
+xl a partir de 1280px
+-->
