@@ -52,22 +52,14 @@ onMounted(async () => {
       <a href="/area-do-aluno" class="block text-gray-700 text-lg font-semibold hover:text-blue-600">
         Home
       </a>
-      <a
-        href="/area-do-aluno/historico-de-estudos"
-        class="block text-gray-700 text-lg font-semibold hover:text-blue-600"
-      >
+      <a href="/area-do-aluno/historico-de-estudos"
+        class="block text-gray-700 text-lg font-semibold hover:text-blue-600">
         Histórico de Estudo
       </a>
-      <a
-        href="/area-do-aluno/estudar"
-        class="block text-gray-700 text-lg font-semibold hover:text-blue-600"
-      >
+      <a href="/area-do-aluno/estudar" class="block text-gray-700 text-lg font-semibold hover:text-blue-600">
         Estudar
       </a>
-      <a
-        href="/area-do-aluno/configuracoes"
-        class="block text-gray-700 text-lg font-semibold hover:text-blue-600"
-      >
+      <a href="/area-do-aluno/configuracoes" class="block text-gray-700 text-lg font-semibold hover:text-blue-600">
         Configurações
       </a>
     </div>
