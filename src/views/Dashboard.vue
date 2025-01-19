@@ -2,6 +2,7 @@
 import { RouterView, useRoute } from 'vue-router';
 import { onMounted, ref, computed } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
+import { UserButton } from 'vue-clerk';
 
 const route = useRoute();
 
@@ -48,7 +49,7 @@ onMounted(async () => {
       </button>
     </nav>
     <div v-if="isMenuMobileOpen"
-      class="fixed top-0 left-0 w-full h-screen bg-white shadow-lg z-40 flex flex-col items-center justify-start pt-20 space-y-4">
+      class="fixed top-0 left-0 w-full h-screen bg-white shadow-lg z-40 flex flex-col items-center justify-start pt-20 space-y-4 mt-10 px-10">
       <a href="/area-do-aluno" class="block text-gray-700 text-lg font-semibold hover:text-blue-600">
         Home
       </a>
@@ -62,6 +63,10 @@ onMounted(async () => {
       <a href="/area-do-aluno/configuracoes" class="block text-gray-700 text-lg font-semibold hover:text-blue-600">
         Configurações
       </a>
+      <div class="w-full flex flex-row-reverse">
+        <UserButton/>
+      </div>
+      
     </div>
     <!-- Sidebar desktop -->
     <aside v-if="!isMobileView" :class="[
