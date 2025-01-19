@@ -24,7 +24,7 @@ onMounted(async () => {
 <template>
     <div class="flex flex-col gap-4 p-2">
         <div class="flex flex-col gap-2">
-            <h3 class="text-4xl font-bold">Resumo dos estudos</h3>
+            <h3 class="text-xl font-bold sm:text-4xl">Resumo dos estudos</h3>
             <p>Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."  }}</p>
         </div>
         <div v-if="!hasStudyRecords" class="text-center text-gray-700">

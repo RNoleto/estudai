@@ -185,31 +185,39 @@ const handleClick = () => {
   <IsLoading v-if="isLoading" />
   <div v-else>
     <!-- Filtro por data -->
-    <div class="filters mb-5">
-      <label for="start-date">Data inicial:</label>
-      <input id="start-date" type="date" v-model="startDate" />
-
-      <label for="end-date">Data final:</label>
-      <input id="end-date" type="date" v-model="endDate" />
+    <div class="filters flex flex-col gap-1 sm:flex-row sm:gap-4">
+      <div class="grid grid-cols-2 sm:flex flex-row items-center gap-2">
+        <label for="start-date">Data inicial:</label>
+        <input id="start-date" type="date" v-model="startDate" />
+      </div>
+      
+      <div class="grid grid-cols-2 sm:flex flex-row items-center gap-2">
+        <label for="end-date">Data final:</label>
+        <input id="end-date" type="date" v-model="endDate" />
+      </div>
 
       <!-- Seleção de critério de ordenação -->
-      <label for="sort-by" class="ml-4">Ordenar por:</label>
-      <select id="sort-by" v-model="sortBy" class="ml-2">
-        <option value="studyTime">Tempo de Estudo</option>
-        <option value="accuracy">Porcentagem de Acertos</option>
-      </select>
+      <div class="">
+        <label for="sort-by">Ordenar por:</label>
+        <select id="sort-by" v-model="sortBy" class="w-full sm:w-auto sm:ml-2">
+          <option value="studyTime">Tempo de Estudo</option>
+          <option value="accuracy">Porcentagem de Acertos</option>
+        </select>
+      </div>
+
+
     </div>
     <!-- Tempo total de estudo no período -->
-    <div class="flex gap-2">
-      <div class="text-sm border bg-white text-center rounded-md p-4 my-2 shadow-sm">
+    <div class="grid mt-2 sm:flex gap-2">
+      <div class="text-sm border bg-white text-center rounded-md p-4 shadow-sm">
         <p>Tempo total de estudo no período</p>
         <p class="text-xl">{{ formatStudyTime(totalStudyTime) }}</p>
       </div>
-      <div class="text-sm border bg-white text-center rounded-md p-4 my-2 shadow-sm">
+      <div class="text-sm border bg-white text-center rounded-md p-4 shadow-sm">
         <p>Total de questões no período</p>
         <p class="text-xl">{{ totalQuestions }}</p>
       </div>
-      <div :class="`text-sm border text-center rounded-md p-4 my-2 shadow-sm ${totalAccuracyBgClass}`">
+      <div :class="`text-sm border text-center rounded-md p-4  shadow-sm ${totalAccuracyBgClass}`">
         <p>Total de acertos no período</p>
         <p class="text-xl">{{ totalQuestionsAndAccuracy.totalCorrectAnswers }} - ({{
           totalQuestionsAndAccuracy.accuracyPercentage }}%)</p>
@@ -217,7 +225,7 @@ const handleClick = () => {
     </div>
 
     <!-- Lista resumida -->
-    <div>
+    <div class="mt-2">
       <div v-for="(subject, index) in summarizedData" :key="subject.subjectName"
         :class="`mb-2 border rounded-md text-zinc-800 overflow-hidden cursor-pointer`" @click="toggleTopics(index)">
         <!-- Header do card -->

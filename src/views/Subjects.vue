@@ -60,16 +60,18 @@ const filteredSubjects = computed(() => {
 onMounted(async () => {
   await subjectStore.fetchSubjects(); // Carrega todas as matérias disponíveis
   await userStore.fetchUserSubjects(); // Carrega as matérias já associadas ao usuário
+
+  subjectStore.subjects.sort((a, b) => a.name.localeCompare(b.name));
   setInitialSelectedSubjects(); // Define as matérias inicialmente selecionadas
 });
 </script>
 
 <template>
   <div class="p-4 flex flex-col gap-4">
-    <h3 class="text-4xl">Selecione as matérias que deseja estudar.</h3>
+    <h3 class="text-xl sm:text-4xl">Selecione as matérias que deseja estudar.</h3>
     <p class="text-md">Carreira: {{ userStore.careerName }}</p>
     <Search placeholder="Pesquise a matéria..." v-model="searchTerm" />
-    <div class="flex flex-wrap gap-2">
+    <div class="grid gap-2 sm:flex flex-wrap">
       <OptionCard
         v-for="subject in filteredSubjects"
         :key="subject.id"

@@ -50,14 +50,17 @@ onMounted(async () => {
   await careersStore.fetchCareers();
   // await userStore.checkUserCareer();
   // await userStore.fetchUserSubjects();
+
+  // Ordenar as carreiras por ordem alfabética
+  careersStore.careers.sort((a, b) => a.name.localeCompare(b.name));
   setInitialSelectedCareer();
 });
 </script>
 
 <template>
   <div class="p-4 flex flex-col gap-4">
-    <h3 class="text-4xl">Selecione a sua carreira</h3>
-    <div class="flex flex-wrap gap-2">
+    <h3 class="text-xl sm:text-4xl">Selecione a sua carreira</h3>
+    <div class="grid gap-2 sm:flex flex-wrap">
       <OptionCard
         v-for="career in careersStore.careers"
         :key="career.id"
