@@ -190,7 +190,7 @@ const handleClick = () => {
         <label for="start-date">Data inicial:</label>
         <input id="start-date" type="date" v-model="startDate" />
       </div>
-      
+
       <div class="grid grid-cols-2 sm:flex flex-row items-center gap-2">
         <label for="end-date">Data final:</label>
         <input id="end-date" type="date" v-model="endDate" />
@@ -208,19 +208,24 @@ const handleClick = () => {
 
     </div>
     <!-- Tempo total de estudo no período -->
-    <div class="grid mt-2 sm:flex gap-2">
-      <div class="text-sm border bg-white text-center rounded-md p-4 shadow-sm">
-        <p>Tempo total de estudo no período</p>
-        <p class="text-xl">{{ formatStudyTime(totalStudyTime) }}</p>
+    <div class="grid grid-cols-2 mt-2 sm:flex gap-2">
+      <div class="flex flex-col gap-2 col-span-2 border bg-white rounded-md p-4 shadow-sm">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-stopwatch"></i>
+          <p class="text-md">Tempo total de estudo</p>
+        </div>
+        <p class="text-4xl font-semibold">{{ formatStudyTime(totalStudyTime) }}</p>
       </div>
       <div class="text-sm border bg-white text-center rounded-md p-4 shadow-sm">
-        <p>Total de questões no período</p>
+        <i class="fa-solid fa-pen-clip"></i>
         <p class="text-xl">{{ totalQuestions }}</p>
+        <p class="text-sm">Total de questões</p>
       </div>
-      <div :class="`text-sm border text-center rounded-md p-4  shadow-sm ${totalAccuracyBgClass}`">
-        <p>Total de acertos no período</p>
+      <div :class="`text-sm border text-center rounded-md p-4 shadow-sm ${totalAccuracyBgClass}`">
+        <i class="fa-solid fa-circle-check"></i>
         <p class="text-xl">{{ totalQuestionsAndAccuracy.totalCorrectAnswers }} - ({{
           totalQuestionsAndAccuracy.accuracyPercentage }}%)</p>
+        <p class="text-sm">Total de acertos</p>
       </div>
     </div>
 
@@ -230,38 +235,39 @@ const handleClick = () => {
         :class="`mb-2 border rounded-md text-zinc-800 overflow-hidden cursor-pointer`" @click="toggleTopics(index)">
         <!-- Header do card -->
         <Tooltip text="Clique para mostrar os tópicos estudado">
-        <div :class="`rounded-md grid grid-cols-3 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`">
-            <h3 class="text-xl font-semibold">{{ subject.subjectName }}</h3>
-          <div class="text-center">
-            <p class="text-xl"><i class="fa-solid fa-stopwatch"></i> Tempo Total de Estudo</p>
-            <p class="text-4xl">{{ formatStudyTime(subject.totalStudyTime) }}</p>
-          </div>
-          <div class="text-sm">
-            <div class="flex flex-col items-end">
-              <p class="text-xl">Total de Questões</p>
-              <p class="text-4xl font-semibold">{{ subject.totalQuestionsResolved }}</p>
-              <p>{{ subject.accuracyPercentage }}%</p>
+          <div :class="`rounded-md grid grid-cols-3 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`">
+            <h3 class="col-span-1 text-md leading-3 font-semibold">{{ subject.subjectName }}</h3>
+            <div class="col-span-1">
+              <div class="flex flex-col gap-1 text-center">
+                <i class="fa-solid fa-stopwatch"></i>
+                <p class="text-md font-semibold sm:text-4xl">{{ formatStudyTime(subject.totalStudyTime) }}</p>
+                <p class="text-sm leading-3 sm:text-xl">Tempo de estudo</p>
+              </div>
+            </div>
+            <div class="flex flex-col gap-1 text-center">
+              <i class="fa-solid fa-circle-check"></i>
+              <p class="text-md font-semibold sm:text-4xl">{{ subject.totalQuestionsResolved }} - {{ subject.accuracyPercentage }}%</p>
+              <p class="text-sm leading-3 sm:text-xl">Total de Questões</p>
             </div>
             <div>
             </div>
           </div>
-        </div>
-      </Tooltip>
+        </Tooltip>
         <!-- Campos de topicos estudados -->
         <div>
           <transition name="fade">
             <ul v-if="activeTopic === index" role="list" class="divide-y divide-zinc-200">
-              <li v-for="(topic, idx) in subject.topics" :key="idx" class="flex justify-between gap-x-6 py-1"
-                :class="[
-                  idx === 0 ? 'shadow-inner' : '',  
-                  getColorClass(topic.correctAnswers, topic.questionsResolved)
-                ]">
+              <li v-for="(topic, idx) in subject.topics" :key="idx" class="flex justify-between gap-x-6 py-1" :class="[
+                idx === 0 ? 'shadow-inner' : '',
+                getColorClass(topic.correctAnswers, topic.questionsResolved)
+              ]">
                 <div class="grid grid-cols-4 w-full justify-between items-center px-4">
-                  <div class="col-span-2">
+                  <div class="col-span-1 leading-3">
                     <p class="text-md font-semibold">{{ topic.topic ? topic.topic : 'Tópico não informado' }}</p>
                   </div>
-                  <div class="text-sm col-span-1">
-                    <p>Tempo de Estudo: {{ formatStudyTime(topic.studyTime) }}</p>
+                  <div class="text-center col-span-1">
+                    <p class="text-sm">Tempo de estudo</p>
+                    <p class="text-sm">{{ formatStudyTime(topic.studyTime) }}</p>
                   </div>
                   <div class="text-sm col-span-1 hidden shrink-0 sm:flex sm:flex-col sm:items-end">
                     <p>Questões Resolvidas: {{ topic.questionsResolved }}</p>
@@ -282,13 +288,16 @@ const handleClick = () => {
 
 <style scoped>
 .shadow-inner-top {
-  box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.1); /* Ajuste a sombra interna do topo */
+  box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.1);
+  /* Ajuste a sombra interna do topo */
 }
 
 /* Sombra apenas no primeiro item */
 .shadow-inner {
-  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1); /* Ajuste a sombra interna no item */
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1);
+  /* Ajuste a sombra interna no item */
 }
+
 .container {
   overflow: visible;
 }
