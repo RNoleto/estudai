@@ -214,16 +214,16 @@ const handleClick = () => {
           <i class="fa-solid fa-stopwatch"></i>
           <p class="text-md">Tempo total de estudo</p>
         </div>
-        <p class="text-4xl font-semibold">{{ formatStudyTime(totalStudyTime) }}</p>
+        <p class="text-4xl text-end font-semibold">{{ formatStudyTime(totalStudyTime) }}</p>
       </div>
       <div class="text-sm border bg-white text-center rounded-md p-4 shadow-sm">
         <i class="fa-solid fa-pen-clip"></i>
-        <p class="text-xl">{{ totalQuestions }}</p>
+        <p class="text-xl font-semibold">{{ totalQuestions }}</p>
         <p class="text-sm">Total de questões</p>
       </div>
       <div :class="`text-sm border text-center rounded-md p-4 shadow-sm ${totalAccuracyBgClass}`">
         <i class="fa-solid fa-circle-check"></i>
-        <p class="text-xl">{{ totalQuestionsAndAccuracy.totalCorrectAnswers }} - ({{
+        <p class="text-xl font-semibold">{{ totalQuestionsAndAccuracy.totalCorrectAnswers }} - ({{
           totalQuestionsAndAccuracy.accuracyPercentage }}%)</p>
         <p class="text-sm">Total de acertos</p>
       </div>
@@ -236,7 +236,7 @@ const handleClick = () => {
         <!-- Header do card -->
         <Tooltip text="Clique para mostrar os tópicos estudado">
           <div :class="`rounded-md grid grid-cols-3 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`">
-            <h3 class="col-span-1 text-md leading-3 font-semibold">{{ subject.subjectName }}</h3>
+            <h3 class="col-span-1 text-md leading-4 font-semibold">{{ subject.subjectName }}</h3>
             <div class="col-span-1">
               <div class="flex flex-col gap-1 text-center">
                 <i class="fa-solid fa-stopwatch"></i>
@@ -245,7 +245,7 @@ const handleClick = () => {
               </div>
             </div>
             <div class="flex flex-col gap-1 text-center">
-              <i class="fa-solid fa-circle-check"></i>
+              <i class="fa-solid fa-pen-clip"></i>
               <p class="text-md font-semibold sm:text-4xl">{{ subject.totalQuestionsResolved }} - {{ subject.accuracyPercentage }}%</p>
               <p class="text-sm leading-3 sm:text-xl">Total de Questões</p>
             </div>
@@ -262,18 +262,19 @@ const handleClick = () => {
                 getColorClass(topic.correctAnswers, topic.questionsResolved)
               ]">
                 <div class="grid grid-cols-4 w-full justify-between items-center px-4">
-                  <div class="col-span-1 leading-3">
-                    <p class="text-md font-semibold">{{ topic.topic ? topic.topic : 'Tópico não informado' }}</p>
+                  <div class="col-span-1 leading-4 text-md font-semibold">
+                    <p>{{ topic.topic ? topic.topic : 'Tópico não informado' }}</p>
                   </div>
-                  <div class="text-center col-span-1">
-                    <p class="text-sm">Tempo de estudo</p>
-                    <p class="text-sm">{{ formatStudyTime(topic.studyTime) }}</p>
+                  <div class="text-sm text-center col-span-1">
+                    <p>Tempo de estudo {{ formatStudyTime(topic.studyTime) }}</p>
                   </div>
-                  <div class="text-sm col-span-1 hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                    <p>Questões Resolvidas: {{ topic.questionsResolved }}</p>
-                    <p>Respostas Corretas: {{ topic.correctAnswers }}</p>
-                    <p>Respostas Incorretas: {{ topic.incorrectAnswers }}</p>
-                    <p>Porcentagem: {{ getAccuracyPercentage(topic.correctAnswers, topic.questionsResolved) }}%</p>
+                  <div class="text-sm text-end col-span-1 shrink-0 sm:flex sm:flex-col sm:items-end">
+                    <p>Acertos: {{ topic.correctAnswers }}</p>
+                    <p>Erros: {{ topic.incorrectAnswers }}</p>
+                    <p>Total: {{ topic.questionsResolved }}</p>
+                  </div>
+                  <div class="text-2xl col-span-1  text-end">
+                    <p>{{ getAccuracyPercentage(topic.correctAnswers, topic.questionsResolved) }}%</p>
                   </div>
                   <!-- <p>Quantidade de Pausas: {{ topic.pauses }}</p> -->
                 </div>
