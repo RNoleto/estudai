@@ -42,14 +42,14 @@ onMounted(async () => {
   <div class="grid bg-gray-100 sm:flex">
     <!-- sidebar mobile -->
     <nav v-if="isMobileView"
-      class="fixed top-0 left-0 w-full bg-white shadow-md z-50 flex items-center justify-between p-4">
+      class="fixed top-0 left-0 w-full bg-gray-800 text-white shadow-zinc-500 shadow-md z-50 flex items-center justify-between p-4">
       <p class="font-bold text-lg">Área do Aluno</p>
       <button @click="toggleMenu" class="text-xl p-2 rounded focus:outline-none">
         <i :class="isMenuMobileOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
       </button>
     </nav>
     <div v-if="isMenuMobileOpen"
-      class="fixed top-0 left-0 w-full h-screen bg-white shadow-lg z-40 flex flex-col items-center justify-start pt-20 space-y-4 mt-10 px-10">
+      class="fixed top-0 left-0 w-full h-screen bg-zinc-100 shadow-lg z-40 flex flex-col items-center justify-start pt-20 space-y-4 mt-10 px-10">
       <a href="/area-do-aluno" class="block text-gray-700 text-lg font-semibold hover:text-blue-600">
         Home
       </a>
