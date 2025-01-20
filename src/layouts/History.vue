@@ -185,27 +185,23 @@ const handleClick = () => {
   <IsLoading v-if="isLoading" />
   <div v-else>
     <!-- Filtro por data -->
-    <div class="filters flex flex-col gap-1 sm:flex-row sm:gap-4">
-      <div class="grid grid-cols-2 sm:flex flex-row items-center gap-2">
-        <label for="start-date">Data inicial:</label>
-        <input id="start-date" type="date" v-model="startDate" />
+    <div class="flex justify-between gap-1 sm:flex-row sm:gap-4">
+      <div class="flex flex-col">
+        <label for="start-date">Data inicial</label>
+        <input id="start-date" type="date" class="rounded-md p-1" v-model="startDate" />
       </div>
-
-      <div class="grid grid-cols-2 sm:flex flex-row items-center gap-2">
-        <label for="end-date">Data final:</label>
-        <input id="end-date" type="date" v-model="endDate" />
+      <div class="flex flex-col">
+        <label for="end-date">Data final</label>
+        <input id="end-date" type="date" class="rounded-md p-1" v-model="endDate" />
       </div>
-
-      <!-- Seleção de critério de ordenação -->
-      <div class="">
-        <label for="sort-by">Ordenar por:</label>
-        <select id="sort-by" v-model="sortBy" class="w-full sm:w-auto sm:ml-2">
-          <option value="studyTime">Tempo de Estudo</option>
-          <option value="accuracy">Porcentagem de Acertos</option>
-        </select>
-      </div>
-
-
+    </div>
+    <!-- Seleção de critério de ordenação -->
+    <div class="flex flex-col gap-1 mt-1">
+      <label for="sort-by">Ordenar por</label>
+      <select id="sort-by" v-model="sortBy" class="w-full p-1 rounded-md sm:w-auto sm:ml-2">
+        <option value="studyTime">Tempo de Estudo</option>
+        <option value="accuracy">Porcentagem de Acertos</option>
+      </select>
     </div>
     <!-- Tempo total de estudo no período -->
     <div class="grid grid-cols-2 mt-2 sm:flex gap-2">
