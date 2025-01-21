@@ -22,7 +22,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-4 p-2">
+    <div class="mt-8 flex flex-col gap-4">
         <div class="flex flex-col gap-2">
             <h3 class="text-xl font-bold sm:text-4xl">Resumo dos estudos</h3>
             <p>Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."  }}</p>
@@ -30,10 +30,16 @@ onMounted(async () => {
         <div v-if="!hasStudyRecords" class="text-center text-gray-700">
             <p>Você não tem dados de estudos no momento!</p>
         </div>
-        <div v-else class="flex flex-wrap gap-2 min-h-[250px]">
-            <StudyTimeRecord />
-            <StudyStatisticsRecords  />
-            <SubjectSummaryTable />
+        <div v-else>
+            <div class="hidden sm:flex sm:gap-2">
+                <StudyTimeRecord />
+                <StudyStatisticsRecords  />
+                <SubjectSummaryTable/>
+            </div>
+            <div class="flex justify-between gap-1 sm:hidden">
+                <StudyTimeRecord />
+                <StudyStatisticsRecords />
+            </div>
         </div>
     </div>
 </template>

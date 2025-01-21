@@ -29,12 +29,12 @@ onMounted(async () => {
 <template>
   <IsLoading v-if="isLoading" />    
   <div v-else>
-    <div class="flex flex-col justify-center bg-white shadow-md rounded-lg text-center p-4 gap-4 min-h-[250px]">
-      <h2 class="text-2xl font-bold text-gray-800">Tempo Total de Estudo</h2>
-      <p class="text-4xl font-extrabold text-blue-600">
+    <div class="flex flex-col justify-center bg-white shadow-md rounded-lg text-center p-2 gap-2 sm:p-4 sm:gap-4 sm:min-h-[250px]">
+      <h2 class="text-base sm:text-2xl font-bold text-gray-800">Tempo de Estudo</h2>
+      <p class="text-base font-bold sm:text-4xl text-blue-600">
         {{ formatStudyTime(totalStudyTime) }}
       </p>
-      <p class="text-sm text-gray-600">Acompanhe o seu progresso!</p>
+      <p class="text-xs text-gray-600">Acompanhe o seu progresso!</p>
     </div>
   </div>
 </template>
