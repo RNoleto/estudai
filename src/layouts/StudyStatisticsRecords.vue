@@ -8,9 +8,9 @@ const userStore = useUserStore();
 
 // Opções para o combobox
 const options = [
-  { label: 'Total de Questões Resolvidas', value: 'questions_resolved' },
-  { label: 'Total de Respostas Corretas', value: 'correct_answers' },
-  { label: 'Total de Respostas Incorretas', value: 'incorrect_answers' },
+  { label: 'Questões resolvidas', value: 'questions_resolved' },
+  { label: 'Questões corretas', value: 'correct_answers' },
+  { label: 'Questões incorretas', value: 'incorrect_answers' },
 ];
 
 // Estado para a seleção do combobox
