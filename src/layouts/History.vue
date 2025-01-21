@@ -171,7 +171,7 @@ const totalAccuracyBgClass = computed(() => {
   <IsLoading v-if="isLoading" />
   <div v-else>
     <!-- Filtro por data -->
-    <div class="flex justify-between gap-1 sm:flex-row sm:gap-4">
+    <div class="flex justify-between gap-1 sm:justify-start sm:items-center sm:gap-4">
       <div class="flex flex-col">
         <label for="start-date">Data inicial</label>
         <input id="start-date" type="date" class="rounded-md p-1" v-model="startDate" />
@@ -180,9 +180,17 @@ const totalAccuracyBgClass = computed(() => {
         <label for="end-date">Data final</label>
         <input id="end-date" type="date" class="rounded-md p-1" v-model="endDate" />
       </div>
+      <!-- Seleção de critério de ordenação -->
+    <div class="hidden sm:flex sm:flex-col">
+      <label for="sort-by">Ordenar por</label>
+      <select id="sort-by" v-model="sortBy" class="w-full p-1 rounded-md sm:w-auto">
+        <option value="studyTime">Tempo de Estudo</option>
+        <option value="accuracy">Porcentagem de Acertos</option>
+      </select>
+    </div>
     </div>
     <!-- Seleção de critério de ordenação -->
-    <div class="flex flex-col gap-1 mt-1">
+    <div class="flex flex-col gap-1 mt-1 sm:hidden">
       <label for="sort-by">Ordenar por</label>
       <select id="sort-by" v-model="sortBy" class="w-full p-1 rounded-md sm:w-auto sm:ml-2">
         <option value="studyTime">Tempo de Estudo</option>
@@ -191,7 +199,7 @@ const totalAccuracyBgClass = computed(() => {
     </div>
     <!-- Tempo total de estudo no período -->
     <div class="grid grid-cols-2 mt-2 sm:flex gap-2">
-      <div class="flex flex-col gap-2 col-span-2 border bg-white rounded-md p-4 shadow-sm">
+      <div class="flex flex-col gap-2 col-span-2 border bg-white rounded-md p-4 shadow-sm sm:items-center">
         <div class="flex items-center gap-2">
           <i class="fa-solid fa-stopwatch"></i>
           <p class="text-md">Tempo total de estudo</p>
@@ -200,12 +208,12 @@ const totalAccuracyBgClass = computed(() => {
       </div>
       <div class="text-sm border bg-white text-center rounded-md p-4 shadow-sm">
         <i class="fa-solid fa-pen-clip"></i>
-        <p class="text-xl font-semibold">{{ totalQuestions }}</p>
+        <p class="text-xl font-semibold sm:text-4xl">{{ totalQuestions }}</p>
         <p class="text-sm">Total de questões</p>
       </div>
       <div :class="`text-sm border text-center rounded-md p-4 shadow-sm ${totalAccuracyBgClass}`">
         <i class="fa-solid fa-check"></i>
-        <p class="text-xl font-semibold">{{ totalQuestionsAndAccuracy.totalCorrectAnswers }} - ({{
+        <p class="text-xl font-semibold sm:text-4xl">{{ totalQuestionsAndAccuracy.totalCorrectAnswers }} - ({{
           totalQuestionsAndAccuracy.accuracyPercentage }}%)</p>
         <p class="text-sm">Total de acertos</p>
       </div>
@@ -217,20 +225,35 @@ const totalAccuracyBgClass = computed(() => {
         :class="`mb-2 border rounded-md text-zinc-800 overflow-hidden cursor-pointer`" @click="toggleTopics(index)">
         <!-- Header do card -->
         
-          <div :class="`rounded-md grid grid-cols-3 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`">
-            <h3 class="col-span-1 text-md leading-4 font-semibold">{{ subject.subjectName }}</h3>
-            <div class="col-span-1">
-              <div class="flex flex-col gap-1 text-center">
-                <i class="fa-solid fa-stopwatch"></i>
-                <p class="text-md font-semibold sm:text-4xl">{{ formatStudyTime(subject.totalStudyTime) }}</p>
-                <p class="text-sm leading-3 sm:text-xl">Tempo de estudo</p>
+          <div :class="`rounded-md grid grid-cols-4 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`">
+            <h3 class="col-span-1 text-md leading-4 font-semibold sm:text-2xl">{{ subject.subjectName }}</h3>
+            <!-- Campo de total de tempo -->
+            <div class="col-span-2">
+              <div class="flex flex-col gap-1 text-center items-center">
+                <div class="sm:hidden">
+                  <i class="fa-solid fa-stopwatch"></i>
+                  <p class="text-md font-semibold sm:text-xl">{{ formatStudyTime(subject.totalStudyTime) }}</p>
+                </div>
+                <div class="hidden sm:flex sm:items-center gap-2">
+                  <i class="fa-solid fa-stopwatch"></i>
+                  <p class="text-md font-semibold sm:text-xl">{{ formatStudyTime(subject.totalStudyTime) }}</p>
+                </div>
+                <p class="text-sm leading-3 sm:text-md">Tempo de estudo</p>
               </div>
             </div>
-            <div class="flex flex-col gap-1 text-center">
-              <i class="fa-solid fa-pen-clip"></i>
-              <p class="text-md font-semibold sm:text-4xl">{{ subject.totalQuestionsResolved }} - {{
+            <!-- Campo de total de acertos -->
+            <div class="col-span-1 flex flex-col gap-1 text-center">
+              <div class="sm:hidden">
+                <i class="fa-solid fa-pen-clip"></i>
+                <p class="text-md font-semibold sm:text-4xl">{{ subject.totalQuestionsResolved }} - {{
                 subject.accuracyPercentage }}%</p>
-              <p class="text-sm leading-3 sm:text-xl">Total de Questões</p>
+              </div>
+              <div class="hidden sm:flex sm:items-center sm:gap-2 sm:justify-center">
+                <i class="fa-solid fa-pen-clip"></i>
+                <p class="text-md font-semibold sm:text-2xl">{{ subject.totalQuestionsResolved }} - {{
+                subject.accuracyPercentage }}%</p>
+              </div>
+              <p class="text-sm leading-3 sm:text-md">Total de Questões</p>
             </div>
             <div>
             </div>
@@ -240,12 +263,12 @@ const totalAccuracyBgClass = computed(() => {
         <div>
           <transition name="fade">
             <ul v-if="activeTopic === index" role="list" class="divide-y divide-zinc-200">
-              <li v-for="(topic, idx) in subject.topics" :key="idx" class="flex flex-col gap-1 p-2" :class="[
+              <li v-for="(topic, idx) in subject.topics" :key="idx" class="flex flex-col gap-1 p-2 sm:items-center sm:flex-row sm:justify-between" :class="[
                 idx === 0 ? 'shadow-inner' : '',
                 getColorClass(topic.correctAnswers, topic.questionsResolved)
               ]">
-              <p class="text-sm font-semibold">{{ topic.topic ? topic.topic : 'Tópico não informado' }}</p>
-              <div class="flex justify-between items-center text-mini">
+              <p class="text-sm font-semibold sm:text-base">{{ topic.topic ? topic.topic : 'Tópico não informado' }}</p>
+              <div class="flex justify-between items-center text-mini sm:hidden">
                 <div class="text-center leading-3">
                   <p class="font-semibold">{{ formatStudyTime(topic.studyTime) }}</p>
                   <p>de estudo</p>
@@ -264,6 +287,14 @@ const totalAccuracyBgClass = computed(() => {
                 </div>
                 <p class="text-2xl">{{ getAccuracyPercentage(topic.correctAnswers, topic.questionsResolved) }}%</p>
               </div>
+              <!-- Desktop -->
+               <div class="hidden gap-4 sm:flex sm:justify-between sm:items-center">
+                  <p>{{ formatStudyTime(topic.studyTime) }} de estudo</p>
+                  <p>{{ topic.correctAnswers }} acertos</p>
+                  <p>{{ topic.incorrectAnswers }} erros</p>
+                  <p>{{ topic.questionsResolved }} questões</p>
+                  <p class="text-xl">{{ getAccuracyPercentage(topic.correctAnswers, topic.questionsResolved) }}%</p>
+               </div>
               </li>
             </ul>
           </transition>
