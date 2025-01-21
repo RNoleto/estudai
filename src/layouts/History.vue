@@ -3,14 +3,12 @@ import { computed, onMounted, ref } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
 import { useSubjectStore } from '../stores/useSubjectStore';
 import IsLoading from '../components/ui/IsLoading.vue';
-import Tooltip from '../components/Tooltip.vue';
 
 import { useTimeFormatter } from '../composables/useTimeFormatter';
 
 const userStore = useUserStore();
 const subjectStore = useSubjectStore();
 const isLoading = ref(true);
-const showTooltip = ref(false); // Controla a visibilidade do tooltip
 const { formatStudyTime } = useTimeFormatter();
 
 const startDate = ref(null); // Data inicial do filtro
@@ -167,18 +165,6 @@ const totalAccuracyBgClass = computed(() => {
       ? 'border-yellow-200 bg-yellow-100'
       : 'border-red-200 bg-red-100';
 });
-
-const handleMouseEnter = () => {
-  showTooltip.value = true;
-};
-
-const handleMouseLeave = () => {
-  showTooltip.value = false;
-};
-
-const handleClick = () => {
-  showTooltip.value = false; // Oculta o tooltip ao clicar
-};
 </script>
 
 <template>
@@ -218,7 +204,7 @@ const handleClick = () => {
         <p class="text-sm">Total de questões</p>
       </div>
       <div :class="`text-sm border text-center rounded-md p-4 shadow-sm ${totalAccuracyBgClass}`">
-        <i class="fa-solid fa-circle-check"></i>
+        <i class="fa-solid fa-check"></i>
         <p class="text-xl font-semibold">{{ totalQuestionsAndAccuracy.totalCorrectAnswers }} - ({{
           totalQuestionsAndAccuracy.accuracyPercentage }}%)</p>
         <p class="text-sm">Total de acertos</p>
@@ -230,7 +216,7 @@ const handleClick = () => {
       <div v-for="(subject, index) in summarizedData" :key="subject.subjectName"
         :class="`mb-2 border rounded-md text-zinc-800 overflow-hidden cursor-pointer`" @click="toggleTopics(index)">
         <!-- Header do card -->
-        <Tooltip text="Clique para mostrar os tópicos estudado">
+        
           <div :class="`rounded-md grid grid-cols-3 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`">
             <h3 class="col-span-1 text-md leading-4 font-semibold">{{ subject.subjectName }}</h3>
             <div class="col-span-1">
@@ -242,38 +228,42 @@ const handleClick = () => {
             </div>
             <div class="flex flex-col gap-1 text-center">
               <i class="fa-solid fa-pen-clip"></i>
-              <p class="text-md font-semibold sm:text-4xl">{{ subject.totalQuestionsResolved }} - {{ subject.accuracyPercentage }}%</p>
+              <p class="text-md font-semibold sm:text-4xl">{{ subject.totalQuestionsResolved }} - {{
+                subject.accuracyPercentage }}%</p>
               <p class="text-sm leading-3 sm:text-xl">Total de Questões</p>
             </div>
             <div>
             </div>
           </div>
-        </Tooltip>
+        
         <!-- Campos de topicos estudados -->
         <div>
           <transition name="fade">
             <ul v-if="activeTopic === index" role="list" class="divide-y divide-zinc-200">
-              <li v-for="(topic, idx) in subject.topics" :key="idx" class="flex justify-between gap-x-6 py-1" :class="[
+              <li v-for="(topic, idx) in subject.topics" :key="idx" class="flex flex-col gap-1 p-2" :class="[
                 idx === 0 ? 'shadow-inner' : '',
                 getColorClass(topic.correctAnswers, topic.questionsResolved)
               ]">
-                <div class="grid grid-cols-4 w-full justify-between items-center px-4">
-                  <div class="col-span-1 leading-4 text-md font-semibold">
-                    <p>{{ topic.topic ? topic.topic : 'Tópico não informado' }}</p>
-                  </div>
-                  <div class="text-sm text-center col-span-1">
-                    <p>Tempo de estudo {{ formatStudyTime(topic.studyTime) }}</p>
-                  </div>
-                  <div class="text-sm text-end col-span-1 shrink-0 sm:flex sm:flex-col sm:items-end">
-                    <p>Acertos: {{ topic.correctAnswers }}</p>
-                    <p>Erros: {{ topic.incorrectAnswers }}</p>
-                    <p>Total: {{ topic.questionsResolved }}</p>
-                  </div>
-                  <div class="text-2xl col-span-1  text-end">
-                    <p>{{ getAccuracyPercentage(topic.correctAnswers, topic.questionsResolved) }}%</p>
-                  </div>
-                  <!-- <p>Quantidade de Pausas: {{ topic.pauses }}</p> -->
+              <p class="text-sm font-semibold">{{ topic.topic ? topic.topic : 'Tópico não informado' }}</p>
+              <div class="flex justify-between items-center text-mini">
+                <div class="text-center leading-3">
+                  <p class="font-semibold">{{ formatStudyTime(topic.studyTime) }}</p>
+                  <p>de estudo</p>
                 </div>
+                <div class="text-center leading-3">
+                  <p class="font-semibold">{{ topic.correctAnswers }}</p>
+                  <p>acertos</p>
+                </div>
+                <div class="text-center leading-3">
+                  <p class="font-semibold">{{ topic.incorrectAnswers }}</p>
+                  <p>erros</p>
+                </div>
+                <div class="text-center leading-3">
+                  <p class="font-semibold">{{ topic.questionsResolved }}</p>
+                  <p>questões</p>
+                </div>
+                <p class="text-2xl">{{ getAccuracyPercentage(topic.correctAnswers, topic.questionsResolved) }}%</p>
+              </div>
               </li>
             </ul>
           </transition>
@@ -284,6 +274,10 @@ const handleClick = () => {
 </template>
 
 <style scoped>
+.text-mini {
+  font-size: 12px;
+}
+
 .shadow-inner-top {
   box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.1);
   /* Ajuste a sombra interna do topo */

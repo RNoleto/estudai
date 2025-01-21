@@ -6,7 +6,7 @@ import { UserButton } from 'vue-clerk';
 
 const route = useRoute();
 
-const isMobileView = computed(() => window.innerWidth < 400);
+const isMobileView = computed(() => window.innerWidth <= 490);
 const isMenuMobileOpen = ref(false);
 
 const toggleMenu = () => {
@@ -42,7 +42,7 @@ onMounted(async () => {
   <div class="grid bg-gray-100 sm:flex">
     <!-- sidebar mobile -->
     <nav v-if="isMobileView"
-      class="fixed top-0 left-0 w-full bg-gray-800 text-white shadow-zinc-500 shadow-md z-50 flex items-center justify-between p-4">
+      class="fixed top-0 left-0 w-full bg-gray-800 text-white shadow-zinc-500 shadow-sm z-50 flex items-center justify-between p-4">
       <p class="font-bold text-lg">Área do Aluno</p>
       <button @click="toggleMenu" class="text-xl p-2 rounded focus:outline-none">
         <i :class="isMenuMobileOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
