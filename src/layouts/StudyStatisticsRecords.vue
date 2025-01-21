@@ -66,7 +66,7 @@ onMounted(async () => {
       }">
         {{ totalValue }}
       </p>
-      <div class="flex items-center py-1 gap-1">
+      <div class="flex items-center py-2 gap-1">
         <input type="checkbox" v-model="displayAsPercentage" class="form-checkbox text-blue-600" />
         <label class="text-xs text-gray-600">Exibir como porcentagem</label>
       </div>
