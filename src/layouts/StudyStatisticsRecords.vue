@@ -51,7 +51,7 @@ onMounted(async () => {
   <IsLoading v-if="isLoading" />    
   <div v-else>
     <div class="bg-white shadow-md flex flex-col gap-1 items-center rounded-lg px-2 py-4 text-center sm:justify-center sm:p-6 sm:min-h-[250px]">
-      <h2 class="text-base sm:text-2xl font-bold text-gray-800">Estatísticas de Estudo</h2>
+      <h2 class="text-sm sm:text-2xl font-bold text-gray-800">Questões respondidas</h2>
       <select v-model="selectedOption"
         class="w-full text-xs p-1 border border-gray-200 rounded-md focus:ring focus:ring-blue-300">
         <option v-for="option in options" :key="option.value" :value="option.value">
@@ -66,7 +66,7 @@ onMounted(async () => {
       }">
         {{ totalValue }}
       </p>
-      <div class="flex items-center gap-1 p-1">
+      <div class="flex items-center py-1 gap-1">
         <input type="checkbox" v-model="displayAsPercentage" class="form-checkbox text-blue-600" />
         <label class="text-xs text-gray-600">Exibir como porcentagem</label>
       </div>
