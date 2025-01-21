@@ -36,9 +36,11 @@ onMounted(async () => {
                 <StudyStatisticsRecords  />
                 <SubjectSummaryTable/>
             </div>
-            <div class="flex justify-between gap-1 sm:hidden">
-                <StudyTimeRecord />
-                <StudyStatisticsRecords />
+            <div class="sm:hidden">
+                <div class="grid grid-cols-2 gap-2 h-min-[500px]">
+                    <StudyTimeRecord />
+                    <StudyStatisticsRecords />
+                </div>
             </div>
         </div>
     </div>

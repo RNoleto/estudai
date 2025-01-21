@@ -50,26 +50,26 @@ onMounted(async () => {
 <template>
   <IsLoading v-if="isLoading" />    
   <div v-else>
-    <div class="bg-white shadow-md rounded-lg p-2 text-center sm:p-6 sm:min-h-[250px]">
-      <h2 class="text-base sm:text-2xl font-bold text-gray-800 mb-4">Estatísticas de Estudo</h2>
+    <div class="bg-white shadow-md flex flex-col gap-1 items-center rounded-lg px-2 py-4 text-center sm:justify-center sm:p-6 sm:min-h-[250px]">
+      <h2 class="text-base sm:text-2xl font-bold text-gray-800">Estatísticas de Estudo</h2>
       <select v-model="selectedOption"
-        class="w-full text-xs mb-4 p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300">
+        class="w-full text-xs p-1 border border-gray-200 rounded-md focus:ring focus:ring-blue-300">
         <option v-for="option in options" :key="option.value" :value="option.value">
           {{ option.label }}
         </option>
       </select>
-      <div class="flex items-center gap-2 mb-4 px-2">
-        <input type="checkbox" v-model="displayAsPercentage" class="form-checkbox text-blue-600" />
-        <label class="text-sm text-gray-600">Exibir como porcentagem</label>
-      </div>
       <!-- Classe condicional para colorir o valor -->
-      <p class="text-xl sm:text-5xl font-extrabold" :class="{
+      <p class="text-2xl sm:text-5xl font-extrabold" :class="{
         'text-blue-600': selectedOption === 'questions_resolved',
         'text-green-600': selectedOption === 'correct_answers',
         'text-red-600': selectedOption === 'incorrect_answers'
       }">
         {{ totalValue }}
       </p>
+      <div class="flex items-center gap-1 p-1">
+        <input type="checkbox" v-model="displayAsPercentage" class="form-checkbox text-blue-600" />
+        <label class="text-xs text-gray-600">Exibir como porcentagem</label>
+      </div>
     </div>
   </div>
 </template>
