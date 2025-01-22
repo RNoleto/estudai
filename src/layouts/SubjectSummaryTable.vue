@@ -102,23 +102,25 @@ const summarizedData = computed(() => {
     </table>
   </div>
   <div class="col-span-2 sm:hidden">
-    <div class="bg-zinc-800 text-zinc-100 p-1">
+    <div class="bg-zinc-800 text-zinc-100 p-1 rounded-t-md">
       <p>Matérias estudadas</p>
     </div>
     <ul class="flex flex-col">
-      <li v-for="(subject, index) in summarizedData" :key="subject.subjectName">
-        <div class="px-1">
+      <li v-for="(subject, index) in summarizedData" :key="subject.subjectName" :class="index % 2 === 0 ? 'bg-gray-300' : 'bg-zinc-200'">
+        <div class="px-1" >
           <div class="flex items-center justify-between gap-1">
             <p>{{ subject.subjectName }}</p>
             <p class="text-mini">{{ formatStudyTime(subject.totalStudyTime) }}</p>
           </div>
-          <div class="text-mini flex items-center gap-2">
+          <div class="text-mini flex justify-end gap-2">
             <p>{{ subject.totalQuestionsResolved }} questões</p>
             <p>{{ subject.totalCorrectAnswers }} corretas</p>
           </div>
         </div>
       </li>
     </ul>
+    <div class="bg-zinc-800 p-1 rounded-b-md">
+    </div>
   </div>
 </template>
 
