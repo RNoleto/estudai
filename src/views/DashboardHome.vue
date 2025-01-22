@@ -4,6 +4,8 @@ import StudyTimeRecord from '../layouts/StudyTimeRecord.vue';
 import StudyStatisticsRecords from '../layouts/StudyStatisticsRecords.vue';
 import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
 
+import Card from '../components/Card.vue';
+
 import { useUserStore } from '../stores/useUserStore';
 const userStore = useUserStore();
 
@@ -41,6 +43,7 @@ onMounted(async () => {
                     <StudyTimeRecord />
                     <StudyStatisticsRecords />
                     <SubjectSummaryTable/>
+                    <!-- <Card title="Carreira" :content="userStore.careerName ? userStore.careerName : 'Carregando..'"/> -->
                 </div>
             </div>
         </div>
