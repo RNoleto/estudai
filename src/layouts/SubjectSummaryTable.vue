@@ -76,7 +76,7 @@ const summarizedData = computed(() => {
 
 <template>
   <IsLoading v-if="isLoading" />
-  <div v-else>  
+  <div v-else class="hidden sm:block">  
     <table  class="bg-white shadow-md rounded-lg overflow-hidden w-[980px]">
       <thead class="bg-gray-800 text-white">
         <tr>
@@ -101,4 +101,29 @@ const summarizedData = computed(() => {
       </tbody>
     </table>
   </div>
+  <div class="col-span-2 sm:hidden">
+    <div class="bg-zinc-800 text-zinc-100 p-1">
+      <p>Matérias estudadas</p>
+    </div>
+    <ul class="flex flex-col">
+      <li v-for="(subject, index) in summarizedData" :key="subject.subjectName">
+        <div class="px-1">
+          <div class="flex items-center justify-between gap-1">
+            <p>{{ subject.subjectName }}</p>
+            <p class="text-mini">{{ formatStudyTime(subject.totalStudyTime) }}</p>
+          </div>
+          <div class="text-mini flex items-center gap-2">
+            <p>{{ subject.totalQuestionsResolved }} questões</p>
+            <p>{{ subject.totalCorrectAnswers }} corretas</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </template>
+
+<style scoped>
+.text-mini{
+  font-size: 0.7rem;
+}
+</style>

@@ -40,6 +40,7 @@ onMounted(async () => {
                 <div class="grid grid-cols-2 gap-2 h-min-[500px]">
                     <StudyTimeRecord />
                     <StudyStatisticsRecords />
+                    <SubjectSummaryTable/>
                 </div>
             </div>
         </div>
