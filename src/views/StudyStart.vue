@@ -234,7 +234,7 @@ const handleSaveManualEntry = async (newRecord) => {
 </script>
 
 <template>
-  <div class="flex-col gap-4 mt-4 sm:mt-0">
+  <div class="flex-col gap-4">
     <h3 class="text-xl font-bold sm:text-4xl">Iniciar Estudos</h3>
     <div class="flex justify-between">
       <p class="text-sm sm:text-base">Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."  }}</p>

@@ -78,6 +78,11 @@ const routes = [
         name: 'DashboardCiclo',
         component: StudyCycle,
       },
+      {
+        path: 'teste',
+        name: 'DashboardTeste',
+        component: Test,
+      },
     ]
   }
 ];

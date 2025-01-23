@@ -40,16 +40,19 @@ onMounted(async () => {
 
 <template>
   <div class="grid bg-gray-100 sm:flex">
-    <!-- sidebar mobile -->
+    <!-- navbar mobile -->
     <nav v-if="isMobileView"
       class="fixed top-0 left-0 w-full bg-gray-800 text-white shadow-zinc-500 shadow-sm z-50 flex items-center justify-between p-4">
-      <p class="font-bold text-lg">Área do Aluno</p>
+      <p class="font-bold text-lg">Gerenciamento de estudo</p>
       <button @click="toggleMenu" class="text-xl p-2 rounded focus:outline-none">
         <i :class="isMenuMobileOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
       </button>
     </nav>
     <div v-if="isMenuMobileOpen"
-      class="fixed top-0 left-0 w-full h-screen bg-zinc-100 shadow-lg z-40 flex flex-col items-center justify-start pt-20 space-y-4 mt-10 px-10">
+      class="fixed top-0 left-0 w-full h-screen bg-zinc-100 shadow-lg z-40 flex flex-col justify-start pt-16 space-y-4 mt-10 px-10">
+      <div class="w-full flex flex-row-reverse">
+        <UserButton/>
+      </div>
       <a href="/area-do-aluno" class="block text-gray-700 text-lg font-semibold hover:text-blue-600">
         Home
       </a>
@@ -62,11 +65,7 @@ onMounted(async () => {
       </a>
       <a href="/area-do-aluno/configuracoes" class="block text-gray-700 text-lg font-semibold hover:text-blue-600">
         Configurações
-      </a>
-      <div class="w-full flex flex-row-reverse">
-        <UserButton/>
-      </div>
-      
+      </a>      
     </div>
     <!-- Sidebar desktop -->
     <aside v-if="!isMobileView" :class="[
@@ -167,7 +166,7 @@ onMounted(async () => {
       </nav>
     </aside>
     <!-- Conteúdo Principal -->
-    <main class="h-screen flex-1 p-2 sm:p-6">
+    <main class="h-screen flex-1 p-2 mt-6 sm:p-6 sm:mt-0">
       <!-- Conteudo a ser carregado na página -->
       <router-view />
     </main>

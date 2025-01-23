@@ -2,9 +2,11 @@
 import { onMounted } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
 
+import Card from '../components/Card.vue';
+
 const userStore = useUserStore();
 
-onMounted(async() => {
+onMounted(async () => {
   await userStore.checkUserCareer();
   await userStore.fetchUserSubjects();
 })
@@ -13,12 +15,17 @@ onMounted(async() => {
 
 <template>
   <div>
-    <h1>Página de teste</h1>
-    <strong>Dados no Pinia</strong>
-    <p>State UserId: {{ userStore.userId }}</p>
-    <p>State CareerId: {{ userStore.careerId ? userStore.careerId : "Id Carreira não definida" }}</p>
-    <p>State CareerName: {{ userStore.careerName ? userStore.careerName : "Nome de Carreira não definida"  }}</p>
-    <p>State Subjects Id's: {{ userStore.userSubjects.length ? userStore.userSubjects : "Matérias não definidas" }}</p>
-    
+    <p>Página de teste</p>
+    <div class="grid grid-cols-6 gap-2 mt-2">
+      <Card class="col-span-2">
+      </Card>
+      <Card  class="col-span-2">
+      </Card>
+      <Card  class="col-span-2">
+      </Card>
+      <div class="col-span-6">
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem harum molestiae, facilis voluptates neque fugiat odio non repellat deserunt ad quo numquam explicabo tenetur ea. Voluptas ipsam sed vitae minus.</p>
+      </div>
+    </div>
   </div>
 </template>
