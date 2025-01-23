@@ -64,7 +64,7 @@ const handleSelection = (option) => {
           <ComboboxItem
             v-for="option in options"
             :key="option.id"
-            class="text-base leading-none text-gray-700 rounded flex items-center h-[25px] px-[25px] relative cursor-pointer hover:bg-gray-200"
+            class=""
             :value="option"
             @click="handleSelection(option)">
             <ComboboxItemIndicator
