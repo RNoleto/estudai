@@ -72,6 +72,7 @@ onMounted(async () => {
                 <StudyStatisticsRecords />
                 <SubjectSummaryTable />
             </div>
+            <!-- Aqui fica os campos Mobile -->
             <div class="sm:hidden">
                 <div class="grid grid-cols-2 gap-2 h-min-[500px]">
                     <!-- Card de tempo de estudo -->

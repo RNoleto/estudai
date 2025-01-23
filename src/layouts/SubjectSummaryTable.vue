@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, watch, ref } from 'vue';
 
-import IsLoading from '../components/ui/IsLoading.vue';
+// import IsLoading from '../components/ui/IsLoading.vue';
 
 import { useTimeFormatter } from '../composables/useTimeFormatter';
 const { formatStudyTime } = useTimeFormatter();
@@ -12,7 +12,7 @@ import { useSubjectStore } from '../stores/useSubjectStore';
 const userStore = useUserStore();
 const subjectStore = useSubjectStore();
 
-const isLoading = ref(true);
+// const isLoading = ref(true);
 
 // Carregar as matérias da API
 onMounted(async () => {
@@ -26,7 +26,7 @@ onMounted(async () => {
   } catch (error) {
     console.error("Erro ao carregar tempo de estudo:", error);
   } finally {
-    isLoading.value = false;
+    // isLoading.value = false;
   }
 
   if (userStore.userSubjects?.length && subjectStore.subjects?.length) {
@@ -75,9 +75,9 @@ const summarizedData = computed(() => {
 </script>
 
 <template>
-  <IsLoading v-if="isLoading" />
-  <div v-else class="hidden sm:block">  
-    <table  class="bg-white shadow-md rounded-lg overflow-hidden w-[980px]">
+  <!-- <IsLoading v-if="isLoading" /> -->
+  <div class="hidden sm:block">  
+    <table  class="bg-white shadow-md rounded-lg overflow-hidden">
       <thead class="bg-gray-800 text-white">
         <tr>
           <th class="px-4 py-2 text-left">Matérias</th>
@@ -101,18 +101,18 @@ const summarizedData = computed(() => {
       </tbody>
     </table>
   </div>
-  <div class="col-span-2 sm:hidden">
-    <div class="bg-zinc-800 text-zinc-100 p-1 rounded-t-md">
+  <div class="col-span-2 shadow-md sm:hidden">
+    <div class="bg-zinc-800 text-zinc-100 px-1 py-1.5 rounded-t-md">
       <p>Matérias estudadas</p>
     </div>
     <ul class="flex flex-col">
-      <li v-for="(subject, index) in summarizedData" :key="subject.subjectName" :class="index % 2 === 0 ? 'bg-gray-300' : 'bg-zinc-200'">
-        <div class="px-1" >
-          <div class="flex items-center justify-between gap-1">
+      <li v-for="(subject, index) in summarizedData" :key="subject.subjectName" :class="index % 2 === 0 ? 'bg-gray-100' : 'bg-white'">
+        <div class="flex justify-between items-center p-1 text-gray-700">
+          <div class="leading-normal">
             <p>{{ subject.subjectName }}</p>
             <p class="text-mini">{{ formatStudyTime(subject.totalStudyTime) }}</p>
           </div>
-          <div class="text-mini flex justify-end gap-2">
+          <div class="text-mini flex flex-col justify-end gap-1">
             <p>{{ subject.totalQuestionsResolved }} questões</p>
             <p>{{ subject.totalCorrectAnswers }} corretas</p>
           </div>
