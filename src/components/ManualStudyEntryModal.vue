@@ -108,16 +108,16 @@ const handleCancel = () => {
                     </label>
                 </div>
             </div>
-            <div v-if="questionsResolved === 'yes'" class="flex gap-2 mt-2">
-                <label class="flex flex-col w-[150px]">
-                    <span class="text-sm font-medium sm:text-base">Questões Resolvidas</span>
+            <div v-if="questionsResolved === 'yes'" class="flex gap-4 mt-2">
+                <label class="flex flex-col">
+                    <span class="text-sm font-medium sm:text-base">Total</span>
                     <input type="number" v-model="totalQuestions" min="0" placeholder="Ex.: 20"
-                        class="mt-1 border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                        class="w-[110px] mt-1 border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
                 </label>
-                <label class="flex flex-col w-[150px]">
-                    <span class="text-sm font-medium sm:text-base">Questões Certas</span>
+                <label class="flex flex-col">
+                    <span class="text-sm font-medium sm:text-base">Corretas</span>
                     <input type="number" v-model="correctAnswers" min="0" placeholder="Ex.: 15"
-                        class="mt-1 border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                        class="w-[110px] mt-1 border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
                 </label>
             </div>
             <div class="text-sm mt-4 sm:text-base">
