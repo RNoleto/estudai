@@ -58,13 +58,13 @@ const handleSelection = (option) => {
     <ComboboxContent class="absolute z-10 w-full mt-2 bg-white rounded shadow">
       <ComboboxViewport class="p-[5px]">
         <ComboboxGroup>
-          <ComboboxLabel class="px-[25px] text-xs leading-[25px] text-gray-500">
+          <ComboboxLabel class="px-[25px] text-base leading-[25px] text-gray-500">
             Opções
           </ComboboxLabel>
           <ComboboxItem
             v-for="option in options"
             :key="option.id"
-            class="text-[13px] leading-none text-gray-700 rounded flex items-center h-[25px] px-[25px] relative cursor-pointer hover:bg-gray-200"
+            class="text-base leading-none text-gray-700 rounded flex items-center h-[25px] px-[25px] relative cursor-pointer hover:bg-gray-200"
             :value="option"
             @click="handleSelection(option)">
             <ComboboxItemIndicator
