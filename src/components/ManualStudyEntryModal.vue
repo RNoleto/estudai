@@ -84,7 +84,7 @@ const handleCancel = () => {
 
 <template>
     <div v-if="isVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div class="bg-white p-4 rounded-lg shadow-lg w-full max-w-md relative">
+        <div class="bg-white p-4 rounded-lg shadow-lg relative">
             <h2 class="text-lg sm:text-2xl font-bold sm:mb-4">Inserir Informações de Estudo</h2>
             <div class="text-sm mb-4 sm:text-base">
                 <p><strong>Matéria:</strong> {{ selectedSubject.name }}</p>

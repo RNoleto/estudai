@@ -15,7 +15,7 @@ const button = tv({
         size: {
             default: 'px-4 py-2.5',
             full: 'w-full py-2',
-            sm: 'px-3 py-1.5',
+            sm: 'px-3 py-2',
             xs: 'px-1.5 py-1',
         },
     },
