@@ -234,15 +234,15 @@ const handleSaveManualEntry = async (newRecord) => {
 </script>
 
 <template>
-  <div class="flex-col gap-4">
-    <h3 class="text-4xl">Iniciar Estudos</h3>
+  <div class="flex-col gap-4 mt-4 sm:mt-0">
+    <h3 class="text-xl font-bold sm:text-4xl">Iniciar Estudos</h3>
     <div class="flex justify-between">
-      <p>Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."  }}</p>
-      <p>{{ formattedDate }}</p>
+      <p class="text-sm sm:text-base">Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."  }}</p>
+      <p class="text-sm sm:text-base">{{ formattedDate }}</p>
     </div>
-    <div class="grid gap-2 grid-cols-6 mt-4">
+    <div class="flex flex-col gap-2 mt-4 sm:grid sm:grid-cols-6">
       <!-- Campo de pesquisa com lista suspensa de matérias -->
-      <div class="flex gap-2 col-span-6">
+      <div class="flex flex-col gap-2 sm:flex-row col-span-6">
         <ComboBox :options="userSubjects" :placeholder="'Selecione uma matéria...'" v-model="selectedSubject"
           @select="handleSubjectSelection" class="w-full" />
         <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-full"
@@ -277,12 +277,12 @@ const handleSaveManualEntry = async (newRecord) => {
     <div v-if="isFocus">
       <FocusTimer @close="closeFocus" @timerStopped="handleTimerStopped"/>
   </div>
-  <ManualStudyEntryModal 
-    :isVisible="isManualEntryModalVisible"
-    :selectedSubject="selectedSubject"
-    @close="isManualEntryModalVisible = false" 
-    :onSave="handleSaveManualEntry"
-  />
+    <ManualStudyEntryModal 
+      :isVisible="isManualEntryModalVisible"
+      :selectedSubject="selectedSubject"
+      @close="isManualEntryModalVisible = false" 
+      :onSave="handleSaveManualEntry"
+    />
 </template>
 
 <style scoped>

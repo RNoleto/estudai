@@ -76,11 +76,11 @@ function stopTimer() {
 
 <template>
   <div class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center">
-    <button @click="$emit('close')" class="absolute top-4 right-4 text-white text-2xl hover:text-red-500">
+    <button @click="$emit('close')" class="absolute top-[90px] right-4 sm:top-4 sm:right-4 text-white text-2xl hover:text-red-500">
       <i class="fa-solid fa-xmark"></i>
     </button>
     <div class="text-center text-white">
-      <div class="text-8xl font-mono mb-8">
+      <div class="text-6xl sm:text-8xl font-mono mb-8">
         {{ String(hours).padStart(2, '0') }}:{{ String(minutes).padStart(2, '0') }}:{{ String(seconds).padStart(2, '0') }}
       </div>
       <div class="text-2xl font-semibold mb-4">

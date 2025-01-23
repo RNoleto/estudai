@@ -84,18 +84,18 @@ const handleCancel = () => {
 
 <template>
     <div v-if="isVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
-            <h2 class="text-2xl font-bold mb-4">Inserir Informações de Estudo</h2>
-            <div class="mb-4">
+        <div class="bg-white p-4 rounded-lg shadow-lg w-full max-w-md relative">
+            <h2 class="text-lg sm:text-2xl font-bold sm:mb-4">Inserir Informações de Estudo</h2>
+            <div class="text-sm mb-4 sm:text-base">
                 <p><strong>Matéria:</strong> {{ selectedSubject.name }}</p>
                 <p><strong>Tópico:</strong> {{ studyStore.topic }}</p>
             </div>
-            <div class="mb-4">
+            <div class="text-sm mb-4 sm:text-base">
                 <label for="study-time" class="block font-medium">Tempo de Estudos (hh:mm:ss)</label>
                 <input id="study-time" v-model="studyTime" placeholder="hh:mm:ss"
                     class="mt-1 block w-full border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
-            <div class="mt-4">
+            <div class="text-sm mt-4 sm:text-base">
                 <p class="font-medium">Você resolveu questões?</p>
                 <div class="flex gap-4">
                     <label class="flex items-center">
@@ -120,7 +120,7 @@ const handleCancel = () => {
                         class="mt-1 block w-full border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
                 </label>
             </div>
-            <div class="mt-4">
+            <div class="text-sm mt-4 sm:text-base">
                 <p class="font-medium">Você fez pausas durante o estudo?</p>
                 <div class="flex gap-4">
                     <label class="flex items-center">
