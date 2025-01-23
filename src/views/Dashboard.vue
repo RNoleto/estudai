@@ -166,7 +166,7 @@ onMounted(async () => {
       </nav>
     </aside>
     <!-- Conteúdo Principal -->
-    <main class="h-screen flex-1 p-2 mt-6 sm:p-6 sm:mt-0">
+    <main class="flex-1 p-2 mt-6 sm:p-6 sm:mt-0">
       <!-- Conteudo a ser carregado na página -->
       <router-view />
     </main>
