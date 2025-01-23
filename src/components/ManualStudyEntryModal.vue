@@ -83,7 +83,7 @@ const handleCancel = () => {
 </script>
 
 <template>
-    <div v-if="isVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div v-if="isVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm z-50">
         <div class="bg-white p-4 rounded-lg shadow-lg relative">
             <h2 class="text-lg sm:text-2xl font-bold sm:mb-4">Inserir Informações de Estudo</h2>
             <div class="text-sm mb-4 sm:text-base">
@@ -108,16 +108,16 @@ const handleCancel = () => {
                     </label>
                 </div>
             </div>
-            <div v-if="questionsResolved === 'yes'" class="flex gap-4 mt-4">
-                <label class="block">
-                    <span class="font-medium">Questões Resolvidas</span>
+            <div v-if="questionsResolved === 'yes'" class="flex gap-2 mt-2">
+                <label class="flex flex-col w-[150px]">
+                    <span class="text-sm font-medium sm:text-base">Questões Resolvidas</span>
                     <input type="number" v-model="totalQuestions" min="0" placeholder="Ex.: 20"
-                        class="mt-1 block w-full border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                        class="mt-1 border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
                 </label>
-                <label class="block">
-                    <span class="font-medium">Questões Certas</span>
+                <label class="flex flex-col w-[150px]">
+                    <span class="text-sm font-medium sm:text-base">Questões Certas</span>
                     <input type="number" v-model="correctAnswers" min="0" placeholder="Ex.: 15"
-                        class="mt-1 block w-full border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                        class="mt-1 border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
                 </label>
             </div>
             <div class="text-sm mt-4 sm:text-base">
@@ -133,7 +133,7 @@ const handleCancel = () => {
                     </label>
                 </div>
                 <div v-if="pause === 'yes'">
-                    <label class="block mt-4">
+                    <label class="block mt-2">
                         <span class="font-medium">Número de Pausas</span>
                         <input type="number" v-model="totalPauses" min="1" placeholder="Ex.: 3"
                             class="mt-1 block w-full border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
