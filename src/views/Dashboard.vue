@@ -2,7 +2,9 @@
 import { RouterView, useRoute } from 'vue-router';
 import { onMounted, ref, computed } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
-import { UserButton } from 'vue-clerk';
+import { UserButton, useUser } from 'vue-clerk';
+
+const { user } = useUser();
 
 const route = useRoute();
 
@@ -60,16 +62,35 @@ onMounted(async () => {
           <i class="fa-solid fa-pen-clip"></i>
           Histórico de Estudo
         </a>
-        <a href="/area-do-aluno/estudar" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl hover:bg-blue-100">
+        <a href="/area-do-aluno/estudar" class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
           <i class="fa-solid fa-stopwatch"></i>
           Estudar
         </a>
-        <a href="/area-do-aluno/configuracoes" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold  p-2 rounded-xlhover:bg-blue-100">
+        <div>
+          <button @click="toggleMenu3" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold  p-2 rounded-xl hover:bg-blue-100">
+            <div>
+              <i class="fas fa-cog"></i>
+              Configurações
+            </div>
+          </button>
+          <div v-if="isMenu3Open" class="ml-6 flex flex-col gap-1">
+            <a href="" class="p-2 bg-blue-100">
+              <i></i>Minha Carreira
+            </a>
+            <a href="" class="p-2 bg-blue-100">
+              <i></i>Minhas Matérias
+            </a>
+          </div>
+        </div>
+        <!-- <a href="/area-do-aluno/configuracoes" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold  p-2 rounded-xlhover:bg-blue-100">
           <i class="fas fa-cog"></i>
           Configurações
-        </a>
+        </a> -->
         <div class="bottom-10 right-4 fixed">
-          <UserButton/>
+          <div class="flex items-center gap-2">
+            <p class="text-gray-700 text-lg font-semibold">{{ user.fullName }}</p>
+            <UserButton/>
+          </div>
         </div>      
       </div>
     </div>
