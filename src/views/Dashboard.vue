@@ -48,24 +48,30 @@ onMounted(async () => {
         <i :class="isMenuMobileOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
       </button>
     </nav>
-    <div v-if="isMenuMobileOpen"
-      class="fixed top-0 left-0 w-full h-screen bg-zinc-100 shadow-lg z-40 flex flex-col justify-start pt-16 space-y-4 mt-10 px-10">
-      <div class="w-full flex flex-row-reverse">
-        <UserButton/>
+    <div v-if="isMenuMobileOpen" class="fixed inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm z-40">
+      <div
+        class="fixed top-0 right-0 h-screen bg-zinc-100 z-10 flex flex-col justify-start pt-16 gap-2 mt-10 px-6">
+        <a href="/area-do-aluno" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl hover:bg-blue-100">
+          <i class="fas fa-home"></i>
+          Home
+        </a>
+        <a href="/area-do-aluno/historico-de-estudos"
+          class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+          <i class="fa-solid fa-pen-clip"></i>
+          Histórico de Estudo
+        </a>
+        <a href="/area-do-aluno/estudar" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl hover:bg-blue-100">
+          <i class="fa-solid fa-stopwatch"></i>
+          Estudar
+        </a>
+        <a href="/area-do-aluno/configuracoes" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold  p-2 rounded-xlhover:bg-blue-100">
+          <i class="fas fa-cog"></i>
+          Configurações
+        </a>
+        <div class="bottom-10 right-4 fixed">
+          <UserButton/>
+        </div>      
       </div>
-      <a href="/area-do-aluno" class="block text-gray-700 text-lg font-semibold hover:text-blue-600">
-        Home
-      </a>
-      <a href="/area-do-aluno/historico-de-estudos"
-        class="block text-gray-700 text-lg font-semibold hover:text-blue-600">
-        Histórico de Estudo
-      </a>
-      <a href="/area-do-aluno/estudar" class="block text-gray-700 text-lg font-semibold hover:text-blue-600">
-        Estudar
-      </a>
-      <a href="/area-do-aluno/configuracoes" class="block text-gray-700 text-lg font-semibold hover:text-blue-600">
-        Configurações
-      </a>      
     </div>
     <!-- Sidebar desktop -->
     <aside v-if="!isMobileView" :class="[
