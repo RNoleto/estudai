@@ -1,13 +1,15 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useCareerStore } from '../stores/useCareerStore';
 import { useUserStore } from '../stores/useUserStore';
 import { useRouter, useRoute } from 'vue-router';
 import OptionCard from '../components/ui/OptionCard.vue';
 import Button from '../components/ui/Button.vue';
+import Search from '../components/ui/Search.vue';
 
 const router = useRouter();
 const route = useRoute();
+const searchTerm = ref('');
 
 // Instanciar os stores
 const userStore = useUserStore();
@@ -55,20 +57,31 @@ onMounted(async () => {
   careersStore.careers.sort((a, b) => a.name.localeCompare(b.name));
   setInitialSelectedCareer();
 });
+
+const filteredCareers = computed(() => {
+  if (!searchTerm.value) return careersStore.careers;
+  return careersStore.careers.filter((career) =>
+    career.name.toLowerCase().includes(searchTerm.value.toLowerCase())
+  );
+});
 </script>
 
 <template>
   <div class="p-4 flex flex-col gap-4">
     <h3 class="text-xl sm:text-4xl">Selecione a sua carreira</h3>
     <div class="grid gap-2 sm:flex flex-wrap">
+      <Search placeholder="Pesquise a carreira..." v-model="searchTerm" />
       <OptionCard
-        v-for="career in careersStore.careers"
+        v-for="career in filteredCareers"
         :key="career.id"
         @click="selectCareer(career)"
         :icon="career.icon"
         :careerName="career.name"
         :variant="selectedCareer && career.id === selectedCareer.id ? 'selected' : 'primary'"
       />
+      <div v-if="!filteredCareers.length" class="text-center p-4">
+        <p class="text-lg text-zinc-800">Carreira não encontrada</p>
+      </div>
     </div>
     <div>
       <Button
