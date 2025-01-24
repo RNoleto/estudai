@@ -67,6 +67,7 @@ const filteredCareers = computed(() => {
   );
 });
 const createCareer = () => {
+  searchTerm.value = '';
   newCareerModal.value = true;
   console.log('Abrir modal para criar carreira');
 };
