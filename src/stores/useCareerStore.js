@@ -14,6 +14,16 @@ export const useCareerStore = defineStore('career', {
             } catch (error) {
                 console.error('Erro ao buscar carreiras:', error);
             }
+        },
+        async createCareer(name){
+            const icon = "wpf:administrator"; //Icone padrão Avatar com gravata
+            try{
+                const response = await axios.post('careers', {name, icon});
+                console.log('Carreira criada com sucesso:', response.data);
+                this.careers.push(response.data);
+            } catch (error){
+                console.error('Erro ao criar carreira:', error);
+            }
         }
     }
 })

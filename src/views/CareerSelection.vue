@@ -13,6 +13,8 @@ const route = useRoute();
 const searchTerm = ref('');
 const newCareerModal = ref(false);
 
+const newCareerName = ref('');
+
 // Instanciar os stores
 const userStore = useUserStore();
 const careersStore = useCareerStore();
@@ -54,7 +56,9 @@ onMounted(async () => {
   await careersStore.fetchCareers();
   // await userStore.checkUserCareer();
   // await userStore.fetchUserSubjects();
-
+  
+  await careersStore.createCareer();
+  
   // Ordenar as carreiras por ordem alfabética
   careersStore.careers.sort((a, b) => a.name.localeCompare(b.name));
   setInitialSelectedCareer();
@@ -76,9 +80,18 @@ const closeCareerModal = () => {
   newCareerModal.value = false;
 };
 
-const saveCareer = () => {
-  console.log('Salvar carreira');
-  closeCareerModal();
+const saveCareer = async () => {
+  if (newCareerName.value.trim()) {
+    try {
+      await careersStore.createCareer(newCareerName.value.trim()); // Chama o método do store com o nome da carreira
+      newCareerName.value = ''; // Limpa o campo do modal
+      closeCareerModal();
+    } catch (error) {
+      console.error('Erro ao salvar a nova carreira:', error);
+    }
+  } else {
+    console.log('O nome da carreira é obrigatório.');
+  }
 };
 </script>
 
@@ -102,7 +115,13 @@ const saveCareer = () => {
       <!-- Modelo de card sem componetização -->
       <div v-if="newCareerModal" class="border rounded-md shadow-md flex flex-col gap-2 p-4  bg-gray-200">
         <p class="text-base text-zinc-800 text-center font-semibold">Criar nova carreira</p>
-        <Input type="text" class="w-full rounded-md" placeholder="Nome da carreira" :showLabel="false" />
+        <Input
+          v-model="newCareerName"
+          type="text"
+          class="w-full rounded-md"
+          placeholder="Nome da carreira"
+          :showLabel="false"
+        />
         <Button @click="saveCareer">Salvar carreira</Button>
       </div>
     </div>
@@ -111,7 +130,7 @@ const saveCareer = () => {
       <Button
         :disabled="!selectedCareer"
         class="disabled:opacity-50"
-        @click="saveCareerAndNavigate"
+        @onSave="saveCareerAndNavigate"
       >
         Avançar
       </Button>
