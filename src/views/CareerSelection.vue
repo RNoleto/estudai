@@ -57,8 +57,6 @@ onMounted(async () => {
   // await userStore.checkUserCareer();
   // await userStore.fetchUserSubjects();
   
-  await careersStore.createCareer();
-  
   // Ordenar as carreiras por ordem alfabética
   careersStore.careers.sort((a, b) => a.name.localeCompare(b.name));
   setInitialSelectedCareer();
@@ -73,18 +71,21 @@ const filteredCareers = computed(() => {
 const createCareer = () => {
   searchTerm.value = '';
   newCareerModal.value = true;
-  console.log('Abrir modal para criar carreira');
 };
 
 const closeCareerModal = () => {
   newCareerModal.value = false;
+  careersStore.fetchCareers();
 };
 
 const saveCareer = async () => {
   if (newCareerName.value.trim()) {
     try {
-      await careersStore.createCareer(newCareerName.value.trim()); // Chama o método do store com o nome da carreira
-      newCareerName.value = ''; // Limpa o campo do modal
+      // Ajusta a primeira letra para maiúscula
+      const formattedName = newCareerName.value.trim().charAt(0).toUpperCase() + newCareerName.value.trim().slice(1).toLowerCase();
+
+      await careersStore.createCareer(formattedName);
+      newCareerName.value = '';
       closeCareerModal();
     } catch (error) {
       console.error('Erro ao salvar a nova carreira:', error);
