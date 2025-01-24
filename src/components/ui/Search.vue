@@ -38,7 +38,7 @@ watch(() => props.modelValue, (newVal) => {
 });
 </script>
 <template>
-    <div class="w-full inline-flex items-center justify-between rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] bg-white text-gray-700 shadow hover:bg-gray-100 outline-none group" :class="inputClass">
+    <div class="w-full inline-flex items-center justify-between rounded px-[15px] text-base leading-none h-[35px] gap-[5px] bg-white text-gray-700 shadow hover:bg-gray-100 outline-none group" :class="inputClass">
       <!-- Exibe o ícone de busca apenas se a propriedade `showIcon` for verdadeira -->
       <template v-if="showIcon">
         <Icon icon="ic:baseline-search" class="text-zinc-500 text-sm mr-1 transition-transform duration-200 ease-in-out group-hover:scale-125" />
