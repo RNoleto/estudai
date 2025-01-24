@@ -134,7 +134,7 @@ const saveCareer = async () => {
       <Button
         :disabled="!selectedCareer"
         class="disabled:opacity-50"
-        @onSave="saveCareerAndNavigate"
+        @click="saveCareerAndNavigate"
       >
         Avançar
       </Button>
