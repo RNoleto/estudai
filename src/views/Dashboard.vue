@@ -51,49 +51,53 @@ onMounted(async () => {
       </button>
     </nav>
     <div v-if="isMenuMobileOpen" class="fixed inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm z-40">
-      <div
-        class="fixed top-0 right-0 h-screen bg-zinc-100 z-10 flex flex-col justify-start pt-16 gap-2 mt-10 px-6">
-        <a href="/area-do-aluno" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl hover:bg-blue-100">
-          <i class="fas fa-home"></i>
-          Home
-        </a>
-        <a href="/area-do-aluno/historico-de-estudos"
-          class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-          <i class="fa-solid fa-pen-clip"></i>
-          Histórico de Estudo
-        </a>
-        <a href="/area-do-aluno/estudar" class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-          <i class="fa-solid fa-stopwatch"></i>
-          Estudar
-        </a>
-        <div>
-          <button @click="toggleMenu3" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl focus:bg-blue-100">
-            <div>
-              <i class="fas fa-cog"></i>
-              Configurações
+        <transition name="fade-slide" mode="out-in" appear>
+        <div
+          class="fixed top-0 right-0 h-screen bg-zinc-100 z-10 flex flex-col justify-start pt-16 gap-2 mt-10 px-6">
+          <a href="/area-do-aluno" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl hover:bg-blue-100">
+            <i class="fas fa-home"></i>
+            Home
+          </a>
+          <a href="/area-do-aluno/historico-de-estudos"
+            class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+            <i class="fa-solid fa-pen-clip"></i>
+            Histórico de Estudo
+          </a>
+          <a href="/area-do-aluno/estudar" class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+            <i class="fa-solid fa-stopwatch"></i>
+            Estudar
+          </a>
+          <div>
+            <button @click="toggleMenu3" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl hover:bg-blue-100">
+              <div>
+                <i class="fas fa-cog"></i>
+                Configurações
+              </div>
+            </button>
+            <transition name="fade-slide" mode="out-in" appear>
+              <div v-if="isMenu3Open" class="text-zinc-700 mt-1 ml-8 flex flex-col gap-2">
+                <a href="/area-do-aluno/carreiras" class="flex items-center  gap-1 text-sm hover:text-blue-800">
+                  Minha Carreira
+                </a>
+                <a href="/area-do-aluno/materias" class="flex items-center gap-1 text-sm hover:text-blue-800">
+                  Minhas Matérias
+                </a>
+              </div>
+            </transition>
+          </div>
+          <!-- <a href="/area-do-aluno/configuracoes" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold  p-2 rounded-xlhover:bg-blue-100">
+            <i class="fas fa-cog"></i>
+            Configurações
+          </a> -->
+          <div class="bottom-10 right-4 fixed">
+            <div class="flex items-center gap-2">
+              <p class="text-gray-700 text-lg font-semibold">{{ user.fullName }}</p>
+              <UserButton/>
             </div>
-          </button>
-          <div v-if="isMenu3Open" class="text-zinc-700 mt-1 ml-8 flex flex-col gap-2">
-            <a href="/area-do-aluno/carreiras" class="flex items-center  gap-1 text-sm hover:text-blue-800">
-              Minha Carreira
-            </a>
-            <a href="/area-do-aluno/materias" class="flex items-center gap-1 text-sm hover:text-blue-800">
-              Minhas Matérias
-            </a>
-          </div>
+          </div>      
         </div>
-        <!-- <a href="/area-do-aluno/configuracoes" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold  p-2 rounded-xlhover:bg-blue-100">
-          <i class="fas fa-cog"></i>
-          Configurações
-        </a> -->
-        <div class="bottom-10 right-4 fixed">
-          <div class="flex items-center gap-2">
-            <p class="text-gray-700 text-lg font-semibold">{{ user.fullName }}</p>
-            <UserButton/>
-          </div>
-        </div>      
+      </transition>
       </div>
-    </div>
     <!-- Sidebar desktop -->
     <aside v-if="!isMobileView" :class="[
       'min-h-screen bg-white shadow-md transition-all duration-300',
@@ -178,17 +182,17 @@ onMounted(async () => {
             <i class="fas"
               :class="[isMenu3Open ? 'fa-chevron-up' : 'fa-chevron-down', isSidebarCollapsed ? 'mini' : 'text-base']"></i>
           </button>
-          <div v-if="isMenu3Open"
-            :class="['mt-1 space-y-2 transition-all duration-300', isSidebarCollapsed ? 'absolute z-10 rounded-md left-16 bg-zinc-50 shadow-lg w-48 p-2' : 'pl-8']">
-            <a href="/area-do-aluno/carreiras"
-              class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i
-                class="fa-solid fa-user-astronaut"></i> Minha Carreira</a>
-            <a href="/area-do-aluno/materias"
-              class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i class="fa-solid fa-book"></i>
-              Minhas Matérias</a>
-            <!-- <a href="/area-do-aluno/ciclo-de-estudos" class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i class="fa-solid fa-arrows-spin"></i> Meu Ciclo de Estudo</a> -->
-            <!-- <a href="#" class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i class="fa-solid fa-crosshairs"></i> Meus Objetivos</a> -->
-          </div>
+            <div v-if="isMenu3Open"
+              :class="['mt-1 space-y-2 transition-all duration-300', isSidebarCollapsed ? 'absolute z-10 rounded-md left-16 bg-zinc-50 shadow-lg w-48 p-2' : 'pl-8']">
+              <a href="/area-do-aluno/carreiras"
+                class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i
+                  class="fa-solid fa-user-astronaut"></i> Minha Carreira</a>
+              <a href="/area-do-aluno/materias"
+                class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i class="fa-solid fa-book"></i>
+                Minhas Matérias</a>
+              <!-- <a href="/area-do-aluno/ciclo-de-estudos" class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i class="fa-solid fa-arrows-spin"></i> Meu Ciclo de Estudo</a> -->
+              <!-- <a href="#" class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i class="fa-solid fa-crosshairs"></i> Meus Objetivos</a> -->
+            </div>
         </div>
       </nav>
     </aside>
@@ -199,9 +203,30 @@ onMounted(async () => {
     </main>
   </div>
 </template>
-
-<style scoped>
-.mini {
-  font-size: 12px;
+<style>
+/* Estilo para a transição */
+.fade-slide-enter-active, .fade-slide-leave-active {
+  transition: all 0.5s ease;
 }
+
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+.fade-slide-enter-to {
+  opacity: 1;
+  transform: translatex(0);
+}
+
+.fade-slide-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
 </style>
