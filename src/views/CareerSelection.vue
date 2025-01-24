@@ -6,10 +6,12 @@ import { useRouter, useRoute } from 'vue-router';
 import OptionCard from '../components/ui/OptionCard.vue';
 import Button from '../components/ui/Button.vue';
 import Search from '../components/ui/Search.vue';
+import Input from '../components/ui/Input.vue'
 
 const router = useRouter();
 const route = useRoute();
 const searchTerm = ref('');
+const newCareerModal = ref(false);
 
 // Instanciar os stores
 const userStore = useUserStore();
@@ -64,6 +66,19 @@ const filteredCareers = computed(() => {
     career.name.toLowerCase().includes(searchTerm.value.toLowerCase())
   );
 });
+const createCareer = () => {
+  newCareerModal.value = true;
+  console.log('Abrir modal para criar carreira');
+};
+
+const closeCareerModal = () => {
+  newCareerModal.value = false;
+};
+
+const saveCareer = () => {
+  console.log('Salvar carreira');
+  closeCareerModal();
+};
 </script>
 
 <template>
@@ -72,6 +87,7 @@ const filteredCareers = computed(() => {
     <div class="grid gap-2 sm:flex flex-wrap">
       <Search placeholder="Pesquise a carreira..." v-model="searchTerm" />
       <OptionCard
+        v-if="!newCareerModal"
         v-for="career in filteredCareers"
         :key="career.id"
         @click="selectCareer(career)"
@@ -79,11 +95,18 @@ const filteredCareers = computed(() => {
         :careerName="career.name"
         :variant="selectedCareer && career.id === selectedCareer.id ? 'selected' : 'primary'"
       />
-      <div v-if="!filteredCareers.length" class="text-center p-4">
+      <div v-if="!filteredCareers.length && !newCareerModal" class="text-center p-4">
         <p class="text-lg text-zinc-800">Carreira não encontrada</p>
       </div>
+      <!-- Modelo de card sem componetização -->
+      <div v-if="newCareerModal" class="border rounded-md shadow-md flex flex-col gap-2 p-4  bg-gray-200">
+        <p class="text-base text-zinc-800 text-center font-semibold">Criar nova carreira</p>
+        <Input type="text" class="w-full rounded-md" placeholder="Nome da carreira" :showLabel="false" />
+        <Button @click="saveCareer">Salvar carreira</Button>
+      </div>
     </div>
-    <div>
+    <div class="flex justify-between">
+      <Button @click="createCareer">Adicionar nova carreira</Button>
       <Button
         :disabled="!selectedCareer"
         class="disabled:opacity-50"
