@@ -67,18 +67,18 @@ onMounted(async () => {
           Estudar
         </a>
         <div>
-          <button @click="toggleMenu3" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold  p-2 rounded-xl hover:bg-blue-100">
+          <button @click="toggleMenu3" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl focus:bg-blue-100">
             <div>
               <i class="fas fa-cog"></i>
               Configurações
             </div>
           </button>
-          <div v-if="isMenu3Open" class="ml-6 flex flex-col gap-1">
-            <a href="" class="p-2 bg-blue-100">
-              <i></i>Minha Carreira
+          <div v-if="isMenu3Open" class="text-zinc-700 mt-1 ml-8 flex flex-col gap-2">
+            <a href="/area-do-aluno/carreiras" class="flex items-center  gap-1 text-sm hover:text-blue-800">
+              Minha Carreira
             </a>
-            <a href="" class="p-2 bg-blue-100">
-              <i></i>Minhas Matérias
+            <a href="/area-do-aluno/materias" class="flex items-center gap-1 text-sm hover:text-blue-800">
+              Minhas Matérias
             </a>
           </div>
         </div>
