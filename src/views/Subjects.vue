@@ -80,6 +80,9 @@ onMounted(async () => {
         @click="toggleSubject(subject)"
         :variant="selectedSubjects.includes(subject) ? 'selected' : 'primary'"
       />
+      <div v-if="!filteredSubjects.length" class="text-center p-4">
+        <p class="text-lg text-zinc-800">Matéria não encontrada</p>
+      </div>
     </div>
     <div class="flex gap-2">
       <Button :to="{ name: 'Carreiras' }">Voltar</Button>
