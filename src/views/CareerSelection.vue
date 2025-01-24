@@ -69,12 +69,13 @@ const filteredCareers = computed(() => {
   );
 });
 const createCareer = () => {
-  searchTerm.value = '';
   newCareerModal.value = true;
+  document.body.style.overflow = 'hidden'; // Bloqueia a rolagem
 };
 
 const closeCareerModal = () => {
   newCareerModal.value = false;
+  document.body.style.overflow = ''
   careersStore.fetchCareers();
 };
 
@@ -102,7 +103,6 @@ const saveCareer = async () => {
     <div class="grid gap-2 sm:flex flex-wrap">
       <Search placeholder="Pesquise a carreira..." v-model="searchTerm" />
       <OptionCard
-        v-if="!newCareerModal"
         v-for="career in filteredCareers"
         :key="career.id"
         @click="selectCareer(career)"
@@ -110,12 +110,13 @@ const saveCareer = async () => {
         :careerName="career.name"
         :variant="selectedCareer && career.id === selectedCareer.id ? 'selected' : 'primary'"
       />
-      <div v-if="!filteredCareers.length && !newCareerModal" class="text-center p-4">
+      <div v-if="!filteredCareers.length" class="text-center p-4">
         <p class="text-lg text-zinc-800">Carreira não encontrada</p>
       </div>
       <!-- Modelo de card sem componetização -->
-      <div v-if="newCareerModal" class="border rounded-md shadow-md flex flex-col gap-2 p-4  bg-gray-200">
-        <p class="text-base text-zinc-800 text-center font-semibold">Criar nova carreira</p>
+      <div v-if="newCareerModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm z-50">
+      <div  class="border rounded-md flex flex-col gap-2 p-4 bg-gray-200">
+        <p class="text-base text-zinc-800 text-center font-semibold sm:text-xl">Criar nova carreira</p>
         <Input
           v-model="newCareerName"
           type="text"
@@ -124,6 +125,8 @@ const saveCareer = async () => {
           :showLabel="false"
         />
         <Button @click="saveCareer">Salvar carreira</Button>
+        <Button @click="closeCareerModal">Cancelar</Button>
+      </div>
       </div>
     </div>
     <div class="flex justify-between">
