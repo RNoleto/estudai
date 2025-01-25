@@ -8,7 +8,7 @@ import EditModal from '../components/EditModal.vue';
 import AlertModal from '../components/AlertModal.vue';
 import Button from '../components/ui/Button.vue';
 import ManualStudyEntryModal from '../components/ManualStudyEntryModal.vue';
-import Date from '../components/ui/Date.vue';
+import DateCard from '../components/ui/DateCard.vue';
 
 import { useUserStore } from "../stores/useUserStore";
 import { useStudyStore } from "../stores/useStudyStore";
@@ -118,7 +118,7 @@ const getChartOptions = (record) => {
 };
 
 const todayStudyRecords = computed(() => {
-  // const today = new Date().toISOString().slice(0, 10); // Data de hoje no formato ISO (AAAA-MM-DD)
+  const today = new Date().toISOString().slice(0, 10); // Data de hoje no formato ISO (AAAA-MM-DD)
 
   return userStore.userStudyRecords.filter((record) => {
     if (!record.created_at) return false; // Ignora registros sem data
@@ -239,7 +239,7 @@ const handleSaveManualEntry = async (newRecord) => {
           <p class="text-sm sm:text-base">Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."  }}</p>      
         </div>
       </div>
-      <Date class="hidden sm:block" />
+      <DateCard class="hidden sm:block" />
     </div>
     <div class="flex flex-col gap-2 mt-4 sm:grid sm:grid-cols-6">
       <!-- Campo de pesquisa com lista suspensa de matérias -->
