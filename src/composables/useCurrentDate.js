@@ -1,16 +1,33 @@
 export function useCurrentDate() {
-    const daysOfWeek = [
-      'Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'
-    ];
+  const daysOfWeek = [
+    'Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'
+  ];
   
-    const currentDate = new Date();
+  const months = [
+    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+  ];
+  
+  const currentDate = new Date();
+  
+  const dayOfWeek = daysOfWeek[currentDate.getDay()];
+  const day = String(currentDate.getDate()).padStart(2, '0');
+  const monthNumeric = String(currentDate.getMonth() + 1).padStart(2, '0'); // Meses começam em 0
+  const monthFull = months[currentDate.getMonth()];
+  const year = currentDate.getFullYear();
+  
+  const formatDate = (format = 'DD/MM/YYYY') => {
+    const mapping = {
+      DD: day,
+      dddd: dayOfWeek,
+      MM: monthNumeric,
+      MO: monthFull,
+      YYYY: year,
+    };
     
-    const dayOfWeek = daysOfWeek[currentDate.getDay()];
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Os meses começam em 0
-    const year = currentDate.getFullYear();
+    // Substitui os tokens no formato especificado
+    return format.replace(/DD|dddd|MM|MO|YYYY/g, (match) => mapping[match]);
+  };
   
-    const formattedDate = `${dayOfWeek} ${day}/${month}/${year}`;
-  
-    return { formattedDate };
-  }
+  return { formatDate };
+}

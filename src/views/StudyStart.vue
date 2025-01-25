@@ -8,14 +8,11 @@ import EditModal from '../components/EditModal.vue';
 import AlertModal from '../components/AlertModal.vue';
 import Button from '../components/ui/Button.vue';
 import ManualStudyEntryModal from '../components/ManualStudyEntryModal.vue';
+import Date from '../components/ui/Date.vue';
 
 import { useUserStore } from "../stores/useUserStore";
 import { useStudyStore } from "../stores/useStudyStore";
 import { useSubjectStore } from "../stores/useSubjectStore";
-
-import { useCurrentDate } from '../composables/useCurrentDate';
-
-const { formattedDate } = useCurrentDate();
 
 import StudyCard from '../layouts/StudyCard.vue';
 import FocusTimer from '../components/FocusTimer.vue';
@@ -121,7 +118,7 @@ const getChartOptions = (record) => {
 };
 
 const todayStudyRecords = computed(() => {
-  const today = new Date().toISOString().slice(0, 10); // Data de hoje no formato ISO (AAAA-MM-DD)
+  // const today = new Date().toISOString().slice(0, 10); // Data de hoje no formato ISO (AAAA-MM-DD)
 
   return userStore.userStudyRecords.filter((record) => {
     if (!record.created_at) return false; // Ignora registros sem data
@@ -234,11 +231,15 @@ const handleSaveManualEntry = async (newRecord) => {
 </script>
 
 <template>
-  <div class="flex-col gap-4">
-    <h3 class="text-xl font-bold sm:text-4xl">Iniciar Estudos</h3>
-    <div class="flex justify-between">
-      <p class="text-sm sm:text-base">Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."  }}</p>
-      <p class="text-sm sm:text-base">{{ formattedDate }}</p>
+  <div class="gap-4">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-xl font-bold sm:text-4xl">Iniciar Estudos</h3>
+        <div class="flex justify-between">
+          <p class="text-sm sm:text-base">Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."  }}</p>      
+        </div>
+      </div>
+      <Date class="hidden sm:block" />
     </div>
     <div class="flex flex-col gap-2 mt-4 sm:grid sm:grid-cols-6">
       <!-- Campo de pesquisa com lista suspensa de matérias -->

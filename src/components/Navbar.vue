@@ -13,7 +13,7 @@ import { UserButton } from 'vue-clerk';
 <template>
   <nav class="flex justify-between p-4 items-center bg-gray-800 shadow-sm shadow-zinc-500">
     <!-- <pre class="text-white">Token: {{ userStore.token }}</pre> -->
-    <p class="text-white font-bold">Gerenciador de Estudos</p>
+    <p class="text-white font-bold">Estudaí</p>
     <UserButton />
   </nav>
 </template>
