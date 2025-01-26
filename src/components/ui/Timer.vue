@@ -39,12 +39,9 @@ const openFocus = () => {
         <Button @click="stopTimer" variant="delete" :disabled="!timerStore.isRunning">Parar</Button>
       </div>
     </div>
-    <div class="flex justify-between py-2">
-      <p><strong>Tempo total:</strong> {{ timerStore.formatPauseTime(timerStore.totalPauseTime) }}</p>
-      <p><strong>Total de pausas:</strong> {{ timerStore.pauses.length }}</p>      
-    </div>
   </div>
 </template>
+
 
 <style scoped>
 .btn {

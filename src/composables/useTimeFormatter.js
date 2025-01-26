@@ -7,10 +7,10 @@ export function useTimeFormatter() {
   const formatStudyTime = (seconds) => {
     if (isNaN(seconds) || seconds < 0) return '0s';
 
-    const hours = Math.floor(seconds / 3600); // 1 hora = 3600 segundos
-    const remainingSecondsAfterHours = seconds % 3600;
-    const minutes = Math.floor(remainingSecondsAfterHours / 60); // 1 minuto = 60 segundos
-    const remainingSeconds = remainingSecondsAfterHours % 60;
+    // Calcula as horas, minutos e segundos corretamente
+    const hours = Math.floor(seconds / 3600); // Cada hora tem 3600 segundos
+    const minutes = Math.floor((seconds % 3600) / 60); // Cada minuto tem 60 segundos
+    const remainingSeconds = seconds % 60; // Segundos restantes após horas e minutos
 
     // Constrói o tempo formatado apenas com os valores maiores que 0
     const timeParts = [];
