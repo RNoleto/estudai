@@ -213,7 +213,7 @@ export const useUserStore = defineStore('user', {
           seconds = parseInt(timeParts[1]); // Converte segundos diretamente
         }
 
-        console.log("Horas em segundos:", timeParts);
+        // console.log("Horas em segundos:", timeParts);
     
         // Soma os valores em segundos
         studyTimeInSeconds = hoursInSeconds + minutesInSeconds + seconds;
@@ -241,10 +241,10 @@ export const useUserStore = defineStore('user', {
         };
     
         // Exibe o valor de estudo em segundos para verificar a conversão
-        console.log("Estudo em segundos:", studyTimeInSeconds);
+        // console.log("Estudo em segundos:", studyTimeInSeconds);
     
         const response = await axios.post('user-study-records', payload);
-        console.log('Registro salvo com sucesso:', response.data);
+        // console.log('Registro salvo com sucesso:', response.data);
       } catch (error) {
         console.error("Erro ao salvar os dados de estudos no banco de dados:", error);
       }
