@@ -1,8 +1,12 @@
 <script setup>
+import { ref } from 'vue';
 import { useTimerStore } from '../../stores/useTimerStore';
 import Button from './Button.vue';
 
+const isFocusMode = ref(false); // Controle do modo focus
+
 const timerStore = useTimerStore();
+
 
 const props = defineProps({
   isDisabled: {
@@ -11,33 +15,70 @@ const props = defineProps({
   }
 });
 
+const enterFocusMode = () => {
+  isFocusMode.value = true;
+  document.body.style.overflow = 'hidden'; // Desabilita rolagem da página
+};
+
 const emit = defineEmits(['timerStopped', 'openFocus']);
 
 const stopTimer = () => {
   timerStore.stop();
   emit('timerStopped');
+  if (isFocusMode.value === true) {
+    isFocusMode.value = false;
+  }
 };
 
-const openFocus = () => {
-  emit('openFocus');
-}
+const exitFocusMode = () => {
+  isFocusMode.value = false;
+  document.body.style.overflow = ''; // Restaura rolagem da página
+};
 </script>
 
 <template>
-  <div class="relative flex flex-col rounded-md bg-white shadow p-4 min-h-[250px]">
-    <!-- <div @click="!props.isDisabled && openFocus()" class="absolute right-4 text-sm p-1 cursor-pointer" :class="{ 'cursor-not-allowed text-gray-400': props.isDisabled }">
+  <div class="relative flex flex-col rounded-md bg-white shadow p-4 min-h-[250px]"
+    :class="['timer', isFocusMode ? 'focus-mode' : '']">
+    <div @click="!props.isDisabled && enterFocusMode()" class="absolute right-4 text-sm p-1 cursor-pointer"
+      :class="{ 'cursor-not-allowed text-gray-400': props.isDisabled }">
       <i class="fa-solid fa-arrows-to-circle"></i>
-    </div> -->
+    </div>
     <div class="flex flex-col items-center gap-1 py-4">
       <h2 class="w-full text-2xl text-center border-b border-zinc-100 p-2">Temporizador</h2>
       <div class="text-4xl font-mono">{{ timerStore.formattedTime }}</div>
       <div class="flex space-x-2">
-        <Button @click="timerStore.start" variant="primary" :disabled="timerStore.isRunning || props.isDisabled">Iniciar</Button>
+        <Button @click="timerStore.start" variant="primary"
+          :disabled="timerStore.isRunning || props.isDisabled">Iniciar</Button>
         <Button @click="timerStore.togglePause" variant="secondary" :disabled="!timerStore.isRunning">
           {{ timerStore.isPaused ? 'Continuar' : 'Pausar' }}
         </Button>
         <Button @click="stopTimer" variant="delete" :disabled="!timerStore.isRunning">Parar</Button>
       </div>
+    </div>
+    <!-- Modo Focus -->
+    <div v-if="isFocusMode" class="focus-overlay z-50 backdrop-blur-sm">
+      <div @click="exitFocusMode"
+        class="absolute top-[90px] right-4 p-3 sm:top-4 sm:right-4 text-white text-2xl hover:text-blue-500">
+        <i class="fa-solid fa-xmark"></i>
+      </div>
+      <div class="text-center text-white">
+        <div class="text-6xl sm:text-8xl font-mono mb-8">
+          {{ timerStore.formattedTime }}
+        </div>
+        <div class="space-x-4">
+          <button 
+  @click="timerStore.isRunning ? timerStore.togglePause() : timerStore.start()" 
+  class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded" 
+  :disabled="props.isDisabled"
+>
+  {{ timerStore.isRunning ? (timerStore.isPaused ? 'Continuar' : 'Pausar') : 'Iniciar' }}
+</button>
+
+          <button @click="stopTimer" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+            :disabled="!timerStore.isRunning">Parar</button>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -46,8 +87,23 @@ const openFocus = () => {
 <style scoped>
 .btn {
   @apply bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600;
+
   &:disabled {
     @apply bg-gray-400 cursor-not-allowed;
   }
+}
+
+.focus-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 </style>
