@@ -40,6 +40,7 @@ const showConfirmModal = ref(false);
 const recordToDelete = ref(null);
 const isManualEntryModalVisible = ref(false);
 
+
 // Carregar as matérias da API
 onMounted(async () => {
   try {
@@ -152,15 +153,6 @@ watch(
   { immediate: true }
 );
 
-// Watch para desabilitar a rolagem ao abrir o FocusTimer
-watch(isFocus, (newValue) => {
-  if (newValue) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = '';
-  }
-});
-
 // Combine userSubjects com nomes de matérias
 const userSubjects = computed(() => {
   return userStore.userSubjects
@@ -226,6 +218,19 @@ const handleSaveManualEntry = async (newRecord) => {
     console.error("Erro ao salvar o registro de estudo:", error.message);
   }
 };
+
+// Função para atualizar o estilo de overflow com base nos estados dos modais
+function updateBodyOverflow() {
+  if (isFocus.value || isOpen.value || isModalVisible.value || showConfirmModal.value || isManualEntryModalVisible.value) {
+    document.body.style.overflow = 'hidden'; // Desativa a rolagem
+  } else {
+    document.body.style.overflow = ''; // Restaura ao estado inicial
+  }
+}
+
+// Watchers para os estados dos modais
+watch([isFocus, isOpen, isModalVisible, showConfirmModal, isManualEntryModalVisible], updateBodyOverflow);
+
 
 </script>
 
