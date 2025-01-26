@@ -47,11 +47,13 @@ const exitFocusMode = () => {
       <h2 class="w-full text-2xl text-center border-b border-zinc-100 p-2">Temporizador</h2>
       <div class="text-4xl font-mono">{{ timerStore.formattedTime }}</div>
       <div class="flex space-x-2">
-        <Button @click="timerStore.start" variant="primary"
-          :disabled="timerStore.isRunning || props.isDisabled">Iniciar</Button>
-        <Button @click="timerStore.togglePause" variant="secondary" :disabled="!timerStore.isRunning">
+        <button @click="timerStore.isRunning ? timerStore.togglePause() : timerStore.start()"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" :disabled="props.isDisabled">
+            {{ timerStore.isRunning ? (timerStore.isPaused ? 'Continuar' : 'Pausar') : 'Iniciar' }}
+          </button>
+        <!-- <Button @click="timerStore.togglePause" variant="secondary" :disabled="!timerStore.isRunning">
           {{ timerStore.isPaused ? 'Continuar' : 'Pausar' }}
-        </Button>
+        </Button> -->
         <Button @click="stopTimer" variant="delete" :disabled="!timerStore.isRunning">Parar</Button>
       </div>
     </div>
@@ -66,13 +68,10 @@ const exitFocusMode = () => {
           {{ timerStore.formattedTime }}
         </div>
         <div class="space-x-4">
-          <button 
-  @click="timerStore.isRunning ? timerStore.togglePause() : timerStore.start()" 
-  class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded" 
-  :disabled="props.isDisabled"
->
-  {{ timerStore.isRunning ? (timerStore.isPaused ? 'Continuar' : 'Pausar') : 'Iniciar' }}
-</button>
+          <button @click="timerStore.isRunning ? timerStore.togglePause() : timerStore.start()"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" :disabled="props.isDisabled">
+            {{ timerStore.isRunning ? (timerStore.isPaused ? 'Continuar' : 'Pausar') : 'Iniciar' }}
+          </button>
 
           <button @click="stopTimer" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
             :disabled="!timerStore.isRunning">Parar</button>
