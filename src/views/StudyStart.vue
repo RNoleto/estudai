@@ -8,7 +8,6 @@ import EditModal from '../components/EditModal.vue';
 import AlertModal from '../components/AlertModal.vue';
 import Button from '../components/ui/Button.vue';
 import ManualStudyEntryModal from '../components/ManualStudyEntryModal.vue';
-import DateCard from '../components/ui/DateCard.vue';
 
 import { useUserStore } from "../stores/useUserStore";
 import { useStudyStore } from "../stores/useStudyStore";
@@ -239,7 +238,6 @@ const handleSaveManualEntry = async (newRecord) => {
           <p class="text-sm sm:text-base">Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."  }}</p>      
         </div>
       </div>
-      <DateCard class="hidden sm:block" />
     </div>
     <div class="flex flex-col gap-2 mt-4 sm:grid sm:grid-cols-6">
       <!-- Campo de pesquisa com lista suspensa de matérias -->
@@ -275,9 +273,9 @@ const handleSaveManualEntry = async (newRecord) => {
       @confirm="handleDeleteRecord" 
       @cancel="showConfirmModal = false"
     />
-    <div v-if="isFocus">
+    <!-- <div v-if="isFocus">
       <FocusTimer @close="closeFocus" @timerStopped="handleTimerStopped"/>
-  </div>
+    </div> -->
     <ManualStudyEntryModal 
       :isVisible="isManualEntryModalVisible"
       :selectedSubject="selectedSubject"

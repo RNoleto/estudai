@@ -25,9 +25,9 @@ const openFocus = () => {
 
 <template>
   <div class="relative flex flex-col rounded-md bg-white shadow p-4 min-h-[250px]">
-    <div @click="!props.isDisabled && openFocus()" class="absolute right-4 text-sm p-1 cursor-pointer" :class="{ 'cursor-not-allowed text-gray-400': props.isDisabled }">
+    <!-- <div @click="!props.isDisabled && openFocus()" class="absolute right-4 text-sm p-1 cursor-pointer" :class="{ 'cursor-not-allowed text-gray-400': props.isDisabled }">
       <i class="fa-solid fa-arrows-to-circle"></i>
-    </div>
+    </div> -->
     <div class="flex flex-col items-center gap-1 py-4">
       <h2 class="w-full text-2xl text-center border-b border-zinc-100 p-2">Temporizador</h2>
       <div class="text-4xl font-mono">{{ timerStore.formattedTime }}</div>
