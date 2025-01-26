@@ -37,20 +37,19 @@ const exitFocusMode = () => {
 </script>
 
 <template>
-  <div class="relative flex flex-col rounded-md bg-white shadow p-4 min-h-[250px]"
+  <div class="relative flex flex-col rounded-2xl bg-white shadow-md p-4"
     :class="['timer', isFocusMode ? 'focus-mode' : '']">
     <div @click="!props.isDisabled && enterFocusMode()" class="absolute right-4 text-sm p-1 cursor-pointer"
       :class="{ 'cursor-not-allowed text-gray-400': props.isDisabled }">
       <i class="fa-solid fa-arrows-to-circle"></i>
     </div>
     <div class="flex flex-col items-center gap-1 py-4">
-      <h2 class="w-full text-2xl text-center border-b border-zinc-100 p-2">Temporizador</h2>
+      <h2 class="w-full text-xl text-center border-zinc-100 ">Temporizador</h2>
       <div class="text-4xl font-mono">{{ timerStore.formattedTime }}</div>
       <div class="flex space-x-2">
-        <button @click="timerStore.isRunning ? timerStore.togglePause() : timerStore.start()"
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" :disabled="props.isDisabled">
+        <Button variant="play" @click="timerStore.isRunning ? timerStore.togglePause() : timerStore.start()" :disabled="props.isDisabled">
             {{ timerStore.isRunning ? (timerStore.isPaused ? 'Continuar' : 'Pausar') : 'Iniciar' }}
-          </button>
+          </Button>
         <!-- <Button @click="timerStore.togglePause" variant="secondary" :disabled="!timerStore.isRunning">
           {{ timerStore.isPaused ? 'Continuar' : 'Pausar' }}
         </Button> -->
@@ -67,14 +66,14 @@ const exitFocusMode = () => {
         <div class="text-6xl sm:text-8xl font-mono mb-8">
           {{ timerStore.formattedTime }}
         </div>
-        <div class="space-x-4">
-          <button @click="timerStore.isRunning ? timerStore.togglePause() : timerStore.start()"
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" :disabled="props.isDisabled">
+        <div class="flex justify-between space-x-2">
+          <Button @click="timerStore.isRunning ? timerStore.togglePause() : timerStore.start()"
+             :disabled="props.isDisabled" variant="play">
             {{ timerStore.isRunning ? (timerStore.isPaused ? 'Continuar' : 'Pausar') : 'Iniciar' }}
-          </button>
+          </Button>
 
-          <button @click="stopTimer" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-            :disabled="!timerStore.isRunning">Parar</button>
+          <Button @click="stopTimer" variant="delete"
+            :disabled="!timerStore.isRunning">Parar</Button>
         </div>
       </div>
 
