@@ -85,10 +85,10 @@ onUnmounted(() => {
             <div
               v-for="(slide, index) in slides"
               :key="index"
-              class="swiper-slide flex content-center"
+              class="swiper-slide flex content-center bg-red-500"
             >
               <slot :slide="slide">
-                <div class="bg-yellow-100 text-center">
+                <div class="bg-yellow-100 text-center content-center h-[50px]">
                     {{ slide }}
                 </div>
               </slot>
@@ -108,6 +108,6 @@ onUnmounted(() => {
 .swiper {
   width: 300px; /* Largura dinâmica */
   max-width: 330px; /* Largura máxima */
-  height: 200px;
+  height: 250px;
 }
 </style>
