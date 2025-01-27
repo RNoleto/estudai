@@ -45,7 +45,7 @@ onMounted(async () => {
     <!-- navbar mobile -->
     <nav v-if="isMobileView"
       class="fixed top-0 left-0 w-full bg-gray-800 text-white shadow-zinc-500 shadow-sm z-50 flex items-center justify-between p-4">
-      <p class="font-bold text-lg">Estudaí</p>
+      <p class="font-bold text-lg">Gerenciamento de Estudo</p>
       <button @click="toggleMenu" class="text-xl p-2 rounded focus:outline-none">
         <i :class="isMenuMobileOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
       </button>

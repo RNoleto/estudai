@@ -10,7 +10,7 @@ import Button from '../components/ui/Button.vue';
   <div class="h-screen grid md:grid-cols-2">
     <!-- Esquerda -->
      <div class="flex flex-col h-full justify-center p-8 max-w-[550px] mx-auto">
-      <h1 class="text-4xl font-bold mb-3">Bem-vindo ao Estudaí.</h1>
+      <h1 class="text-4xl font-bold mb-3">Bem-vindo ao Gerenciamento de estudo.</h1>
       <p class="mb-8">Seu gerenciador de estudos para organizar seu tempo, acompanhar seu desempenho e alcançar seus objetivos. Simplifique seus estudos e estude com mais eficiência!</p>
        <SignInButton>
         <Button variant="primary" size="default">Fazer login ou criar conta</Button>
