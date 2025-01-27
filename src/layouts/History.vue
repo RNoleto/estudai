@@ -173,12 +173,12 @@ const totalAccuracyBgClass = computed(() => {
     <!-- Filtro por data -->
     <div class="flex justify-between gap-1 sm:justify-start sm:items-center sm:gap-4">
       <div class="flex flex-col">
-        <label for="start-date">Data inicial</label>
-        <input id="start-date" type="date" class="rounded-md p-1" v-model="startDate" />
+        <label for="start-date" class="ml-1">Data inicial</label>
+        <input id="start-date" type="date" class="rounded-md p-1 text-zinc-500 shadow-sm" v-model="startDate" />
       </div>
       <div class="flex flex-col">
-        <label for="end-date">Data final</label>
-        <input id="end-date" type="date" class="rounded-md p-1" v-model="endDate" />
+        <label for="end-date" class="ml-1">Data final</label>
+        <input id="end-date" type="date" class="rounded-md p-1 text-zinc-500 shadow-sm" v-model="endDate" />
       </div>
       <!-- Seleção de critério de ordenação -->
     <div class="hidden sm:flex sm:flex-col">
@@ -191,27 +191,27 @@ const totalAccuracyBgClass = computed(() => {
     </div>
     <!-- Seleção de critério de ordenação -->
     <div class="flex flex-col gap-1 mt-1 sm:hidden">
-      <label for="sort-by">Ordenar por</label>
-      <select id="sort-by" v-model="sortBy" class="w-full p-1 rounded-md sm:w-auto sm:ml-2">
-        <option value="studyTime">Tempo de Estudo</option>
-        <option value="accuracy">Porcentagem de Acertos</option>
+      <label for="sort-by" class="ml-1">Ordenar por</label>
+      <select id="sort-by" v-model="sortBy" class="w-full text-zinc-500 p-2 rounded-md shadow-sm sm:w-auto sm:ml-2">
+        <option value="studyTime" class="text-base">Tempo de Estudo</option>
+        <option value="accuracy" class="text-base">Porcentagem de Acertos</option>
       </select>
     </div>
     <!-- Tempo total de estudo no período -->
     <div class="grid grid-cols-2 mt-2 sm:flex gap-2">
-      <div class="flex flex-col gap-2 col-span-2 border bg-white rounded-md p-4 shadow-sm sm:items-center">
+      <div class="flex flex-col gap-2 col-span-2 border bg-white rounded-2xl p-4 shadow-sm sm:items-center">
         <div class="flex items-center gap-2">
           <i class="fa-solid fa-stopwatch"></i>
           <p class="text-md">Tempo total de estudo</p>
         </div>
         <p class="text-4xl text-end font-semibold">{{ formatStudyTime(totalStudyTime) }}</p>
       </div>
-      <div class="text-sm border bg-white text-center rounded-md p-4 shadow-sm">
+      <div class="text-sm border bg-white text-center rounded-2xl p-4 shadow-sm">
         <i class="fa-solid fa-pen-clip"></i>
         <p class="text-xl font-semibold sm:text-4xl">{{ totalQuestions }}</p>
         <p class="text-sm">Total de questões</p>
       </div>
-      <div :class="`text-sm border text-center rounded-md p-4 shadow-sm ${totalAccuracyBgClass}`">
+      <div :class="`text-sm border text-center rounded-2xl p-4 shadow-sm ${totalAccuracyBgClass}`">
         <i class="fa-solid fa-check"></i>
         <p class="text-xl font-semibold sm:text-4xl">{{ totalQuestionsAndAccuracy.totalCorrectAnswers }} - ({{
           totalQuestionsAndAccuracy.accuracyPercentage }}%)</p>
@@ -222,10 +222,9 @@ const totalAccuracyBgClass = computed(() => {
     <!-- Lista resumida -->
     <div class="mt-2">
       <div v-for="(subject, index) in summarizedData" :key="subject.subjectName"
-        :class="`mb-2 border rounded-md text-zinc-800 overflow-hidden cursor-pointer`" @click="toggleTopics(index)">
+        :class="`mb-2 text-zinc-800 overflow-hidden cursor-pointer`" @click="toggleTopics(index)">
         <!-- Header do card -->
-        
-          <div :class="`rounded-md grid grid-cols-4 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`">
+          <div :class="`rounded-2xl grid grid-cols-4 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`">
             <h3 class="col-span-1 text-md leading-4 font-semibold sm:text-2xl">{{ subject.subjectName }}</h3>
             <!-- Campo de total de tempo -->
             <div class="col-span-2">
@@ -258,7 +257,6 @@ const totalAccuracyBgClass = computed(() => {
             <div>
             </div>
           </div>
-        
         <!-- Campos de topicos estudados -->
         <div>
           <transition name="fade">

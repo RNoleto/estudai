@@ -5,7 +5,7 @@ import { computed } from 'vue';
 
 // Definindo os estilos do OptionCard usando tv (tailwind-variants)
 const optionCard = tv({
-  base: 'p-2 flex items-center gap-2 rounded-md shadow-sm shadow-black cursor-pointer',
+  base: 'p-2 flex items-center gap-2 rounded-lg shadow-sm shadow-black cursor-pointer',
   variants: {
     variant: {
       primary: 'bg-gray-900 text-white hover:bg-blue-600',

@@ -14,7 +14,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="flex flex-col justify-center bg-white shadow-md rounded-lg text-center px-2 py-4 gap-1 sm:p-4 sm:gap-4 sm:min-h-[250px]">
+  <div class="flex flex-col justify-center bg-white shadow-md rounded-2xl text-center px-2 py-4 gap-1 sm:p-4 sm:gap-4 sm:min-h-[250px]">
     <!-- Título -->
     <p class="text-sm sm:text-2xl font-bold text-gray-800">{{ title }}</p>
 
