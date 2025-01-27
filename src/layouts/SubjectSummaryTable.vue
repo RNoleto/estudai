@@ -101,9 +101,9 @@ const summarizedData = computed(() => {
       </tbody>
     </table>
   </div>
-  <div class="col-span-2 shadow-md sm:hidden">
-    <div class="bg-zinc-800 text-zinc-100 px-1 py-1.5 rounded-t-md">
-      <p>Matérias estudadas</p>
+  <div class="col-span-2 shadow-md rounded-2xl sm:hidden">
+    <div class="bg-zinc-800 text-zinc-100 px-1 py-1.5 rounded-t-2xl">
+      <p class="text-base ml-2">Matérias estudadas</p>
     </div>
     <ul class="flex flex-col">
       <li v-for="(subject, index) in summarizedData" :key="subject.subjectName" :class="index % 2 === 0 ? 'bg-gray-100' : 'bg-white'">
@@ -119,7 +119,7 @@ const summarizedData = computed(() => {
         </div>
       </li>
     </ul>
-    <div class="bg-zinc-800 p-1 rounded-b-md">
+    <div class="bg-zinc-800 p-1 rounded-b-2xl">
     </div>
   </div>
 </template>

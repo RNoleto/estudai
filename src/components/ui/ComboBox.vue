@@ -46,7 +46,7 @@ const handleSelection = (option) => {
 <template>
   <ComboboxRoot v-model="selectedOption" class="relative">
     <ComboboxAnchor
-      class="w-full inline-flex items-center justify-between rounded px-[15px] text-[16px] leading-none h-[36px] gap-[5px] bg-white text-gray-700 shadow hover:bg-gray-100 outline-none">
+      class="w-full inline-flex items-center justify-between rounded-md px-[15px] text-base leading-none h-[36px] gap-[5px] bg-white text-gray-700 shadow hover:bg-gray-100 outline-none">
       <ComboboxTrigger class="w-full flex justify-between items-center">
         <ComboboxInput
           class="w-full !bg-transparent outline-none text-gray-700 h-full selection:bg-gray-300"
@@ -55,20 +55,20 @@ const handleSelection = (option) => {
       </ComboboxTrigger>
     </ComboboxAnchor>
 
-    <ComboboxContent class="absolute z-10 w-full mt-2 bg-white rounded shadow">
-      <ComboboxViewport class="p-[5px]">
+    <ComboboxContent class="absolute z-10 w-full mt-2 bg-white rounded-md shadow-md ">
+      <ComboboxViewport class="p-1">
         <ComboboxGroup>
-          <ComboboxLabel class="px-[25px] text-base leading-[25px] text-gray-500">
+          <ComboboxLabel class="px-4 text-base leading-[25px] text-zinc-500">
             Opções
           </ComboboxLabel>
           <ComboboxItem
             v-for="option in options"
             :key="option.id"
-            class="text-base leading-none text-gray-700 rounded flex items-center h-[25px] px-[25px] relative cursor-pointer hover:bg-gray-200"
+            class="text-base leading-2 text-zinc-700 rounded flex items-center px-4 relative cursor-pointer hover:bg-gray-200"
             :value="option"
             @click="handleSelection(option)">
             <ComboboxItemIndicator
-              class="absolute left-0 w-[25px] inline-flex items-center justify-center">
+              class="absolute left-0 inline-flex items-center justify-center text-green-600">
               <Icon icon="radix-icons:check" />
             </ComboboxItemIndicator>
             {{ option.name }}

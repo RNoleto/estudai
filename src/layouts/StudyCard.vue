@@ -62,7 +62,7 @@ const showIncorrect = ref(false);
       </div>
       <div class="rounded-full bg-slate-200 h-[100px] w-[100px]"></div>
     </div>
-  <div v-else class="shadow-sm flex flex-col gap-1 text-xs text-zinc-700 border-b rounded-md bg-white p-4">
+  <div v-else class="shadow-md flex flex-col gap-1 text-xs text-zinc-700 border-b rounded-2xl bg-white p-4">
     <!-- Header do card -->
     <div class="flex justify-between">
       <div class="text-base flex flex-col justify-center gap-1">
