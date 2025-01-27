@@ -40,6 +40,8 @@ let swiperInstance = null;
 onMounted(() => {
   swiperInstance = new Swiper('.swiper', {
     modules: [Navigation, Pagination, Autoplay],
+    slidesPerView: "3",
+    spaceBetween: "10",
     direction: props.direction,
     loop: props.loop,
     autoplay: props.autoplay ? { delay: 3000 } : false,
