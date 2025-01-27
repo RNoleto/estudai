@@ -75,7 +75,11 @@ onUnmounted(() => {
               :key="index"
               class="swiper-slide flex items-center justify-center bg-yellow-100 text-center"
             >
-              <slot :slide="slide">{{ slide }}</slot>
+              <slot :slide="slide">
+                <div class="content-center h-full">
+                    {{ slide }}
+                </div>
+              </slot>
             </div>
           </div>
       
