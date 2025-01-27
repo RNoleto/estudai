@@ -88,8 +88,10 @@ onUnmounted(() => {
               class="swiper-slide flex content-center bg-red-500"
             >
               <slot :slide="slide">
-                <div class="bg-yellow-100 text-center content-center h-[50px]">
+                <div class="bg-yellow-100 text-center content-center h-[50px] hover:bg-blue-500">
+                  <div>
                     {{ slide }}
+                  </div>  
                 </div>
               </slot>
             </div>
