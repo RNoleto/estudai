@@ -24,6 +24,11 @@ const props = defineProps({
     type: Boolean,
     default: false, // Define se os slides devem avançar automaticamente
   },
+  pagination: {
+    el: '.swiper-pagination',
+    clickable: true,
+    default: true,
+  },
   navigation: {
     type: Boolean,
     default: true,
