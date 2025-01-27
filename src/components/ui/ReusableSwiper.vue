@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted } from 'vue';
 import { Swiper } from 'swiper';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { EffectCoverflow ,Navigation, Pagination, Autoplay } from 'swiper/modules';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -39,9 +39,19 @@ let swiperInstance = null;
 
 onMounted(() => {
   swiperInstance = new Swiper('.swiper', {
-    modules: [Navigation, Pagination, Autoplay],
+    modules: [Navigation, Pagination, Autoplay, EffectCoverflow],
+    effect:"coverflow",
     slidesPerView: "3",
-    spaceBetween: "10",
+    spaceBetween: "1",
+    grabCursor: true,
+    centeredSlides: true,
+    coverflowEffect: {
+      rotate: -50,
+      stretch: 0,
+      depth: 100,
+      modifier: 1,
+      slideShadows: true,
+    },
     direction: props.direction,
     loop: props.loop,
     autoplay: props.autoplay ? { delay: 3000 } : false,
@@ -69,13 +79,13 @@ onUnmounted(() => {
 </script>
 
 <template>
-        <div class="swiper bg-red-500">
+        <div class="swiper ">
           <!-- Container de slides -->
           <div class="swiper-wrapper">
             <div
               v-for="(slide, index) in slides"
               :key="index"
-              class="swiper-slide flex content-center p-2 bg-blue-500"
+              class="swiper-slide flex content-center"
             >
               <slot :slide="slide">
                 <div class="bg-yellow-100 text-center">
@@ -96,8 +106,8 @@ onUnmounted(() => {
 
 <style scoped>
 .swiper {
-  width: 100%; /* Largura dinâmica */
-  max-width: 400px; /* Largura máxima */
+  width: 300px; /* Largura dinâmica */
+  max-width: 330px; /* Largura máxima */
   height: 200px;
 }
 </style>

@@ -26,7 +26,7 @@ const slides = computed(() => {
     <!-- <ReusableSwiper :slides="slides" direction="horizontal" :autoplay="true" :navigation="true" :pagination="true" :loop="true"/> -->
 
     <div class="mt-4">
-      <ReusableSwiper :slides="slides" direction="horizontal" :loop="false" :pagination="false" :navigation="false"/>    
+      <ReusableSwiper :slides="slides" direction="vertical" :loop="false" :pagination="false" :navigation="false"/>    
     </div>
   </div>
 </template>
