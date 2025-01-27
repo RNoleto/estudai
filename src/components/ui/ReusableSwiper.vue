@@ -43,10 +43,12 @@ onMounted(() => {
     direction: props.direction,
     loop: props.loop,
     autoplay: props.autoplay ? { delay: 3000 } : false,
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
+    pagination: props.pagination 
+        ? {
+            el: '.swiper-pagination',
+            clickable: true,
+        }
+        : false,
     navigation: props.navigation 
         ? {
           nextEl: '.swiper-button-next',
