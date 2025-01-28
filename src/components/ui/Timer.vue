@@ -43,9 +43,9 @@ const exitFocusMode = () => {
       :class="{ 'cursor-not-allowed text-gray-400': props.isDisabled }">
       <i class="fa-solid fa-arrows-to-circle"></i>
     </div>
-    <div class="flex flex-col items-center gap-1 py-4">
-      <h2 class="w-full text-xl text-center border-zinc-100 ">Temporizador</h2>
-      <div class="text-4xl font-mono">{{ timerStore.formattedTime }}</div>
+    <div class="flex flex-col items-center gap-1 py-4 sm:gap-6">
+      <h2 class="w-full text-xl text-center border-zinc-100 sm:text-2xl sm:font-semibold">Temporizador</h2>
+      <div class="font-mono text-6xl">{{ timerStore.formattedTime }}</div>
       <div class="flex space-x-2">
         <Button variant="play" @click="timerStore.isRunning ? timerStore.togglePause() : timerStore.start()" :disabled="props.isDisabled">
             {{ timerStore.isRunning ? (timerStore.isPaused ? 'Continuar' : 'Pausar') : 'Iniciar' }}

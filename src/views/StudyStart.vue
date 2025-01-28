@@ -244,32 +244,30 @@ watch([isFocus, isOpen, isModalVisible, showConfirmModal, isManualEntryModalVisi
         </div>
       </div>
     </div>
-    <div class="flex flex-col gap-2 mt-4 sm:grid sm:grid-cols-6">
+    <div class="flex flex-col gap-2 mt-4">
       <!-- Campo de pesquisa com lista suspensa de matérias -->
       <div class="flex flex-col gap-2 sm:flex-row col-span-6">
         <ComboBox :options="userSubjects" :placeholder="'Selecione uma matéria...'" v-model="selectedSubject"
           @select="handleSubjectSelection" class="w-full" />
         <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-full"
           v-model="studyStore.topic" />
-        <Button :variant="isSubjectSelected ? 'primary' : 'secondary'" :disabled="!isSubjectSelected" size="sm" class="min-w-max" @mouseover="showTooltip = !selectedSubject" @mouseleave="showTooltip = false" @click="openManualEntryModal">Inserir Manualmente</Button>
+        <!-- <Button :variant="isSubjectSelected ? 'primary' : 'secondary'" :disabled="!isSubjectSelected" size="sm" class="min-w-max" @mouseover="showTooltip = !selectedSubject" @mouseleave="showTooltip = false" @click="openManualEntryModal">Inserir Manualmente</Button> -->
         <div v-if="showTooltip && !selectedSubject" class="tooltip">
           Selecione uma matéria para ativar o botão
         </div>
       </div>
-      <div class="gap-2 xl:col-span-2 lg:col-span-2 md:col-span-5 sm:col-span-5">
+      <div class="gap-2">
         <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus" class="w-full" />
         <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
       </div>
-      <div class="xl:col-span-4">
         <!-- Exibe os registros de estudo -->
-        <div  class="grid gap-2 xl:grid-cols-2">
-          <StudyCard v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record" :isLoading="isLoading"
+        <div class="flex flex-wrap gap-2 sm:grid grid-cols-3">
+          <StudyCard class="sm:col-span-1" v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record" :isLoading="isLoading"
             :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal" @delete="openDeleteModal(record)" />
             <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord" @update="updateRecord"
             @close="isModalVisible = false" />
           </div>
         </div>
-    </div>
   </div>
   <AlertModal 
       :visible="showConfirmModal" 
