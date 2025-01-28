@@ -129,11 +129,11 @@ const saveCareer = async () => {
       </div>
       </div>
     </div>
-    <div class="flex justify-between">
-      <Button @click="createCareer">Adicionar nova carreira</Button>
+    <div class="flex justify-end mt-4 sm:mt-10">
+      <!-- <Button @click="createCareer">Adicionar nova carreira</Button> -->
       <Button
         :disabled="!selectedCareer"
-        class="disabled:opacity-50"
+        class="disabled:opacity-50 w-full sm:w-auto"
         @click="saveCareerAndNavigate"
       >
         Avançar

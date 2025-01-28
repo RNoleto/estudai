@@ -84,11 +84,11 @@ onMounted(async () => {
         <p class="text-lg text-zinc-800">Matéria não encontrada</p>
       </div>
     </div>
-    <div class="flex gap-2">
+    <div class="flex justify-end gap-2 mt-4 sm:mt-10">
       <Button :to="{ name: 'Carreiras' }">Voltar</Button>
       <Button
         :disabled="selectedSubjects.length === 0"
-        class="disabled:opacity-50"
+        class="disabled:opacity-50 w-full sm:w-auto"
         @click="saveSubjectsAndNavigate"
       >
         Salvar e Avançar
