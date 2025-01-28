@@ -8,16 +8,20 @@ import EditModal from '../components/EditModal.vue';
 import AlertModal from '../components/AlertModal.vue';
 import Button from '../components/ui/Button.vue';
 import ManualStudyEntryModal from '../components/ManualStudyEntryModal.vue';
+import Card from '../components/Card.vue';
 
 import { useUserStore } from "../stores/useUserStore";
 import { useStudyStore } from "../stores/useStudyStore";
 import { useSubjectStore } from "../stores/useSubjectStore";
+import { useTimeFormatter } from '../composables/useTimeFormatter';
+
+const { formatStudyTime } = useTimeFormatter();
 
 import StudyCard from '../layouts/StudyCard.vue';
 import FocusTimer from '../components/FocusTimer.vue';
 
-function openFocus(){
-    isFocus.value = true;
+function openFocus() {
+  isFocus.value = true;
 }
 
 function closeFocus() {
@@ -93,7 +97,7 @@ const getChartOptions = (record) => {
       legend: {
         display: false, // Oculta a legenda
       },
-      tooltip: {    
+      tooltip: {
         enabled: true, // Habilita o tooltip
         callbacks: {
           // Personaliza o conteúdo do tooltip
@@ -105,7 +109,7 @@ const getChartOptions = (record) => {
               return `Erros: ${tooltipItem.raw.toFixed(1)}%`;
             }
           },
-        },        
+        },
       },
       centerText: {
         text: `${correctPercentage.toFixed(1)}%`, // Texto inicial com a porcentagem de acertos
@@ -204,7 +208,7 @@ async function handleDeleteRecord() {
   }
 }
 
-const isFocusButtonDisabled = computed(() => !selectedSubject.value);
+// const isFocusButtonDisabled = computed(() => !selectedSubject.value);
 
 const openManualEntryModal = () => {
   isManualEntryModalVisible.value = true;
@@ -232,6 +236,26 @@ function updateBodyOverflow() {
 watch([isFocus, isOpen, isModalVisible, showConfirmModal, isManualEntryModalVisible], updateBodyOverflow);
 
 
+const totalTimeStudyToday = computed(() => {
+  return todayStudyRecords.value.reduce((total, record) => {
+    const isToday = new Date(record.created_at).toDateString() === new Date().toDateString();
+    return isToday ? total + record.study_time : total;
+  }, 0);
+});
+
+const questionResolved = computed(() => {
+  return todayStudyRecords.value.reduce((total, record) => {
+    const isToday = new Date(record.created_at).toDateString() === new Date().toDateString();
+    return isToday ? total + record.questions_resolved : total;
+  }, 0);
+});
+
+const totalCorrectAnswers = computed(() => {
+  return todayStudyRecords.value.reduce((total, record) => {
+    const isToday = new Date(record.created_at).toDateString() === new Date().toDateString();
+    return isToday ? total + record.correct_answers : total;
+  }, 0);
+});
 </script>
 
 <template>
@@ -240,7 +264,8 @@ watch([isFocus, isOpen, isModalVisible, showConfirmModal, isManualEntryModalVisi
       <div>
         <h3 class="text-xl font-bold sm:text-4xl">Iniciar Estudos</h3>
         <div class="flex justify-between">
-          <p class="text-sm sm:text-base">Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."  }}</p>      
+          <p class="text-sm sm:text-base">Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..." }}
+          </p>
         </div>
       </div>
     </div>
@@ -256,35 +281,43 @@ watch([isFocus, isOpen, isModalVisible, showConfirmModal, isManualEntryModalVisi
           Selecione uma matéria para ativar o botão
         </div>
       </div>
-      <div class="gap-2">
-        <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus" class="w-full" />
+      <div class="flex flex-col gap-2 sm:grid sm:grid-cols-6">
+        <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus" class="sm:col-span-3"/>
+        <Card title="Hoje você estudou" footer="Soma do tempo de estudo de hoje">
+          <template #content>
+            <pre>{{ formatStudyTime(totalTimeStudyToday) }}</pre>
+          </template>
+        </Card>
+        <Card title="Você respondeu" footer="Soma de questões respondidas hoje">
+          <template #content>
+            <p>{{ questionResolved }}</p>
+          </template>
+        </Card>
+        <Card title="Você acertou" footer="Total de questões corretas hoje">
+          <template #content>
+            <p>{{ totalCorrectAnswers }}</p>
+          </template>
+        </Card>
         <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
       </div>
-        <!-- Exibe os registros de estudo -->
-        <div class="flex flex-wrap gap-2 sm:grid grid-cols-3">
-          <StudyCard class="sm:col-span-1" v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record" :isLoading="isLoading"
-            :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal" @delete="openDeleteModal(record)" />
-            <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord" @update="updateRecord"
-            @close="isModalVisible = false" />
-          </div>
-        </div>
+      <!-- Exibe os registros de estudo -->
+      <div class="flex flex-wrap gap-2 sm:grid sm:grid-cols-4">
+        <StudyCard class="sm:col-span-1" v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record"
+          :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal"
+          @delete="openDeleteModal(record)" />
+        <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord" @update="updateRecord"
+          @close="isModalVisible = false" />
+      </div>
+    </div>
   </div>
-  <AlertModal 
-      :visible="showConfirmModal" 
-      title="Deletar Registro"
-      message="Tem certeza que deseja deletar este registro? Esta ação não pode ser desfeita."
-      @confirm="handleDeleteRecord" 
-      @cancel="showConfirmModal = false"
-    />
-    <!-- <div v-if="isFocus">
+  <AlertModal :visible="showConfirmModal" title="Deletar Registro"
+    message="Tem certeza que deseja deletar este registro? Esta ação não pode ser desfeita."
+    @confirm="handleDeleteRecord" @cancel="showConfirmModal = false" />
+  <!-- <div v-if="isFocus">
       <FocusTimer @close="closeFocus" @timerStopped="handleTimerStopped"/>
     </div> -->
-    <ManualStudyEntryModal 
-      :isVisible="isManualEntryModalVisible"
-      :selectedSubject="selectedSubject"
-      @close="isManualEntryModalVisible = false" 
-      :onSave="handleSaveManualEntry"
-    />
+  <ManualStudyEntryModal :isVisible="isManualEntryModalVisible" :selectedSubject="selectedSubject"
+    @close="isManualEntryModalVisible = false" :onSave="handleSaveManualEntry" />
 </template>
 
 <style scoped>
