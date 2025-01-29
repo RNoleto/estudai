@@ -276,24 +276,24 @@ const totalCorrectAnswers = computed(() => {
           @select="handleSubjectSelection" class="w-full" />
         <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-full"
           v-model="studyStore.topic" />
-        <!-- <Button :variant="isSubjectSelected ? 'primary' : 'secondary'" :disabled="!isSubjectSelected" size="sm" class="min-w-max" @mouseover="showTooltip = !selectedSubject" @mouseleave="showTooltip = false" @click="openManualEntryModal">Inserir Manualmente</Button> -->
+        <Button :variant="isSubjectSelected ? 'primary' : 'secondary'" :disabled="!isSubjectSelected" size="sm" class="min-w-max" @mouseover="showTooltip = !selectedSubject" @mouseleave="showTooltip = false" @click="openManualEntryModal">Inserir Manualmente</Button>
         <div v-if="showTooltip && !selectedSubject" class="tooltip">
           Selecione uma matéria para ativar o botão
         </div>
       </div>
-      <div class="flex flex-col gap-2 sm:grid sm:grid-cols-6">
-        <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus" class="sm:col-span-3"/>
-        <Card title="Hoje você estudou" footer="Soma do tempo de estudo de hoje">
+      <div class="grid grid-cols-3 gap-2 sm:grid-cols-6">
+        <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus" class="col-span-3 sm:col-span-3"/>
+        <Card v-if="totalTimeStudyToday" title="Hoje você estudou" footer="Soma do tempo de estudo de hoje" class="col-span-1">
           <template #content>
-            <pre>{{ formatStudyTime(totalTimeStudyToday) }}</pre>
+            <p>{{ formatStudyTime(totalTimeStudyToday) }}</p>
           </template>
         </Card>
-        <Card title="Você respondeu" footer="Soma de questões respondidas hoje">
+        <Card v-if="questionResolved" title="Você respondeu" footer="Soma de questões respondidas hoje" class="col-span-1">
           <template #content>
             <p>{{ questionResolved }}</p>
           </template>
         </Card>
-        <Card title="Você acertou" footer="Total de questões corretas hoje">
+        <Card v-if="totalCorrectAnswers" title="Você acertou" footer="Total de questões corretas hoje" class="col-span-1">
           <template #content>
             <p>{{ totalCorrectAnswers }}</p>
           </template>
@@ -301,7 +301,7 @@ const totalCorrectAnswers = computed(() => {
         <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
       </div>
       <!-- Exibe os registros de estudo -->
-      <div class="flex flex-wrap gap-2 sm:grid sm:grid-cols-4">
+      <div class="grid grid-cols-1 gap-2 sm:grid sm:grid-cols-4">
         <StudyCard class="sm:col-span-1" v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record"
           :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal"
           @delete="openDeleteModal(record)" />
