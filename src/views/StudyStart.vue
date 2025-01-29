@@ -18,15 +18,13 @@ import { useTimeFormatter } from '../composables/useTimeFormatter';
 const { formatStudyTime } = useTimeFormatter();
 
 import StudyCard from '../layouts/StudyCard.vue';
-import FocusTimer from '../components/FocusTimer.vue';
+
 
 function openFocus() {
   isFocus.value = true;
 }
 
-function closeFocus() {
-  isFocus.value = false;
-}
+
 
 const studyStore = useStudyStore();
 const userStore = useUserStore();
@@ -313,9 +311,6 @@ const totalCorrectAnswers = computed(() => {
   <AlertModal :visible="showConfirmModal" title="Deletar Registro"
     message="Tem certeza que deseja deletar este registro? Esta ação não pode ser desfeita."
     @confirm="handleDeleteRecord" @cancel="showConfirmModal = false" />
-  <!-- <div v-if="isFocus">
-      <FocusTimer @close="closeFocus" @timerStopped="handleTimerStopped"/>
-    </div> -->
   <ManualStudyEntryModal :isVisible="isManualEntryModalVisible" :selectedSubject="selectedSubject"
     @close="isManualEntryModalVisible = false" :onSave="handleSaveManualEntry" />
 </template>
