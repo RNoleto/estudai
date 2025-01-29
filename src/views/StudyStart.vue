@@ -277,9 +277,9 @@ const totalCorrectAnswers = computed(() => {
         <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-full"
           v-model="studyStore.topic" />
         <Button :variant="isSubjectSelected ? 'primary' : 'secondary'" :disabled="!isSubjectSelected" size="sm" class="min-w-max" @mouseover="showTooltip = !selectedSubject" @mouseleave="showTooltip = false" @click="openManualEntryModal">Inserir Manualmente</Button>
-        <div v-if="showTooltip && !selectedSubject" class="tooltip">
+        <!-- <div v-if="showTooltip && !selectedSubject" class="tooltip">
           Selecione uma matéria para ativar o botão
-        </div>
+        </div> -->
       </div>
       <div class="grid grid-cols-3 gap-2 sm:grid-cols-6">
         <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus" class="col-span-3 sm:col-span-3"/>
