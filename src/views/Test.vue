@@ -16,7 +16,7 @@ import StudyReportModal from '../components/StudyReportModal.vue';
 
 <template>
   <div class="flex flex-col items-center">
-    <h1 class="text-2xl font-bold mb-4">Teste integração GeminiAi</h1>
+    <h1 class="text-2xl font-bold mb-4">Teste integração Gemini-Ai</h1>
     <!-- <ChatOpenAi /> -->
      <!-- <ChatView /> -->
 
