@@ -106,3 +106,65 @@ defineExpose({ openModal });
         </div>
     </div>
 </template>
+
+<style scoped>
+/* Estilos gerais para a tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+/* Estilos para as células da tabela */
+th, td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #e1e1e1;
+}
+
+/* Cabeçalho da tabela */
+th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Linhas alternadas para melhorar a legibilidade */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Estilos para os links, se houver algum */
+a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Estilo para o título da seção */
+h3 {
+    font-size: 1.25rem;
+    color: #2d3748;
+    margin-bottom: 10px;
+}
+
+/* Estilo para os parágrafos e listas */
+p, ul {
+    font-size: 0.875rem;
+    color: #4a5568;
+}
+
+ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+/* Para o carregamento */
+div.animate-spin {
+    margin: auto;
+}
+</style>

@@ -16,7 +16,7 @@ import StudyReportModal from '../components/StudyReportModal.vue';
 
 <template>
   <div class="flex flex-col items-center">
-    <h1 class="text-2xl font-bold mb-4">Teste integração ChatOpenAi</h1>
+    <h1 class="text-2xl font-bold mb-4">Teste integração GeminiAi</h1>
     <!-- <ChatOpenAi /> -->
      <!-- <ChatView /> -->
 
@@ -25,7 +25,7 @@ import StudyReportModal from '../components/StudyReportModal.vue';
       <Relatorio />
      </div> -->
 
-    <button @click="openReport" class="px-4 py-2 bg-green-500 text-white rounded">Ver Relatório</button>
+    <button @click="openReport" class="px-4 py-2 bg-green-500 text-white rounded">Gerar Insight</button>
     <StudyReportModal ref="studyModal" /> 
   </div>
 </template>
