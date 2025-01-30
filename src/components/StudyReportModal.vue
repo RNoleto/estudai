@@ -29,6 +29,7 @@ const openModal = async () => {
 const closeModal = () => {
     isOpen.value = false;
     aiStore.$reset();
+    document.body.style.overflow = ''; // Restaura rolagem da página
 };
 
 const formatTime = (seconds) => {
@@ -45,11 +46,13 @@ const generateAIInsights = async () => {
     }
 
     localLoading.value = true;
+
+    console.log("studyRecords recuperado:", studyRecords.value);
     
     try {
-        const studyData = studyRecords.value.map(record => `Matéria: ${record.subjectName}\nTópico: ${record.topic || 'N/A'}\nTempo de estudo: ${formatTime(record.study_time)}\nAcertos: ${record.correct_answers}\nErros: ${record.incorrect_answers}`).join('\n');
+        const studyData = studyRecords.value.map(record => `Carreira: ${record.careerName}\nMatéria: ${record.subjectName}\nTópico: ${record.topic || 'N/A'}\nTempo de estudo: ${formatTime(record.study_time)}\nAcertos: ${record.correct_answers}\nErros: ${record.incorrect_answers}`).join('\n');
 
-        const prompt = `Atue como um tutor especialista em aprendizagem. Analise os seguintes dados de estudo e gere insights detalhados:\n\nDados do Estudante:\n${studyData}\n\nGere um relatório com:\n1. Análise de desempenho por matéria\n2. Sugestões de melhoria baseadas nas estatísticas\n3. Recomendações personalizadas de estudo\n4. Formate a resposta usando markdown básico`;
+        const prompt = `Atue como um coaching especialista em estudo para concursos publicos. Analise os seguintes dados de estudo e gere insights detalhados:\n\nDados do Estudante:\n${studyData}\n\nGere um relatório com:\n1. Análise de desempenho por matéria\n2. Sugestões de melhoria baseadas nas estatísticas\n3. Recomendações personalizadas de estudo\n4. Formate a resposta usando markdown básico`;
 
         await aiStore.sendMessage(prompt);
         
@@ -62,6 +65,7 @@ const generateAIInsights = async () => {
         console.error("Erro na geração de insights:", error);
         insights.value = "Não foi possível gerar insights no momento. Tente novamente mais tarde.";
     } finally {
+        document.body.style.overflow = 'hidden'; // Desabilita rolagem da página
         localLoading.value = false;
     }
 };
