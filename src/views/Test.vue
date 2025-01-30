@@ -2,6 +2,16 @@
 // import ChatOpenAi from '../components/ChatOpenAi.vue';
 import ChatView from '../components/ChatView.vue';
 import Relatorio from '../components/Relatorio.vue';
+
+import { ref } from "vue";
+
+const studyModal = ref(null);
+
+const openReport = () => {
+  studyModal.value.openModal();
+};
+
+import StudyReportModal from '../components/StudyReportModal.vue';
 </script>
 
 <template>
@@ -10,9 +20,16 @@ import Relatorio from '../components/Relatorio.vue';
     <!-- <ChatOpenAi /> -->
      <ChatView />
 
-     <div>
+     <!-- <div>
       <p>Teste Relatorio</p>
       <Relatorio />
+     </div> -->
+
+
+     <div>
+      <p>Teste Study Report Modal</p>
+      <button @click="openReport" class="px-4 py-2 bg-green-500 text-white rounded">Ver Relatório</button>
+      <StudyReportModal ref="studyModal" />
      </div>
   </div>
 </template>
