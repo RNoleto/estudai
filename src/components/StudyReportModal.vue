@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useUserStore } from "../stores/useUserStore";
-import { useAIStore } from "../stores/aiStore"; // Importe sua store de IA
+import { useAIStore } from "../stores/aiStore"; 
+import { marked } from "marked";
 
 const userStore = useUserStore();
 const aiStore = useAIStore();
@@ -27,7 +28,7 @@ const openModal = async () => {
 
 const closeModal = () => {
     isOpen.value = false;
-    aiStore.$reset(); // Limpa o estado da IA ao fechar
+    aiStore.$reset();
 };
 
 const formatTime = (seconds) => {
@@ -35,10 +36,6 @@ const formatTime = (seconds) => {
     const m = Math.floor((seconds % 3600) / 60);
     const s = seconds % 60;
     return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-};
-
-const generateBaseInsights = () => {
-    // ... (mantenha sua lógica atual de generateInsights aqui)
 };
 
 const generateAIInsights = async () => {
@@ -50,32 +47,16 @@ const generateAIInsights = async () => {
     localLoading.value = true;
     
     try {
-        // Construir o prompt com dados formatados
-        const studyData = studyRecords.value.map(record => `
-            Matéria: ${record.subjectName}
-            Tópico: ${record.topic || 'N/A'}
-            Tempo de estudo: ${formatTime(record.study_time)}
-            Acertos: ${record.correct_answers}
-            Erros: ${record.incorrect_answers}
-        `).join('\n');
+        const studyData = studyRecords.value.map(record => `Matéria: ${record.subjectName}\nTópico: ${record.topic || 'N/A'}\nTempo de estudo: ${formatTime(record.study_time)}\nAcertos: ${record.correct_answers}\nErros: ${record.incorrect_answers}`).join('\n');
 
-        const prompt = `Atue como um tutor especialista em aprendizagem. Analise os seguintes dados de estudo e gere insights detalhados:
-        
-        Dados do Estudante:
-        ${studyData}
-        
-        Gere um relatório com:
-        1. Análise de desempenho por matéria
-        2. Sugestões de melhoria baseadas nas estatísticas
-        3. Recomendações personalizadas de estudo
-        4. Formate a resposta usando markdown básico`;
+        const prompt = `Atue como um tutor especialista em aprendizagem. Analise os seguintes dados de estudo e gere insights detalhados:\n\nDados do Estudante:\n${studyData}\n\nGere um relatório com:\n1. Análise de desempenho por matéria\n2. Sugestões de melhoria baseadas nas estatísticas\n3. Recomendações personalizadas de estudo\n4. Formate a resposta usando markdown básico`;
 
         await aiStore.sendMessage(prompt);
         
         if (aiStore.error) {
             insights.value = "Erro ao gerar insights. Tente novamente mais tarde.";
         } else {
-            insights.value = aiStore.response;
+            insights.value = marked(aiStore.response); // Use marked para converter o markdown em HTML
         }
     } catch (error) {
         console.error("Erro na geração de insights:", error);
@@ -90,7 +71,7 @@ defineExpose({ openModal });
 
 <template>
     <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
             <div class="flex justify-between items-center border-b pb-2">
                 <h2 class="text-xl font-bold">Relatório de Estudos & Insights</h2>
                 <button @click="closeModal" class="text-gray-500 hover:text-gray-700">✕</button>
@@ -105,13 +86,13 @@ defineExpose({ openModal });
             <!-- Insights Gerados -->
             <div v-else class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded">
                 <h3 class="text-lg font-semibold text-blue-700 mb-2">🧠 Coach de Estudos Inteligente</h3>
-                <div class="prose max-w-none" v-html="insights"></div>
+                <div class="prose max-w-none text-[12px]" v-html="insights"></div> <!-- Renderiza o HTML gerado pelo Markdown -->
             </div>
 
             <!-- Tabela de Registros -->
             <div v-if="studyRecords.length > 0" class="mt-4">
                 <table class="w-full border-collapse border border-gray-200">
-                    <!-- Mantenha sua tabela existente -->
+                    <!-- Tabela de registros -->
                 </table>
             </div>
 
