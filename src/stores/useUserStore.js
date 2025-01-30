@@ -162,15 +162,20 @@ export const useUserStore = defineStore('user', {
         console.error("ID do usuário não encontrado.");
         return;
       }
-
+    
       try {
         const response = await axios.get(`user-study-records/user/${this.userId}`);
-
+    
         if (response.status === 200) {
-          const subjectStore = useSubjectStore(); // Obtém o subjectStore para acesso às matérias
-
+          const subjectStore = useSubjectStore();
+    
+          // Aguarda o carregamento das matérias, caso ainda não tenham sido carregadas
+          if (!subjectStore.subjects.length) {
+            await subjectStore.fetchSubjects();
+          }
+    
           const activeRecords = response.data.filter(record => record.ativo === 1);
-
+    
           this.userStudyRecords = activeRecords.map((record) => {
             const subject = subjectStore.subjects.find(sub => sub.id === record.subject_id);
             return {
@@ -182,7 +187,7 @@ export const useUserStore = defineStore('user', {
       } catch (error) {
         console.error("Erro ao carregar registros de estudo do usuário fetchUserStudyRecords:", error);
       }
-    },
+    },    
     async saveUserStudyRecord(newRecord) {
       const timerStore = useTimerStore();
       const studyStore = useStudyStore();
