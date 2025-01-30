@@ -18,18 +18,14 @@ import StudyReportModal from '../components/StudyReportModal.vue';
   <div class="flex flex-col items-center">
     <h1 class="text-2xl font-bold mb-4">Teste integração ChatOpenAi</h1>
     <!-- <ChatOpenAi /> -->
-     <ChatView />
+     <!-- <ChatView /> -->
 
      <!-- <div>
       <p>Teste Relatorio</p>
       <Relatorio />
      </div> -->
 
-
-     <div>
-      <p>Teste Study Report Modal</p>
-      <button @click="openReport" class="px-4 py-2 bg-green-500 text-white rounded">Ver Relatório</button>
-      <StudyReportModal ref="studyModal" />
-     </div>
+    <button @click="openReport" class="px-4 py-2 bg-green-500 text-white rounded">Ver Relatório</button>
+    <StudyReportModal ref="studyModal" /> 
   </div>
 </template>

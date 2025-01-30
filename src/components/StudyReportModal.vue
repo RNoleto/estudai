@@ -1,152 +1,127 @@
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useUserStore } from "../stores/useUserStore";
+import { useAIStore } from "../stores/aiStore"; // Importe sua store de IA
 
 const userStore = useUserStore();
+const aiStore = useAIStore();
 const isOpen = ref(false);
-
-// Computed para acessar os registros de estudo
 const studyRecords = ref([]);
 const insights = ref("");
+const localLoading = ref(false);
 
 onMounted(async () => {
     await userStore.fetchUserStudyRecords();
-    console.log("Dados carregados:", userStore.userStudyRecords); // Debug
     studyRecords.value = userStore.userStudyRecords;
 });
 
 watch(() => userStore.userStudyRecords, (newRecords) => {
-    console.log("Novos registros:", newRecords); // Debug
     studyRecords.value = newRecords;
 });
 
-// Função para abrir o modal e gerar insights
 const openModal = async () => {
-  isOpen.value = true;
-  await userStore.fetchUserStudyRecords();
-  generateInsights();
+    isOpen.value = true;
+    await userStore.fetchUserStudyRecords();
+    await generateAIInsights();
 };
 
-// Fechar o modal
 const closeModal = () => {
-  isOpen.value = false;
+    isOpen.value = false;
+    aiStore.$reset(); // Limpa o estado da IA ao fechar
 };
 
-// Formatar tempo de estudo de segundos para HH:MM:SS
 const formatTime = (seconds) => {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = seconds % 60;
-  return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
 };
 
-// Função para gerar insights baseados nos dados do usuário
-const generateInsights = () => {
-  if (!studyRecords.value.length) {
-    insights.value = "Nenhum dado de estudo encontrado. Tente estudar por pelo menos 30 minutos para gerar insights!";
-    return;
-  }
+const generateBaseInsights = () => {
+    // ... (mantenha sua lógica atual de generateInsights aqui)
+};
 
-  let totalTime = 0;
-  let totalCorrect = 0;
-  let totalIncorrect = 0;
-  let weakestSubject = null;
-  let lowestScore = Infinity;
-
-  // Analisando os dados de estudo
-  studyRecords.value.forEach(record => {
-    totalTime += record.study_time;
-    totalCorrect += record.correct_answers;
-    totalIncorrect += record.incorrect_answers;
-
-    let successRate = record.correct_answers / (record.correct_answers + record.incorrect_answers);
-    if (successRate < lowestScore) {
-      lowestScore = successRate;
-      weakestSubject = record.subjectName;
+const generateAIInsights = async () => {
+    if (!studyRecords.value.length) {
+        insights.value = "Nenhum dado de estudo encontrado. Tente estudar por pelo menos 30 minutos para gerar insights!";
+        return;
     }
-  });
 
-  let totalQuestions = totalCorrect + totalIncorrect;
-  let accuracyRate = totalQuestions > 0 ? ((totalCorrect / totalQuestions) * 100).toFixed(1) : 0;
-  let avgStudyTime = totalTime / studyRecords.value.length;
+    localLoading.value = true;
+    
+    try {
+        // Construir o prompt com dados formatados
+        const studyData = studyRecords.value.map(record => `
+            Matéria: ${record.subjectName}
+            Tópico: ${record.topic || 'N/A'}
+            Tempo de estudo: ${formatTime(record.study_time)}
+            Acertos: ${record.correct_answers}
+            Erros: ${record.incorrect_answers}
+        `).join('\n');
 
-  // Criando sugestões personalizadas
-  let tips = [];
+        const prompt = `Atue como um tutor especialista em aprendizagem. Analise os seguintes dados de estudo e gere insights detalhados:
+        
+        Dados do Estudante:
+        ${studyData}
+        
+        Gere um relatório com:
+        1. Análise de desempenho por matéria
+        2. Sugestões de melhoria baseadas nas estatísticas
+        3. Recomendações personalizadas de estudo
+        4. Formate a resposta usando markdown básico`;
 
-  if (totalTime < 1800) {
-    tips.push("Tente estudar pelo menos 30 minutos por dia para melhorar a retenção do conteúdo.");
-  }
-
-  if (accuracyRate < 70) {
-    tips.push("Revise os conceitos básicos antes de avançar para tópicos mais difíceis.");
-  } else if (accuracyRate > 90) {
-    tips.push("Ótimo desempenho! Que tal desafiar-se com questões mais avançadas?");
-  }
-
-  if (weakestSubject) {
-    tips.push(`Seu maior desafio parece ser **${weakestSubject}**. Tente revisar esse assunto com mais atenção.`);
-  }
-
-  insights.value = `📊 **Resumo do estudo:**  
-  - Tempo total de estudo: **${formatTime(totalTime)}**  
-  - Taxa de acerto: **${accuracyRate}%**  
-  - Tempo médio por sessão: **${formatTime(avgStudyTime)}**  
-  - Matéria mais desafiadora: **${weakestSubject || "Nenhuma específica"}**  
-
-  🔍 **Sugestões para melhorar:**  
-  ${tips.length ? tips.map(t => `- ${t}`).join("\n  ") : "Continue assim, ótimo trabalho!"}`;
+        await aiStore.sendMessage(prompt);
+        
+        if (aiStore.error) {
+            insights.value = "Erro ao gerar insights. Tente novamente mais tarde.";
+        } else {
+            insights.value = aiStore.response;
+        }
+    } catch (error) {
+        console.error("Erro na geração de insights:", error);
+        insights.value = "Não foi possível gerar insights no momento. Tente novamente mais tarde.";
+    } finally {
+        localLoading.value = false;
+    }
 };
 
 defineExpose({ openModal });
-
 </script>
 
 <template>
-  <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full">
-      <!-- Título e botão de fechar -->
-      <div class="flex justify-between items-center border-b pb-2">
-        <h2 class="text-xl font-bold">Relatório de Estudos & Insights</h2>
-        <button @click="closeModal" class="text-gray-500 hover:text-gray-700">✕</button>
-      </div>
+    <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h2 class="text-xl font-bold">Relatório de Estudos & Insights</h2>
+                <button @click="closeModal" class="text-gray-500 hover:text-gray-700">✕</button>
+            </div>
 
-      <!-- Insights do Coach de Estudos -->
-      <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded">
-        <h3 class="text-lg font-semibold text-blue-700">📢 Coach de Estudos</h3>
-        <p class="text-gray-700 whitespace-pre-line">{{ insights }}</p>
-      </div>
+            <!-- Estado de Carregamento -->
+            <div v-if="localLoading" class="mt-4 p-4 text-center">
+                <div class="animate-spin inline-block w-8 h-8 border-4 border-blue-500 rounded-full border-t-transparent"></div>
+                <p class="mt-2 text-gray-600">Analisando seus dados com IA...</p>
+            </div>
 
-      <!-- Lista de registros -->
-      <div v-if="studyRecords.length > 0" class="mt-4">
-        <table class="w-full border-collapse border border-gray-200">
-          <thead class="bg-gray-100">
-            <tr>
-              <th class="border border-gray-200 p-2 text-left">Matéria</th>
-              <th class="border border-gray-200 p-2">Tópico</th>
-              <th class="border border-gray-200 p-2">Tempo</th>
-              <th class="border border-gray-200 p-2">Acertos</th>
-              <th class="border border-gray-200 p-2">Erros</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="record in studyRecords" :key="record.id" class="border border-gray-200">
-              <td class="p-2">{{ record.subjectName }}</td>
-              <td class="p-2">{{ record.topic || 'N/A' }}</td>
-              <td class="p-2">{{ formatTime(record.study_time) }}</td>
-              <td class="p-2">{{ record.correct_answers }}</td>
-              <td class="p-2">{{ record.incorrect_answers }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+            <!-- Insights Gerados -->
+            <div v-else class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded">
+                <h3 class="text-lg font-semibold text-blue-700 mb-2">🧠 Coach de Estudos Inteligente</h3>
+                <div class="prose max-w-none" v-html="insights"></div>
+            </div>
 
-      <!-- Mensagem caso não tenha registros -->
-      <p v-else class="text-center text-gray-500 mt-4">Nenhum registro de estudo encontrado.</p>
+            <!-- Tabela de Registros -->
+            <div v-if="studyRecords.length > 0" class="mt-4">
+                <table class="w-full border-collapse border border-gray-200">
+                    <!-- Mantenha sua tabela existente -->
+                </table>
+            </div>
 
-      <!-- Botão de fechar -->
-      <div class="mt-4 flex justify-end">
-        <button @click="closeModal" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Fechar</button>
-      </div>
+            <p v-else class="text-center text-gray-500 mt-4">Nenhum registro de estudo encontrado.</p>
+
+            <div class="mt-4 flex justify-end">
+                <button @click="closeModal" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    Fechar
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
