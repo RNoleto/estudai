@@ -50,9 +50,9 @@ const generateAIInsights = async () => {
     console.log("studyRecords recuperado:", studyRecords.value);
     
     try {
-        const studyData = studyRecords.value.map(record => `Carreira: ${record.careerName}\nMatéria: ${record.subjectName}\nTópico: ${record.topic || 'N/A'}\nTempo de estudo: ${formatTime(record.study_time)}\nAcertos: ${record.correct_answers}\nErros: ${record.incorrect_answers}`).join('\n');
+        const studyData = studyRecords.value.map(record => `Matéria: ${record.subjectName}\nTópico: ${record.topic || 'N/A'}\nTempo de estudo: ${formatTime(record.study_time)}\nAcertos: ${record.correct_answers}\nErros: ${record.incorrect_answers}`).join('\n');
 
-        const prompt = `Atue como um coaching especialista em estudo para concursos publicos. Analise os seguintes dados de estudo e gere insights detalhados:\n\nDados do Estudante:\n${studyData}\n\nGere um relatório com:\n1. Análise de desempenho por matéria\n2. Sugestões de melhoria baseadas nas estatísticas\n3. Recomendações personalizadas de estudo\n4. Formate a resposta usando markdown básico`;
+        const prompt = `Atue como um coaching especialista em estudo para concursos publicos. Analise os seguintes dados de estudo e gere insights detalhados:\n\nDados do Estudante:\n${studyData}\n\nGere um relatório com:\n1. Análise de desempenho por matéria, organize em tabela com nome da matéria, tempor de estudo, acertos, erros e precisão, não incluir tópicos\n2. Sugestões de melhoria baseadas nas estatísticas incluindo os tópicos\n3. Recomendações personalizadas de estudo incluindo os tópicos\n4. Formate a resposta usando markdown básico, essa informação não precisa aparecer no insight`;
 
         await aiStore.sendMessage(prompt);
         
