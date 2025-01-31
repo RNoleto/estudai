@@ -74,10 +74,10 @@ defineExpose({ openModal });
 </script>
 
 <template>
-    <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
-        <div class="mt-10 bg-white p-6 rounded-lg shadow-lg sm:mt-0">
+    <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
+        <div class="mt-10 bg-white p-6 rounded-2xl shadow-lg sm:mt-0">
             <div class="flex justify-between items-center border-b pb-2">
-                <h2 class="text-xl font-bold">Relatório de Estudos & Insights</h2>
+                <h2 class="text-base font-bold sm:text-xl">Relatório de Estudos & Insights</h2>
                 <button @click="closeModal" class="text-gray-500 hover:text-gray-700">✕</button>
             </div>
 
@@ -90,7 +90,7 @@ defineExpose({ openModal });
             <!-- Insights Gerados -->
             <div v-else class="mt-4 p-1 bg-blue-50 border border-blue-200 rounded w-[330px] sm:w-[1200px]">
                 <h3 class="text-sm sm:text-lg font-semibold text-blue-700 mb-2">🧠 Coach de Estudos Inteligente</h3>
-                <div class="p-2 prose max-w-none max-h-[300px] overflow-hidden overflow-y-scroll text-sm sm:w-[1182px] sm:text-base" v-html="insights"></div> <!-- Renderiza o HTML gerado pelo Markdown -->
+                <div class="p-2 prose max-w-none max-h-[300px] overflow-hidden overflow-y-scroll text-sm sm:w-[1182px] sm:max-h-[570px] sm:text-base" v-html="insights"></div> <!-- Renderiza o HTML gerado pelo Markdown -->
             </div>
 
             <!-- Tabela de Registros -->
@@ -102,8 +102,8 @@ defineExpose({ openModal });
 
             <p v-else class="text-center text-gray-500 mt-4">Nenhum registro de estudo encontrado.</p>
 
-            <div class="mt-4 flex justify-end">
-                <button @click="closeModal" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+            <div class="mt-1 flex justify-end">
+                <button @click="closeModal" class="px-4 py-2 bg-blue-500 text-white rounded shadow-md hover:bg-blue-600">
                     Fechar
                 </button>
             </div>

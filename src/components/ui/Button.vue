@@ -13,6 +13,7 @@ const button = tv({
             delete: 'bg-red-500 text-red-50 hover:bg-red-600 ring-red-500',
             play: 'bg-blue-500 text-blue-50 hover:bg-blue-600 ring-blue-500',
             disable: 'bg-gray-400 text-gray-50 cursor-not-allowed',
+            ia: 'bg-green-500 text-white hover:bg-green-600 ring-green-500',
         },
         size: {
             default: 'px-4 py-2.5',

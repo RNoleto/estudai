@@ -2,9 +2,17 @@
 import { computed, onMounted, ref } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
 import { useSubjectStore } from '../stores/useSubjectStore';
-import IsLoading from '../components/ui/IsLoading.vue';
-
 import { useTimeFormatter } from '../composables/useTimeFormatter';
+
+import IsLoading from '../components/ui/IsLoading.vue';
+import StudyReportModal from '../components/StudyReportModal.vue';
+import Button from '../components/ui/Button.vue';
+
+const studyModal = ref(null);
+
+const openReport = () => {
+  studyModal.value.openModal();
+};
 
 const userStore = useUserStore();
 const subjectStore = useSubjectStore();
@@ -171,7 +179,7 @@ const totalAccuracyBgClass = computed(() => {
   <IsLoading v-if="isLoading" />
   <div v-else>
     <!-- Filtro por data -->
-    <div class="flex justify-between gap-1 sm:justify-start sm:items-center sm:gap-4">
+    <div class="flex justify-between gap-1 sm:justify-start sm:items-end sm:gap-4">
       <div class="flex flex-col">
         <label for="start-date" class="ml-1">Data inicial</label>
         <input id="start-date" type="date" class="rounded-md p-1 text-zinc-500 shadow-sm" v-model="startDate" />
@@ -181,13 +189,15 @@ const totalAccuracyBgClass = computed(() => {
         <input id="end-date" type="date" class="rounded-md p-1 text-zinc-500 shadow-sm" v-model="endDate" />
       </div>
       <!-- Seleção de critério de ordenação -->
-    <div class="hidden sm:flex sm:flex-col">
-      <label for="sort-by">Ordenar por</label>
-      <select id="sort-by" v-model="sortBy" class="w-full p-1 rounded-md sm:w-auto">
-        <option value="studyTime">Tempo de Estudo</option>
-        <option value="accuracy">Porcentagem de Acertos</option>
-      </select>
-    </div>
+      <div class="hidden sm:flex sm:flex-col">
+        <label for="sort-by">Ordenar por</label>
+        <select id="sort-by" v-model="sortBy" class="w-full p-1 rounded-md sm:w-auto">
+          <option value="studyTime">Tempo de Estudo</option>
+          <option value="accuracy">Porcentagem de Acertos</option>
+        </select>
+      </div>
+      <Button @click="openReport" variant="ia">Gerar Insight</Button>
+      <StudyReportModal ref="studyModal" />
     </div>
     <!-- Seleção de critério de ordenação -->
     <div class="flex flex-col gap-1 mt-1 sm:hidden">
@@ -224,75 +234,77 @@ const totalAccuracyBgClass = computed(() => {
       <div v-for="(subject, index) in summarizedData" :key="subject.subjectName"
         :class="`mb-2 text-zinc-800 overflow-hidden cursor-pointer`" @click="toggleTopics(index)">
         <!-- Header do card -->
-          <div :class="`rounded-2xl grid grid-cols-4 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`">
-            <h3 class="col-span-1 text-md leading-4 font-semibold sm:text-2xl">{{ subject.subjectName }}</h3>
-            <!-- Campo de total de tempo -->
-            <div class="col-span-2">
-              <div class="flex flex-col gap-1 text-center items-center">
-                <div class="sm:hidden">
-                  <i class="fa-solid fa-stopwatch"></i>
-                  <p class="text-md font-semibold sm:text-xl">{{ formatStudyTime(subject.totalStudyTime) }}</p>
-                </div>
-                <div class="hidden sm:flex sm:items-center gap-2">
-                  <i class="fa-solid fa-stopwatch"></i>
-                  <p class="text-md font-semibold sm:text-xl">{{ formatStudyTime(subject.totalStudyTime) }}</p>
-                </div>
-                <p class="text-sm leading-3 sm:text-md">Tempo de estudo</p>
-              </div>
-            </div>
-            <!-- Campo de total de acertos -->
-            <div class="col-span-1 flex flex-col gap-1 text-center">
+        <div :class="`rounded-2xl grid grid-cols-4 gap-2 items-center shadow-sm p-2 ${subject.bgClass}`">
+          <h3 class="col-span-1 text-md leading-4 font-semibold sm:text-2xl">{{ subject.subjectName }}</h3>
+          <!-- Campo de total de tempo -->
+          <div class="col-span-2">
+            <div class="flex flex-col gap-1 text-center items-center">
               <div class="sm:hidden">
-                <i class="fa-solid fa-pen-clip"></i>
-                <p class="text-md font-semibold sm:text-4xl">{{ subject.totalQuestionsResolved }} - {{
-                subject.accuracyPercentage }}%</p>
+                <i class="fa-solid fa-stopwatch"></i>
+                <p class="text-md font-semibold sm:text-xl">{{ formatStudyTime(subject.totalStudyTime) }}</p>
               </div>
-              <div class="hidden sm:flex sm:items-center sm:gap-2 sm:justify-center">
-                <i class="fa-solid fa-pen-clip"></i>
-                <p class="text-md font-semibold sm:text-2xl">{{ subject.totalQuestionsResolved }} - {{
-                subject.accuracyPercentage }}%</p>
+              <div class="hidden sm:flex sm:items-center gap-2">
+                <i class="fa-solid fa-stopwatch"></i>
+                <p class="text-md font-semibold sm:text-xl">{{ formatStudyTime(subject.totalStudyTime) }}</p>
               </div>
-              <p class="text-sm leading-3 sm:text-md">Total de Questões</p>
-            </div>
-            <div>
+              <p class="text-sm leading-3 sm:text-md">Tempo de estudo</p>
             </div>
           </div>
+          <!-- Campo de total de acertos -->
+          <div class="col-span-1 flex flex-col gap-1 text-center">
+            <div class="sm:hidden">
+              <i class="fa-solid fa-pen-clip"></i>
+              <p class="text-md font-semibold sm:text-4xl">{{ subject.totalQuestionsResolved }} - {{
+                subject.accuracyPercentage }}%</p>
+            </div>
+            <div class="hidden sm:flex sm:items-center sm:gap-2 sm:justify-center">
+              <i class="fa-solid fa-pen-clip"></i>
+              <p class="text-md font-semibold sm:text-2xl">{{ subject.totalQuestionsResolved }} - {{
+                subject.accuracyPercentage }}%</p>
+            </div>
+            <p class="text-sm leading-3 sm:text-md">Total de Questões</p>
+          </div>
+          <div>
+          </div>
+        </div>
         <!-- Campos de topicos estudados -->
         <div>
           <transition name="fade">
             <ul v-if="activeTopic === index" role="list" class="divide-y divide-zinc-200">
-              <li v-for="(topic, idx) in subject.topics" :key="idx" class="flex flex-col gap-1 p-2 sm:items-center sm:flex-row sm:justify-between" :class="[
-                idx === 0 ? 'shadow-inner' : '',
-                getColorClass(topic.correctAnswers, topic.questionsResolved)
-              ]">
-              <p class="text-sm font-semibold sm:text-base">{{ topic.topic ? topic.topic : 'Tópico não informado' }}</p>
-              <div class="flex justify-between items-center text-mini sm:hidden">
-                <div class="text-center leading-3">
-                  <p class="font-semibold">{{ formatStudyTime(topic.studyTime) }}</p>
-                  <p>de estudo</p>
+              <li v-for="(topic, idx) in subject.topics" :key="idx"
+                class="flex flex-col gap-1 p-2 sm:items-center sm:flex-row sm:justify-between" :class="[
+                  idx === 0 ? 'shadow-inner' : '',
+                  getColorClass(topic.correctAnswers, topic.questionsResolved)
+                ]">
+                <p class="text-sm font-semibold sm:text-base">{{ topic.topic ? topic.topic : 'Tópico não informado' }}
+                </p>
+                <div class="flex justify-between items-center text-mini sm:hidden">
+                  <div class="text-center leading-3">
+                    <p class="font-semibold">{{ formatStudyTime(topic.studyTime) }}</p>
+                    <p>de estudo</p>
+                  </div>
+                  <div class="text-center leading-3">
+                    <p class="font-semibold">{{ topic.correctAnswers }}</p>
+                    <p>acertos</p>
+                  </div>
+                  <div class="text-center leading-3">
+                    <p class="font-semibold">{{ topic.incorrectAnswers }}</p>
+                    <p>erros</p>
+                  </div>
+                  <div class="text-center leading-3">
+                    <p class="font-semibold">{{ topic.questionsResolved }}</p>
+                    <p>questões</p>
+                  </div>
+                  <p class="text-2xl">{{ getAccuracyPercentage(topic.correctAnswers, topic.questionsResolved) }}%</p>
                 </div>
-                <div class="text-center leading-3">
-                  <p class="font-semibold">{{ topic.correctAnswers }}</p>
-                  <p>acertos</p>
-                </div>
-                <div class="text-center leading-3">
-                  <p class="font-semibold">{{ topic.incorrectAnswers }}</p>
-                  <p>erros</p>
-                </div>
-                <div class="text-center leading-3">
-                  <p class="font-semibold">{{ topic.questionsResolved }}</p>
-                  <p>questões</p>
-                </div>
-                <p class="text-2xl">{{ getAccuracyPercentage(topic.correctAnswers, topic.questionsResolved) }}%</p>
-              </div>
-              <!-- Desktop -->
-               <div class="hidden gap-4 sm:flex sm:justify-between sm:items-center">
+                <!-- Desktop -->
+                <div class="hidden gap-4 sm:flex sm:justify-between sm:items-center">
                   <p>{{ formatStudyTime(topic.studyTime) }} de estudo</p>
                   <p>{{ topic.correctAnswers }} acertos</p>
                   <p>{{ topic.incorrectAnswers }} erros</p>
                   <p>{{ topic.questionsResolved }} questões</p>
                   <p class="text-xl">{{ getAccuracyPercentage(topic.correctAnswers, topic.questionsResolved) }}%</p>
-               </div>
+                </div>
               </li>
             </ul>
           </transition>
