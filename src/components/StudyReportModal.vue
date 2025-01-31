@@ -90,7 +90,7 @@ defineExpose({ openModal });
             <!-- Insights Gerados -->
             <div v-else class="mt-4 p-1 bg-blue-50 border border-blue-200 rounded w-[330px] sm:w-[1200px]">
                 <h3 class="text-sm sm:text-lg font-semibold text-blue-700 mb-2">🧠 Coach de Estudos Inteligente</h3>
-                <div class="p-2 prose max-w-none max-h-[600px] overflow-hidden overflow-y-scroll text-sm sm:w-[1182px] sm:text-base" v-html="insights"></div> <!-- Renderiza o HTML gerado pelo Markdown -->
+                <div class="p-2 prose max-w-none max-h-[450px] overflow-hidden overflow-y-scroll text-sm sm:w-[1182px] sm:text-base" v-html="insights"></div> <!-- Renderiza o HTML gerado pelo Markdown -->
             </div>
 
             <!-- Tabela de Registros -->
