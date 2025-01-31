@@ -196,6 +196,7 @@ const totalAccuracyBgClass = computed(() => {
           <option value="accuracy">Porcentagem de Acertos</option>
         </select>
       </div>
+      <!-- botão desktop -->
       <div class="hidden sm:block">
         <Button @click="openReport" variant="ia">Gerar Insight</Button>
         <StudyReportModal ref="studyModal" />
@@ -209,10 +210,11 @@ const totalAccuracyBgClass = computed(() => {
         <option value="accuracy" class="text-base">Porcentagem de Acertos</option>
       </select>
     </div>
-    <div class="mt-2 sm:hidden">
+    <!-- botão mobile -->
+    <!-- <div class="mt-2 sm:hidden">
       <Button @click="openReport" variant="ia" class="w-full">Gerar Insight</Button>
       <StudyReportModal ref="studyModal" />
-    </div>
+    </div> -->
     <!-- Tempo total de estudo no período -->
     <div class="grid grid-cols-2 mt-2 sm:flex gap-2">
       <div class="flex flex-col gap-2 col-span-2 border bg-white rounded-2xl p-4 shadow-sm sm:items-center">
