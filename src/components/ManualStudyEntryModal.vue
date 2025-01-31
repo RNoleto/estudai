@@ -2,9 +2,6 @@
 import { ref, computed } from 'vue';
 import Button from './ui/Button.vue';
 import { useStudyStore } from '../stores/useStudyStore';
-import { useTimeFormatter } from '../composables/useTimeFormatter';
-
-const { formatStudyTime } = useTimeFormatter();
 
 const props = defineProps({
     isVisible: Boolean,
@@ -14,7 +11,8 @@ const props = defineProps({
 });
 
 const studyStore = useStudyStore();
-const studyTime = ref('');
+const hours = ref('');
+const minutes = ref('');
 const totalQuestions = ref(0);
 const correctAnswers = ref(0);
 const questionsResolved = ref(null);
@@ -25,7 +23,8 @@ const incorrectAnswers = computed(() => totalQuestions.value - correctAnswers.va
 
 const resetForm = () => {
     studyStore.topic = '';
-    studyTime.value = '';
+    hours.value = '';
+    minutes.value = '';
     totalQuestions.value = 0;
     correctAnswers.value = 0;
     questionsResolved.value = null;
@@ -34,8 +33,8 @@ const resetForm = () => {
 };
 
 const validateInputs = () => {
-    if (!/^\d{1,2}:\d{2}:\d{2}$/.test(studyTime.value)) {
-        alert('Por favor, insira o tempo de estudo no formato hh:mm:ss.');
+    if (!/^(\d{1,2})$/.test(hours.value) || !/^(\d{1,2})$/.test(minutes.value)) {
+        alert('Por favor, insira um valor válido para horas e minutos.');
         return false;
     }
     if (totalQuestions.value < 0 || correctAnswers.value < 0) {
@@ -53,8 +52,7 @@ const handleSave = () => {
     if (!validateInputs()) return;
 
     try {
-        const [hours, minutes, seconds] = studyTime.value.split(':').map(Number);
-        const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+        const totalSeconds = (parseInt(hours.value, 10) || 0) * 3600 + (parseInt(minutes.value, 10) || 0) * 60;
 
         const newRecord = {
             subject_id: props.selectedSubject.id,
@@ -91,9 +89,14 @@ const handleCancel = () => {
                 <p><strong>Tópico:</strong> {{ studyStore.topic }}</p>
             </div>
             <div class="text-sm mb-4 sm:text-base">
-                <label for="study-time" class="block font-medium">Tempo de Estudos (hh:mm:ss)</label>
-                <input id="study-time" v-model="studyTime" placeholder="hh:mm:ss"
-                    class="mt-1 block w-full border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                <label class="block font-medium">Tempo de Estudos</label>
+                <div class="flex gap-2">
+                    <input v-model="hours" type="number" min="0" placeholder="Horas"
+                        class="w-[70px] border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                    <span class="self-center">:</span>
+                    <input v-model="minutes" type="number" min="0" max="59" placeholder="Minutos"
+                        class="w-[70px] border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
             </div>
             <div class="text-sm mt-4 sm:text-base">
                 <p class="font-medium">Você resolveu questões?</p>
@@ -120,36 +123,15 @@ const handleCancel = () => {
                         class="w-[110px] mt-1 border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
                 </label>
             </div>
-            <div class="text-sm mt-4 sm:text-base">
-                <p class="font-medium">Você fez pausas durante o estudo?</p>
-                <div class="flex gap-4">
-                    <label class="flex items-center">
-                        <input type="radio" v-model="pause" value="yes" class="mr-2">
-                        Sim
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" v-model="pause" value="no" class="mr-2">
-                        Não
-                    </label>
-                </div>
-                <div v-if="pause === 'yes'">
-                    <label class="block mt-2">
-                        <span class="font-medium">Número de Pausas</span>
-                        <input type="number" v-model="totalPauses" min="1" placeholder="Ex.: 3"
-                            class="mt-1 block w-full border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
-                    </label>
-                </div>
-                <div class="flex justify-end gap-2 mt-6">
-                    <Button variant="secondary" @click="handleCancel">Cancelar</Button>
-                    <Button variant="primary" @click="handleSave">Salvar</Button>
-                </div>
+            <div class="flex justify-end gap-2 mt-6">
+                <Button variant="secondary" @click="handleCancel">Cancelar</Button>
+                <Button variant="primary" @click="handleSave">Salvar</Button>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-/* Remove spinner for number inputs */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;

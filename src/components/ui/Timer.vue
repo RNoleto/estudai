@@ -71,7 +71,6 @@ const exitFocusMode = () => {
              :disabled="props.isDisabled" variant="play">
             {{ timerStore.isRunning ? (timerStore.isPaused ? 'Continuar' : 'Pausar') : 'Iniciar' }}
           </Button>
-
           <Button @click="stopTimer" variant="delete"
             :disabled="!timerStore.isRunning">Parar</Button>
         </div>
