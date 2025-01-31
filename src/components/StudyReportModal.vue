@@ -75,7 +75,7 @@ defineExpose({ openModal });
 
 <template>
     <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
-        <div class="bg-white p-6 rounded-lg shadow-lg">
+        <div class="mt-10 bg-white p-6 rounded-lg shadow-lg sm:mt-0">
             <div class="flex justify-between items-center border-b pb-2">
                 <h2 class="text-xl font-bold">Relatório de Estudos & Insights</h2>
                 <button @click="closeModal" class="text-gray-500 hover:text-gray-700">✕</button>
@@ -88,9 +88,9 @@ defineExpose({ openModal });
             </div>
 
             <!-- Insights Gerados -->
-            <div v-else class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded">
+            <div v-else class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded w-[400px] sm:w-[1200px]">
                 <h3 class="text-lg font-semibold text-blue-700 mb-2">🧠 Coach de Estudos Inteligente</h3>
-                <div class="prose max-w-none w-[1200px] h-[600px] overflow-hidden overflow-y-scroll text-base" v-html="insights"></div> <!-- Renderiza o HTML gerado pelo Markdown -->
+                <div class="prose max-w-none w-[380px] h-[600px] overflow-hidden overflow-y-scroll text-sm sm:w-[1182px] sm:text-base" v-html="insights"></div> <!-- Renderiza o HTML gerado pelo Markdown -->
             </div>
 
             <!-- Tabela de Registros -->
