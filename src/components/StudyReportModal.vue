@@ -47,7 +47,7 @@ const generateAIInsights = async () => {
 
     localLoading.value = true;
 
-    console.log("studyRecords recuperado:", studyRecords.value);
+    // console.log("studyRecords recuperado:", studyRecords.value);
     
     try {
         const studyData = studyRecords.value.map(record => `Matéria: ${record.subjectName}\nTópico: ${record.topic || 'N/A'}\nTempo de estudo: ${formatTime(record.study_time)}\nAcertos: ${record.correct_answers}\nErros: ${record.incorrect_answers}`).join('\n');
