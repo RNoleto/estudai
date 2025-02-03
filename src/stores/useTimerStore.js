@@ -14,6 +14,13 @@ export const useTimerStore = defineStore('timer', () => {
   let lastPauseDuration = 0;
   let lastTimestamp = null;
 
+  // Função para adicionar tempo (em segundos) somente quando o timer não estiver rodando
+  const addTime = (seconds) => {
+    if (!isRunning.value) {
+      elapsedTime.value += seconds;
+    }
+  };
+
   const start = () => {
     if (!isRunning.value) {
       isRunning.value = true;
@@ -66,6 +73,7 @@ export const useTimerStore = defineStore('timer', () => {
     isRunning.value = false;
     isPaused.value = false;
 
+    // Reinicia o timer
     elapsedTime.value = 0;
     pauses.value = [];
   };
@@ -104,5 +112,6 @@ export const useTimerStore = defineStore('timer', () => {
     finalFormattedPauseTime,
     finalTotalPausesLength,
     finalElapsedTime,
+    addTime // Função para adicionar tempo customizado
   };
 });
