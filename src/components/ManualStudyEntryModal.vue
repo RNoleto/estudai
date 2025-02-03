@@ -82,7 +82,7 @@ const handleCancel = () => {
 
 <template>
     <div v-if="isVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm z-50">
-        <div class="bg-white p-4 rounded-lg shadow-lg relative">
+        <div class="bg-white p-4 rounded-2xl shadow-lg relative">
             <h2 class="text-lg sm:text-2xl font-bold sm:mb-4">Inserir Informações de Estudo</h2>
             <div class="text-sm mb-4 sm:text-base">
                 <p><strong>Matéria:</strong> {{ selectedSubject.name }}</p>
@@ -124,8 +124,8 @@ const handleCancel = () => {
                 </label>
             </div>
             <div class="flex justify-end gap-2 mt-6">
+                <Button variant="primary" size="full" @click="handleSave">Salvar</Button>
                 <Button variant="secondary" @click="handleCancel">Cancelar</Button>
-                <Button variant="primary" @click="handleSave">Salvar</Button>
             </div>
         </div>
     </div>
