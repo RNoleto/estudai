@@ -5,12 +5,12 @@ import { computed } from 'vue';
 
 // Definindo os estilos do OptionCard usando tv (tailwind-variants)
 const optionCard = tv({
-  base: 'p-2 flex items-center gap-2 rounded-2xl shadow-sm shadow-black cursor-pointer',
+  base: 'p-2 flex items-center gap-2 rounded-lg shadow-sm shadow-black cursor-pointer',
   variants: {
     variant: {
-      primary: 'bg-gray-900 text-white hover:bg-blue-600',
-      secondary: 'bg-gray-500 text-white hover:bg-gray-600',
-      selected: 'bg-blue-700 text-white hover:bg-blue-600',
+      primary: 'bg-gray-900 text-white sm:hover:bg-blue-600',
+      secondary: 'bg-gray-500 text-white sm:hover:bg-gray-600',
+      selected: 'bg-blue-700 text-white sm:hover:bg-blue-900',
       disabled: 'bg-gray-300 text-gray-500 cursor-not-allowed',
     },
   },

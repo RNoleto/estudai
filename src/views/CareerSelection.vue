@@ -129,7 +129,7 @@ const saveCareer = async () => {
       </div>
       </div>
     </div>
-    <div class="flex justify-end mt-4 bg-red-500 sm:mt-10">
+    <div class="flex justify-end mt-4 sm:mt-10">
       <!-- <Button @click="createCareer">Adicionar nova carreira</Button> -->
       <Button
         :disabled="!selectedCareer"
