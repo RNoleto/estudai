@@ -6,6 +6,8 @@ import { useTimeFormatter } from '../composables/useTimeFormatter';
 import { useSubjectStore } from '../stores/useSubjectStore';
 
 import ComboBox from '../components/ui/ComboBox.vue';
+import Button from '../components/ui/Button.vue';
+import Input from  '../components/ui/Input.vue';
 
 const { formatStudyTime } = useTimeFormatter();
 
@@ -125,8 +127,8 @@ const closeSuccessModal = () => {
 
 <template>
   <div v-if="isVisible && !modalMessage.text"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-zinc-600">
-    <div class="bg-zinc-100 rounded-lg shadow-lg p-6 w-full max-w-md">
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-zinc-600 px-2">
+    <div class="bg-zinc-100 rounded-2xl shadow-lg p-6 w-full max-w-md">
       <h2 class="text-lg font-bold mb-4">Editar Registro</h2>
       <form @submit.prevent="saveChanges">
         <div class="mb-4">
@@ -135,33 +137,23 @@ const closeSuccessModal = () => {
             class="mt-1 block w-full" />
         </div>
         <div class="mb-4">
-          <label for="topic" class="block text-sm font-medium text-gray-700">Tópico</label>
-          <input v-model="formData.topic" type="text" id="topic"
-            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+          <Input v-model="formData.topic" type="text" id="topic" showLabel="true" label="Tópico"/>
         </div>
         <div class="flex gap-4 justify-between">
           <div class="mb-4">
-            <label for="study_time" class="block text-sm font-medium text-gray-700">Tempo de estudo</label>
-            <input v-model="formData.study_time" type="text" id="study_time" placeholder="hh:mm:ss"
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+            <Input v-model="formData.study_time" type="text" id="study_time" placeholder="hh:mm:ss" label="Tempo de estudo"/>
           </div>
           <div class="mb-4">
-            <label for="total_pauses" class="block text-sm font-medium text-gray-700">Nº de pauses</label>
-            <input v-model="formData.total_pauses" type="number" id="total_pauses" min="0"
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+            <Input v-model="formData.total_pauses" type="number" id="total_pauses" min="0" label="Nº de pauses"/>
           </div>
         </div>
         <p class="text-center p-4 block text-sm font-medium text-gray-700">Dados de Questões</p>
         <div class="flex gap-2 justify-between">
           <div class="mb-4">
-            <label for="questions_resolved" class="block text-sm font-medium text-gray-700">Total</label>
-            <input v-model="formData.questions_resolved" type="number" id="questions_resolved"
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+            <Input v-model="formData.questions_resolved" type="number" id="questions_resolved" label="Total"/>
           </div>
           <div class="mb-4">
-            <label for="correct_answers" class="block text-sm font-medium text-gray-700">Corretas</label>
-            <input v-model="formData.correct_answers" type="number" id="correct_answers"
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+            <Input v-model="formData.correct_answers" type="number" id="correct_answers" label="Corretas"/>
           </div>
           <!-- <div class="mb-4">
             <label for="incorrect_answers" class="block text-sm font-medium text-gray-700">Erradas</label>
@@ -170,13 +162,13 @@ const closeSuccessModal = () => {
           </div> -->
         </div>
         <div class="flex justify-end gap-2">
-          <button type="button" @click="closeModal"
-            class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
-            Cancelar
-          </button>
-          <button type="submit" class="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600">
+          <Button type="submit" variant="play" size="full" >
             Salvar
-          </button>
+          </Button>
+          <Button type="button" variant="secondary" @click="closeModal">
+            Cancelar
+          </Button>
+          
         </div>
       </form>
     </div>
