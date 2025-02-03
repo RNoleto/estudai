@@ -3,6 +3,7 @@ import { ref, onMounted, watch } from "vue";
 import { useUserStore } from "../stores/useUserStore";
 import { useAIStore } from "../stores/aiStore"; 
 import { marked } from "marked";
+import Button from "./ui/Button.vue";
 
 const userStore = useUserStore();
 const aiStore = useAIStore();
@@ -76,7 +77,7 @@ defineExpose({ openModal });
 <template>
     <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
         <div class="mt-10 bg-white p-6 rounded-2xl shadow-lg sm:mt-0">
-            <div class="flex justify-between items-center border-b pb-2">
+            <div class="flex justify-between items-center border-b pb-2 gap-2">
                 <h2 class="text-base font-bold sm:text-xl">Relatório de Estudos & Insights</h2>
                 <button @click="closeModal" class="text-gray-500 hover:text-gray-700">✕</button>
             </div>
@@ -103,9 +104,9 @@ defineExpose({ openModal });
             <p v-else class="text-center text-gray-500 mt-4">Nenhum registro de estudo encontrado.</p>
 
             <div class="mt-1 flex justify-end">
-                <button @click="closeModal" class="px-4 py-2 bg-blue-500 text-white rounded shadow-md hover:bg-blue-600">
+                <Button @click="closeModal" variant="play">
                     Fechar
-                </button>
+                </Button>
             </div>
         </div>
     </div>
