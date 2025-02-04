@@ -3,6 +3,8 @@
 import ChatView from '../components/ChatView.vue';
 import Relatorio from '../components/Relatorio.vue';
 
+import Stripe from '../components/Stripe.vue';
+
 import { ref } from "vue";
 
 const studyModal = ref(null);
@@ -25,7 +27,9 @@ import StudyReportModal from '../components/StudyReportModal.vue';
       <Relatorio />
      </div> -->
 
-    <button @click="openReport" class="px-4 py-2 bg-green-500 text-white rounded">Gerar Insight</button>
-    <StudyReportModal ref="studyModal" /> 
+    <!-- <button @click="openReport" class="px-4 py-2 bg-green-500 text-white rounded">Gerar Insight</button>
+    <StudyReportModal ref="studyModal" />  -->
+
+    <Stripe />
   </div>
 </template>
