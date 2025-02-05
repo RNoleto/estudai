@@ -303,7 +303,7 @@ const totalCorrectAnswers = computed(() => {
         <StudyCard class="sm:col-span-1" v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record"
           :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal"
           @delete="openDeleteModal(record)" />
-        <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord" @update="updateRecord"
+        <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord" @update="userStore.fetchUserStudyRecords"
           @close="isModalVisible = false" />
       </div>
     </div>

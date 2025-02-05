@@ -72,11 +72,12 @@ watch(
 // Computed para obter a lista de matérias
 const subjects = computed(() => subjectStore.subjects);
 
-// // Emite evento de atualização
-// const handleSubmit = () => {
-//   emit('update', { ...formData });
-//   closeModal();
-// };
+watch(
+  [() => formData.questions_resolved, () => formData.correct_answers],
+  ([total, correct]) => {
+    formData.incorrect_answers = Math.max(0, total - correct);
+  }
+);
 
 // Fecha o modal
 const closeModal = () => {
@@ -110,6 +111,10 @@ const saveChanges = async () => {
     };
 
     await userStore.updateUserStudyRecord(props.record.id, updatedData);
+
+    //Emitindo evento para carregar a listagem
+    emit('update');
+
     modalMessage.text = 'Registro atualizado com sucesso!';
     modalMessage.type = 'success';
   } catch (error) {
