@@ -299,7 +299,7 @@ const totalCorrectAnswers = computed(() => {
         <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
       </div>
       <!-- Exibe os registros de estudo -->
-      <div class="grid grid-cols-1 gap-2 sm:grid sm:grid-cols-4">
+      <div class="grid grid-cols-1 gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <StudyCard class="sm:col-span-1" v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record"
           :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal"
           @delete="openDeleteModal(record)" />
