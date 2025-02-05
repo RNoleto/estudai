@@ -15,6 +15,8 @@ const timerStore = useTimerStore();
 const studyStore = useStudyStore();
 const userStore = useUserStore();
 
+const isSaving = ref(false);
+
 
 // Computed properties para garantir que os valores estejam atualizados
 const totalStudyTime = computed(() => timerStore.finalFormattedTime);
@@ -35,9 +37,17 @@ onMounted(async () => {
 
 // Salvando dados no store
 const saveData = async () => {
+
+  if(isSaving.value) return; //Impedimento de cliques repetidos enquanto salva
+
   if(correctAnswers.value > totalQuestions.value){
     alert('Total de questões corretas não pode ser maior que total de questões respondidas');
-  } else{
+    return;
+  }
+  
+  isSaving.value = true; //Ativa o estado de salvamento
+  
+  try {
     const newRecord  = {
       totalStudyTime: totalStudyTime.value,
       totalPauses: totalPauses.value,
@@ -54,6 +64,10 @@ const saveData = async () => {
     
     clearForm();
     closeModal();
+  } catch (error) {
+    console.error('Erro ao salvar:', error);
+  } finally {
+    isSaving = false; // Libera o botão após a conclusão
   }
 }
 
@@ -117,9 +131,9 @@ const isFormValid = computed(() => {
         <Button 
           variant="primary"
             @click="saveData"
-            :disabled="!isFormValid"
+            :disabled="!isFormValid || isSaving"
         >
-          Salvar
+          {{ isSaving ? 'Salvando...' : 'Salvar' }}
         </Button>
         <Button
           variant="secondary"
