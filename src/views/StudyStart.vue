@@ -120,20 +120,27 @@ const getChartOptions = (record) => {
 };
 
 const todayStudyRecords = computed(() => {
-  const today = new Date().toISOString().slice(0, 10); // Data de hoje no formato ISO (AAAA-MM-DD)
+  // Data atual no fuso horário do navegador (local)
+  const now = new Date();
+  // Início de hoje (00:00:00) no horário local
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  // Início do dia seguinte (00:00:00), que será o limite superior (não incluso)
+  const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 
   return userStore.userStudyRecords.filter((record) => {
-    if (!record.created_at) return false; // Ignora registros sem data
+    if (!record.created_at) return false;
     try {
-      // Ajuste para o formato vindo do banco de dados
-      const recordDate = new Date(record.created_at.split('.')[0]);
-      return recordDate.toISOString().slice(0, 10) === today;
+      // Converte a string da API em objeto Date
+      const recordDate = new Date(record.created_at);
+      // Retorna true se o registro estiver entre o início e o final do dia
+      return recordDate >= startOfToday && recordDate < endOfToday;
     } catch (error) {
       console.error("Erro ao processar a data do registro:", error);
-      return false; // Ignora registros com erro
+      return false;
     }
   });
 });
+
 
 const updateChartData = () => {
   try {
