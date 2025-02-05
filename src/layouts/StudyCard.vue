@@ -62,10 +62,10 @@ const showIncorrect = ref(false);
       </div>
       <div class="rounded-full bg-slate-200 h-[100px] w-[100px]"></div>
     </div>
-  <div v-else class="shadow-md flex flex-col gap-1 text-xs text-zinc-700 border-b rounded-2xl bg-white p-4">
+  <div v-else class="shadow-md flex flex-col gap-1 text-xs sm:text-sm text-zinc-700 border-b rounded-2xl bg-white p-4">
     <!-- Header do card -->
     <div class="flex justify-between">
-      <div class="text-base flex flex-col justify-center gap-1">
+      <div class=" flex flex-col justify-center gap-1">
         <p><span class="font-bold">Matéria:</span> {{ record.subjectName }}</p>
         <p><span class="font-bold">Tópico:</span> {{ record.topic }}</p>
       </div>
@@ -75,7 +75,7 @@ const showIncorrect = ref(false);
       </div>
     </div>
     <!-- Conteudo do Card -->
-    <div class="text-sm flex justify-between gap-10">
+    <div class=" flex justify-between gap-10">
       <div class="flex flex-col justify-center gap-1">
         <p><span class="font-bold">Tempo de estudo:</span> {{ formatStudyTime(record.study_time) }}</p>
         <p v-if="record.total_pauses > 0">
@@ -89,15 +89,15 @@ const showIncorrect = ref(false);
       </div>
       <!-- Gráfico -->
       <div v-if="record.questions_resolved > 0" class="relative flex justify-center">
-        <Chart :type="'doughnut'" :data="chartData" :options="chartOptions" class="w-[10rem]" />
-        <div class="absolute bottom-5 text-center">
+        <Chart :type="'doughnut'" :data="chartData" :options="chartOptions" class="w-[4rem] sm:w-[5rem] lg:w-[10rem]" />
+        <div class="absolute text-center bottom-1 sm:bottom-11 md:bottom-12 lg:bottom-6">
           <div v-bind:class="{ 'text-[#00B884]': showCorrect, 'hidden': !showCorrect }">
-            <strong class="text-xl">{{ correctPercentage }}%</strong>
-            <p class="text-sm">Acertos</p>
+            <strong class="text-xs lg:text-xl">{{ correctPercentage }}%</strong>
+            <p class="text-sm sm:text-sm lg:text-base">Acertos</p>
           </div>
           <div v-if="incorrectPercentage > 0" v-bind:class="{ 'text-[#FF5675]': showIncorrect, 'hidden': !showIncorrect }">
-            <strong class="text-xl">{{ incorrectPercentage }}%</strong>
-            <p class="text-sm">Erros</p>
+            <strong class="text-xs sm:text-xl">{{ incorrectPercentage }}%</strong>
+            <p class="text-sm sm:text-sm lg:text-base">Erros</p>
           </div>
         </div>
       </div>
