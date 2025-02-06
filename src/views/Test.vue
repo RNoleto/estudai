@@ -1,35 +1,24 @@
 <script setup>
-// import ChatOpenAi from '../components/ChatOpenAi.vue';
-import ChatView from '../components/ChatView.vue';
-import Relatorio from '../components/Relatorio.vue';
-
 import Stripe from '../components/Stripe.vue';
-
 import { ref } from "vue";
+import { useUser } from 'vue-clerk';
 
-const studyModal = ref(null);
+const { user } = useUser();
 
-const openReport = () => {
-  studyModal.value.openModal();
-};
+const isPremium = user?.privateMetadata?.premium;
 
-import StudyReportModal from '../components/StudyReportModal.vue';
 </script>
 
 <template>
   <div class="flex flex-col items-center">
-    <h1 class="text-2xl font-bold mb-4">Teste integração Gemini-Ai</h1>
-    <!-- <ChatOpenAi /> -->
-     <!-- <ChatView /> -->
-
-     <!-- <div>
-      <p>Teste Relatorio</p>
-      <Relatorio />
-     </div> -->
-
-    <!-- <button @click="openReport" class="px-4 py-2 bg-green-500 text-white rounded">Gerar Insight</button>
-    <StudyReportModal ref="studyModal" />  -->
+    <div>
+      <h1>Bem-vindo, {{ user.fullName }}</h1>
+      <p v-if="isPremium">🎉 Você tem acesso premium!</p>
+      <p v-else>⚠️ Assine para desbloquear recursos premium.</p>
+    </div>
 
     <Stripe />
+
+
   </div>
 </template>
