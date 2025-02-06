@@ -7,6 +7,9 @@ import Subjects from '../views/Subjects.vue';
 import StudyCycle from '../views/StudyCycle.vue';
 import StudyStart from '../views/StudyStart.vue';
 
+import Success from '../layouts/Success.vue';
+import Cancel from '../layouts/Cancel.vue';
+
 import Dashboard from '../views/Dashboard.vue';
 import DashboardHome from '../views/DashboardHome.vue';
 import StudyHistory from '../views/StudyHistory.vue';
@@ -82,6 +85,16 @@ const routes = [
         path: 'teste',
         name: 'DashboardTeste',
         component: Test,
+      },
+      {
+        path: 'pagamento-sucesso',
+        name: 'DashboardSuccess',
+        component: Success,
+      },
+      {
+        path: 'pagamento-cancelado',
+        name: 'DashboardCancel',
+        component: Cancel,
       },
     ]
   }
