@@ -85,6 +85,11 @@ onMounted(async () => {
               </div>
             </transition>
           </div>
+          <a href="/area-do-aluno/planos"
+            class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+            <i class="fa-solid fa-file-signature"></i>
+            Planos
+          </a>
           <!-- <a href="/area-do-aluno/configuracoes" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold  p-2 rounded-xlhover:bg-blue-100">
             <i class="fas fa-cog"></i>
             Configurações
@@ -138,6 +143,16 @@ onMounted(async () => {
           ]">
             <i class="fa-solid fa-stopwatch"></i>
             <span v-if="!isSidebarCollapsed">Estudar</span>
+          </a>
+        </div>
+        <!-- Planos da Dashboard -->
+        <div>
+          <a href="/area-do-aluno/planos" :class="[
+            'flex items-center gap-2 px-4 py-2 rounded',
+            route.path === '/area-do-aluno/planos' ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100'
+          ]">
+            <i class="fa-solid fa-file-signature"></i>
+            <span v-if="!isSidebarCollapsed">Planos</span>
           </a>
         </div>
         <!-- Menu Principal 1 -->

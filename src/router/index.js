@@ -10,6 +10,8 @@ import StudyStart from '../views/StudyStart.vue';
 import Success from '../layouts/Success.vue';
 import Cancel from '../layouts/Cancel.vue';
 
+import SubscriptionsPage from '../views/SubscriptionsPage.vue';
+
 import Dashboard from '../views/Dashboard.vue';
 import DashboardHome from '../views/DashboardHome.vue';
 import StudyHistory from '../views/StudyHistory.vue';
@@ -80,6 +82,11 @@ const routes = [
         path: 'ciclo-de-estudos',
         name: 'DashboardCiclo',
         component: StudyCycle,
+      },
+      {
+        path: 'planos',
+        name: 'DashboardSubscriptions',
+        component: SubscriptionsPage,
       },
       {
         path: 'teste',
