@@ -18,14 +18,18 @@ onMounted(async () => {
     if (sessionId) {
         try {
             const response = await axios.get(`/stripe/confirm-subscription?session_id=${sessionId}`);
-            console.log("response do get: ", response.data);
+            console.log('response: ', response.data);
             if (response.data.message) {
                 confirmationMessage.value = "Assinatura feita com sucesso!";
-                // Se o endpoint retornar os dados do usuário, atualize os metadados para debugar
+                // Verifique se response.data.user existe antes de acessar seus metadados
                 const updatedUser = response.data.user;
-                subscriptionPlan.value = updatedUser.public_metadata.subscriptionPlan || '';
-                stripeCustomerId.value = updatedUser.private_metadata.stripeCustomerId || '';
-                stripeSubscriptionId.value = updatedUser.private_metadata.stripeSubscriptionId || '';
+                if (updatedUser) {
+                    subscriptionPlan.value = updatedUser.public_metadata?.subscriptionPlan || '';
+                    stripeCustomerId.value = updatedUser.private_metadata?.stripeCustomerId || '';
+                    stripeSubscriptionId.value = updatedUser.private_metadata?.stripeSubscriptionId || '';
+                } else {
+                    console.warn("Dados do usuário não encontrados na resposta.");
+                }
             } else {
                 confirmationMessage.value = "Assinatura não realizada.";
             }
