@@ -18,6 +18,7 @@ onMounted(async () => {
     if (sessionId) {
         try {
             const response = await axios.get(`/stripe/confirm-subscription?session_id=${sessionId}`);
+            console.log("response do get: ", response.data);
             if (response.data.message) {
                 confirmationMessage.value = "Assinatura feita com sucesso!";
                 // Se o endpoint retornar os dados do usuário, atualize os metadados para debugar
