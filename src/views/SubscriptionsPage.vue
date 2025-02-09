@@ -1,10 +1,10 @@
 <template>
-  <div class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-gray-100 flex items-center justify-center">
     <div class="max-w-4xl w-full px-4 py-8">
       <h1 class="text-3xl font-bold text-center mb-8">Escolha Seu Plano</h1>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Plano Gratuito -->
-        <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+        <div class="bg-white shadow-md rounded-2xl p-6 flex flex-col">
           <h2 class="text-xl font-bold mb-4">Plano Gratuito</h2>
           <p class="text-gray-600 mb-4">
             Aproveite nosso plano gratuito com funcionalidades básicas para começar.
@@ -12,11 +12,11 @@
           <ul class="mb-6 space-y-2">
             <li class="flex items-center">
               <span class="text-green-500 mr-2">✔</span>
-              <span>Funcionalidade 1</span>
+              <span>Registros de estudos</span>
             </li>
             <li class="flex items-center">
               <span class="text-green-500 mr-2">✔</span>
-              <span>Funcionalidade 2</span>
+              <span>Métricas de estudos</span>
             </li>
             <li class="flex items-center">
               <span class="text-green-500 mr-2">✔</span>
@@ -31,7 +31,7 @@
           </button>
         </div>
         <!-- Plano Premium -->
-        <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col">
+        <div class="bg-white shadow-md rounded-2xl p-6 flex flex-col">
           <h2 class="text-xl font-bold mb-4">Plano Premium</h2>
           <p class="text-gray-600 mb-4">
             Tenha acesso a funcionalidades avançadas e suporte prioritário com nosso plano premium.
@@ -44,11 +44,15 @@
             </li>
             <li class="flex items-center">
               <span class="text-green-500 mr-2">✔</span>
-              <span>Funcionalidades Exclusivas Premium</span>
+              <span>Insigth's com IA</span>
             </li>
             <li class="flex items-center">
               <span class="text-green-500 mr-2">✔</span>
-              <span>Suporte Prioritário</span>
+              <span>Sem limites de registros de estudo</span>
+            </li>
+            <li class="flex items-center">
+              <span class="text-green-500 mr-2">✔</span>
+              <span>Registro manual de estudos</span>
             </li>
           </ul>
           <button
