@@ -103,8 +103,8 @@ const saveCareer = async () => {
 <template>
   <DefaultLayout backgroundOpacity="opacity-20">
     <div class="p-4 flex flex-col gap-4 max-w-[1440px] m-auto">
-      <div class="mt-[100px] flex items-center justify-between">
-        <h3 class="text-4xl font-bold text-[#21BFCA] sm:text-4xl">Selecione a sua carreira</h3>
+      <div class="mt-[50px] flex items-center justify-between">
+        <h3 class="text-2xl sm:text-4xl font-bold text-[#21BFCA] sm:text-4xl">Escolha uma carreira</h3>
         <UserButton />
       </div>
       <div class="grid gap-2 sm:flex flex-wrap">
