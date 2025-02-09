@@ -1,4 +1,5 @@
 <script setup>
+import DefaultLayout from '../layouts/DefaultLayout.vue';
 import { computed, onMounted, ref } from 'vue';
 import { useSubjectStore } from '../stores/useSubjectStore';
 import { useUserStore } from '../stores/useUserStore';
@@ -67,32 +68,32 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="p-4 flex flex-col gap-4">
-    <h3 class="text-xl sm:text-4xl">Selecione as matérias que deseja estudar.</h3>
-    <p class="text-md">Carreira: {{ userStore.careerName }}</p>
-    <Search placeholder="Pesquise a matéria..." v-model="searchTerm" />
-    <div class="grid gap-2 sm:flex flex-wrap">
-      <OptionCard
-        v-for="subject in filteredSubjects"
-        :key="subject.id"
-        :icon="'basil:book-outline'"
-        :careerName="subject.name"
-        @click="toggleSubject(subject)"
-        :variant="selectedSubjects.includes(subject) ? 'selected' : 'primary'"
-      />
-      <div v-if="!filteredSubjects.length" class="text-center p-4">
-        <p class="text-lg text-zinc-800">Matéria não encontrada</p>
+  <DefaultLayout backgroundOpacity="opacity-20">
+    <div class="p-4 flex flex-col gap-4">
+      <h3 class="text-2xl sm:text-4xl font-bold text-[#21BFCA] sm:text-4xl">Escolha suas matérias</h3>
+      <p class="text-md text-[#21BFCA]">Carreira: {{ userStore.careerName }}</p>
+      <Search placeholder="Pesquise a matéria..." v-model="searchTerm" />
+      <div class="grid gap-2 sm:flex flex-wrap">
+        <OptionCard
+          v-for="subject in filteredSubjects"
+          :key="subject.id"
+          :icon="'basil:book-outline'"
+          :careerName="subject.name"
+          @click="toggleSubject(subject)"
+          :variant="selectedSubjects.includes(subject) ? 'selected' : 'primary'"
+        />
+        <div v-if="!filteredSubjects.length" class="text-center p-4">
+          <p class="text-lg text-zinc-800">Matéria não encontrada</p>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 mt-4 sm:mt-10">
+        <Button variant="base" :to="{ name: 'Carreiras' }">Voltar</Button>
+  
+        <Button :variant="selectedSubjects.length ? 'base' : 'baseDisable'" :disabled="selectedSubjects.length === 0"
+            class="disabled:opacity-100 w-full sm:w-auto" @click="saveSubjectsAndNavigate">
+            Salvar e avançar
+          </Button>
       </div>
     </div>
-    <div class="flex justify-end gap-2 mt-4 sm:mt-10">
-      <Button :to="{ name: 'Carreiras' }">Voltar</Button>
-      <Button
-        :disabled="selectedSubjects.length === 0"
-        class="disabled:opacity-50 w-full sm:w-auto"
-        @click="saveSubjectsAndNavigate"
-      >
-        Salvar e Avançar
-      </Button>
-    </div>
-  </div>
+  </DefaultLayout>
 </template>
