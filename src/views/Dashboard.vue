@@ -124,7 +124,7 @@ onMounted(async () => {
           <a href="/area-do-aluno" :class="[
             'flex items-center gap-2 px-4 py-2 mt-4 rounded-lg hover:shadow-md',
             route.path === '/area-do-aluno'
-              ? 'bg-[#AFEBEF] text-[#3E73ED] shadow-sm'
+              ? 'bg-secondary text-[#3E73ED] shadow-sm'
               : 'text-gray-700 hover:bg-gray-100'
           ]">
             <i :class="[
@@ -140,13 +140,13 @@ onMounted(async () => {
             :class="[
               'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
               route.path === '/area-do-aluno/historico-de-estudos' 
-              ? 'bg-[#AFEBEF] text-[#3E73ED] shadow-sm'
+              ? 'bg-secondary text-[#3E73ED] shadow-sm'
               : 'text-gray-700 hover:bg-gray-100'
               ]">
             <i :class="[
               'fa-solid fa-pen-clip',
               route.path === '/area-do-aluno/historico-de-estudos' 
-              ? 'bg-[#AFEBEF] text-[#3E73ED] shadow-sm' 
+              ? 'bg-secondary text-[#3E73ED] shadow-sm' 
               : 'text-[#21BFCA] hover:text-gray-500'
               ]"></i>
             <span v-if="!isSidebarCollapsed">Histórico de Estudo</span>
@@ -156,12 +156,12 @@ onMounted(async () => {
         <div>
           <a href="/area-do-aluno/estudar" :class="[
             'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-            route.path === '/area-do-aluno/estudar' ? 'bg-[#AFEBEF] text-[#3E73ED] shadow-sm' : 'text-gray-700 hover:bg-gray-100'
+            route.path === '/area-do-aluno/estudar' ? 'bg-secondary text-[#3E73ED] shadow-sm' : 'text-gray-700 hover:bg-gray-100'
           ]">
             <i :class="[
               'fa-solid fa-stopwatch',
               route.path === '/area-do-aluno/estudar'
-              ? 'bg-[#AFEBEF] text-[#3E73ED] shadow-sm'
+              ? 'bg-secondary text-[#3E73ED] shadow-sm'
               : 'text-[#21BFCA] hover:text-gray-500'
               ]"></i>
             <span v-if="!isSidebarCollapsed">Estudar</span>
@@ -171,11 +171,11 @@ onMounted(async () => {
         <div>
           <a href="/area-do-aluno/planos" :class="[
             'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-            route.path === '/area-do-aluno/planos' ? 'bg-[#AFEBEF] text-[#3E73ED] shadow-sm' : 'text-gray-700 hover:bg-gray-100'
+            route.path === '/area-do-aluno/planos' ? 'bg-secondary text-[#3E73ED] shadow-sm' : 'text-gray-700 hover:bg-gray-100'
           ]">
             <i :class="['fa-solid fa-file-signature',
               route.path === '/area-do-aluno/planos'
-              ? 'bg-[#AFEBEF] text-[#3E73ED] shadow-sm' 
+              ? 'bg-secondary text-[#3E73ED] shadow-sm' 
               : 'text-[#21BFCA] hover:text-gray-500'
             ]"></i>
             <span v-if="!isSidebarCollapsed">Planos</span>
@@ -187,19 +187,26 @@ onMounted(async () => {
             :class="[
               'flex gap-1 items-center justify-between w-full px-4 py-2 text-left text-gray-700 rounded-lg hover:shadow-md',
               route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
-                ? 'bg-[#AFEBEF] text-[#3E73ED] shadow-sm' 
+                ? 'bg-secondary text-[#3E73ED] shadow-sm' 
                 : 'text-gray-700 hover:bg-gray-100'
               ]">
             <div class="flex items-center gap-2">
               <i :class="['fas fa-cog',
               route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
-                ? 'bg-[#AFEBEF] text-[#3E73ED] shadow-sm' 
+                ? 'text-[#3E73ED]' 
                 : 'text-[#21BFCA] hover:text-gray-100'
               ]"></i>
-              <span v-if="!isSidebarCollapsed">Configurações</span>
+              <span v-if="!isSidebarCollapsed" :class="[
+                route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
+                ? 'text-[#3E73ED]' : 'text-gray-700 hover:bg-gray-100'
+              ]">Configurações</span>
             </div>
             <i class="text-xs text-[#21BFCA] fas"
-              :class="[isMenu3Open ? 'fa-chevron-up' : 'fa-chevron-down', isSidebarCollapsed ? 'mini' : 'text-base']"></i>
+              :class="[isMenu3Open ? 'fa-chevron-up' : 'fa-chevron-down', isSidebarCollapsed ? 'mini' : 'text-base', 
+                route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
+                ? 'text-[#3E73ED]' 
+                : 'text-[#21BFCA] hover:text-gray-100'
+              ]"></i>
           </button>
           <div v-if="isMenu3Open"
             :class="['mt-1 space-y-2 transition-all duration-300', isSidebarCollapsed ? 'absolute z-10 rounded-md left-16 bg-zinc-50 shadow-lg w-48 p-2' : 'pl-8']">

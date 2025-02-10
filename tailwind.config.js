@@ -4,7 +4,12 @@ export default {
   purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   darkMode: false,
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: '#2EC1CB',
+        secondary: '#AFEBEF'
+      }
+    },
   },
   plugins: [
     require('@tailwindcss/typography'),
