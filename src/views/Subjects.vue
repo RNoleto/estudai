@@ -73,7 +73,7 @@ onMounted(async () => {
       <h3 class="text-2xl sm:text-4xl font-bold text-gray-700">Escolha suas <span class="text-[#21BFCA]">matérias.</span></h3>
       <p class="text-md text-gray-700">Carreira: {{ userStore.careerName }}</p>
       <Search placeholder="Pesquise a matéria..." v-model="searchTerm" />
-      <div class="grid grid-cols-1 gap-2 w-full sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+      <div class="grid grid-cols-1 gap-2 w-full sm:grid-cols-2 lg:grid-cols-3  xl:grid-cols-5">
         <OptionCard
           v-for="subject in filteredSubjects"
           :key="subject.id"

@@ -102,14 +102,14 @@ const saveCareer = async () => {
 
 <template>
   <DefaultLayout backgroundOpacity="opacity-20">
-    <div class="p-4 flex flex-col gap-4 max-w-[1840px] m-auto">
+    <div class="p-4 flex flex-col gap-4 m-auto">
       <div class="mt-[50px] flex items-center justify-between">
         <h3 class="text-2xl font-bold text-gray-700 sm:text-4xl">Escolha uma <span class="text-primary">carreira.</span></h3>
         <UserButton />
       </div>
       <div class="grid gap-2 sm:flex flex-wrap">
         <Search placeholder="Pesquise a carreira..." v-model="searchTerm" />
-        <div class="grid grid-cols-1 gap-2 w-full sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div class="grid grid-cols-1 gap-2 w-full sm:grid-cols-2 lg:grid-cols-3  xl:grid-cols-5">
           <OptionCard v-for="career in filteredCareers" :key="career.id" @click="selectCareer(career)" :icon="career.icon"
             :careerName="career.name"
             :variant="selectedCareer && career.id === selectedCareer.id ? 'selected' : 'primary'" />
