@@ -1,5 +1,5 @@
 <template>
-    <div class="relative w-full h-screen">
+    <div class="relative w-full h-full">
       <!-- Background: imagem que ocupa toda a tela -->
       <div 
         class="absolute top-0 left-0 w-full h-full bg-cover bg-center transition-opacity duration-300"

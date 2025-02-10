@@ -47,7 +47,7 @@ watch(() => props.modelValue, (newVal) => {
         v-model="searchTerm"
         :placeholder="placeholder"
         type="text"
-        class="w-full placeholder-[#21BFCA] text-[#21BFCA] inline-flex  leading-none outline-none bg-white"
+        class="w-full placeholder-gray-600 text-gray-800 inline-flex  leading-none outline-none bg-white"
       />
     </div>
   </template>

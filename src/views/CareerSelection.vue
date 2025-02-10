@@ -102,18 +102,21 @@ const saveCareer = async () => {
 
 <template>
   <DefaultLayout backgroundOpacity="opacity-20">
-    <div class="p-4 flex flex-col gap-4 max-w-[1440px] m-auto">
+    <div class="p-4 flex flex-col gap-4 max-w-[1840px] m-auto">
       <div class="mt-[50px] flex items-center justify-between">
-        <h3 class="text-2xl sm:text-4xl font-bold text-[#21BFCA] sm:text-4xl">Escolha uma carreira</h3>
+        <h3 class="text-2xl font-bold text-gray-700 sm:text-4xl">Escolha uma <span class="text-[#2EC1CB]">carreira.</span></h3>
         <UserButton />
       </div>
       <div class="grid gap-2 sm:flex flex-wrap">
         <Search placeholder="Pesquise a carreira..." v-model="searchTerm" />
-        <OptionCard v-for="career in filteredCareers" :key="career.id" @click="selectCareer(career)" :icon="career.icon"
-          :careerName="career.name"
-          :variant="selectedCareer && career.id === selectedCareer.id ? 'selected' : 'primary'" />
-        <div v-if="!filteredCareers.length" class="text-center p-4">
-          <p class="text-lg text-zinc-800">Carreira não encontrada</p>
+        <div class="grid grid-cols-1 gap-2 w-full sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <OptionCard v-for="career in filteredCareers" :key="career.id" @click="selectCareer(career)" :icon="career.icon"
+            :careerName="career.name"
+            :variant="selectedCareer && career.id === selectedCareer.id ? 'selected' : 'primary'" />
+        </div>
+        <!-- Mensagem de busca sem sucesso -->
+        <div v-if="!filteredCareers.length" class="m-auto text-center p-4">
+          <p class="text-lg sm:text-2xl text-zinc-700">Carreira não encontrada</p>
         </div>
         <!-- Modelo de card sem componetização -->
         <div v-if="newCareerModal"
@@ -127,7 +130,7 @@ const saveCareer = async () => {
           </div>
         </div>
       </div>
-      <div class="flex justify-end mt-4 sm:mt-10">
+      <div class="flex justify-end mt-10">
         <!-- <Button @click="createCareer">Adicionar nova carreira</Button> -->
         <Button :variant="selectedCareer ? 'base' : 'baseDisable'" :disabled="!selectedCareer"
           class="disabled:opacity-100 w-full sm:w-auto" @click="saveCareerAndNavigate">

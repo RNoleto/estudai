@@ -7,7 +7,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <div class="w-full bg-gray-100 h-screen">
+  <div class="w-full bg-gray-100">
       <!-- <Navbar v-if="route.path !== '/'" /> -->
       <RouterView/>
   </div>

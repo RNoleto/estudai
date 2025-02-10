@@ -70,10 +70,10 @@ onMounted(async () => {
 <template>
   <DefaultLayout backgroundOpacity="opacity-20">
     <div class="p-4 flex flex-col gap-4">
-      <h3 class="text-2xl sm:text-4xl font-bold text-[#21BFCA] sm:text-4xl">Escolha suas matérias</h3>
-      <p class="text-md text-[#21BFCA]">Carreira: {{ userStore.careerName }}</p>
+      <h3 class="text-2xl sm:text-4xl font-bold text-gray-700">Escolha suas <span class="text-[#21BFCA]">matérias.</span></h3>
+      <p class="text-md text-gray-700">Carreira: {{ userStore.careerName }}</p>
       <Search placeholder="Pesquise a matéria..." v-model="searchTerm" />
-      <div class="grid gap-2 sm:flex flex-wrap">
+      <div class="grid grid-cols-1 gap-2 w-full sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         <OptionCard
           v-for="subject in filteredSubjects"
           :key="subject.id"
@@ -82,9 +82,9 @@ onMounted(async () => {
           @click="toggleSubject(subject)"
           :variant="selectedSubjects.includes(subject) ? 'selected' : 'primary'"
         />
-        <div v-if="!filteredSubjects.length" class="text-center p-4">
-          <p class="text-lg text-zinc-800">Matéria não encontrada</p>
-        </div>
+      </div>
+      <div v-if="!filteredSubjects.length" class="m-auto text-center p-4">
+        <p class="text-lg sm:text-2xl text-zinc-700">Matéria não encontrada</p>
       </div>
       <div class="flex justify-end gap-2 mt-4 sm:mt-10">
         <Button variant="base" :to="{ name: 'Carreiras' }">Voltar</Button>
