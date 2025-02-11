@@ -71,37 +71,39 @@ onMounted(async () => {
             <div v-else>
                 <div class="flex flex-col justify-between gap-2 sm:flex sm:flex-row sm:justify-normal sm:flex-wrap sm:gap-2">
                     <!-- Card de tempo de estudo -->
-                    <Card title="Tempo de estudo" icon="fa-solid fa-stopwatch-20">
-                        <template #content>
-                            {{ formatStudyTime(totalStudyTime) }}
-                        </template>
-                    </Card>
-                    <!-- Card com questões respondidas -->
-                    <Card title="Questões respondidas" icon="fa-solid fa-pen-clip">
-                        <template #content>
-                            <div class="flex w-full items-end gap-4 justify-between">
-                                <select v-model="selectedOption" class="text-xs text-gray-500 p-1 border border-tertiary rounded-lg">
-                                    <option v-for="option in options" :key="option.value" :value="option.value">
-                                        {{ option.label }}
-                                    </option>
-                                </select>
-                                <!-- Classe condicional para colorir o valor -->
-                                <p class="text-2xl sm:text-5xl font-extrabold" :class="{
-                                    'text-primary': selectedOption === 'questions_resolved',
-                                    'text-baseBlue': selectedOption === 'correct_answers',
-                                    'text-baseRed': selectedOption === 'incorrect_answers'
-                                }">
-                                    {{ totalValue }}
-                                </p>
-                            </div>
-                        </template>
-                        <template #footer>
-                            <div class="flex items-center gap-1">
-                                <input type="checkbox" v-model="displayAsPercentage" class="form-checkbox text-blue-600" />
-                                <label class="text-xs text-gray-600">Exibir como porcentagem</label>
-                            </div>
-                        </template>
-                    </Card>
+                     <div class="flex gap-2 justify-between">
+                         <Card title="Tempo de estudo" icon="fa-solid fa-stopwatch-20">
+                             <template #content>
+                                 {{ formatStudyTime(totalStudyTime) }}
+                             </template>
+                         </Card>
+                         <!-- Card com questões respondidas -->
+                         <Card title="Questões respondidas" icon="fa-solid fa-pen-clip">
+                             <template #content>
+                                 <div class="flex w-full items-end gap-4 justify-between">
+                                     <select v-model="selectedOption" class="text-xs text-gray-500 p-1 border border-tertiary rounded-lg">
+                                         <option v-for="option in options" :key="option.value" :value="option.value">
+                                             {{ option.label }}
+                                         </option>
+                                     </select>
+                                     <!-- Classe condicional para colorir o valor -->
+                                     <p class="text-2xl sm:text-5xl font-extrabold" :class="{
+                                         'text-primary': selectedOption === 'questions_resolved',
+                                         'text-baseBlue': selectedOption === 'correct_answers',
+                                         'text-baseRed': selectedOption === 'incorrect_answers'
+                                     }">
+                                         {{ totalValue }}
+                                     </p>
+                                 </div>
+                             </template>
+                             <template #footer>
+                                 <div class="flex items-center gap-1">
+                                     <input type="checkbox" v-model="displayAsPercentage" class="form-checkbox text-blue-600" />
+                                     <label class="text-xs text-gray-600">Exibir como porcentagem</label>
+                                 </div>
+                             </template>
+                         </Card>
+                     </div>
                     <div class="hidden sm:block">
                         <SubjectSummaryTable />
                     </div>
