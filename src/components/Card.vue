@@ -18,7 +18,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="flex flex-col p-[10px] bg-white shadow-md rounded-2xl border border-primary">
+  <div class="flex flex-col p-[10px] bg-white shadow-md rounded-2xl border border-secondary">
     <!-- Título com ícone dinâmico -->
     <slot name="title">
       <div class="flex items-center gap-2 text-gray-500 font-medium">
