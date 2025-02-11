@@ -115,8 +115,8 @@ onMounted(async () => {
        ]">
          <div class="p-4 text-lg text-gray-700 font-bold border-b border-secondary flex justify-between items-center">
            <span v-if="!isSidebarCollapsed">Área do Aluno</span>
-           <button @click="toggleSidebar" class="p-2 text-[#21BFCA] hover:bg-gray-200 rounded">
-             <i :class="isSidebarCollapsed ? 'fas fa-angle-right' : 'fas fa-angle-left'"></i>
+           <button @click="toggleSidebar" class="px-2 text-[#21BFCA] hover:bg-gray-200 rounded">
+             <i :class="isSidebarCollapsed ? 'fa-solid fa-caret-right' : 'fa-solid fa-caret-left'"></i>
            </button>
          </div>
          <nav class="flex flex-col gap-1 " :class="isSidebarCollapsed ? 'p-1' : 'p-2'">
@@ -195,7 +195,7 @@ onMounted(async () => {
                  <i :class="['fas fa-cog',
                  route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
                    ? 'text-[#3E73ED]' 
-                   : 'text-[#21BFCA] hover:text-gray-100'
+                   : 'text-[#21BFCA] hover:text-gray-500'
                  ]"></i>
                  <span v-if="!isSidebarCollapsed" :class="[
                    route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
@@ -203,7 +203,7 @@ onMounted(async () => {
                  ]">Configurações</span>
                </div>
                <i v-if="!isSidebarCollapsed" class="text-xs text-[#21BFCA] fas"
-                 :class="[isMenu3Open ? 'fa-chevron-up' : 'fa-chevron-down', isSidebarCollapsed ? 'mini' : 'text-base', 
+                 :class="[isMenu3Open ? 'fa-solid fa-caret-up' : 'fa-solid fa-caret-down', isSidebarCollapsed ? 'text-xs' : 'text-base', 
                    route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
                    ? 'text-[#3E73ED]' 
                    : 'text-[#21BFCA] hover:text-gray-100'
