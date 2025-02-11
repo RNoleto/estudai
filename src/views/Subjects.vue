@@ -69,7 +69,7 @@ onMounted(async () => {
 
 <template>
   <DefaultLayout backgroundOpacity="opacity-20">
-    <div class="p-4 flex flex-col gap-4">
+    <div class="p-4 flex flex-col mt-12 gap-4 sm:mt-0">
       <h3 class="text-2xl sm:text-4xl font-bold text-gray-700">Escolha suas <span class="text-[#21BFCA]">matérias.</span></h3>
       <p class="text-md text-gray-700">Carreira: {{ userStore.careerName }}</p>
       <Search placeholder="Pesquise a matéria..." v-model="searchTerm" />

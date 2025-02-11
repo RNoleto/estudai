@@ -70,6 +70,11 @@ onMounted(async () => {
             <i class="fa-solid fa-stopwatch"></i>
             Estudar
           </a>
+          <a href="/area-do-aluno/planos"
+            class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+            <i class="fa-solid fa-file-signature"></i>
+            Planos
+          </a>
           <div>
             <button @click="toggleMenu3"
               class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl hover:bg-blue-100">
@@ -89,11 +94,6 @@ onMounted(async () => {
               </div>
             </transition>
           </div>
-          <a href="/area-do-aluno/planos"
-            class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <i class="fa-solid fa-file-signature"></i>
-            Planos
-          </a>
           <!-- <a href="/area-do-aluno/configuracoes" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold  p-2 rounded-xlhover:bg-blue-100">
             <i class="fas fa-cog"></i>
             Configurações
@@ -217,8 +217,6 @@ onMounted(async () => {
               class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i
                 class="fa-solid fa-book text-[#21BFCA]"></i>
               Minhas Matérias</a>
-            <!-- <a href="/area-do-aluno/ciclo-de-estudos" class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i class="fa-solid fa-arrows-spin"></i> Meu Ciclo de Estudo</a> -->
-            <!-- <a href="#" class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i class="fa-solid fa-crosshairs"></i> Meus Objetivos</a> -->
           </div>
         </div>
       </nav>
