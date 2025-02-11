@@ -289,7 +289,7 @@ const totalCorrectAnswers = computed(() => {
             Selecione uma matéria para ativar o botão
           </div> -->
         </div>
-        <div class="grid grid-cols-3 gap-2 md:grid-cols-1 lg:grid-cols-6">
+        <div class="grid sm:items-start grid-cols-3 gap-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-6">
           <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus" class="col-span-3 sm:col-span-3"/>
           <Card v-if="totalTimeStudyToday" title="Hoje você estudou" icon="fa-solid fa-stopwatch-20" footer="Soma do tempo de estudo de hoje" class="col-span-1">
             <template #content>
