@@ -280,13 +280,13 @@ const totalAccuracyBgClass = computed(() => {
           <transition name="fade">
             <ul v-if="activeTopic === index" role="list" class="divide-y divide-zinc-200">
               <li v-for="(topic, idx) in subject.topics" :key="idx"
-                class="flex flex-col gap-1 p-2 sm:items-center sm:flex-row sm:justify-between" :class="[
+                class="flex flex-col gap-1 p-2 sm:items-center sm:flex-row sm:justify-between sm:w-[98%] sm:m-auto" :class="[
                   idx === 0 ? 'shadow-inner' : '',
                   getColorClass(topic.correctAnswers, topic.questionsResolved)
                 ]">
                 <p class="text-sm font-semibold sm:text-base">{{ topic.topic ? topic.topic : 'Tópico não informado' }}
                 </p>
-                <div class="flex justify-between items-center text-mini sm:hidden">
+                <div class="flex justify-between items-center text-xs sm:hidden">
                   <div class="text-center leading-3">
                     <p class="font-semibold">{{ formatStudyTime(topic.studyTime) }}</p>
                     <p>de estudo</p>
@@ -323,10 +323,6 @@ const totalAccuracyBgClass = computed(() => {
 </template>
 
 <style scoped>
-.text-mini {
-  font-size: 12px;
-}
-
 .shadow-inner-top {
   box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.1);
   /* Ajuste a sombra interna do topo */

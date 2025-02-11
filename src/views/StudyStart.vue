@@ -291,17 +291,17 @@ const totalCorrectAnswers = computed(() => {
         </div>
         <div class="grid grid-cols-3 gap-2 md:grid-cols-1 lg:grid-cols-6">
           <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus" class="col-span-3 sm:col-span-3"/>
-          <Card v-if="totalTimeStudyToday" title="Hoje você estudou" footer="Soma do tempo de estudo de hoje" class="col-span-1">
+          <Card v-if="totalTimeStudyToday" title="Hoje você estudou" icon="fa-solid fa-stopwatch-20" footer="Soma do tempo de estudo de hoje" class="col-span-1">
             <template #content>
               <p>{{ formatStudyTime(totalTimeStudyToday) }}</p>
             </template>
           </Card>
-          <Card v-if="questionResolved" title="Você respondeu" footer="Soma de questões respondidas hoje" class="col-span-1">
+          <Card v-if="questionResolved" title="Você respondeu" icon="fa-solid fa-pen-clip" footer="Soma de questões respondidas hoje" class="col-span-1">
             <template #content>
               <p>{{ questionResolved }}</p>
             </template>
           </Card>
-          <Card v-if="totalCorrectAnswers" title="Você acertou" footer="Total de questões corretas hoje" class="col-span-1">
+          <Card v-if="totalCorrectAnswers" title="Você acertou" icon="fa-solid fa-check" footer="Total de questões corretas hoje" class="col-span-1">
             <template #content>
               <p>{{ totalCorrectAnswers }}</p>
             </template>
