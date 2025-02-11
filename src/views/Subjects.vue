@@ -33,9 +33,9 @@ const saveSubjectsAndNavigate = async () => {
   await userStore.saveUserSubjects(selectedSubjectIds);
 
   const nextRoute = route.path.startsWith('/area-do-aluno')
-    ? { name: 'Estudar' } // Rota dentro da Dashboard
-    : { name: 'Estudar' };         // Rota fora da Dashboard
-
+    ? { name: 'materias' } // Rota dentro da Dashboard
+    : { name: 'Estudar' }; // Rota fora da Dashboard
+  alert("Matérias salvas com sucesso!");
   router.push(nextRoute);
 };
 
@@ -87,8 +87,7 @@ onMounted(async () => {
         <p class="text-lg sm:text-2xl text-zinc-700">Matéria não encontrada</p>
       </div>
       <div class="flex justify-end gap-2 mt-4 sm:mt-10">
-        <Button variant="base" :to="{ name: 'Carreiras' }">Voltar</Button>
-  
+        <Button v-if="route.path !== '/area-do-aluno/materias'" variant="base" :to="{ name: 'Carreiras' }">Voltar</Button>
         <Button :variant="selectedSubjects.length ? 'base' : 'baseDisable'" :disabled="selectedSubjects.length === 0"
             class="disabled:opacity-100 w-full sm:w-auto" @click="saveSubjectsAndNavigate">
             Salvar e avançar

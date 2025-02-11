@@ -34,9 +34,10 @@ const saveCareerAndNavigate = async () => {
   if (selectedCareer.value) {
     await userStore.saveUserCareer(selectedCareer.value.id, selectedCareer.value.name);
     const nextRoute = route.path.startsWith('/area-do-aluno')
-      ? { name: 'DashboardMaterias' }
+      ? { name: 'DashboardCarreiras' }
       : { name: 'Materias' };
     router.push(nextRoute);
+    alert('Carreira salva com sucesso!')
   }
 };
 
