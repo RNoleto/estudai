@@ -58,7 +58,7 @@ onMounted(async () => {
 
 <template>
     <DefaultLayout backgroundOpacity="opacity-20">
-        <div class="flex flex-col p-2 mt-12 gap-4 sm:mt-0">
+        <div class="flex flex-col p-2 mt-12 gap-4 sm:mt-0 sm:px-4">
             <div class="flex flex-col gap-2">
                 <h3 class="text-2xl font-bold text-gray-700 sm:text-4xl">Resumo dos <span
                         class="text-primary">estudos.</span></h3>
@@ -87,9 +87,9 @@ onMounted(async () => {
                                 </select>
                                 <!-- Classe condicional para colorir o valor -->
                                 <p class="text-2xl sm:text-5xl font-extrabold" :class="{
-                                    'text-[#3E73ED]': selectedOption === 'questions_resolved',
-                                    'text-[#2EC1CB]': selectedOption === 'correct_answers',
-                                    'text-[#CB2E2E]': selectedOption === 'incorrect_answers'
+                                    'text-primary': selectedOption === 'questions_resolved',
+                                    'text-baseBlue': selectedOption === 'correct_answers',
+                                    'text-baseRed': selectedOption === 'incorrect_answers'
                                 }">
                                     {{ totalValue }}
                                 </p>

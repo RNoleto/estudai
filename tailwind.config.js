@@ -8,7 +8,9 @@ export default {
       colors: {
         primary: '#2EC1CB',
         secondary: '#AFEBEF',
-        tertiary: '#3AB3BB'
+        tertiary: '#3AB3BB',
+        baseBlue: '#3E73ED',
+        baseRed: '#CB2E2E'
       }
     },
   },

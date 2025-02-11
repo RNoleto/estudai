@@ -12,7 +12,7 @@ defineProps({
   icon: {
     type: String,
     required: false,
-    default: "fa-solid fa-paw", // Ícone padrão
+    default: "fa-solid fa-ghost", // Ícone padrão
   },
 });
 </script>
