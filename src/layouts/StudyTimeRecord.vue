@@ -27,13 +27,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <IsLoading v-if="isLoading" />
+  <!-- <IsLoading v-if="isLoading" /> -->
   <div>
-    <div class="flex flex-col justify-center bg-white shadow-md rounded-lg text-center px-2 py-8 gap-2 sm:p-4 sm:gap-4 sm:min-h-[250px]">
-      <h2 class="text-sm sm:text-2xl font-bold text-gray-800">Tempo de Estudo</h2>
-      <p class="text-2xl font-bold sm:text-4xl text-blue-600">
-        {{ formatStudyTime(totalStudyTime) }}
-      </p>
+    <div class="flex flex-col justify-center bg-white shadow-md rounded-2xl border border-tertiary text-center px-2 py-8 gap-2 sm:p-4 sm:gap-4 sm:min-h-[250px]">
+      <h2 class="text-sm sm:text-xl font-medium text-gray-700">Tempo de Estudo</h2>
+        <p class="text-2xl font-bold sm:text-4xl text-primary">
+          {{ formatStudyTime(totalStudyTime) }}
+        </p>
       <p class="text-xs text-gray-600">Acompanhe o seu progresso!</p>
     </div>
   </div>

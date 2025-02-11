@@ -62,14 +62,14 @@ onMounted(async () => {
     <DefaultLayout backgroundOpacity="opacity-20">
         <div class="flex flex-col p-4 mt-12 gap-4 h-screen sm:mt-0">
             <div class="flex flex-col gap-2">
-                <h3 class="text-xl font-bold sm:text-4xl">Resumo dos estudos</h3>
-                <p>Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..." }}</p>
+                <h3 class="text-2xl font-bold text-gray-700 sm:text-4xl">Resumo dos <span class="text-primary">estudos.</span></h3>
+                <p class="text-md text-gray-700">Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..." }}</p>
             </div>
             <div v-if="!hasStudyRecords" class="text-center text-gray-700">
                 <p>Você não tem dados de estudos no momento!</p>
             </div>
             <div v-else>
-                <div class="hidden sm:flex sm:gap-2">
+                <div class="hidden sm:flex sm:flex-wrap sm:gap-2">
                     <StudyTimeRecord />
                     <StudyStatisticsRecords />
                     <SubjectSummaryTable />

@@ -48,19 +48,19 @@ onMounted(async () => {
 </script>
 
 <template>
-  <IsLoading v-if="isLoading" />    
-  <div v-else>
-    <div class="bg-white shadow-md flex flex-col gap-1 items-center rounded-lg px-2 py-4 text-center sm:justify-center sm:p-6 sm:min-h-[250px]">
-      <h2 class="text-sm sm:text-2xl font-bold text-gray-800">Questões respondidas</h2>
+  <!-- <IsLoading v-if="isLoading" />     -->
+  <div>
+    <div class="bg-white shadow-md flex flex-col gap-1 items-center rounded-2xl border border-tertiary px-2 py-4 text-center sm:justify-center sm:p-6 sm:min-h-[250px]">
+      <h2 class="text-sm sm:text-xl font-medium text-gray-700">Questões respondidas</h2>
       <select v-model="selectedOption"
-        class="w-full text-xs p-1 border border-gray-200 rounded-md focus:ring focus:ring-blue-300">
+        class="w-full text-xs p-1 border border-tertiary rounded-lg">
         <option v-for="option in options" :key="option.value" :value="option.value">
           {{ option.label }}
         </option>
       </select>
       <!-- Classe condicional para colorir o valor -->
       <p class="text-2xl sm:text-5xl font-extrabold" :class="{
-        'text-blue-600': selectedOption === 'questions_resolved',
+        'text-primary': selectedOption === 'questions_resolved',
         'text-green-600': selectedOption === 'correct_answers',
         'text-red-600': selectedOption === 'incorrect_answers'
       }">

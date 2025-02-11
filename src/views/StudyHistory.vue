@@ -7,7 +7,7 @@ import DefaultLayout from '../layouts/DefaultLayout.vue';
 <template>
     <DefaultLayout backgroundOpacity="opacity-20">
         <div class="flex flex-col mt-12 gap-2 p-4 sm:mt-0">
-            <h3 class="text-xl font-bold sm:text-4xl">Histórico de estudos</h3>
+            <h3 class="text-xl font-bold text-gray-700 sm:text-4xl">Histórico de <span class="text-primary">estudos.</span></h3>
             <History />
         </div>
     </DefaultLayout>

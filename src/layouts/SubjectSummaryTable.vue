@@ -77,8 +77,8 @@ const summarizedData = computed(() => {
 <template>
   <!-- <IsLoading v-if="isLoading" /> -->
   <div class="hidden sm:block">  
-    <table  class="bg-white shadow-md rounded-lg overflow-hidden">
-      <thead class="bg-gray-800 text-white">
+    <table  class="bg-white shadow-md rounded-xl overflow-hidden">
+      <thead class="bg-gray-800 text-white sm:text-xs">
         <tr>
           <th class="px-4 py-2 text-left">Matérias</th>
           <th class="px-4 py-2 text-left">Tempo de Estudo</th>

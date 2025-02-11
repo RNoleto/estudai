@@ -176,8 +176,8 @@ const totalAccuracyBgClass = computed(() => {
 </script>
 
 <template>
-  <IsLoading v-if="isLoading" />
-  <div v-else>
+  <!-- <IsLoading v-if="isLoading" /> -->
+  <div>
     <!-- Filtro por data -->
     <div class="flex justify-between gap-1 sm:justify-start sm:items-end sm:gap-4">
       <div class="flex flex-col">
