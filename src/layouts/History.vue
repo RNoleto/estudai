@@ -112,10 +112,10 @@ const summarizedData = computed(() => {
 
     subject.bgClass =
       subject.accuracyPercentage >= 70
-        ? 'border border-green-200 bg-green-100'
+        ? 'border border-primary bg-secondary'
         : subject.accuracyPercentage > 50
-          ? 'border border-yellow-200 bg-yellow-100'
-          : 'border border-red-200 bg-red-100';
+          ? 'border border-baseYellow bg-secYellow'
+          : 'border border-baseRed bg-secRed';
 
     return subject;
   });

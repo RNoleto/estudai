@@ -80,7 +80,7 @@ onMounted(async () => {
                     <Card title="Questões respondidas" icon="fa-solid fa-pen-clip">
                         <template #content>
                             <div class="flex w-full items-end gap-4 justify-between">
-                                <select v-model="selectedOption" class="text-xs p-1 border border-tertiary rounded-lg">
+                                <select v-model="selectedOption" class="text-xs text-gray-500 p-1 border border-tertiary rounded-lg">
                                     <option v-for="option in options" :key="option.value" :value="option.value">
                                         {{ option.label }}
                                     </option>

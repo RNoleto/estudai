@@ -12,7 +12,9 @@ export default {
         hoverGreen: '#42D3DD',
         baseBlue: '#3E73ED',
         baseYellow: "#C1CB2E",
-        baseRed: '#CB2E2E'
+        secYellow: '#EFEDAF',
+        baseRed: '#CB2E2E',
+        secRed: '#EFAFAF',
       }
     },
   },
