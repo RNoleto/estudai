@@ -1,8 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import DefaultLayout from '../layouts/DefaultLayout.vue';
-import StudyTimeRecord from '../layouts/StudyTimeRecord.vue';
-import StudyStatisticsRecords from '../layouts/StudyStatisticsRecords.vue';
 import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
 
 import Card from '../components/Card.vue';
@@ -41,7 +39,7 @@ const totalValue = computed(() => {
     );
 
     if (displayAsPercentage.value && totalQuestions > 0) {
-        return ((selectedTotal / totalQuestions) * 100).toFixed(2) + '%';
+        return ((selectedTotal / totalQuestions) * 100).toFixed(0) + '%';
     }
 
     return selectedTotal;
@@ -60,70 +58,56 @@ onMounted(async () => {
 
 <template>
     <DefaultLayout backgroundOpacity="opacity-20">
-        <div class="flex flex-col p-4 mt-12 gap-4 h-screen sm:mt-0">
+        <div class="flex flex-col p-2 mt-12 gap-4 sm:mt-0">
             <div class="flex flex-col gap-2">
-                <h3 class="text-2xl font-bold text-gray-700 sm:text-4xl">Resumo dos <span class="text-primary">estudos.</span></h3>
-                <p class="text-md text-gray-700">Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..." }}</p>
+                <h3 class="text-2xl font-bold text-gray-700 sm:text-4xl">Resumo dos <span
+                        class="text-primary">estudos.</span></h3>
+                <p class="text-md text-gray-700">Carreira: {{ userStore.careerName ? userStore.careerName :
+                    "Carregando..." }}</p>
             </div>
             <div v-if="!hasStudyRecords" class="text-center text-gray-700">
                 <p>Você não tem dados de estudos no momento!</p>
             </div>
             <div v-else>
-                <div class="hidden sm:flex sm:flex-wrap sm:gap-2">
-                    <StudyTimeRecord />
-                    <StudyStatisticsRecords />
-                    <SubjectSummaryTable />
-                </div>
-                <!-- Aqui fica os campos Mobile -->
-                <div class="sm:hidden">
-                    <div class="grid grid-cols-2 gap-2 h-min-[500px]">
-                        <!-- Card de tempo de estudo -->
-                        <Card title="Tempo de estudo">
-                            <template #content>
-                                <p>{{ formatStudyTime(totalStudyTime) }}</p>
-                            </template>
-                            <template #footer>
-                                <p>Acompanhe o seu progresso!</p>
-                            </template>
-                        </Card>
-                        <!-- Card de restões respondidas -->
-                        <Card title="Questões respondidas">
-                            <!-- Slote content -->
-                            <template #content>
-                                <p :class="{
-                                    'text-blue-600': selectedOption === 'questions_resolved',
-                                    'text-green-600': selectedOption === 'correct_answers',
-                                    'text-red-600': selectedOption === 'incorrect_answers'
-                                }">
-                                    {{ totalValue }}
-                                </p>
-                            </template>
-                            <!-- Slot fields -->
-                            <template #fields>
-                                <!-- Select para opções -->
-                                <select v-model="selectedOption"
-                                    class="w-full text-xs p-1 border border-gray-200 rounded-md focus:ring focus:ring-blue-300">
+                <div class="flex flex-col justify-between gap-2 sm:flex sm:flex-row sm:justify-normal sm:flex-wrap sm:gap-2">
+                    <!-- Card de tempo de estudo -->
+                    <Card title="Tempo de estudo" icon="fa-solid fa-stopwatch-20">
+                        <template #content>
+                            {{ formatStudyTime(totalStudyTime) }}
+                        </template>
+                    </Card>
+                    <!-- Card com questões respondidas -->
+                    <Card title="Questões respondidas" icon="fa-solid fa-pen-clip">
+                        <template #content>
+                            <div class="flex w-full items-end gap-4 justify-between">
+                                <select v-model="selectedOption" class="text-xs p-1 border border-tertiary rounded-lg">
                                     <option v-for="option in options" :key="option.value" :value="option.value">
                                         {{ option.label }}
                                     </option>
                                 </select>
-                            </template>
-                            <!-- Checkbox para porcentagem -->
-                            <div class="flex items-center py-2 gap-1">
+                                <!-- Classe condicional para colorir o valor -->
+                                <p class="text-2xl sm:text-5xl font-extrabold" :class="{
+                                    'text-[#3E73ED]': selectedOption === 'questions_resolved',
+                                    'text-[#2EC1CB]': selectedOption === 'correct_answers',
+                                    'text-[#CB2E2E]': selectedOption === 'incorrect_answers'
+                                }">
+                                    {{ totalValue }}
+                                </p>
+                            </div>
+                        </template>
+                        <template #footer>
+                            <div class="flex items-center gap-1">
                                 <input type="checkbox" v-model="displayAsPercentage" class="form-checkbox text-blue-600" />
                                 <label class="text-xs text-gray-600">Exibir como porcentagem</label>
                             </div>
-                            <template #footer>
-                                <!-- Checkbox para porcentagem -->
-                                <div class="flex items-center justify-center gap-1">
-                                    <input type="checkbox" v-model="displayAsPercentage"
-                                        class="form-checkbox text-blue-600" />
-                                    <label class="text-xs text-gray-600">Exibir como porcentagem</label>
-                                </div>
-                            </template>
-                        </Card>
-                        <SubjectSummaryTable/>
+                        </template>
+                    </Card>
+                    <div class="hidden sm:block">
+                        <SubjectSummaryTable />
                     </div>
+                </div>
+                <div class="sm:hidden block mt-2">
+                    <SubjectSummaryTable />
                 </div>
             </div>
         </div>

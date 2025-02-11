@@ -78,7 +78,7 @@ const summarizedData = computed(() => {
   <!-- <IsLoading v-if="isLoading" /> -->
   <div class="hidden sm:block">  
     <table  class="bg-white shadow-md rounded-xl overflow-hidden">
-      <thead class="bg-gray-800 text-white sm:text-xs">
+      <thead class="bg-primary text-white sm:text-xs">
         <tr>
           <th class="px-4 py-2 text-left">Matérias</th>
           <th class="px-4 py-2 text-left">Tempo de Estudo</th>
@@ -102,7 +102,7 @@ const summarizedData = computed(() => {
     </table>
   </div>
   <div class="col-span-2 shadow-md rounded-2xl sm:hidden">
-    <div class="bg-zinc-800 text-zinc-100 px-1 py-1.5 rounded-t-2xl">
+    <div class="bg-primary text-zinc-100 px-1 py-1.5 rounded-t-2xl">
       <p class="text-base ml-2">Matérias estudadas</p>
     </div>
     <ul class="flex flex-col">
@@ -110,22 +110,16 @@ const summarizedData = computed(() => {
         <div class="flex justify-between items-center p-1 text-gray-700">
           <div class="leading-normal">
             <p>{{ subject.subjectName }}</p>
-            <p class="text-mini">{{ formatStudyTime(subject.totalStudyTime) }}</p>
+            <p class="text-xs">{{ formatStudyTime(subject.totalStudyTime) }}</p>
           </div>
-          <div class="text-mini flex flex-col justify-end gap-1">
+          <div class="text-xs flex flex-col justify-end gap-1">
             <p>{{ subject.totalQuestionsResolved }} questões</p>
             <p>{{ subject.totalCorrectAnswers }} corretas</p>
           </div>
         </div>
       </li>
     </ul>
-    <div class="bg-zinc-800 p-1 rounded-b-2xl">
+    <div class="bg-primary py-2 rounded-b-2xl">
     </div>
   </div>
 </template>
-
-<style scoped>
-.text-mini{
-  font-size: 0.7rem;
-}
-</style>
