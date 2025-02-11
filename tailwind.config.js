@@ -9,7 +9,9 @@ export default {
         primary: '#2EC1CB',
         secondary: '#AFEBEF',
         tertiary: '#3AB3BB',
+        hoverGreen: '#42D3DD',
         baseBlue: '#3E73ED',
+        baseYellow: "#C1CB2E",
         baseRed: '#CB2E2E'
       }
     },

@@ -4,6 +4,8 @@ import { useUserStore } from '../stores/useUserStore';
 import { useSubjectStore } from '../stores/useSubjectStore';
 import { useTimeFormatter } from '../composables/useTimeFormatter';
 
+import Card from '../components/Card.vue';
+
 import IsLoading from '../components/ui/IsLoading.vue';
 import StudyReportModal from '../components/StudyReportModal.vue';
 import Button from '../components/ui/Button.vue';
@@ -168,10 +170,10 @@ const totalQuestionsAndAccuracy = computed(() => {
 const totalAccuracyBgClass = computed(() => {
   const { accuracyPercentage } = totalQuestionsAndAccuracy.value;
   return accuracyPercentage >= 70
-    ? 'border-green-200 bg-green-100'
+    ? 'text-baseBlue border-baseBlue'
     : accuracyPercentage > 50
-      ? 'border-yellow-200 bg-yellow-100'
-      : 'border-red-200 bg-red-100';
+      ? 'text-baseYellow border-baseYellow'
+      : 'text-baseRed border-baseRed';
 });
 </script>
 
@@ -217,24 +219,22 @@ const totalAccuracyBgClass = computed(() => {
     </div> -->
     <!-- Tempo total de estudo no período -->
     <div class="grid grid-cols-2 mt-2 sm:flex gap-2">
-      <div class="flex flex-col gap-2 col-span-2 border bg-white rounded-2xl p-4 shadow-sm sm:items-center">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-stopwatch"></i>
-          <p class="text-md">Tempo total de estudo</p>
-        </div>
-        <p class="text-4xl text-end font-semibold">{{ formatStudyTime(totalStudyTime) }}</p>
-      </div>
-      <div class="text-sm border bg-white text-center rounded-2xl p-4 shadow-sm">
-        <i class="fa-solid fa-pen-clip"></i>
-        <p class="text-xl font-semibold sm:text-4xl">{{ totalQuestions }}</p>
-        <p class="text-sm">Total de questões</p>
-      </div>
-      <div :class="`text-sm border text-center rounded-2xl p-4 shadow-sm ${totalAccuracyBgClass}`">
-        <i class="fa-solid fa-check"></i>
-        <p class="text-xl font-semibold sm:text-4xl">{{ totalQuestionsAndAccuracy.totalCorrectAnswers }} - ({{
+      <Card title="Tempo total de estudo" icon="fa-solid fa-stopwatch-20" class="col-span-3">
+        <template #content>
+          {{ formatStudyTime(totalStudyTime) }}
+        </template>
+      </Card>
+      <Card title="" icon="fa-solid fa-pen-clip" footer="Total de questões" class="items-center">
+        <template #content>
+          <p>{{ totalQuestions }}</p>
+        </template>
+      </Card>
+      <Card title="" :icon="`fa-solid fa-check ${totalAccuracyBgClass}`" footer="Total de acertos" :class="`items-center ${totalAccuracyBgClass}`">
+        <template #content>
+          <p :class="`${totalAccuracyBgClass}`">{{ totalQuestionsAndAccuracy.totalCorrectAnswers }} - ({{
           totalQuestionsAndAccuracy.accuracyPercentage }}%)</p>
-        <p class="text-sm">Total de acertos</p>
-      </div>
+        </template>
+      </Card>
     </div>
 
     <!-- Lista resumida -->
