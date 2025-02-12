@@ -8,6 +8,7 @@ import OptionCard from '../components/ui/OptionCard.vue';
 import Button from '../components/ui/Button.vue';
 import Search from '../components/ui/Search.vue';
 import Modal from '../components/ui/Modal.vue';
+import AlertModal from '../components/ui/AlertModal.vue';
 
 // Acessando os stores
 const subjectStore = useSubjectStore();
@@ -20,6 +21,12 @@ const route = useRoute();
 const selectedSubjects = ref([]);
 
 const isModal = ref(false);
+
+const alertVisible = ref(false);
+const alertTitle = ref('');
+const alertMessage = ref('');
+const alertType = ref('');
+
 
 // Função para selecionar/desmarcar uma matéria
 const toggleSubject = (subject) => {
@@ -73,15 +80,22 @@ onMounted(async () => {
 // Salvar nova matéria
 const saveSubject = async (subjectName) => {
   const result = await userStore.createUserSubject(subjectName);
-  
-  alert(result.message); // Mostra a mensagem retornada pelo backend
+
+  // Define os valores do alerta
+  alertTitle.value = result.success ? 'Sucesso!' : 'Erro!';
+  alertMessage.value = result.message;
+  alertType.value = result.success ? 'success' : 'error';
+  alertVisible.value = true;
 
   if (result.success) {
     await subjectStore.fetchSubjects(); // Atualiza a lista
     setInitialSelectedSubjects(); // Atualiza as seleções
     isModal.value = false; // Fecha o modal
+  } else {
+    isModal.value = false;
   }
 };
+
 </script>
 
 <template>
@@ -112,6 +126,13 @@ const saveSubject = async (subjectName) => {
         </Button>
       </div>
         <Modal title="Nova Matéria" v-if="isModal" @close="isModal = false" @save="saveSubject" />
+        <AlertModal 
+  :visible="alertVisible" 
+  :title="alertTitle" 
+  :message="alertMessage" 
+  :type="alertType" 
+  @close="alertVisible = false" 
+/>
     </div>
   </DefaultLayout>
 </template>
