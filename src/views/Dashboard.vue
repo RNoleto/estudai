@@ -108,121 +108,124 @@ onMounted(async () => {
       </transition>
     </div>
     <!-- Sidebar desktop -->
-     <div class="sm:min-h-screen p-1">
-       <aside v-if="!isMobileView" :class="[
-         'h-full rounded-lg border border-secondary bg-white shadow-md transition-all duration-300 text-sm',
-         isSidebarCollapsed ? 'w-18' : 'w-60'
-       ]">
-         <div class="p-4 text-lg text-gray-700 font-bold border-b border-secondary flex justify-between items-center">
-           <span v-if="!isSidebarCollapsed">Área do Aluno</span>
-           <button @click="toggleSidebar" class="px-2 text-[#21BFCA] hover:bg-gray-200 rounded">
-             <i :class="isSidebarCollapsed ? 'fa-solid fa-caret-right' : 'fa-solid fa-caret-left'"></i>
-           </button>
-         </div>
-         <nav class="flex flex-col gap-1 " :class="isSidebarCollapsed ? 'p-1' : 'p-2'">
-           <!-- Home da Dashboard -->
-           <div>
-             <a href="/area-do-aluno" :class="[
-               'flex items-center gap-2 px-4 py-2 mt-4 rounded-lg hover:shadow-md',
-               route.path === '/area-do-aluno'
-                 ? 'bg-secondary text-[#3E73ED] shadow-sm'
-                 : 'text-gray-700 hover:bg-gray-100'
-             ]">
-               <i :class="[
-                 'fas fa-home',
-                 route.path === '/area-do-aluno' ? 'text-[#3E73ED]' : 'text-[#21BFCA] hover:text-gray-500'
-               ]"></i>
-               <span v-if="!isSidebarCollapsed">Home</span>
-             </a>
-           </div>
-           <!-- Historico de Estudos -->
-           <div>
-             <a href="/area-do-aluno/historico-de-estudos"
-               :class="[
-                 'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-                 route.path === '/area-do-aluno/historico-de-estudos' 
-                 ? 'bg-secondary text-[#3E73ED] shadow-sm'
-                 : 'text-gray-700 hover:bg-gray-100'
-                 ]">
-               <i :class="[
-                 'fa-solid fa-pen-clip',
-                 route.path === '/area-do-aluno/historico-de-estudos' 
-                 ? 'bg-secondary text-[#3E73ED] shadow-sm' 
-                 : 'text-[#21BFCA] hover:text-gray-500'
-                 ]"></i>
-               <span v-if="!isSidebarCollapsed">Histórico de Estudo</span>
-             </a>
-           </div>
-           <!-- Estudar da Dashboard -->
-           <div>
-             <a href="/area-do-aluno/estudar" :class="[
-               'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-               route.path === '/area-do-aluno/estudar' ? 'bg-secondary text-[#3E73ED] shadow-sm' : 'text-gray-700 hover:bg-gray-100'
-             ]">
-               <i :class="[
-                 'fa-solid fa-stopwatch',
-                 route.path === '/area-do-aluno/estudar'
-                 ? 'bg-secondary text-[#3E73ED] shadow-sm'
-                 : 'text-[#21BFCA] hover:text-gray-500'
-                 ]"></i>
-               <span v-if="!isSidebarCollapsed">Estudar</span>
-             </a>
-           </div>
-           <!-- Planos da Dashboard -->
-           <div>
-             <a href="/area-do-aluno/planos" :class="[
-               'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-               route.path === '/area-do-aluno/planos' ? 'bg-secondary text-[#3E73ED] shadow-sm' : 'text-gray-700 hover:bg-gray-100'
-             ]">
-               <i :class="['fa-solid fa-file-signature',
-                 route.path === '/area-do-aluno/planos'
-                 ? 'bg-secondary text-[#3E73ED] shadow-sm' 
-                 : 'text-[#21BFCA] hover:text-gray-500'
-               ]"></i>
-               <span v-if="!isSidebarCollapsed">Planos</span>
-             </a>
-           </div>
-           <!-- Menu de Configuração -->
-           <div>
-             <button @click="toggleMenu3"
-               :class="[
-                 'flex gap-1 items-center justify-between w-full px-4 py-2 text-left text-gray-700 rounded-lg hover:shadow-md',
-                 route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
-                   ? 'bg-secondary text-[#3E73ED] shadow-sm' 
-                   : 'text-gray-700 hover:bg-gray-100'
-                 ]">
-               <div class="flex items-center gap-2">
-                 <i :class="['fas fa-cog',
-                 route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
-                   ? 'text-[#3E73ED]' 
-                   : 'text-[#21BFCA] hover:text-gray-500'
-                 ]"></i>
-                 <span v-if="!isSidebarCollapsed" :class="[
-                   route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
-                   ? 'text-[#3E73ED]' : 'text-gray-700 hover:bg-gray-100'
-                 ]">Configurações</span>
-               </div>
-               <i v-if="!isSidebarCollapsed" class="text-xs text-[#21BFCA] fas"
-                 :class="[isMenu3Open ? 'fa-solid fa-caret-up' : 'fa-solid fa-caret-down', isSidebarCollapsed ? 'text-xs' : 'text-base', 
-                   route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
-                   ? 'text-[#3E73ED]' 
-                   : 'text-[#21BFCA] hover:text-gray-100'
-                 ]"></i>
-             </button>
-             <div v-if="isMenu3Open"
-               :class="['mt-1 space-y-2 transition-all duration-300', isSidebarCollapsed ? 'absolute z-10 rounded-md left-16 bg-zinc-50 shadow-lg w-48 p-2' : 'pl-8']">
-               <a href="/area-do-aluno/carreiras"
-                 class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i
-                   class="fa-solid fa-user-astronaut text-[#21BFCA]"></i> Minha Carreira</a>
-               <a href="/area-do-aluno/materias"
-                 class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i
-                   class="fa-solid fa-book text-[#21BFCA]"></i>
-                 Minhas Matérias</a>
-             </div>
-           </div>
-         </nav>
-       </aside>
-     </div>
+    <div class="sm:min-h-screen p-1">
+      <aside v-if="!isMobileView" :class="[
+        'flex  flex-col h-full rounded-lg border border-secondary bg-white shadow-md transition-all duration-300 text-sm',
+        isSidebarCollapsed ? 'w-18' : 'w-60'
+      ]">
+        <div class="p-4 text-lg text-gray-700 font-bold border-b border-secondary flex justify-between items-center">
+          <span v-if="!isSidebarCollapsed">Área do Aluno</span>
+          <button @click="toggleSidebar" class="px-2 text-[#21BFCA] hover:bg-gray-200 rounded">
+            <i :class="isSidebarCollapsed ? 'fa-solid fa-caret-right' : 'fa-solid fa-caret-left'"></i>
+          </button>
+        </div>
+        <nav class="flex flex-col h-full gap-1" :class="isSidebarCollapsed ? 'p-1' : 'p-2'">
+          <!-- Home da Dashboard -->
+          <div>
+            <a href="/area-do-aluno" :class="[
+              'flex items-center gap-2 px-4 py-2 mt-4 rounded-lg hover:shadow-md',
+              route.path === '/area-do-aluno'
+                ? 'bg-secondary text-[#3E73ED] shadow-sm'
+                : 'text-gray-700 hover:bg-gray-100'
+            ]">
+              <i :class="[
+                'fas fa-home',
+                route.path === '/area-do-aluno' ? 'text-[#3E73ED]' : 'text-[#21BFCA] hover:text-gray-500'
+              ]"></i>
+              <span v-if="!isSidebarCollapsed">Home</span>
+            </a>
+          </div>
+          <!-- Historico de Estudos -->
+          <div>
+            <a href="/area-do-aluno/historico-de-estudos" :class="[
+              'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
+              route.path === '/area-do-aluno/historico-de-estudos'
+                ? 'bg-secondary text-[#3E73ED] shadow-sm'
+                : 'text-gray-700 hover:bg-gray-100'
+            ]">
+              <i :class="[
+                'fa-solid fa-pen-clip',
+                route.path === '/area-do-aluno/historico-de-estudos'
+                  ? 'bg-secondary text-[#3E73ED] shadow-sm'
+                  : 'text-[#21BFCA] hover:text-gray-500'
+              ]"></i>
+              <span v-if="!isSidebarCollapsed">Histórico de Estudo</span>
+            </a>
+          </div>
+          <!-- Estudar da Dashboard -->
+          <div>
+            <a href="/area-do-aluno/estudar" :class="[
+              'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
+              route.path === '/area-do-aluno/estudar' ? 'bg-secondary text-[#3E73ED] shadow-sm' : 'text-gray-700 hover:bg-gray-100'
+            ]">
+              <i :class="[
+                'fa-solid fa-stopwatch',
+                route.path === '/area-do-aluno/estudar'
+                  ? 'bg-secondary text-[#3E73ED] shadow-sm'
+                  : 'text-[#21BFCA] hover:text-gray-500'
+              ]"></i>
+              <span v-if="!isSidebarCollapsed">Estudar</span>
+            </a>
+          </div>
+          <!-- Planos da Dashboard -->
+          <div>
+            <a href="/area-do-aluno/planos" :class="[
+              'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
+              route.path === '/area-do-aluno/planos' ? 'bg-secondary text-[#3E73ED] shadow-sm' : 'text-gray-700 hover:bg-gray-100'
+            ]">
+              <i :class="['fa-solid fa-file-signature',
+                route.path === '/area-do-aluno/planos'
+                  ? 'bg-secondary text-[#3E73ED] shadow-sm'
+                  : 'text-[#21BFCA] hover:text-gray-500'
+              ]"></i>
+              <span v-if="!isSidebarCollapsed">Planos</span>
+            </a>
+          </div>
+          <!-- Menu de Configuração -->
+          <div>
+            <button @click="toggleMenu3" :class="[
+              'flex gap-1 items-center justify-between w-full px-4 py-2 text-left text-gray-700 rounded-lg hover:shadow-md',
+              route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
+                ? 'bg-secondary text-[#3E73ED] shadow-sm'
+                : 'text-gray-700 hover:bg-gray-100'
+            ]">
+              <div class="flex items-center gap-2">
+                <i :class="['fas fa-cog',
+                  route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
+                    ? 'text-[#3E73ED]'
+                    : 'text-[#21BFCA] hover:text-gray-500'
+                ]"></i>
+                <span v-if="!isSidebarCollapsed" :class="[
+                  route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
+                    ? 'text-[#3E73ED]' : 'text-gray-700 hover:bg-gray-100'
+                ]">Configurações</span>
+              </div>
+              <i v-if="!isSidebarCollapsed" class="text-xs text-[#21BFCA] fas" :class="[isMenu3Open ? 'fa-solid fa-caret-up' : 'fa-solid fa-caret-down', isSidebarCollapsed ? 'text-xs' : 'text-base',
+              route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
+                ? 'text-[#3E73ED]'
+                : 'text-[#21BFCA] hover:text-gray-100'
+              ]"></i>
+            </button>
+            <div v-if="isMenu3Open"
+              :class="['mt-1 space-y-2 transition-all duration-300', isSidebarCollapsed ? 'absolute z-10 rounded-md left-16 bg-zinc-50 shadow-lg w-48 p-2' : 'pl-8']">
+              <a href="/area-do-aluno/carreiras"
+                class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i
+                  class="fa-solid fa-user-astronaut text-[#21BFCA]"></i> Minha Carreira</a>
+              <a href="/area-do-aluno/materias"
+                class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i
+                  class="fa-solid fa-book text-[#21BFCA]"></i>
+                Minhas Matérias</a>
+            </div>
+          </div>
+          <div class="mt-auto bg-secondary p-2 rounded-lg w-full shadow-md">
+            <div class="flex items-center gap-2">
+              <UserButton />
+              <p v-if="!isSidebarCollapsed" class="text-baseBlue text-sm font-medium">{{ user.fullName }}</p>
+            </div>
+          </div>
+        </nav>
+      </aside>
+    </div>
     <!-- Conteúdo Principal -->
     <main class="flex-1 mt-6 sm:mt-0">
       <!-- Conteudo a ser carregado na página -->
