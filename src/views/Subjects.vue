@@ -23,8 +23,8 @@ const isModal = ref(false);
 
 // Função para selecionar/desmarcar uma matéria
 const toggleSubject = (subject) => {
-  if (selectedSubjects.value.includes(subject)) {
-    selectedSubjects.value = selectedSubjects.value.filter((s) => s !== subject);
+  if (selectedSubjects.value.some(s => s.id === subject.id)) {
+    selectedSubjects.value = selectedSubjects.value.filter((s) => s.id !== subject.id);
   } else {
     selectedSubjects.value.push(subject);
   }
@@ -62,9 +62,11 @@ const filteredSubjects = computed(() => {
 
 // Buscar matérias e configurar seleção inicial ao montar o componente
 onMounted(async () => {
-  await subjectStore.fetchSubjects(); 
+  await subjectStore.fetchSubjects();
   await userStore.fetchUserSubjects();
+  
   subjectStore.subjects.sort((a, b) => a.name.localeCompare(b.name));
+  
   setInitialSelectedSubjects();
 });
 
@@ -75,7 +77,8 @@ const saveSubject = async (subjectName) => {
   alert(result.message); // Mostra a mensagem retornada pelo backend
 
   if (result.success) {
-    subjectStore.fetchSubjects(); // Atualiza a lista
+    await subjectStore.fetchSubjects(); // Atualiza a lista
+    setInitialSelectedSubjects(); // Atualiza as seleções
     isModal.value = false; // Fecha o modal
   }
 };
@@ -94,7 +97,7 @@ const saveSubject = async (subjectName) => {
           :icon="'basil:book-outline'"
           :careerName="subject.name"
           @click="toggleSubject(subject)"
-          :variant="selectedSubjects.includes(subject) ? 'selected' : 'primary'"
+          :variant="selectedSubjects.some(s => s.id === subject.id) ? 'selected' : 'primary'"
         />
       </div>
       <div v-if="!filteredSubjects.length" class="m-auto text-center p-4">
@@ -108,7 +111,7 @@ const saveSubject = async (subjectName) => {
             Salvar e avançar
         </Button>
       </div>
-        <Modal v-if="isModal" @close="isModal = false" @save="saveSubject" />
+        <Modal title="Nova Matéria" v-if="isModal" @close="isModal = false" @save="saveSubject" />
     </div>
   </DefaultLayout>
 </template>
