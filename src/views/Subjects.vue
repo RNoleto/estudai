@@ -7,6 +7,7 @@ import { useRouter, useRoute } from 'vue-router';
 import OptionCard from '../components/ui/OptionCard.vue';
 import Button from '../components/ui/Button.vue';
 import Search from '../components/ui/Search.vue';
+import Modal from '../components/ui/Modal.vue';
 
 // Acessando os stores
 const subjectStore = useSubjectStore();
@@ -17,6 +18,8 @@ const route = useRoute();
 
 // Rastreia as matérias selecionadas
 const selectedSubjects = ref([]);
+
+const isModal = ref(false);
 
 // Função para selecionar/desmarcar uma matéria
 const toggleSubject = (subject) => {
@@ -59,18 +62,29 @@ const filteredSubjects = computed(() => {
 
 // Buscar matérias e configurar seleção inicial ao montar o componente
 onMounted(async () => {
-  await subjectStore.fetchSubjects(); // Carrega todas as matérias disponíveis
-  await userStore.fetchUserSubjects(); // Carrega as matérias já associadas ao usuário
-
+  await subjectStore.fetchSubjects(); 
+  await userStore.fetchUserSubjects();
   subjectStore.subjects.sort((a, b) => a.name.localeCompare(b.name));
-  setInitialSelectedSubjects(); // Define as matérias inicialmente selecionadas
+  setInitialSelectedSubjects();
 });
+
+// Salvar nova matéria
+const saveSubject = async (subjectName) => {
+  const success = await userStore.createUserSubject(subjectName);
+  if (success) {
+    alert('Matéria salva com sucesso!');
+    subjectStore.fetchSubjects();
+    isModal.value = false;
+  } else {
+    alert('Erro ao salvar a matéria.');
+  }
+};
 </script>
 
 <template>
   <DefaultLayout backgroundOpacity="opacity-20">
-    <div class="p-4 flex flex-col mt-12 gap-4 sm:mt-0">
-      <h3 class="text-2xl sm:text-4xl font-bold text-gray-700">Escolha suas <span class="text-[#21BFCA]">matérias.</span></h3>
+    <div class="relative p-4 flex flex-col mt-12 gap-4 sm:mt-0">
+      <h3 class="text-2xl sm:text-4xl font-bold text-gray-700">Escolha suas <span class="text-[#21BFCA]">matérias</span>.</h3>
       <p class="text-md text-gray-700">Carreira: {{ userStore.careerName }}</p>
       <Search placeholder="Pesquise a matéria..." v-model="searchTerm" />
       <div class="grid grid-cols-1 gap-2 w-full sm:grid-cols-2 lg:grid-cols-3  xl:grid-cols-5">
@@ -88,11 +102,13 @@ onMounted(async () => {
       </div>
       <div class="flex justify-end gap-2 mt-4 sm:mt-10">
         <Button v-if="route.path !== '/area-do-aluno/materias'" variant="base" :to="{ name: 'Carreiras' }">Voltar</Button>
+        <Button variant="base" @click="isModal = true">Criar Matéria</Button>
         <Button :variant="selectedSubjects.length ? 'base' : 'baseDisable'" :disabled="selectedSubjects.length === 0"
             class="disabled:opacity-100 w-full sm:w-auto" @click="saveSubjectsAndNavigate">
             Salvar e avançar
-          </Button>
+        </Button>
       </div>
+        <Modal v-if="isModal" @close="isModal = false" @save="saveSubject" />
     </div>
   </DefaultLayout>
 </template>

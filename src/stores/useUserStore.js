@@ -14,6 +14,7 @@ export const useUserStore = defineStore('user', {
     careerId: null,
     careerName: '',
     userSubjects: [],
+    subjects:[],
     userStudyRecords: [],
   }),
   actions: {
@@ -100,6 +101,21 @@ export const useUserStore = defineStore('user', {
         }
         console.error("Erro ao verificar carreira do usuário:", error);
         return false;
+      }
+    },
+    async createUserSubject(subjectName) {
+      try {
+        const response = await axios.post('subjects', { name: subjectName });
+    
+        if (response.status === 200) {
+          this.subjects.push(response.data);
+          return true;  // Retorna sucesso
+        } else {
+          return false; // Retorna falha se o status não for 200
+        }
+      } catch (error) {
+        console.error("Erro ao salvar nova matéria:", error);
+        return false; // Retorna falha se houver erro
       }
     },    
     async addUserSubjects(subjectIds) {
