@@ -70,13 +70,13 @@ onMounted(async () => {
 
 // Salvar nova matéria
 const saveSubject = async (subjectName) => {
-  const success = await userStore.createUserSubject(subjectName);
-  if (success) {
-    alert('Matéria salva com sucesso!');
-    subjectStore.fetchSubjects();
-    isModal.value = false;
-  } else {
-    alert('Erro ao salvar a matéria.');
+  const result = await userStore.createUserSubject(subjectName);
+  
+  alert(result.message); // Mostra a mensagem retornada pelo backend
+
+  if (result.success) {
+    subjectStore.fetchSubjects(); // Atualiza a lista
+    isModal.value = false; // Fecha o modal
   }
 };
 </script>

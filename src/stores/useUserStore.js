@@ -107,15 +107,21 @@ export const useUserStore = defineStore('user', {
       try {
         const response = await axios.post('subjects', { name: subjectName });
     
-        if (response.status === 200) {
+        if (response.status === 201) {
           this.subjects.push(response.data);
-          return true;  // Retorna sucesso
-        } else {
-          return false; // Retorna falha se o status não for 200
+          return { success: true, message: response.data.message };
         }
       } catch (error) {
         console.error("Erro ao salvar nova matéria:", error);
-        return false; // Retorna falha se houver erro
+        
+        if (error.response) {
+          return { 
+            success: false, 
+            message: error.response.data.message || "Erro desconhecido frontend.", 
+            errors: error.response.data.errors || null
+          };
+        }
+        return { success: false, message: "Erro de conexão com o servidor."};
       }
     },    
     async addUserSubjects(subjectIds) {
