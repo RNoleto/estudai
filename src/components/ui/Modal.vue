@@ -28,7 +28,7 @@ const save = () => {
 </script>
 
 <template>
-    <div class="fixed inset-0 flex items-center justify-center bg-black backdrop-blur-sm bg-opacity-50 z-50">
+    <div class="fixed inset-0 flex items-center justify-center bg-black backdrop-blur-sm bg-opacity-50 z-10">
         <Card class="px-10 py-5 relative">
             <template #title>
                 <i @click="$emit('close')" class="absolute top-3 right-3 text-primary fa-solid fa-xmark text-lg cursor-pointer hover:text-secondary"></i>
@@ -38,7 +38,7 @@ const save = () => {
             </template>
             <template #content>
                 <div class="flex flex-col gap-2 relative">
-                    <Input v-model="subjectName" placeholder="Nome da matéria aqui..." class="font-medium" />
+                    <Input v-model="subjectName" :maxlength="10" placeholder="Nome da matéria aqui..." class="font-medium" />
                     <div class="flex justify-end">
                         <Button @click="save" variant="base" size="full" class="mt-2 w-fit">Salvar</Button>
                     </div>

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="visible" class="fixed inset-0 flex items-center justify-center bg-black backdrop-blur-sm bg-opacity-50">
+    <div v-if="visible" class="fixed inset-0 flex items-center justify-center bg-black backdrop-blur-sm bg-opacity-50 z-20">
       <div class="bg-white p-6 rounded-2xl shadow-lg w-80 text-center">
         <div class="flex justify-center mb-4">
           <span v-if="type === 'success'" class="text-green-500 text-4xl">✔️</span>

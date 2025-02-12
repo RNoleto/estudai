@@ -91,8 +91,6 @@ const saveSubject = async (subjectName) => {
     await subjectStore.fetchSubjects(); // Atualiza a lista
     setInitialSelectedSubjects(); // Atualiza as seleções
     isModal.value = false; // Fecha o modal
-  } else {
-    isModal.value = false;
   }
 };
 
@@ -127,12 +125,12 @@ const saveSubject = async (subjectName) => {
       </div>
         <Modal title="Nova Matéria" v-if="isModal" @close="isModal = false" @save="saveSubject" />
         <AlertModal 
-  :visible="alertVisible" 
-  :title="alertTitle" 
-  :message="alertMessage" 
-  :type="alertType" 
-  @close="alertVisible = false" 
-/>
+          :visible="alertVisible" 
+          :title="alertTitle" 
+          :message="alertMessage" 
+          :type="alertType" 
+          @close="alertVisible = false" 
+        />
     </div>
   </DefaultLayout>
 </template>
