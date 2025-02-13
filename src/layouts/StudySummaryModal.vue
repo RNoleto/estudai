@@ -69,7 +69,7 @@ const saveData = async () => {
   } catch (error) {
     console.error('Erro ao salvar:', error);
   } finally {
-    isSaving = false; // Libera o botão após a conclusão
+    isSaving.value = false; // Libera o botão após a conclusão
   }
 }
 
