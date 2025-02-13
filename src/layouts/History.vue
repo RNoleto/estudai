@@ -200,7 +200,15 @@ const totalAccuracyBgClass = computed(() => {
       </div>
       <!-- botão desktop -->
       <div class="hidden sm:block">
-        <Button @click="openReport" variant="ia">Gerar Insight</Button>
+        <Button 
+          @click="openReport" 
+          :variant="summarizedData.length <= 0 ? 'baseDisable' : 'base'"
+          size="sm"
+          :disabled="summarizedData.length <= 0"
+          :title="summarizedData.length <= 0 ? 'Você precisa criar registro de estudo antes!' : ''"
+        >
+          Gerar Insight
+        </Button>
         <StudyReportModal ref="studyModal" />
       </div>
     </div>
