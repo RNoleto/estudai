@@ -68,6 +68,8 @@ const handleTimerStopped = () => {
 
 const handleCloseModal = () => {
   isOpen.value = false;
+  selectedSubject.value = null;
+  studyStore.topic = ""; //Aqui está limpando
 }
 
 // Gera os dados do gráfico para cada registro
@@ -280,8 +282,14 @@ const totalCorrectAnswers = computed(() => {
       <div class="flex flex-col gap-2 mt-4">
         <!-- Campo de pesquisa com lista suspensa de matérias -->
         <div class="flex flex-col gap-2 sm:flex-row col-span-6">
-          <ComboBox :options="userSubjects" :placeholder="'Selecione uma matéria...'" v-model="selectedSubject"
-            @select="handleSubjectSelection" class="w-full" />
+          <ComboBox 
+            :options="userSubjects" 
+            :placeholder="'Selecione uma matéria...'" 
+            v-model="selectedSubject"
+            :key="selectedSubject ? selectedSubject.id : 'empty'"
+            @select="handleSubjectSelection" 
+            class="w-full" 
+          />
           <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-full"
             v-model="studyStore.topic" />
           <Button :variant="isSubjectSelected ? 'primary' : 'secondary'" :disabled="!isSubjectSelected" size="sm" class="min-w-max" @mouseover="showTooltip = !selectedSubject" @mouseleave="showTooltip = false" @click="openManualEntryModal">Inserir Manualmente</Button>
