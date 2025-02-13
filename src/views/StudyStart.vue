@@ -270,7 +270,7 @@ const totalCorrectAnswers = computed(() => {
     <div class="p-4 mt-12 gap-4 sm:mt-0">
       <div class="flex items-center justify-between">
         <div>
-          <h3 class="text-xl font-bold sm:text-4xl">Iniciar Estudos</h3>
+          <h3 class="text-xl font-bold sm:text-4xl">Iniciar <span class="text-primary">estudos.</span></h3>
           <div class="flex justify-between">
             <p class="text-sm sm:text-base">Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..." }}
             </p>

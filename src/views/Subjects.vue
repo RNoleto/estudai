@@ -123,7 +123,7 @@ const handleAlertClose = () => {
 <template>
   <DefaultLayout backgroundOpacity="opacity-20">
     <div class="relative p-4 flex flex-col mt-12 gap-4 sm:mt-0">
-      <h3 class="text-2xl sm:text-4xl font-bold text-gray-700">Escolha suas <span class="text-[#21BFCA]">matérias</span>.</h3>
+      <h3 class="text-2xl sm:text-4xl font-bold text-gray-700">Escolha suas <span class="text-primary">matérias.</span></h3>
       <p class="text-md text-gray-700">Carreira: {{ userStore.careerName }}</p>
       <Search placeholder="Pesquise a matéria..." v-model="searchTerm" />
       <div class="grid grid-cols-1 gap-2 w-full sm:grid-cols-2 lg:grid-cols-3  xl:grid-cols-5">
