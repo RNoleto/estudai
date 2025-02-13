@@ -38,7 +38,7 @@ const save = () => {
             </template>
             <template #content>
                 <div class="flex flex-col gap-2 relative">
-                    <Input v-model="subjectName" :maxlength="10" placeholder="Nome da matéria aqui..." class="font-medium" />
+                    <Input v-model="subjectName" :maxlength="25" placeholder="Nome da matéria aqui..." class="font-medium" />
                     <div class="flex justify-end">
                         <Button @click="save" variant="base" size="full" class="mt-2 w-fit">Salvar</Button>
                     </div>

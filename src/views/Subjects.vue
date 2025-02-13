@@ -27,6 +27,8 @@ const alertTitle = ref('');
 const alertMessage = ref('');
 const alertType = ref('');
 
+//Navegação depois de fechar o AlerModal
+const navigateAfterAlert = ref(false);
 
 // Função para selecionar/desmarcar uma matéria
 const toggleSubject = (subject) => {
@@ -40,13 +42,23 @@ const toggleSubject = (subject) => {
 // Função para salvar as matérias selecionadas e navegar para a próxima página
 const saveSubjectsAndNavigate = async () => {
   const selectedSubjectIds = selectedSubjects.value.map((subject) => subject.id);
-  await userStore.saveUserSubjects(selectedSubjectIds);
+  const result = await userStore.saveUserSubjects(selectedSubjectIds);
 
-  const nextRoute = route.path.startsWith('/area-do-aluno')
-    ? { name: 'materias' } // Rota dentro da Dashboard
-    : { name: 'Estudar' }; // Rota fora da Dashboard
-  alert("Matérias salvas com sucesso!");
-  router.push(nextRoute);
+  // Define os valores do alerta
+  alertTitle.value = result.success ? 'Sucesso!' : 'Erro!';
+  alertMessage.value = result.message;
+  alertType.value = result.success ? 'success' : 'error';
+  alertVisible.value = true;
+
+  if(result.success){
+      navigateAfterAlert.value = true;
+  }
+
+  // const nextRoute = route.path.startsWith('/area-do-aluno')
+  //   ? { name: 'materias' } // Rota dentro da Dashboard
+  //   : { name: 'Estudar' }; // Rota fora da Dashboard
+  // alert("Matérias salvas com sucesso!");
+  // router.push(nextRoute);
 };
 
 // Configura as matérias selecionadas inicialmente
@@ -94,6 +106,18 @@ const saveSubject = async (subjectName) => {
   }
 };
 
+const handleAlertClose = () => {
+  alertVisible.value = false;
+  // Se o alerta foi de sucesso e a flag estiver ativa, navegue para a próxima página
+  if (navigateAfterAlert.value) {
+    navigateAfterAlert.value = false; // Limpa a flag para evitar navegações futuras indevidas
+    const nextRoute = route.path.startsWith('/area-do-aluno')
+      ? { name: 'materias' } // Rota dentro da Dashboard
+      : { name: 'Estudar' }; // Rota fora da Dashboard
+    router.push(nextRoute);
+  }
+};
+
 </script>
 
 <template>
@@ -123,13 +147,13 @@ const saveSubject = async (subjectName) => {
             Salvar e avançar
         </Button>
       </div>
-        <Modal title="Nova Matéria" v-if="isModal" @close="isModal = false" @save="saveSubject" />
+        <Modal title="Nova Matéria" v-if="isModal" :maxlength="20" @close="isModal = false" @save="saveSubject" />
         <AlertModal 
           :visible="alertVisible" 
           :title="alertTitle" 
           :message="alertMessage" 
           :type="alertType" 
-          @close="alertVisible = false" 
+          @close="handleAlertClose" 
         />
     </div>
   </DefaultLayout>

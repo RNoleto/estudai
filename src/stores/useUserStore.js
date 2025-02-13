@@ -166,24 +166,25 @@ export const useUserStore = defineStore('user', {
       }
     },
     async saveUserSubjects(subjectIds) {
+      const subjectsToDeactivate = this.userSubjects.filter(
+        (id) => !subjectIds.includes(id)
+      ); // Matérias desmarcadas
+
+      const payload = {
+        user_id: this.userId,
+        subject_ids: subjectIds,
+        subjects_to_deactivate: subjectsToDeactivate,
+      };
+
       try {
-        const subjectsToDeactivate = this.userSubjects.filter(
-          (id) => !subjectIds.includes(id)
-        ); // Matérias desmarcadas
-
-        const payload = {
-          user_id: this.userId,
-          subject_ids: subjectIds,
-          subjects_to_deactivate: subjectsToDeactivate,
-        };
-
         const response = await axios.post('user-subjects', payload);
 
         if (response.status === 200) {
-          this.userSubjects = subjectIds;
+          // this.userSubjects = subjectIds;
+          return { success: true, message: response.data.message };
         }
       } catch (error) {
-        console.error("Erro ao salvar matérias do usuário:", error);
+        console.error("Erro ao atribuir matérias ao usuário:", error);
       }
     },
     async fetchUserStudyRecords() {
