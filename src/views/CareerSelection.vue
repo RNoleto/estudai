@@ -162,7 +162,7 @@ const saveCareer = async () => {
       <div class="flex justify-end mt-10">
         <!-- <Button @click="createCareer">Adicionar nova carreira</Button> -->
         <Button :variant="selectedCareer ? 'base' : 'baseDisable'" :disabled="!selectedCareer"
-          class="disabled:opacity-100 w-full sm:w-auto" @click="saveCareerAndNavigate">
+          class="disabled:opacity-100 w-full sm:w-auto" @click="saveCareerAndNavigate" :title="!selectedCareer ? 'Você precisa selecionar uma carreira antes' : ''">
           Avançar
         </Button>
       </div>
