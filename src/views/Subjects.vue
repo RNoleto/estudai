@@ -142,7 +142,7 @@ const handleAlertClose = () => {
       <div class="flex justify-end gap-2 mt-4 sm:mt-10">
         <Button v-if="route.path !== '/area-do-aluno/materias'" variant="base" :to="{ name: 'Carreiras' }">Voltar</Button>
         <Button variant="base" @click="isModal = true">Criar Matéria</Button>
-        <Button :variant="selectedSubjects.length ? 'base' : 'baseDisable'" :disabled="selectedSubjects.length === 0"
+        <Button :variant="selectedSubjects.length ? 'base' : 'baseDisable'" :disabled="selectedSubjects.length === 0" :title="selectedSubjects.length === 0 ? 'Você precisa selecionar ao menos uma matéria antes' : ''"
             class="disabled:opacity-100 w-full sm:w-auto" @click="saveSubjectsAndNavigate">
             Salvar e avançar
         </Button>
