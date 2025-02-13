@@ -59,20 +59,27 @@ export const useUserStore = defineStore('user', {
     },
     async saveUserCareer(careerId, careerName) {
       this.careerId = careerId;
-      this.careerName = careerName; // Salve o nome da carreira também no Pinia
-
-      // Lógica para enviar para o backend
+      this.careerName = careerName;
+    
       const userCareerData = {
         user_id: this.userId,
         career_id: careerId,
       };
-
+    
       try {
-        // Fazendo a requisição para o backend Laravel para salvar a carreira
         const response = await axios.post('user-career', userCareerData);
-
+    
+        if (response.status === 200 || response.status === 201) {
+          return { success: true, message: response.data.message };
+        } else {
+          return { success: false, message: 'Não foi possível salvar a carreira. Tente novamente.' };
+        }
       } catch (error) {
         console.error("Erro ao salvar a carreira no banco de dados:", error);
+        return {
+          success: false,
+          message: error.response?.data?.message || 'Erro ao comunicar com o servidor. Verifique sua conexão.',
+        };
       }
     },
     async checkUserCareer() {

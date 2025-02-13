@@ -10,6 +10,7 @@ import OptionCard from '../components/ui/OptionCard.vue';
 import Button from '../components/ui/Button.vue';
 import Search from '../components/ui/Search.vue';
 import Input from '../components/ui/Input.vue'
+import AlertModal from '../components/ui/AlertModal.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -17,6 +18,15 @@ const searchTerm = ref('');
 const newCareerModal = ref(false);
 
 const newCareerName = ref('');
+
+//AlertModal
+const alertVisible = ref(false);
+const alertTitle = ref('');
+const alertMessage = ref('');
+const alertType = ref('');
+
+//Navegação depois de fechar o AlerModal
+const navigateAfterAlert = ref(false);
 
 // Instanciar os stores
 const userStore = useUserStore();
@@ -31,13 +41,31 @@ const selectCareer = (career) => {
 
 // Função para salvar a carreira no banco de dados e navegar para a próxima página
 const saveCareerAndNavigate = async () => {
-  if (selectedCareer.value) {
-    await userStore.saveUserCareer(selectedCareer.value.id, selectedCareer.value.name);
+  
+  if(selectedCareer.value){
+    const result = await userStore.saveUserCareer(selectedCareer.value.id, selectedCareer.value.name);
+    //Valores de alerta
+    alertTitle.value = result.success ? 'Sucesso!' : 'Erro!';
+    alertMessage.value = result.message;
+    alertType.value = result.success ? 'success' : 'error';
+    alertVisible.value = true;
+
+    if(result.success){
+      navigateAfterAlert.value = true;
+    }
+
+  }
+};
+
+const handleAlertClose = () => {
+  alertVisible.value = false;
+  // Se o alerta foi de sucesso e a flag estiver ativa, navegue para a próxima página
+  if (navigateAfterAlert.value) {
+    navigateAfterAlert.value = false; // Limpa a flag para evitar navegações futuras indevidas
     const nextRoute = route.path.startsWith('/area-do-aluno')
       ? { name: 'DashboardCarreiras' }
       : { name: 'Materias' };
     router.push(nextRoute);
-    alert('Carreira salva com sucesso!')
   }
 };
 
@@ -138,6 +166,13 @@ const saveCareer = async () => {
           Avançar
         </Button>
       </div>
+      <AlertModal 
+          :visible="alertVisible" 
+          :title="alertTitle" 
+          :message="alertMessage" 
+          :type="alertType" 
+          @close="handleAlertClose" 
+        />
     </div>
   </DefaultLayout>
 </template>
