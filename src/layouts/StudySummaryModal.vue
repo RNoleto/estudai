@@ -2,8 +2,10 @@
 import Button from '../components/ui/Button.vue';
 import { computed, ref, onMounted } from 'vue';
 import { useTimerStore } from '../stores/useTimerStore';
-import { useStudyStore } from '../stores/useStudyStore';
 import { useUserStore } from '../stores/useUserStore';
+
+import { useTimeFormatter } from '../composables/useTimeFormatter';
+const { formatStudyTime } = useTimeFormatter();
 
 const props = defineProps({
   isOpen: Boolean, 
@@ -12,14 +14,14 @@ const props = defineProps({
 const emit = defineEmits(['onClose']);
 
 const timerStore = useTimerStore();
-const studyStore = useStudyStore();
 const userStore = useUserStore();
 
 const isSaving = ref(false);
 
 
 // Computed properties para garantir que os valores estejam atualizados
-const totalStudyTime = computed(() => timerStore.finalFormattedTime);
+const totalStudyTime = computed(() => timerStore.finalFormattedTime); //Tempo no formato de segundos usado para o banco de dados
+const formatedTime = computed(() => formatStudyTime(timerStore.finalElapsedTime)); //Mostra o tempo no formato correto antes de salvar
 const totalPauses = computed(() => timerStore.finalTotalPausesLength);
 
 // Estado do modal
@@ -95,7 +97,7 @@ const isFormValid = computed(() => {
       <h2 class="text-lg font-bold mb-4 uppercase ">Resumo de Estudo</h2>
       <!-- Exibindo o tempo total de estudo -->
       <div>
-        <strong>Tempo Total de Estudo:</strong> {{ totalStudyTime }}
+        <strong>Tempo Total de Estudo:</strong> {{ formatedTime }} 
       </div>
       <!-- Exibindo o número de pausas -->
       <div>
