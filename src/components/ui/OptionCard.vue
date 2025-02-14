@@ -8,9 +8,9 @@ const optionCard = tv({
   base: 'p-2 flex items-center gap-2 rounded-lg shadow-sm shadow-zinc-300 cursor-pointer group',
   variants: {
     variant: {
-      primary: 'bg-white text-gray-600 border-[1px] border-gray-300 sm:hover:bg-[#42D3DD] hover:text-white', 
+      primary: 'bg-white text-gray-600 border-[1px] border-gray-300 sm:hover:bg-hoverGreen hover:text-white', 
       secondary: 'bg-gray-500 text-white sm:hover:bg-gray-600',
-      selected: 'bg-[#21BFCA] text-white sm:hover:bg-[#42D3DD]', 
+      selected: 'bg-primary text-white sm:hover:bg-hoverGreen', 
       disabled: 'bg-gray-300 text-gray-500 cursor-not-allowed',
     },
   },
@@ -41,8 +41,8 @@ const optionCardClass = computed(() => optionCard({ variant: props.variant }));
 // Computed para as classes do ícone
 const iconClass = computed(() => {
   return props.variant === 'selected'
-    ? 'bg-white text-[#21BFCA]'
-    : 'bg-gray-600 text-white group-hover:bg-white group-hover:text-[#21BFCA]';
+    ? 'bg-white text-primary'
+    : 'bg-gray-600 text-white group-hover:bg-white group-hover:text-primary';
 });
 </script>
 

@@ -70,8 +70,8 @@ const showIncorrect = ref(false);
         <p><span class="font-bold">Tópico:</span> {{ record.topic }}</p>
       </div>
       <div>
-        <button class="p-1 text-sm text-blue-400" @click="$emit('edit', props.record)"><i class="fa-regular fa-pen-to-square"></i></button> <!-- Edit -->
-        <button class="text-sm text-red-400 p-1"  @click="$emit('delete', props.record)"><i class="fa-solid fa-trash"></i></button> <!-- Delete -->
+        <button class="p-1 text-sm text-baseBlue" @click="$emit('edit', props.record)"><i class="fa-regular fa-pen-to-square"></i></button> <!-- Edit -->
+        <button class="text-sm text-terRed p-1"  @click="$emit('delete', props.record)"><i class="fa-solid fa-trash"></i></button> <!-- Delete -->
       </div>
     </div>
     <!-- Conteudo do Card -->
@@ -91,11 +91,11 @@ const showIncorrect = ref(false);
       <div v-if="record.questions_resolved > 0" class="relative flex justify-center">
         <Chart :type="'doughnut'" :data="chartData" :options="chartOptions" class="w-[4rem] sm:w-[5rem] lg:w-[10rem]" />
         <div class="absolute text-center bottom-1 sm:bottom-11 md:bottom-12 lg:bottom-6">
-          <div v-bind:class="{ 'text-[#00B884]': showCorrect, 'hidden': !showCorrect }">
+          <div v-bind:class="{ 'text-baseGreen': showCorrect, 'hidden': !showCorrect }">
             <strong class="text-xs lg:text-xl">{{ correctPercentage }}%</strong>
             <p class="text-sm sm:text-sm lg:text-base">Acertos</p>
           </div>
-          <div v-if="incorrectPercentage > 0" v-bind:class="{ 'text-[#FF5675]': showIncorrect, 'hidden': !showIncorrect }">
+          <div v-if="incorrectPercentage > 0" v-bind:class="{ 'text-terRed': showIncorrect, 'hidden': !showIncorrect }">
             <strong class="text-xs sm:text-xl">{{ incorrectPercentage }}%</strong>
             <p class="text-sm sm:text-sm lg:text-base">Erros</p>
           </div>
