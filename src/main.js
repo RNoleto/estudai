@@ -12,8 +12,8 @@ import router from './router';
 const pinia = createPinia();
 
 // Configuração da baseURL do Axios
-axios.defaults.baseURL = 'http://127.0.0.1:8000/api';
-// axios.defaults.baseURL = 'https://gerenciamento-de-estudo-api.vercel.app/api/api';
+// axios.defaults.baseURL = 'http://127.0.0.1:8000/api';
+axios.defaults.baseURL = 'https://gerenciamento-de-estudo-api.vercel.app/api/api';
 
 const app = createApp(App);
 
