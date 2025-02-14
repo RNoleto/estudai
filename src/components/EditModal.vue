@@ -192,13 +192,13 @@ const closeSuccessModal = () => {
   <!-- Modal de Sucesso ou Erro -->
   <div v-if="modalMessage.text"
   class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-white">
-    <!-- <div :class="modalMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500'"
+    <div :class="modalMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500'"
       class="rounded-lg shadow-lg p-6 w-full max-w-sm text-center">
       <p class="text-lg font-bold">{{ modalMessage.text }}</p>
       <button @click="closeSuccessModal" class="mt-4 px-4 py-2 bg-white text-black rounded-md hover:bg-gray-200">
         Fechar
       </button>
-    </div> -->
+    </div>
   </div>
 </template>
 
