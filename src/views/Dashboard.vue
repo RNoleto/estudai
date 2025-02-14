@@ -55,26 +55,30 @@ onMounted(async () => {
     <div v-if="isMenuMobileOpen" class="fixed inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm z-40">
       <transition name="fade-slide" mode="out-in" appear>
         <div class="fixed top-0 right-0 h-screen bg-zinc-100 z-10 flex flex-col justify-start pt-16 gap-2 mt-10 px-6">
-          <a href="/area-do-aluno"
-            class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <i class="fas fa-home"></i>
-            Home
-          </a>
-          <a href="/area-do-aluno/historico-de-estudos"
-            class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <i class="fa-solid fa-pen-clip"></i>
-            Histórico de Estudo
-          </a>
-          <a href="/area-do-aluno/estudar"
-            class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <i class="fa-solid fa-stopwatch"></i>
-            Estudar
-          </a>
-          <a href="/area-do-aluno/planos"
-            class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <i class="fa-solid fa-file-signature"></i>
-            Planos
-          </a>
+          <div class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl hover:bg-blue-100">
+            <a href="/area-do-aluno">
+              <i class="fas fa-home"></i>
+              Home
+            </a>
+          </div>
+          <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+            <a href="/area-do-aluno/historico-de-estudos">
+              <i class="fa-solid fa-pen-clip"></i>
+              Histórico de Estudo
+            </a>
+          </div>
+          <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+            <a href="/area-do-aluno/estudar">
+              <i class="fa-solid fa-stopwatch"></i>
+              Estudar
+            </a>
+          </div>
+          <div class="hidden flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+            <a href="/area-do-aluno/planos">
+              <i class="fa-solid fa-file-signature"></i>
+              Planos
+            </a>
+          </div>
           <div>
             <button @click="toggleMenu3"
               class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl hover:bg-blue-100">
@@ -170,7 +174,7 @@ onMounted(async () => {
             </a>
           </div>
           <!-- Planos da Dashboard -->
-          <div>
+          <div class="hidden">
             <a href="/area-do-aluno/planos" :class="[
               'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
               route.path === '/area-do-aluno/planos' ? 'bg-secondary text-baseBlue shadow-sm' : 'text-gray-700 hover:bg-gray-100'
