@@ -9,8 +9,9 @@ import ComboBox from '../components/ui/ComboBox.vue';
 import Button from '../components/ui/Button.vue';
 import Input from  '../components/ui/Input.vue';
 
-const { formatStudyTime } = useTimeFormatter();
+import AlertModal from './AlertModal.vue';
 
+const { formatStudyTime } = useTimeFormatter();
 
 const props = defineProps({
   isVisible: {
@@ -70,7 +71,13 @@ watch(
 );
 
 // Computed para obter a lista de matérias
-const subjects = computed(() => subjectStore.subjects);
+const subjects = computed(() => {
+  return userStore.userSubjects
+    .map((subject_id) =>
+      subjectStore.subjects.find((subject) => subject.id === subject_id)
+  )
+  .filter(Boolean);
+});
 
 watch(
   [() => formData.questions_resolved, () => formData.correct_answers],
@@ -138,7 +145,11 @@ const closeSuccessModal = () => {
       <form @submit.prevent="saveChanges">
         <div class="mb-4">
           <label for="subjectName" class="block text-sm font-medium text-gray-700">Matéria</label>
-          <ComboBox :options="subjects" :placeholder="'Selecione uma matéria...'" v-model="formData.subjectName"
+          <ComboBox 
+            :options="subjects" 
+            :placeholder="'Selecione uma matéria...'" 
+            v-model="formData.subjectName"
+            :key="subjects.subjectId"
             class="mt-1 block w-full" />
         </div>
         <div class="mb-4">
@@ -180,14 +191,14 @@ const closeSuccessModal = () => {
   </div>
   <!-- Modal de Sucesso ou Erro -->
   <div v-if="modalMessage.text"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-white">
-    <div :class="modalMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500'"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-white">
+    <!-- <div :class="modalMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500'"
       class="rounded-lg shadow-lg p-6 w-full max-w-sm text-center">
       <p class="text-lg font-bold">{{ modalMessage.text }}</p>
       <button @click="closeSuccessModal" class="mt-4 px-4 py-2 bg-white text-black rounded-md hover:bg-gray-200">
         Fechar
       </button>
-    </div>
+    </div> -->
   </div>
 </template>
 
