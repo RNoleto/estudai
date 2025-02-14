@@ -113,15 +113,15 @@ onMounted(async () => {
         'flex flex-col h-full rounded-lg border border-secondary bg-white shadow-md text-sm transition-[width] duration-300 ease-in-out',
         isSidebarCollapsed ? 'w-[4.5rem]' : 'w-[15rem]'
       ]">
-        <div class="p-4 text-lg text-gray-700 font-bold border-b border-secondary flex justify-between items-center">
+        <div class="p-4 text-lg text-gray-700 font-bold border-b border-secondary flex items-center" :class="[isSidebarCollapsed ? 'justify-center' : 'justify-between']">
           <span v-if="!isSidebarCollapsed" >Estudaí</span>
           <button @click="toggleSidebar" class="px-2 text-[#21BFCA] hover:bg-gray-200 rounded">
             <i :class="isSidebarCollapsed ? 'fa-solid fa-caret-right' : 'fa-solid fa-caret-left'"></i>
           </button>
         </div>
-        <nav class="flex flex-col h-full gap-1" :class="isSidebarCollapsed ? 'p-1' : 'p-2'">
+        <nav class="flex flex-col h-full gap-1" :class="isSidebarCollapsed ? 'p-1 items-center' : 'p-2'">
           <!-- Home da Dashboard -->
-          <div>
+          <div :class="[isSidebarCollapsed ? 'justify-center' : 'justify-between']">
             <a href="/area-do-aluno" :class="[
               'flex items-center gap-2 px-4 py-2 mt-4 rounded-lg hover:shadow-md',
               route.path === '/area-do-aluno'
@@ -220,7 +220,7 @@ onMounted(async () => {
             </div>
           </div>
           <div class="mt-auto bg-secondary p-2 rounded-lg w-full shadow-md">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2" :class="isSidebarCollapsed ? 'justify-center' : ''">
               <UserButton />
               <p v-if="!isSidebarCollapsed" class="text-baseBlue text-sm font-medium">{{ user.fullName }}</p>
             </div>
