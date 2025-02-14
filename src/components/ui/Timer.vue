@@ -49,11 +49,15 @@ const addCustomTime = () => {
 </script>
 
 <template>
-  <div class="relative flex flex-col rounded-2xl bg-white shadow-md p-4"
+  <div class="relative flex border border-secondary flex-col rounded-2xl bg-white shadow-md p-4"
        :class="['timer', isFocusMode ? 'focus-mode' : '']">
     <div @click="!props.isDisabled && enterFocusMode()" 
-         class="absolute right-4 text-sm p-1 cursor-pointer"
-         :class="{ 'cursor-not-allowed text-gray-400': props.isDisabled }">
+         class="absolute right-4 text-sm p-1"
+         :title="props.isDisabled ? 'selecione uma matéria' : ''"
+         :class="{ 
+            'text-gray-400': props.isDisabled, 
+            'cursor-pointer' : !props.isDisabled
+          }">
       <i class="fa-solid fa-arrows-to-circle"></i>
     </div>
     <div class="flex flex-col items-center gap-1 py-4 sm:gap-6">
@@ -99,7 +103,7 @@ const addCustomTime = () => {
         <div class="text-6xl sm:text-8xl font-mono mb-8">
           {{ timerStore.formattedTime }}
         </div>
-        <div class="flex justify-between space-x-2">
+        <div class="flex justify-center gap-4">
           <Button @click="timerStore.isRunning ? timerStore.togglePause() : timerStore.start()"
                   :disabled="props.isDisabled" variant="play">
             {{ timerStore.isRunning ? (timerStore.isPaused ? 'Continuar' : 'Pausar') : 'Iniciar' }}
