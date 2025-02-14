@@ -43,24 +43,24 @@ const showIncorrect = ref(false);
 </script>
 
 <template>
-  <div v-if="isLoading" class="border border-zinc-300 shadow-sm rounded-md p-4 animate-pulse flex items-center gap-4 min-h-[250px]">
+  <div v-if="isLoading" class="border bg-white border-secondary shadow-sm rounded-2xl p-4 animate-pulse flex items-center gap-4 min-h-[241px]">
       <!-- Placeholder de loading -->
       <div class="flex-1 space-y-6 py-2">
-        <div class="h-2 bg-slate-200 rounded"></div>
-        <div class="h-2 bg-slate-200 rounded"></div>
+        <div class="h-2 bg-secondary rounded"></div>
+        <div class="h-2 bg-secondary rounded"></div>
         <div class="space-y-3">
           <div class="grid grid-cols-3 gap-4">
-            <div class="h-2 bg-slate-200 rounded col-span-2"></div>
-            <div class="h-2 bg-slate-200 rounded col-span-2"></div>
-            <div class="h-2 bg-slate-200 rounded col-span-1"></div>
-            <div class="h-2 bg-slate-200 rounded col-span-1"></div>
-            <div class="h-2 bg-slate-200 rounded col-span-1"></div>
-            <div class="h-2 bg-slate-200 rounded col-span-1"></div>
+            <div class="h-2 bg-secondary rounded col-span-2"></div>
+            <div class="h-2 bg-secondary rounded col-span-2"></div>
+            <div class="h-2 bg-secondary rounded col-span-1"></div>
+            <div class="h-2 bg-secondary rounded col-span-1"></div>
+            <div class="h-2 bg-secondary rounded col-span-1"></div>
+            <div class="h-2 bg-secondary rounded col-span-1"></div>
           </div>
-          <div class="h-2 bg-slate-200 rounded"></div>
+          <div class="h-2 bg-secondary rounded"></div>
         </div>
       </div>
-      <div class="rounded-full bg-slate-200 h-[100px] w-[100px]"></div>
+      <div class="rounded-full bg-secondary h-[100px] w-[100px]"></div>
     </div>
   <div v-else class="shadow-md flex flex-col gap-1 text-xs sm:text-sm text-zinc-700 border-b rounded-2xl bg-white p-4">
     <!-- Header do card -->
