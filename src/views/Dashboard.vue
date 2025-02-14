@@ -110,11 +110,11 @@ onMounted(async () => {
     <!-- Sidebar desktop -->
     <div class="sm:min-h-screen p-1">
       <aside v-if="!isMobileView" :class="[
-        'flex  flex-col h-full rounded-lg border border-secondary bg-white shadow-md transition-all duration-300 text-sm',
-        isSidebarCollapsed ? 'w-18' : 'w-60'
+        'flex flex-col h-full rounded-lg border border-secondary bg-white shadow-md text-sm transition-[width] duration-300 ease-in-out',
+        isSidebarCollapsed ? 'w-[4.5rem]' : 'w-[15rem]'
       ]">
         <div class="p-4 text-lg text-gray-700 font-bold border-b border-secondary flex justify-between items-center">
-          <span v-if="!isSidebarCollapsed">Área do Aluno</span>
+          <span v-if="!isSidebarCollapsed" >Estudaí</span>
           <button @click="toggleSidebar" class="px-2 text-[#21BFCA] hover:bg-gray-200 rounded">
             <i :class="isSidebarCollapsed ? 'fa-solid fa-caret-right' : 'fa-solid fa-caret-left'"></i>
           </button>
@@ -132,7 +132,24 @@ onMounted(async () => {
                 'fas fa-home',
                 route.path === '/area-do-aluno' ? 'text-[#3E73ED]' : 'text-[#21BFCA] hover:text-gray-500'
               ]"></i>
-              <span v-if="!isSidebarCollapsed">Home</span>
+              <span v-show="!isSidebarCollapsed" >
+                Home
+              </span>
+            </a>
+          </div>
+          <!-- Estudar da Dashboard -->
+          <div>
+            <a href="/area-do-aluno/estudar" :class="[
+              'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
+              route.path === '/area-do-aluno/estudar' ? 'bg-secondary text-[#3E73ED] shadow-sm' : 'text-gray-700 hover:bg-gray-100'
+            ]">
+              <i :class="[
+                'fa-solid fa-stopwatch',
+                route.path === '/area-do-aluno/estudar'
+                  ? 'bg-secondary text-[#3E73ED] shadow-sm'
+                  : 'text-[#21BFCA] hover:text-gray-500'
+              ]"></i>
+              <span v-if="!isSidebarCollapsed" >Estudar</span>
             </a>
           </div>
           <!-- Historico de Estudos -->
@@ -149,22 +166,7 @@ onMounted(async () => {
                   ? 'bg-secondary text-[#3E73ED] shadow-sm'
                   : 'text-[#21BFCA] hover:text-gray-500'
               ]"></i>
-              <span v-if="!isSidebarCollapsed">Histórico de Estudo</span>
-            </a>
-          </div>
-          <!-- Estudar da Dashboard -->
-          <div>
-            <a href="/area-do-aluno/estudar" :class="[
-              'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-              route.path === '/area-do-aluno/estudar' ? 'bg-secondary text-[#3E73ED] shadow-sm' : 'text-gray-700 hover:bg-gray-100'
-            ]">
-              <i :class="[
-                'fa-solid fa-stopwatch',
-                route.path === '/area-do-aluno/estudar'
-                  ? 'bg-secondary text-[#3E73ED] shadow-sm'
-                  : 'text-[#21BFCA] hover:text-gray-500'
-              ]"></i>
-              <span v-if="!isSidebarCollapsed">Estudar</span>
+              <span v-if="!isSidebarCollapsed" >Histórico de Estudo</span>
             </a>
           </div>
           <!-- Planos da Dashboard -->
@@ -178,7 +180,7 @@ onMounted(async () => {
                   ? 'bg-secondary text-[#3E73ED] shadow-sm'
                   : 'text-[#21BFCA] hover:text-gray-500'
               ]"></i>
-              <span v-if="!isSidebarCollapsed">Planos</span>
+              <span v-if="!isSidebarCollapsed" >Planos</span>
             </a>
           </div>
           <!-- Menu de Configuração -->
@@ -198,7 +200,7 @@ onMounted(async () => {
                 <span v-if="!isSidebarCollapsed" :class="[
                   route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
                     ? 'text-[#3E73ED]' : 'text-gray-700 hover:bg-gray-100'
-                ]">Configurações</span>
+                ]" >Configurações</span>
               </div>
               <i v-if="!isSidebarCollapsed" class="text-xs text-[#21BFCA] fas" :class="[isMenu3Open ? 'fa-solid fa-caret-up' : 'fa-solid fa-caret-down', isSidebarCollapsed ? 'text-xs' : 'text-base',
               route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
