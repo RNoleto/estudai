@@ -16,8 +16,6 @@ import Dashboard from '../views/Dashboard.vue';
 import DashboardHome from '../views/DashboardHome.vue';
 import StudyHistory from '../views/StudyHistory.vue';
 
-//Teste
-import Test from '../views/Test.vue';
 
 const routes = [
   {
@@ -41,11 +39,6 @@ const routes = [
     name: 'Ciclo',
     component: StudyCycle,
     meta: { requiresAuth: true },
-  },
-  {
-    path: '/teste',
-    name: 'Teste',
-    component: Test,
   },
   {
     path: '/area-do-aluno',
@@ -87,11 +80,6 @@ const routes = [
         path: 'planos',
         name: 'DashboardSubscriptions',
         component: SubscriptionsPage,
-      },
-      {
-        path: 'teste',
-        name: 'DashboardTeste',
-        component: Test,
       },
       {
         path: 'pagamento-sucesso',

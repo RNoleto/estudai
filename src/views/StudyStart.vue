@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref, computed, watch } from 'vue';
-import History from '../layouts/History.vue';
+
 import DefaultLayout from '../layouts/DefaultLayout.vue';
 import Input from '../components/ui/Input.vue';
 import Timer from '../components/ui/Timer.vue';
@@ -37,7 +37,7 @@ const chartData = ref();
 const chartOptions = ref(null);
 const isOpen = ref(false);
 const isFocus = ref(false);
-const showTooltip = ref(false);
+
 
 const isLoading = ref(true);
 const showConfirmModal = ref(false);
@@ -92,7 +92,6 @@ const getChartData = (record) => {
 // Gera as opções do gráfico para cada registro
 const getChartOptions = (record) => {
   const correctPercentage = userStore.getCorrectAnswerPercentage(record);
-  const incorrectPercentage = userStore.getIncorrectAnswerPercentage(record);
 
   return {
     plugins: {
@@ -189,11 +188,6 @@ const openModal = (record) => {
   selectedRecord.value = { ...record };
   isModalVisible.value = true;
 };
-
-const updateRecord = (updatedRecord) => {
-  isModalVisible.value = false;
-};
-
 
 // Função para abrir o modal de confirmação
 function openDeleteModal(record) {
@@ -294,9 +288,6 @@ const totalCorrectAnswers = computed(() => {
             v-model="studyStore.topic" />
           <Button :variant="isSubjectSelected ? 'base' : 'baseDisable'" :disabled="!isSubjectSelected" size="xs" class="min-w-max" @click="openManualEntryModal" :title="!isSubjectSelected ? 'Você precisa selecionar uma matéria' : ''"
           >Inserir Manualmente</Button>
-          <!-- <div v-if="showTooltip && !selectedSubject" class="tooltip">
-            Selecione uma matéria para ativar o botão
-          </div> -->
         </div>
         <div class="grid sm:items-start grid-cols-3 gap-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-6">
           <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus" class="col-span-3 sm:col-span-3"/>
@@ -334,19 +325,3 @@ const totalCorrectAnswers = computed(() => {
       @close="isManualEntryModalVisible = false" :onSave="handleSaveManualEntry" />
   </DefaultLayout>
 </template>
-
-<style scoped>
-.tooltip {
-  position: absolute;
-  top: 202px;
-  right: 25px;
-  background-color: #333;
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 10;
-  pointer-events: none;
-}
-</style>
