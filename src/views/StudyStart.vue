@@ -2,13 +2,16 @@
 import { onMounted, ref, computed, watch } from 'vue';
 
 import DefaultLayout from '../layouts/DefaultLayout.vue';
+import StudyCard from '../layouts/StudyCard.vue';
+import StudySummaryModal from '../layouts/StudySummaryModal.vue';
+
 import Input from '../components/ui/Input.vue';
 import Timer from '../components/ui/Timer.vue';
-import StudySummaryModal from '../layouts/StudySummaryModal.vue';
 import ComboBox from '../components/ui/ComboBox.vue';
-import EditModal from '../components/EditModal.vue';
-import AlertModal from '../components/AlertModal.vue';
+import AlertModal from '../components/ui/AlertModal.vue';
 import Button from '../components/ui/Button.vue';
+
+import EditModal from '../components/EditModal.vue';
 import ManualStudyEntryModal from '../components/ManualStudyEntryModal.vue';
 import Card from '../components/Card.vue';
 
@@ -17,17 +20,10 @@ import { useStudyStore } from "../stores/useStudyStore";
 import { useSubjectStore } from "../stores/useSubjectStore";
 import { useTimeFormatter } from '../composables/useTimeFormatter';
 
+
+function openFocus() { isFocus.value = true; }
+
 const { formatStudyTime } = useTimeFormatter();
-
-import StudyCard from '../layouts/StudyCard.vue';
-
-
-function openFocus() {
-  isFocus.value = true;
-}
-
-
-
 const studyStore = useStudyStore();
 const userStore = useUserStore();
 const subjectStore = useSubjectStore();
@@ -37,7 +33,6 @@ const chartData = ref();
 const chartOptions = ref(null);
 const isOpen = ref(false);
 const isFocus = ref(false);
-
 
 const isLoading = ref(true);
 const showConfirmModal = ref(false);
@@ -211,8 +206,6 @@ async function handleDeleteRecord() {
   }
 }
 
-// const isFocusButtonDisabled = computed(() => !selectedSubject.value);
-
 const openManualEntryModal = () => {
   isManualEntryModalVisible.value = true;
 };
@@ -268,7 +261,8 @@ const totalCorrectAnswers = computed(() => {
         <div>
           <h3 class="text-xl font-bold sm:text-4xl">Iniciar <span class="text-primary">estudos.</span></h3>
           <div class="flex justify-between">
-            <p class="text-sm sm:text-base">Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..." }}
+            <p class="text-sm sm:text-base">Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..."
+              }}
             </p>
           </div>
         </div>
@@ -276,32 +270,31 @@ const totalCorrectAnswers = computed(() => {
       <div class="flex flex-col gap-2 mt-4">
         <!-- Campo de pesquisa com lista suspensa de matérias -->
         <div class="flex flex-col gap-2 sm:flex-row col-span-6">
-          <ComboBox 
-            :options="userSubjects" 
-            :placeholder="'Selecione uma matéria...'" 
-            v-model="selectedSubject"
-            :key="selectedSubject ? selectedSubject.id : 'empty'"
-            @select="handleSubjectSelection" 
-            class="w-full" 
-          />
+          <ComboBox :options="userSubjects" :placeholder="'Selecione uma matéria...'" v-model="selectedSubject"
+            :key="selectedSubject ? selectedSubject.id : 'empty'" @select="handleSubjectSelection" class="w-full" />
           <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-full"
             v-model="studyStore.topic" />
-          <Button :variant="isSubjectSelected ? 'base' : 'baseDisable'" :disabled="!isSubjectSelected" size="xs" class="min-w-max" @click="openManualEntryModal" :title="!isSubjectSelected ? 'Você precisa selecionar uma matéria' : ''"
-          >Inserir Manualmente</Button>
+          <Button :variant="isSubjectSelected ? 'base' : 'baseDisable'" :disabled="!isSubjectSelected" size="xs"
+            class="min-w-max" @click="openManualEntryModal"
+            :title="!isSubjectSelected ? 'Você precisa selecionar uma matéria' : ''">Inserir Manualmente</Button>
         </div>
         <div class="grid sm:items-start grid-cols-3 gap-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-6">
-          <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus" class="col-span-3 sm:col-span-3"/>
-          <Card v-if="totalTimeStudyToday" title="Hoje você estudou" icon="fa-solid fa-stopwatch-20" footer="Soma do tempo de estudo de hoje" class="col-span-1">
+          <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus"
+            class="col-span-3 sm:col-span-3" />
+          <Card v-if="totalTimeStudyToday" title="Hoje você estudou" icon="fa-solid fa-stopwatch-20"
+            footer="Soma do tempo de estudo de hoje" class="col-span-1">
             <template #content>
               <p>{{ formatStudyTime(totalTimeStudyToday) }}</p>
             </template>
           </Card>
-          <Card v-if="questionResolved" title="Você respondeu" icon="fa-solid fa-pen-clip" footer="Soma de questões respondidas hoje" class="col-span-1">
+          <Card v-if="questionResolved" title="Você respondeu" icon="fa-solid fa-pen-clip"
+            footer="Soma de questões respondidas hoje" class="col-span-1">
             <template #content>
               <p>{{ questionResolved }}</p>
             </template>
           </Card>
-          <Card v-if="totalCorrectAnswers" title="Você acertou" icon="fa-solid fa-check" footer="Total de questões corretas hoje" class="col-span-1">
+          <Card v-if="totalCorrectAnswers" title="Você acertou" icon="fa-solid fa-check"
+            footer="Total de questões corretas hoje" class="col-span-1">
             <template #content>
               <p>{{ totalCorrectAnswers }}</p>
             </template>
@@ -310,17 +303,17 @@ const totalCorrectAnswers = computed(() => {
         </div>
         <!-- Exibe os registros de estudo -->
         <div class="grid grid-cols-1 gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <StudyCard class="sm:col-span-1" v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record"
-            :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal"
-            @delete="openDeleteModal(record)" />
-          <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord" @update="userStore.fetchUserStudyRecords"
-            @close="isModalVisible = false" />
+          <StudyCard class="sm:col-span-1" v-for="(record, index) in todayStudyRecords" :key="record.id"
+            :record="record" :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]"
+            @edit="openModal" @delete="openDeleteModal(record)" />
+          <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord"
+            @update="userStore.fetchUserStudyRecords" @close="isModalVisible = false" />
         </div>
       </div>
     </div>
     <AlertModal :visible="showConfirmModal" title="Deletar Registro"
       message="Tem certeza que deseja deletar este registro? Esta ação não pode ser desfeita."
-      @confirm="handleDeleteRecord" @cancel="showConfirmModal = false" />
+      @confirm="handleDeleteRecord" @close="showConfirmModal = false" :showConfirm="true" />
     <ManualStudyEntryModal :isVisible="isManualEntryModalVisible" :selectedSubject="selectedSubject"
       @close="isManualEntryModalVisible = false" :onSave="handleSaveManualEntry" />
   </DefaultLayout>
