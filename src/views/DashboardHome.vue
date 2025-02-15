@@ -6,9 +6,9 @@ import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
 import Card from '../components/Card.vue';
 
 import { useUserStore } from '../stores/useUserStore';
-const userStore = useUserStore();
-
 import { useTimeFormatter } from '../composables/useTimeFormatter';
+
+const userStore = useUserStore();
 const { formatStudyTime } = useTimeFormatter();
 
 const totalStudyTime = computed(() => {
@@ -23,6 +23,19 @@ const options = [
     { label: 'Questões corretas', value: 'correct_answers' },
     { label: 'Questões incorretas', value: 'incorrect_answers' },
 ];
+
+const TotalUniqueTopics = computed(() => {
+    const uniqueTopics = new Set();
+
+    userStore.userStudyRecords.forEach(record => {
+        if(record.subject_id && record.topic){
+            const key = `${record.subject_id}-${record.topic}`;
+            uniqueTopics.add(key);
+        }
+    })
+
+    return uniqueTopics.size;
+})
 
 // Estado para a seleção do combobox
 const selectedOption = ref(options[0].value);
@@ -65,50 +78,56 @@ onMounted(async () => {
                 <p class="text-md text-gray-700">Carreira: {{ userStore.careerName ? userStore.careerName :
                     "Carregando..." }}</p>
             </div>
-            <div v-if="!hasStudyRecords" class="text-center text-gray-700">
-                <p>Você não tem dados de estudos no momento!</p>
-            </div>
-            <div v-else>
-                <div class="flex flex-col justify-between gap-2 sm:flex sm:flex-row sm:justify-normal sm:flex-wrap sm:gap-2">
-                    <!-- Card de tempo de estudo -->
-                     <div class="flex gap-2 justify-between">
-                         <Card title="Tempo de estudo" icon="fa-solid fa-stopwatch-20">
-                             <template #content>
-                                 {{ formatStudyTime(totalStudyTime) }}
-                             </template>
+            <div>
+                <div class="grid grid-cols-6 gap-2 sm:flex sm:flex-row sm:justify-normal sm:flex-wrap sm:gap-2">
+                        <!-- Card com total de questões -->
+                        <Card icon="fa-solid fa-book" title="Total de matérias" class="col-span-3">
+                            <template #content>
+                                {{ userStore.userSubjects.length }}
+                            </template>
+                        </Card>
+                        <!-- Card com total de topicos estudados -->
+                         <Card icon="fa-solid fa-tags" title="Total de tópicos" class="col-span-3">
+                            <template #content>
+                                {{ TotalUniqueTopics }}
+                            </template>
                          </Card>
-                         <!-- Card com questões respondidas -->
-                         <Card title="Questões respondidas" icon="fa-solid fa-pen-clip">
-                             <template #content>
-                                 <div class="flex flex-col-reverse sm:flex-row w-full items-end gap-4 justify-between">
-                                     <select v-model="selectedOption" class="text-xs text-gray-500 p-1 border border-tertiary rounded-lg">
-                                         <option v-for="option in options" :key="option.value" :value="option.value">
-                                             {{ option.label }}
-                                         </option>
-                                     </select>
-                                     <!-- Classe condicional para colorir o valor -->
-                                     <p class="text-2xl sm:text-5xl font-extrabold" :class="{
-                                         'text-primary': selectedOption === 'questions_resolved',
-                                         'text-baseBlue': selectedOption === 'correct_answers',
-                                         'text-baseRed': selectedOption === 'incorrect_answers'
-                                     }">
-                                         {{ totalValue }}
-                                     </p>
-                                 </div>
-                             </template>
-                             <template #footer>
-                                 <div class="flex items-center gap-1">
-                                     <input type="checkbox" v-model="displayAsPercentage" class="form-checkbox text-blue-600" />
-                                     <label class="text-xs text-gray-600">Exibir como porcentagem</label>
-                                 </div>
-                             </template>
-                         </Card>
-                     </div>
-                    <div class="hidden sm:block">
-                        <SubjectSummaryTable />
-                    </div>
+                        <!-- Card de tempo de estudo -->
+                        <Card title="Tempo de estudo" icon="fa-solid fa-stopwatch-20" class="col-span-2">
+                            <template #content>
+                                {{ formatStudyTime(totalStudyTime) }}
+                            </template>
+                        </Card>
+                        <!-- Card com questões respondidas -->
+                        <Card title="Questões respondidas" icon="fa-solid fa-pen-clip" class="col-span-4">
+                            <template #content>
+                                <div class="flex flex-col-reverse sm:flex-row w-full items-end gap-4 justify-between">
+                                    <div class="flex  flex-col gap-2">
+                                        <select v-model="selectedOption"
+                                            class="text-xs text-gray-500 p-1 border border-tertiary rounded-lg">
+                                            <option v-for="option in options" :key="option.value" :value="option.value">
+                                                {{ option.label }}
+                                            </option>
+                                        </select>
+                                        <div class="flex items-center gap-1">
+                                            <input type="checkbox" v-model="displayAsPercentage"
+                                                class="form-checkbox text-blue-600" />
+                                            <label class="text-xs text-gray-600">Exibir como porcentagem</label>
+                                        </div>
+                                    </div>
+                                    <!-- Classe condicional para colorir o valor -->
+                                    <p class="text-2xl sm:text-5xl font-extrabold" :class="{
+                                        'text-primary': selectedOption === 'questions_resolved',
+                                        'text-baseBlue': selectedOption === 'correct_answers',
+                                        'text-baseRed': selectedOption === 'incorrect_answers'
+                                    }">
+                                        {{ totalValue }}
+                                    </p>
+                                </div>
+                            </template>
+                        </Card>
                 </div>
-                <div class="sm:hidden block mt-2">
+                <div v-if="hasStudyRecords" class="mt-2">
                     <SubjectSummaryTable />
                 </div>
             </div>
