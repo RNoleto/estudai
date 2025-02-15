@@ -313,7 +313,8 @@ const totalCorrectAnswers = computed(() => {
     </div>
     <AlertModal :visible="showConfirmModal" title="Deletar Registro"
       message="Tem certeza que deseja deletar este registro? Esta ação não pode ser desfeita."
-      @confirm="handleDeleteRecord" @close="showConfirmModal = false" :showConfirm="true" />
+      @confirm="handleDeleteRecord" @close="showConfirmModal = false" :showConfirm="true"
+      type="delete" />
     <ManualStudyEntryModal :isVisible="isManualEntryModalVisible" :selectedSubject="selectedSubject"
       @close="isManualEntryModalVisible = false" :onSave="handleSaveManualEntry" />
   </DefaultLayout>
