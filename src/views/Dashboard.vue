@@ -213,7 +213,7 @@ onMounted(async () => {
               ]"></i>
             </button>
             <div v-if="isMenu3Open"
-              :class="['mt-1 space-y-2 transition-all duration-300', isSidebarCollapsed ? 'absolute z-10 rounded-md left-16 bg-zinc-50 shadow-lg w-48 p-2' : 'pl-8']">
+              :class="['mt-1 space-y-2 transition-all duration-300', isSidebarCollapsed ? 'absolute z-20 rounded-xl left-10 bg-gray-50 border border-secondary shadow-lg w-48 p-2' : 'pl-8']">
               <a href="/area-do-aluno/carreiras"
                 class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i
                   class="fa-solid fa-user-astronaut text-primary"></i> Minha Carreira</a>
