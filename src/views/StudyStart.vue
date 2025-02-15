@@ -39,6 +39,9 @@ const showConfirmModal = ref(false);
 const recordToDelete = ref(null);
 const isManualEntryModalVisible = ref(false);
 
+// Ref para controlar o modal de sucesso (após a deleção)
+const showSuccessModal = ref(false);
+
 
 // Carregar as matérias da API
 onMounted(async () => {
@@ -196,13 +199,21 @@ async function handleDeleteRecord() {
 
   try {
     await userStore.deleteUserStudyRecord(recordToDelete.value.id);
-    // Recarrega a lista de registros após deletar
+    // Recarrega a lista de registros após a exclusão
     await userStore.fetchUserStudyRecords();
+
+    // Exibe o modal de sucesso
+    showSuccessModal.value = true;
+    // Opcional: fecha automaticamente o modal de sucesso após 2 segundos
+    setTimeout(() => {
+      showSuccessModal.value = false;
+    }, 2000);
   } catch (error) {
     console.error("Erro ao deletar o registro:", error.message);
   } finally {
-    showConfirmModal.value = false; // Fecha o modal
-    recordToDelete.value = null; // Reseta o registro selecionado
+    // Fecha o modal de confirmação e reseta o registro selecionado
+    showConfirmModal.value = false;
+    recordToDelete.value = null;
   }
 }
 
@@ -311,10 +322,15 @@ const totalCorrectAnswers = computed(() => {
         </div>
       </div>
     </div>
+    <!-- Modal de confirmação para deletar -->
     <AlertModal :visible="showConfirmModal" title="Deletar Registro"
       message="Tem certeza que deseja deletar este registro? Esta ação não pode ser desfeita."
-      @confirm="handleDeleteRecord" @close="showConfirmModal = false" :showConfirm="true"
-      type="delete" />
+      @confirm="handleDeleteRecord" @close="showConfirmModal = false" :showConfirm="true" type="delete" />
+
+    <!-- Modal de sucesso após a deleção -->
+    <AlertModal :visible="showSuccessModal" title="Sucesso" message="Registro deletado com sucesso!"
+      @close="showSuccessModal = false" :showButton="false" :showConfirm="false" type="success" />
+
     <ManualStudyEntryModal :isVisible="isManualEntryModalVisible" :selectedSubject="selectedSubject"
       @close="isManualEntryModalVisible = false" :onSave="handleSaveManualEntry" />
   </DefaultLayout>
