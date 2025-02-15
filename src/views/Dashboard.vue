@@ -1,13 +1,13 @@
 <script setup>
-import DefaultLayout from '../layouts/DefaultLayout.vue';
-import { RouterView, useRoute } from 'vue-router';
+import { RouterView, useRoute, RouterLink } from 'vue-router';
 import { onMounted, ref, computed } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
 import { UserButton, useUser } from 'vue-clerk';
 
 const { user } = useUser();
-
 const route = useRoute();
+
+const userStore = useUserStore();
 
 const isMobileView = computed(() => window.innerWidth <= 490);
 const isMenuMobileOpen = ref(false);
@@ -16,7 +16,6 @@ const toggleMenu = () => {
   isMenuMobileOpen.value = !isMenuMobileOpen.value
 }
 
-const userStore = useUserStore();
 
 // Estado para controlar se a sidebar está recolhida ou expandida
 const isSidebarCollapsed = ref(false);
@@ -24,7 +23,6 @@ const isSidebarCollapsed = ref(false);
 // Estados para controlar a abertura dos menus colapsáveis
 const isMenu1Open = ref(false);
 const isMenu2Open = ref(false);
-
 const isMenu3Open = ref(false);
 
 // Funções para alternar os estados dos menus
@@ -46,7 +44,9 @@ onMounted(async () => {
     <!-- navbar mobile -->
     <nav v-if="isMobileView"
       class="fixed top-0 left-0 w-full bg-gray-800 text-white shadow-zinc-500 shadow-sm z-50 flex items-center justify-between p-4">
-      <p class="font-bold text-lg">Gerenciamento de Estudo</p>
+      <router-link to="/area-do-aluno">
+        <p class="font-bold text-lg">Estudaí</p>
+      </router-link>
       <button @click="toggleMenu" class="text-xl p-2 rounded focus:outline-none">
         <i :class="isMenuMobileOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
       </button>
@@ -56,28 +56,28 @@ onMounted(async () => {
       <transition name="fade-slide" mode="out-in" appear>
         <div class="fixed top-0 right-0 h-screen bg-zinc-100 z-10 flex flex-col justify-start pt-16 gap-2 mt-10 px-6">
           <div class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <a href="/area-do-aluno">
+            <router-link to="/area-do-aluno">
               <i class="fas fa-home"></i>
               Home
-            </a>
+            </router-link>
           </div>
           <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <a href="/area-do-aluno/historico-de-estudos">
+            <router-link to="/area-do-aluno/historico-de-estudos">
               <i class="fa-solid fa-pen-clip"></i>
               Histórico de Estudo
-            </a>
+            </router-link>
           </div>
           <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <a href="/area-do-aluno/estudar">
+            <router-link to="/area-do-aluno/estudar">
               <i class="fa-solid fa-stopwatch"></i>
               Estudar
-            </a>
+            </router-link>
           </div>
           <div class="hidden flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <a href="/area-do-aluno/planos">
+            <router-link to="/area-do-aluno/planos">
               <i class="fa-solid fa-file-signature"></i>
               Planos
-            </a>
+            </router-link>
           </div>
           <div>
             <button @click="toggleMenu3"
@@ -89,19 +89,19 @@ onMounted(async () => {
             </button>
             <transition name="fade-slide" mode="out-in" appear>
               <div v-if="isMenu3Open" class="text-zinc-700 mt-1 ml-8 flex flex-col gap-2">
-                <a href="/area-do-aluno/carreiras" class="flex items-center  gap-1 text-sm hover:text-blue-800">
+                <router-link to="/area-do-aluno/carreiras" class="flex items-center  gap-1 text-sm hover:text-blue-800">
                   Minha Carreira
-                </a>
-                <a href="/area-do-aluno/materias" class="flex items-center gap-1 text-sm hover:text-blue-800">
+                </router-link>
+                <router-link to="/area-do-aluno/materias" class="flex items-center gap-1 text-sm hover:text-blue-800">
                   Minhas Matérias
-                </a>
+                </router-link>
               </div>
             </transition>
           </div>
-          <!-- <a href="/area-do-aluno/configuracoes" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold  p-2 rounded-xlhover:bg-blue-100">
+          <!-- <router-link to="/area-do-aluno/configuracoes" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold  p-2 rounded-xlhover:bg-blue-100">
             <i class="fas fa-cog"></i>
             Configurações
-          </a> -->
+          </router-link> -->
           <div class="bottom-10 right-4 fixed">
             <div class="flex items-center gap-2">
               <p class="text-gray-700 text-lg font-semibold">{{ user.fullName }}</p>
@@ -118,7 +118,7 @@ onMounted(async () => {
         isSidebarCollapsed ? 'w-[4.5rem]' : 'w-[15rem]'
       ]">
         <div class="p-4 text-lg text-gray-700 font-bold border-b border-secondary flex items-center" :class="[isSidebarCollapsed ? 'justify-center' : 'justify-between']">
-          <span v-if="!isSidebarCollapsed" >Estudaí</span>
+          <span v-if="!isSidebarCollapsed" ><router-link to="/area-do-aluno">Estudaí</router-link></span>
           <button @click="toggleSidebar" class="text-primary hover:bg-gray-200 rounded" :class="isSidebarCollapsed ? 'px-4' : 'px-2'">
             <i :class="isSidebarCollapsed ? 'fa-solid fa-caret-right' : 'fa-solid fa-caret-left'"></i>
           </button>
@@ -126,7 +126,7 @@ onMounted(async () => {
         <nav class="flex flex-col h-full gap-1" :class="isSidebarCollapsed ? 'p-1 items-center' : 'p-2'">
           <!-- Home da Dashboard -->
           <div :class="[isSidebarCollapsed ? 'justify-center' : 'justify-between']">
-            <a href="/area-do-aluno" :class="[
+            <router-link to="/area-do-aluno" :class="[
               'flex items-center gap-2 px-4 py-2 mt-4 rounded-lg hover:shadow-md',
               route.path === '/area-do-aluno'
                 ? 'bg-secondary text-baseBlue shadow-sm'
@@ -139,11 +139,11 @@ onMounted(async () => {
               <span v-show="!isSidebarCollapsed" >
                 Home
               </span>
-            </a>
+            </router-link>
           </div>
           <!-- Estudar da Dashboard -->
           <div>
-            <a href="/area-do-aluno/estudar" :class="[
+            <router-link to="/area-do-aluno/estudar" :class="[
               'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
               route.path === '/area-do-aluno/estudar' ? 'bg-secondary text-baseBlue shadow-sm' : 'text-gray-700 hover:bg-gray-100'
             ]">
@@ -154,11 +154,11 @@ onMounted(async () => {
                   : 'text-primary hover:text-gray-500'
               ]"></i>
               <span v-if="!isSidebarCollapsed" >Estudar</span>
-            </a>
+            </router-link>
           </div>
           <!-- Historico de Estudos -->
           <div>
-            <a href="/area-do-aluno/historico-de-estudos" :class="[
+            <router-link to="/area-do-aluno/historico-de-estudos" :class="[
               'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
               route.path === '/area-do-aluno/historico-de-estudos'
                 ? 'bg-secondary text-baseBlue shadow-sm'
@@ -171,7 +171,7 @@ onMounted(async () => {
                   : 'text-primary hover:text-gray-500'
               ]"></i>
               <span v-if="!isSidebarCollapsed" >Histórico de Estudo</span>
-            </a>
+            </router-link>
           </div>
           <!-- Planos da Dashboard -->
           <div class="hidden">
@@ -214,13 +214,13 @@ onMounted(async () => {
             </button>
             <div v-if="isMenu3Open"
               :class="['mt-1 space-y-2 transition-all duration-300', isSidebarCollapsed ? 'absolute z-20 rounded-xl left-10 bg-gray-50 border border-secondary shadow-lg w-48 p-2' : 'pl-8']">
-              <a href="/area-do-aluno/carreiras"
+              <router-link to="/area-do-aluno/carreiras"
                 class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i
-                  class="fa-solid fa-user-astronaut text-primary"></i> Minha Carreira</a>
-              <a href="/area-do-aluno/materias"
+                  class="fa-solid fa-user-astronaut text-primary"></i> Minha Carreira</router-link>
+              <router-link to="/area-do-aluno/materias"
                 class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900"><i
                   class="fa-solid fa-book text-primary"></i>
-                Minhas Matérias</a>
+                Minhas Matérias</router-link>
             </div>
           </div>
           <div class="mt-auto bg-secondary p-2 rounded-lg w-full shadow-md">
