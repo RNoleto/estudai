@@ -9,6 +9,8 @@ import ComboBox from '../components/ui/ComboBox.vue';
 import Button from '../components/ui/Button.vue';
 import Input from  '../components/ui/Input.vue';
 
+import Card from './Card.vue';
+
 import AlertModal from './AlertModal.vue';
 
 const { formatStudyTime } = useTimeFormatter();

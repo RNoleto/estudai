@@ -1,7 +1,10 @@
 <script setup>
 import { ref, computed } from 'vue';
-import Button from './ui/Button.vue';
 import { useStudyStore } from '../stores/useStudyStore';
+
+import Button from './ui/Button.vue';
+
+import Card from './Card.vue';
 
 const props = defineProps({
     isVisible: Boolean,
@@ -82,52 +85,55 @@ const handleCancel = () => {
 
 <template>
     <div v-if="isVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm z-50">
-        <div class="bg-white p-4 rounded-2xl shadow-lg relative">
-            <h2 class="text-lg sm:text-2xl font-bold sm:mb-4">Inserir Informações de Estudo</h2>
-            <div class="text-sm mb-4 sm:text-base">
-                <p><strong>Matéria:</strong> {{ selectedSubject.name }}</p>
-                <p><strong>Tópico:</strong> {{ studyStore.topic }}</p>
-            </div>
-            <div class="text-sm mb-4 sm:text-base">
-                <label class="block font-medium">Tempo de Estudos</label>
-                <div class="flex gap-2">
-                    <input v-model="hours" type="number" min="0" placeholder="Horas"
-                        class="w-[70px] border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
-                    <span class="self-center">:</span>
-                    <input v-model="minutes" type="number" min="0" max="59" placeholder="Minutos"
-                        class="w-[70px] border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+        <Card title="Inserir Informações de Estudo" icon="" class="shadow-lg relative">
+            <template #content>
+                <div class="px-2 text-base flex flex-col w-full text-gray-700 font-normal">
+                    <div class="text-sm mb-4 sm:text-base">
+                        <p><strong>Matéria:</strong> {{ selectedSubject.name }}</p>
+                        <p><strong>Tópico:</strong> {{ studyStore.topic }}</p>
+                    </div>
+                    <div class="text-sm mb-4 sm:text-base">
+                        <label class="block font-medium">Tempo de Estudos</label>
+                        <div class="flex gap-2">
+                            <input v-model="hours" type="number" min="0" placeholder="Horas"
+                                class="w-[70px] border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                            <span class="self-center">:</span>
+                            <input v-model="minutes" type="number" min="0" max="59" placeholder="Minutos"
+                                class="w-[70px] border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                        </div>
+                    </div>
+                    <div class="text-sm mt-4 sm:text-base">
+                        <p class="font-medium">Você resolveu questões?</p>
+                        <div class="flex gap-4">
+                            <label class="flex items-center">
+                                <input type="radio" v-model="questionsResolved" value="yes" class="mr-2">
+                                Sim
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" v-model="questionsResolved" value="no" class="mr-2">
+                                Não
+                            </label>
+                        </div>
+                    </div>
+                    <div v-if="questionsResolved === 'yes'" class="flex gap-4 mt-2">
+                        <label class="flex flex-col">
+                            <span class="text-sm font-medium sm:text-base">Total</span>
+                            <input type="number" v-model="totalQuestions" min="0" placeholder="Ex.: 20"
+                                class="w-[110px] mt-1 border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-primary" />
+                        </label>
+                        <label class="flex flex-col">
+                            <span class="text-sm font-medium sm:text-base">Corretas</span>
+                            <input type="number" v-model="correctAnswers" min="0" placeholder="Ex.: 15"
+                                class="w-[110px] mt-1 border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-primary" />
+                        </label>
+                    </div>
+                    <div class="flex justify-end gap-2 mt-6">
+                        <Button variant="base" size="full" @click="handleSave">Salvar</Button>
+                        <Button variant="secondary" @click="handleCancel">Cancelar</Button>
+                    </div>
                 </div>
-            </div>
-            <div class="text-sm mt-4 sm:text-base">
-                <p class="font-medium">Você resolveu questões?</p>
-                <div class="flex gap-4">
-                    <label class="flex items-center">
-                        <input type="radio" v-model="questionsResolved" value="yes" class="mr-2">
-                        Sim
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" v-model="questionsResolved" value="no" class="mr-2">
-                        Não
-                    </label>
-                </div>
-            </div>
-            <div v-if="questionsResolved === 'yes'" class="flex gap-4 mt-2">
-                <label class="flex flex-col">
-                    <span class="text-sm font-medium sm:text-base">Total</span>
-                    <input type="number" v-model="totalQuestions" min="0" placeholder="Ex.: 20"
-                        class="w-[110px] mt-1 border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
-                </label>
-                <label class="flex flex-col">
-                    <span class="text-sm font-medium sm:text-base">Corretas</span>
-                    <input type="number" v-model="correctAnswers" min="0" placeholder="Ex.: 15"
-                        class="w-[110px] mt-1 border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
-                </label>
-            </div>
-            <div class="flex justify-end gap-2 mt-6">
-                <Button variant="primary" size="full" @click="handleSave">Salvar</Button>
-                <Button variant="secondary" @click="handleCancel">Cancelar</Button>
-            </div>
-        </div>
+            </template>
+        </Card>
     </div>
 </template>
 
