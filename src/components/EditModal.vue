@@ -215,16 +215,16 @@ const saveChanges = async () => {
           <!-- Inputs separados para o tempo de estudo -->
           <div class="flex gap-2 mb-4">
             <div class="flex-1">
-              <Input v-model="formData.studyHours" type="number" id="studyHours" placeholder="hh" label="Horas"/>
+              <Input v-model="formData.studyHours" type="number" id="studyHours" :maxlength="2" placeholder="hh" label="Horas"/>
             </div>
             <div class="flex-1">
-              <Input v-model="formData.studyMinutes" type="number" id="studyMinutes" placeholder="mm" label="Minutos"/>
+              <Input v-model="formData.studyMinutes" type="number" id="studyMinutes" :maxlength="2" placeholder="mm" label="Minutos"/>
             </div>
             <div class="flex-1">
-              <Input v-model="formData.studySeconds" type="number" id="studySeconds" placeholder="ss" label="Segundos"/>
+              <Input v-model="formData.studySeconds" type="number" id="studySeconds" :maxlength="2" placeholder="ss" label="Segundos"/>
             </div>
             <div class="flex-1">
-              <Input v-model="formData.total_pauses" type="number" id="total_pauses" min="0" label="Nº de pauses"/>
+              <Input v-model="formData.total_pauses" type="number" id="total_pauses" :maxlength="2" min="0" label="Nº de pauses"/>
             </div>
           </div>
           <p class="text-center p-4 block text-sm font-medium text-gray-700">Dados de Questões</p>
