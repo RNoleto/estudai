@@ -1,8 +1,7 @@
 <script setup>
-import { reactive, watch, computed } from 'vue';
+import { reactive, watch, computed, ref } from 'vue';
 
 import { useUserStore } from '../stores/useUserStore';
-import { useTimeFormatter } from '../composables/useTimeFormatter';
 import { useSubjectStore } from '../stores/useSubjectStore';
 
 import ComboBox from '../components/ui/ComboBox.vue';
@@ -11,9 +10,7 @@ import Input from  '../components/ui/Input.vue';
 
 import Card from './Card.vue';
 
-import AlertModal from './AlertModal.vue';
-
-const { formatStudyTime } = useTimeFormatter();
+import AlertModal from './ui/AlertModal.vue';
 
 const props = defineProps({
   isVisible: {
@@ -31,30 +28,34 @@ const emit = defineEmits(['update', 'close']);
 const userStore = useUserStore();
 const subjectStore = useSubjectStore();
 
-// Inicializa `formData` com valores reativos
+// Estado para o modal de alerta
+const showModal = ref(false);
+const type = ref(null);
+const title = ref(null);
+const message = ref(null);
+
+// Atualize o formData para ter 3 propriedades de tempo separadas
 const formData = reactive({
   subject_id: null,
   subjectName: '',
   topic: '',
-  study_time: 0,
+  studyHours: '0',    // horas
+  studyMinutes: '00', // minutos
+  studySeconds: '00', // segundos
   total_pauses: 0,
   questions_resolved: 0,
   correct_answers: 0,
   incorrect_answers: 0,
 });
 
-// Variáveis reativas para o modal
-const modalMessage = reactive({ text: '', type: '' }); // Tipo 'success' ou 'error'
+const modalMessage = reactive({ text: '', type: '' });
 
-// Função para formatar o tempo de estudo em HH:MM:SS
-function formatTimeToHHMMSS(seconds) {
-  const hours = String(Math.floor(seconds / 3600)).padStart(2, '0');
-  const minutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-  const secs = String(seconds % 60).padStart(2, '0');
-  return `${hours}:${minutes}:${secs}`;
+// Função auxiliar para garantir 2 dígitos
+function padTime(value) {
+  return String(value).padStart(2, '0');
 }
 
-// Atualiza `formData` quando `record` muda
+// Ao receber um novo record, separe o study_time (em segundos) em hh, mm, ss
 watch(
   () => props.record,
   (newRecord) => {
@@ -62,7 +63,16 @@ watch(
       formData.subject_id = newRecord.subject_id || null;
       formData.subjectName = newRecord.subjectName || '';
       formData.topic = newRecord.topic || '';
-      formData.study_time = formatTimeToHHMMSS(newRecord.study_time || 0);
+      
+      const totalSeconds = newRecord.study_time || 0;
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      
+      formData.studyHours = padTime(hours);
+      formData.studyMinutes = padTime(minutes);
+      formData.studySeconds = padTime(seconds);
+      
       formData.total_pauses = newRecord.total_pauses || 0;
       formData.questions_resolved = newRecord.questions_resolved || 0;
       formData.correct_answers = newRecord.correct_answers || 0;
@@ -72,15 +82,15 @@ watch(
   { immediate: true }
 );
 
-// Computed para obter a lista de matérias
 const subjects = computed(() => {
   return userStore.userSubjects
     .map((subject_id) =>
       subjectStore.subjects.find((subject) => subject.id === subject_id)
-  )
-  .filter(Boolean);
+    )
+    .filter(Boolean);
 });
 
+// Atualiza automaticamente as questões incorretas
 watch(
   [() => formData.questions_resolved, () => formData.correct_answers],
   ([total, correct]) => {
@@ -88,119 +98,156 @@ watch(
   }
 );
 
-// Fecha o modal
 const closeModal = () => {
   emit('close');
 };
 
 const saveChanges = async () => {
+  // Validação dos inputs de tempo
+  const hours = Number(formData.studyHours);
+  const minutes = Number(formData.studyMinutes);
+  const seconds = Number(formData.studySeconds);
+  
+  if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
+    showModal.value = true;
+    title.value = 'Erro';
+    type.value = 'error';
+    message.value = 'Por favor, insira valores numéricos válidos para o tempo de estudo.';
+    setTimeout(() => {
+            showModal.value = false;
+        }, 2000);
+    return false;
+  }
+  
+  // Validação: minutos e segundos entre 0 e 59 e horas não negativas
+  if (hours < 0 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59) {
+
+    showModal.value = true;
+    title.value = 'Erro';
+    type.value = 'error';
+    message.value = 'Por favor, insira um tempo de estudo válido.';
+    setTimeout(() => {
+            showModal.value = false;
+        }, 2000);
+    return;
+  }
+  
+  // Converte o tempo para segundos
+  const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+  if (formData.total_pauses < 0) {
+    showModal.value = true;
+    title.value = 'Erro';
+    type.value = 'error';
+    message.value = 'O número de pauses deve ser maior ou igual a zero.';
+    setTimeout(() => {
+            showModal.value = false;
+        }, 2000);
+    return;
+  }
+
+  if(formData.correct_answers > formData.questions_resolved){
+    showModal.value = true;
+    title.value = 'Erro';
+    type.value = 'error';
+    message.value = 'O número de questões corretas não pode ser maior que o total de questões.';
+    setTimeout(() => {
+            showModal.value = false;
+        }, 2000);
+    return;
+  }
+
   try {
-    // Validação do formato de tempo
-    if (!/^\d{1,2}:\d{2}:\d{2}$/.test(formData.study_time)) {
-      modalMessage.text = 'Por favor, insira o tempo de estudo no formato hh:mm:ss.';
-      modalMessage.type = 'error';
-      return;
-    }
-
-    // Conversão de tempo para segundos
-    const [hours, minutes, seconds] = formData.study_time.split(':').map(Number);
-    const totalSeconds = hours * 3600 + minutes * 60 + seconds;
-
-    // Validação do número de pauses
-    if (formData.total_pauses < 0) {
-      modalMessage.text = 'O número de pauses deve ser maior ou igual a zero.';
-      modalMessage.type = 'error';
-      return;
-    }
-
-    // Atualização dos dados
+    // Cria um objeto atualizado, convertendo os inputs de tempo para segundos
     const updatedData = {
       ...formData,
       study_time: totalSeconds,
     };
-
+    
+    // Remova as propriedades separadas de tempo se o backend não as espera
+    delete updatedData.studyHours;
+    delete updatedData.studyMinutes;
+    delete updatedData.studySeconds;
+    
     await userStore.updateUserStudyRecord(props.record.id, updatedData);
-
-    //Emitindo evento para carregar a listagem
+    
     emit('update');
+    
+    showModal.value = true;
+    title.value = 'Sucesso';
+    type.value = 'success';
+    message.value = 'Registro atualizado com sucesso!';
 
-    modalMessage.text = 'Registro atualizado com sucesso!';
-    modalMessage.type = 'success';
+    setTimeout(() => {
+      showModal.value = false;
+      closeModal();
+    }, 2000);
   } catch (error) {
-    modalMessage.text = 'Ocorreu um erro ao atualizar o registro. Tente novamente.';
-    modalMessage.type = 'error';
+    showModal.value = true;
+    title.value = 'Erro';
+    type.value = 'error';
+    message.value = 'Ocorreu um erro ao atualizar o registro. Tente novamente.';
+    setTimeout(() => {
+        showModal.value = false;
+        closeModal();
+    }, 2000);
   }
-};
-
-// Função para fechar o modal de sucesso
-const closeSuccessModal = () => {
-  modalMessage.text = ''; // Limpa a mensagem
-  closeModal(); // Fecha o modal de edição também
 };
 </script>
 
 <template>
-  <div v-if="isVisible && !modalMessage.text"
+  <div v-if="isVisible"
     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-zinc-600 px-2">
-    <div class="bg-zinc-100 rounded-2xl shadow-lg p-6 w-full max-w-md">
-      <h2 class="text-lg font-bold mb-4">Editar Registro</h2>
-      <form @submit.prevent="saveChanges">
-        <div class="mb-4">
-          <label for="subjectName" class="block text-sm font-medium text-gray-700">Matéria</label>
-          <ComboBox 
-            :options="subjects" 
-            :placeholder="'Selecione uma matéria...'" 
-            v-model="formData.subjectName"
-            :key="subjects.subjectId"
-            class="mt-1 block w-full" />
-        </div>
-        <div class="mb-4">
-          <Input v-model="formData.topic" type="text" id="topic" showLabel="true" label="Tópico"/>
-        </div>
-        <div class="flex gap-4 justify-between">
+    <Card title="Editar Registro" icon="fa-solid fa-tag" class="bg-zinc-100 rounded-2xl shadow-lg p-6 w-full max-w-md">
+      <template #content>
+        <form @submit.prevent="saveChanges" class="font-normal">
           <div class="mb-4">
-            <Input v-model="formData.study_time" type="text" id="study_time" placeholder="hh:mm:ss" label="Tempo de estudo"/>
+            <label for="subjectName" class="block text-sm font-medium text-gray-700">Matéria</label>
+            <ComboBox
+              :options="subjects" 
+              placeholder="Selecione uma matéria..." 
+              v-model="formData.subjectName"
+              class="block w-full" />
           </div>
           <div class="mb-4">
-            <Input v-model="formData.total_pauses" type="number" id="total_pauses" min="0" label="Nº de pauses"/>
+            <Input v-model="formData.topic" type="text" id="topic" showLabel="true" label="Tópico"/>
           </div>
-        </div>
-        <p class="text-center p-4 block text-sm font-medium text-gray-700">Dados de Questões</p>
-        <div class="flex gap-2 justify-between">
-          <div class="mb-4">
-            <Input v-model="formData.questions_resolved" type="number" id="questions_resolved" label="Total"/>
+          <!-- Inputs separados para o tempo de estudo -->
+          <div class="flex gap-2 mb-4">
+            <div class="flex-1">
+              <Input v-model="formData.studyHours" type="number" id="studyHours" placeholder="hh" label="Horas"/>
+            </div>
+            <div class="flex-1">
+              <Input v-model="formData.studyMinutes" type="number" id="studyMinutes" placeholder="mm" label="Minutos"/>
+            </div>
+            <div class="flex-1">
+              <Input v-model="formData.studySeconds" type="number" id="studySeconds" placeholder="ss" label="Segundos"/>
+            </div>
+            <div class="flex-1">
+              <Input v-model="formData.total_pauses" type="number" id="total_pauses" min="0" label="Nº de pauses"/>
+            </div>
           </div>
-          <div class="mb-4">
-            <Input v-model="formData.correct_answers" type="number" id="correct_answers" label="Corretas"/>
+          <p class="text-center p-4 block text-sm font-medium text-gray-700">Dados de Questões</p>
+          <div class="flex gap-2 justify-between">
+            <div class="mb-4">
+              <Input v-model="formData.questions_resolved" type="number" id="questions_resolved" label="Total"/>
+            </div>
+            <div class="mb-4">
+              <Input v-model="formData.correct_answers" type="number" id="correct_answers" label="Corretas"/>
+            </div>
           </div>
-          <!-- <div class="mb-4">
-            <label for="incorrect_answers" class="block text-sm font-medium text-gray-700">Erradas</label>
-            <input v-model="formData.incorrect_answers" type="number" id="incorrect_answers" readonly
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100 cursor-not-allowed text-zinc-500" />
-          </div> -->
-        </div>
-        <div class="flex justify-end gap-2">
-          <Button type="submit" variant="play" size="full" >
-            Salvar
-          </Button>
-          <Button type="button" variant="secondary" @click="closeModal">
-            Cancelar
-          </Button>
-          
-        </div>
-      </form>
-    </div>
-  </div>
-  <!-- Modal de Sucesso ou Erro -->
-  <div v-if="modalMessage.text"
-  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-white">
-    <div :class="modalMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500'"
-      class="rounded-lg shadow-lg p-6 w-full max-w-sm text-center">
-      <p class="text-lg font-bold">{{ modalMessage.text }}</p>
-      <button @click="closeSuccessModal" class="mt-4 px-4 py-2 bg-white text-black rounded-md hover:bg-gray-200">
-        Fechar
-      </button>
-    </div>
+          <div class="flex justify-end gap-2">
+            <Button type="submit" variant="base" size="full" @click="saveChanges">
+              Salvar
+            </Button>
+            <Button type="button" variant="delete" @click="closeModal">
+              Cancelar
+            </Button>
+          </div>
+        </form>
+      </template>
+    </Card>
+    <AlertModal :visible="showModal" :showButton="false" :showConfirm="false" :title="title" :type="type" :message="message"/>
   </div>
 </template>
 
@@ -222,6 +269,6 @@ input[type="number"] {
 }
 
 input {
-  padding: 5px 10px
+  padding: 5px 10px;
 }
 </style>
