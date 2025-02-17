@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { useStudyStore } from '../stores/useStudyStore';
 
 import Button from './ui/Button.vue';
+import AlertModal from './ui/AlertModal.vue';
 
 import Card from './Card.vue';
 
@@ -22,6 +23,12 @@ const questionsResolved = ref(null);
 const pause = ref(null);
 const totalPauses = ref('null');
 
+// Estado para o modal de alerta
+const showModal = ref(false);
+const type = ref(null);
+const title = ref(null);
+const message = ref(null);
+
 const incorrectAnswers = computed(() => totalQuestions.value - correctAnswers.value);
 
 const resetForm = () => {
@@ -37,25 +44,53 @@ const resetForm = () => {
 
 const validateInputs = () => {
     // Se o campo de horas estiver vazio, define como "0"
-    if (hours.value.trim() === '') {
-        hours.value = '0';
+    if (hours.value === '') {
+        hours.value = 0;
+    }
+
+    // Se o campo de minutos estiver vazio, define como "0"
+    if(minutes.value === ''){
+        minutes.value = 0;
+    }
+
+    if((hours.value === '' || hours.value == 0) && (minutes.value === '' || minutes.value == 0)){
+        showModal.value = true;
+        type.value = 'error';
+        title.value = 'Erro';
+        message.value = 'Por favor, insira o tempo de estudo.'
+
+        setTimeout(() => {
+            showModal.value = false;
+        }, 3000);
+        
+        return false;
     }
 
     // Validação para o campo de minutos (aceitando 1 ou 2 dígitos)
     if (!/^(\d{1,2})$/.test(minutes.value)) {
-        alert('Por favor, insira um valor válido para minutos.');
-        return false;
-    }
+        showModal.value = true;
+        type.value = 'error';
+        title.value = 'Erro';
+        message.value = 'Por favor, insira um valor válido para minutos.'
 
-    // Se horas for maior que 0, os minutos devem ser maiores que 0 para considerar as horas válidas
-    if (parseInt(hours.value, 10) > 0 && parseInt(minutes.value, 10) === 0) {
-        alert('A hora só pode ser considerada se os minutos forem maiores que 0.');
+        setTimeout(() => {
+            showModal.value = false;
+        }, 3000);
+        
         return false;
     }
 
     // Validação para o campo de horas (já garantido que não está vazio)
     if (!/^(\d{1,2})$/.test(hours.value)) {
-        alert('Por favor, insira um valor válido para horas.');
+        showModal.value = true;
+        type.value = 'error';
+        title.value = 'Erro';
+        message.value = 'Por favor, insira um valor válido para horas.'
+
+        setTimeout(() => {
+            showModal.value = false;
+        }, 3000);
+
         return false;
     }
 
@@ -65,7 +100,15 @@ const validateInputs = () => {
         return false;
     }
     if (correctAnswers.value > totalQuestions.value) {
-        alert('Questões corretas não podem exceder o total de questões.');
+        showModal.value = true;
+        type.value = 'error';
+        title.value = 'Erro';
+        message.value = 'Questões corretas não podem exceder o total de questões!';
+        
+        setTimeout(() => {
+            showModal.value = false;
+        }, 3000);
+
         return false;
     }
 
@@ -89,9 +132,15 @@ const handleSave = () => {
         };
 
         props.onSave(newRecord);
-        alert('Dados salvos com sucesso!');
-        resetForm();
-        props.onClose();
+        showModal.value = true;
+        title.value = 'Success';
+        type.value = 'success';
+        message.value = 'Registro de estudo salvo com sucesso!';
+        setTimeout(() => {
+            showModal.value = false;
+            resetForm();
+            props.onClose();
+        }, 2000);
     } catch (error) {
         alert('Ocorreu um erro ao salvar os dados. Tente novamente.');
         console.error('Error saving study record:', error);
@@ -155,6 +204,8 @@ const handleCancel = () => {
                 </div>
             </template>
         </Card>
+        <!-- Modal de alerta para confirmar registro -->
+        <AlertModal :visible="showModal" :showButton="false" :showConfirm="false" :title="title" :type="type" :message="message"/>
     </div>
 </template>
 
