@@ -45,7 +45,7 @@ onMounted(async () => {
     <nav v-if="isMobileView"
       class="fixed top-0 left-0 w-full bg-gray-800 text-white shadow-zinc-500 shadow-sm z-50 flex items-center justify-between p-4">
       <router-link to="/area-do-aluno">
-        <p class="font-bold text-lg">Estudaí</p>
+        <p class="font-bold text-lg">Estuday</p>
       </router-link>
       <button @click="toggleMenu" class="text-xl p-2 rounded focus:outline-none">
         <i :class="isMenuMobileOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
@@ -118,7 +118,7 @@ onMounted(async () => {
         isSidebarCollapsed ? 'w-[4.5rem]' : 'w-[15rem]'
       ]">
         <div class="p-4 text-lg text-gray-700 font-bold border-b border-secondary flex items-center" :class="[isSidebarCollapsed ? 'justify-center' : 'justify-between']">
-          <span v-if="!isSidebarCollapsed" ><router-link to="/area-do-aluno">Estudaí</router-link></span>
+          <span v-if="!isSidebarCollapsed" ><router-link to="/area-do-aluno">Estuday</router-link></span>
           <button @click="toggleSidebar" class="text-primary hover:bg-gray-200 rounded" :class="isSidebarCollapsed ? 'px-4' : 'px-2'">
             <i :class="isSidebarCollapsed ? 'fa-solid fa-caret-right' : 'fa-solid fa-caret-left'"></i>
           </button>
