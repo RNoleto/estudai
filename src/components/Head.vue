@@ -13,7 +13,7 @@ const props = defineProps({
   },
   image: {
     type: String,
-    default: "https://estuday.com.br/imagem-padrao.jpg",
+    default: "https://estuday.com.br/img/wallpaper.png",
   },
   url: {
     type: String,

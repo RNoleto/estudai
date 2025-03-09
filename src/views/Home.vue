@@ -10,7 +10,7 @@ import Head from '../components/Head.vue';
   <Head 
     title="Estuday - Acompanhe seus estudos de forma eficiente"
     description="Estuday é uma plataforma para aprendizado rápido e eficiente. Venha aprender agora!"
-    image="/img/wallpaper.png"
+    image="https://estuday.com.br/img/wallpaper.png"
     url="https://estuday.com.br"
   />
   <!-- Aqui definimos a opacidade do background para 100% (padrão) -->
