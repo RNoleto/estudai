@@ -4,6 +4,7 @@ import DefaultLayout from '../layouts/DefaultLayout.vue';
 import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
 
 import Card from '../components/Card.vue';
+import Head from '../components/Head.vue';
 
 import { useUserStore } from '../stores/useUserStore';
 import { useTimeFormatter } from '../composables/useTimeFormatter';
@@ -70,6 +71,12 @@ onMounted(async () => {
 </script>
 
 <template>
+    <Head 
+        title="Estuday | Resumo de Estudos - Seu Desempenho e Progresso"
+        description="Acompanhe seu desempenho nos estudos! Veja o total de tempo estudado, questões respondidas, acertos e erros, além das matérias revisadas. Organize seu aprendizado e evolua com o Estuday!"
+        image="https://estuday.com.br/img/wallpaper.png"
+        url="https://estuday.com.br"
+    />
     <DefaultLayout backgroundOpacity="opacity-20">
         <div class="flex flex-col p-2 mt-12 gap-4 sm:mt-0 sm:px-4">
             <div class="flex flex-col gap-2">

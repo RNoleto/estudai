@@ -15,6 +15,8 @@ import EditModal from '../components/EditModal.vue';
 import ManualStudyEntryModal from '../components/ManualStudyEntryModal.vue';
 import Card from '../components/Card.vue';
 
+import Head from '../components/Head.vue';
+
 import { useUserStore } from "../stores/useUserStore";
 import { useStudyStore } from "../stores/useStudyStore";
 import { useSubjectStore } from "../stores/useSubjectStore";
@@ -266,6 +268,12 @@ const totalCorrectAnswers = computed(() => {
 </script>
 
 <template>
+  <Head 
+        title="Estuday | Estudar - Registre Seu Tempo e Acompanhe Seu Progresso"
+        description="Otimize seus estudos com nosso temporizador! Registre o tempo de estudo, matérias, tópicos e questões resolvidas. Acompanhe seu desempenho e organize seu aprendizado de forma eficiente com o Estuday!"
+        image="https://estuday.com.br/img/wallpaper.png"
+        url="https://estuday.com.br"
+    />
   <DefaultLayout backgroundOpacity="opacity-20">
     <div class="p-4 mt-12 gap-4 sm:mt-0">
       <div class="flex items-center justify-between">
