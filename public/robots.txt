@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://estuday.com.br/sitemap.xml
