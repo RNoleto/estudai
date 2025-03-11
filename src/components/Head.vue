@@ -9,7 +9,7 @@ const props = defineProps({
   },
   description: {
     type: String,
-    default: "Descrição padrão do site Estuday.",
+    default: "Seu gerenciador de estudos para organizar seu tempo, acompanhar seu desempenho e alcançar seus objetivos. Simplifique seus estudos e estude com mais eficiência!",
   },
   image: {
     type: String,
