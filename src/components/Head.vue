@@ -19,36 +19,45 @@ const props = defineProps({
     type: String,
     default: "https://estuday.com.br",
   },
+  keywords:{
+    type: String,
+    default: "concursos públicos, gestão do tempo de estudo, organização de estudos, preparação para concurso, questões de concurso, acompanhamento de desempenho, planejamento de estudos"
+  }
 });
 
 const updateHead = () => {
-  document.title = props.title;
-  document
-    .querySelector('meta[name="description"]')
-    ?.setAttribute("content", props.description);
+  setTimeout(() => {
+    document.title = props.title;
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute("content", props.description);
 
-  document
-    .querySelector('meta[property="og:title"]')
-    ?.setAttribute("content", props.title);
-  document
-    .querySelector('meta[property="og:description"]')
-    ?.setAttribute("content", props.description);
-  document
-    .querySelector('meta[property="og:image"]')
-    ?.setAttribute("content", props.image);
-  document
-    .querySelector('meta[property="og:url"]')
-    ?.setAttribute("content", props.url);
+    document
+      .querySelector('meta[property="og:title"]')
+      ?.setAttribute("content", props.title);
+    document
+      .querySelector('meta[property="og:description"]')
+      ?.setAttribute("content", props.description);
+    document
+      .querySelector('meta[property="og:image"]')
+      ?.setAttribute("content", props.image);
+    document
+      .querySelector('meta[property="og:url"]')
+      ?.setAttribute("content", props.url);
 
-  document
-    .querySelector('meta[name="twitter:title"]')
-    ?.setAttribute("content", props.title);
-  document
-    .querySelector('meta[name="twitter:description"]')
-    ?.setAttribute("content", props.description);
-  document
-    .querySelector('meta[name="twitter:image"]')
-    ?.setAttribute("content", props.image);
+    document
+      .querySelector('meta[name="twitter:title"]')
+      ?.setAttribute("content", props.title);
+    document
+      .querySelector('meta[name="twitter:description"]')
+      ?.setAttribute("content", props.description);
+    document
+      .querySelector('meta[name="twitter:image"]')
+      ?.setAttribute("content", props.image);
+    document
+      .querySelector('meta[name="keywords"]')
+      ?.setAttribute("content", props.keywords);
+  }, 100); // Espera 100ms antes de atualizar as meta tags
 };
 
 // Atualiza ao montar o componente
