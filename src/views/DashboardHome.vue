@@ -2,9 +2,10 @@
 import { computed, onMounted, ref } from 'vue';
 import DefaultLayout from '../layouts/DefaultLayout.vue';
 import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
-
-import Card from '../components/Card.vue';
 import Head from '../components/Head.vue';
+import Card from '../components/Card.vue';
+import SubjectBarChart from '../layouts/SubjectBarChart.vue';
+
 
 import { useUserStore } from '../stores/useUserStore';
 import { useTimeFormatter } from '../composables/useTimeFormatter';
@@ -135,6 +136,7 @@ onMounted(async () => {
                         </Card>
                 </div>
                 <div v-if="hasStudyRecords" class="mt-2">
+                    <!-- <SubjectBarChart /> -->
                     <SubjectSummaryTable />
                 </div>
             </div>
