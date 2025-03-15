@@ -199,7 +199,7 @@ const totalAccuracyBgClass = computed(() => {
         </select>
       </div>
       <!-- botão desktop -->
-      <!-- <div class="hidden sm:block">
+      <div class="hidden sm:block">
         <Button 
           @click="openReport" 
           :variant="summarizedData.length <= 0 ? 'baseDisable' : 'base'"
@@ -210,7 +210,7 @@ const totalAccuracyBgClass = computed(() => {
           Gerar Insight
         </Button>
         <StudyReportModal ref="studyModal" />
-      </div> -->
+      </div>
     </div>
     <!-- Seleção de critério de ordenação -->
     <div class="flex flex-col gap-1 mt-1 sm:hidden">

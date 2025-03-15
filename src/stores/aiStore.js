@@ -15,10 +15,10 @@ export const useAIStore = defineStore('aiStore', {
       this.loading = true;
       this.error = null;
       this.response = '';
-
+    
       const API_CONFIG = {
         gemini: {
-          baseURL: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
+          baseURL: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
           apiKey: import.meta.env.VITE_GEMINI_API_KEY,
           headers: { 'Content-Type': 'application/json' }
         },
@@ -28,24 +28,26 @@ export const useAIStore = defineStore('aiStore', {
           headers: { 'Authorization': `Bearer ${import.meta.env.VITE_MISTRAL_API_KEY}`, 'Content-Type': 'application/json' }
         }
       };
-
+    
       const apiConfig = API_CONFIG[this.activeAPI];
-
+    
       try {
         const apiClient = axios.create({
           baseURL: apiConfig.baseURL,
           headers: apiConfig.headers
         });
-
+    
         let payload;
         if (this.activeAPI === 'gemini') {
           payload = { contents: [{ parts: [{ text: userMessage }] }] };
         } else {
           payload = { model: 'mistral-tiny', messages: [{ role: 'user', content: userMessage }] };
         }
-
-        const response = await apiClient.post(`?key=${apiConfig.apiKey}`, payload);
-
+    
+        const response = await apiClient.post("", payload, {
+          params: { key: apiConfig.apiKey }
+        });
+    
         if (this.activeAPI === 'gemini') {
           this.response = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nenhuma resposta.';
         } else {
@@ -57,6 +59,6 @@ export const useAIStore = defineStore('aiStore', {
       } finally {
         this.loading = false;
       }
-    }
+    }    
   }
 });
