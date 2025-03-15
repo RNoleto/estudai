@@ -87,7 +87,6 @@ export const useUserStore = defineStore('user', {
         // Fazendo uma requisição para o backend Laravel para verificar se já existe uma carreira
         const response = await axios.get(`user-career/${this.userId}`);
         this.careerId = response.data?.career_id || null;
-        // console.log("CareerId em checkUserCareer:", this.careerId);
 
         if(!this.careerId){
           console.warn("Usuário sem carreira registrada.");
@@ -96,7 +95,6 @@ export const useUserStore = defineStore('user', {
     
         const response_name = await axios.get(`user-career/career_name/${this.userId}`);
         this.careerName = response_name.data?.career_name || null;
-        // console.log("CareerName:", this.careerName);
 
         return true;
       } catch (error) {
@@ -266,11 +264,11 @@ export const useUserStore = defineStore('user', {
           subject_id: newRecord.subject_id || studyStore.subject,
           topic: newRecord.topic || studyStore.topic,
           questions_resolved: newRecord.totalQuestions || 0,
-          correct_answers: newRecord.correctAnswers || 0,
-          incorrect_answers:
-            newRecord.totalQuestions && newRecord.correctAnswers !== undefined
-              ? newRecord.totalQuestions - newRecord.correctAnswers
+          correct_answers: 
+            newRecord.totalQuestions && newRecord.incorrectAnswers !== undefined
+              ? newRecord.totalQuestions - newRecord.incorrectAnswers
               : 0,
+          incorrect_answers: newRecord.incorrectAnswers || 0,
           total_pauses: newRecord.totalPauses || 0,
           study_time: studyTimeInSeconds, // Agora em segundos
         };

@@ -318,9 +318,10 @@ const totalCorrectAnswers = computed(() => {
               <p>{{ totalCorrectAnswers }}</p>
             </template>
           </Card>
+          <!-- Modal para inserir dados de estudo após o timer -->
           <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
         </div>
-        <!-- Exibe os registros de estudo -->
+        <!-- Exibe cards com registros de estudo -->
         <div class="grid grid-cols-1 gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <StudyCard class="sm:col-span-1" v-for="(record, index) in todayStudyRecords" :key="record.id"
             :record="record" :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]"
@@ -338,7 +339,7 @@ const totalCorrectAnswers = computed(() => {
     <!-- Modal de sucesso após a deleção -->
     <AlertModal :visible="showSuccessModal" title="Sucesso" message="Registro deletado com sucesso!"
       @close="showSuccessModal = false" :showButton="false" :showConfirm="false" type="success" />
-
+    <!-- Modal para inserir informações manualmente -->
     <ManualStudyEntryModal :isVisible="isManualEntryModalVisible" :selectedSubject="selectedSubject"
       @close="isManualEntryModalVisible = false" :onSave="handleSaveManualEntry" />
   </DefaultLayout>

@@ -27,7 +27,7 @@ const totalPauses = computed(() => timerStore.finalTotalPausesLength);
 // Estado do modal
 const questionsResolved = ref(null);
 const totalQuestions = ref(0);
-const correctAnswers = ref(0);
+const incorrectAnswers = ref(0);
 const closeModal = () => {
   emit('onClose');
   
@@ -42,8 +42,8 @@ const saveData = async () => {
 
   if(isSaving.value) return; //Impedimento de cliques repetidos enquanto salva
 
-  if(correctAnswers.value > totalQuestions.value){
-    alert('Total de questões corretas não pode ser maior que total de questões respondidas');
+  if(incorrectAnswers.value > totalQuestions.value){
+    alert('Total de questões incorretas não pode ser maior que total de questões respondidas');
     return;
   }
   
@@ -55,7 +55,7 @@ const saveData = async () => {
       totalPauses: totalPauses.value,
       questionsResolved: questionsResolved.value,
       totalQuestions: questionsResolved.value === 'yes' ? totalQuestions.value : 0,
-      correctAnswers: questionsResolved.value === 'yes' ? correctAnswers.value : 0,
+      incorrectAnswers: questionsResolved.value === 'yes' ? incorrectAnswers.value : 0,
     };   
 
     // Salvando os dados no userStore
@@ -76,15 +76,15 @@ const saveData = async () => {
 const clearForm = () => {
   questionsResolved.value = null;
   totalQuestions.value = 0;
-  correctAnswers.value = 0;
+  incorrectAnswers.value = 0;
 }
 
 const isFormValid = computed(() => {
   if (questionsResolved.value === 'yes') {
     return (
-      totalQuestions.value >= correctAnswers.value &&
+      totalQuestions.value >= incorrectAnswers.value &&
       totalQuestions.value > 0 &&
-      correctAnswers.value >= 0
+      incorrectAnswers.value >= 0 
     );
   }
   return true; // Válido se nenhuma questão foi resolvida.
@@ -124,9 +124,9 @@ const isFormValid = computed(() => {
           <span>Questões resolvidas</span>
           <input type="number" v-model="totalQuestions" min="0" class="mt-1 block w-full border rounded px-2 py-1 appearance-none outline-none" />
         </label>
-        <label class="block mb-2">
-          <span>Questões certas</span>
-          <input type="number" v-model="correctAnswers" min="0" class="mt-1 block w-full border rounded px-2 py-1 appearance-none outline-none" />
+        <label for="block mb-2">
+          <span>Questões erradas</span>
+          <input type="number" v-model="incorrectAnswers" min="0" :max="totalQuestions" class="mt-1 block w-full border rounded px-2 py-1 appearance-none outline-none">
         </label>
       </div>
       <div class="flex justify-between mt-2">
