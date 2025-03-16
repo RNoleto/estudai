@@ -1,6 +1,5 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import DefaultLayout from '../layouts/DefaultLayout.vue';
 import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
 import Head from '../components/Head.vue';
 import Card from '../components/Card.vue';
@@ -76,9 +75,8 @@ onMounted(async () => {
         title="Estuday | Resumo de Estudos - Seu Desempenho e Progresso"
         description="Acompanhe seu desempenho nos estudos! Veja o total de tempo estudado, questões respondidas, acertos e erros, além das matérias revisadas. Organize seu aprendizado e evolua com o Estuday!"
         image="https://estuday.com.br/img/wallpaper.png"
-        url="https://estuday.com.br"
+        url="https://estuday.com.br" 
     />
-    <DefaultLayout backgroundOpacity="opacity-20">
         <div class="flex flex-col p-2 mt-12 gap-4 sm:mt-0 sm:px-4">
             <div class="flex flex-col gap-2">
                 <h3 class="text-2xl font-bold text-gray-700 sm:text-4xl">Resumo dos <span
@@ -89,25 +87,25 @@ onMounted(async () => {
             <div>
                 <div class="grid grid-cols-6 gap-2 sm:flex sm:flex-row sm:justify-normal sm:flex-wrap sm:gap-2">
                         <!-- Card com total de questões -->
-                        <Card icon="fa-solid fa-book" title="Total de matérias" class="col-span-3">
+                        <Card icon="fa-solid fa-book" title="Total de matérias" class="col-span-3 sm:flex-1">
                             <template #content>
                                 {{ userStore.userSubjects.length }}
                             </template>
                         </Card>
                         <!-- Card com total de topicos estudados -->
-                         <Card icon="fa-solid fa-tags" title="Total de tópicos" class="col-span-3">
+                         <Card icon="fa-solid fa-tags" title="Total de tópicos" class="col-span-3 sm:flex-1">
                             <template #content>
                                 {{ TotalUniqueTopics }}
                             </template>
                          </Card>
                         <!-- Card de tempo de estudo -->
-                        <Card title="Tempo de estudo" icon="fa-solid fa-stopwatch-20" class="col-span-2">
+                        <Card title="Tempo de estudo" icon="fa-solid fa-stopwatch-20" class="col-span-2 sm:flex-1">
                             <template #content>
                                 {{ formatStudyTime(totalStudyTime) }}
                             </template>
                         </Card>
                         <!-- Card com questões respondidas -->
-                        <Card title="Questões respondidas" icon="fa-solid fa-pen-clip" class="col-span-4">
+                        <Card title="Questões respondidas" icon="fa-solid fa-pen-clip" class="col-span-4 sm:flex-1">
                             <template #content>
                                 <div class="flex flex-col-reverse sm:flex-row w-full items-end gap-4 justify-between">
                                     <div class="flex  flex-col gap-2">
@@ -134,12 +132,11 @@ onMounted(async () => {
                                 </div>
                             </template>
                         </Card>
-                </div>
-                <div v-if="hasStudyRecords" class="mt-2">
-                    <!-- <SubjectBarChart /> -->
-                    <SubjectSummaryTable />
-                </div>
+                    </div>
+                    <div v-if="hasStudyRecords" class="flex flex-wrap gap-2 mt-2">
+                        <!-- <SubjectBarChart/> -->
+                        <SubjectSummaryTable/>
+                    </div>
             </div>
         </div>
-    </DefaultLayout>
 </template>

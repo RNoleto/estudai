@@ -1,22 +1,23 @@
 <template>
-  <div class="card">
-    <!-- Seletor de semana -->
-    <select v-model="selectedWeek" @change="updateChartData" class="p-inputtext p-component">
-      <option v-for="(week, index) in weeks" :key="index" :value="week.number">
-        Semana {{ week.number }} ({{ week.startDate }} - {{ week.endDate }})
-      </option>
-    </select>
-
-    <!-- Seletor de métrica -->
-    <select v-model="selectedMetric" @change="updateChartData" class="p-inputtext p-component mt-2">
-      <option v-for="option in metricOptions" :key="option.value" :value="option.value">
-        {{ option.label }}
-      </option>
-    </select>
-
-    <!-- Gráfico -->
-    <Chart type="bar" :data="chartData" :options="chartOptions" class="h-[30rem]" />
-  </div>
+    <div class="card max-w-[500px] max-h-[320px] bg-white shadow-md rounded-2xl border border-secondary overflow-hidden p-2">
+      <div class="flex flex-wrap gap-2 items-center">
+        <!-- Seletor de semana -->
+        <select v-model="selectedWeek" @change="updateChartData" class="p-inputtext p-component text-sm bg-zinc-50">
+          <option v-for="(week, index) in weeks" :key="index" :value="week.number">
+            Semana {{ week.number }} ({{ week.startDate }} - {{ week.endDate }})
+          </option>
+        </select>
+    
+        <!-- Seletor de métrica -->
+        <select v-model="selectedMetric" @change="updateChartData" class="p-inputtext p-component text-sm bg-zinc-50">
+          <option v-for="option in metricOptions" :key="option.value" :value="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+      <!-- Gráfico -->
+      <Chart type="bar" :data="chartData" :options="chartOptions" class="h-[16rem]" />
+    </div>
 </template>
 
 <script setup>
@@ -100,7 +101,6 @@ const aggregateByWeek = (records) => {
     result[weekNumber].correct_answers[dayIndex] += record.correct_answers;
     result[weekNumber].incorrect_answers[dayIndex] += record.incorrect_answers;
   });
-  console.log("Dados agregados por semana:", result);
   return result;
 };
 
@@ -115,11 +115,10 @@ const updateChartData = () => {
   };
   
   const metricData = weekData[selectedMetric.value].map(value => value);
-  const documentStyle = getComputedStyle(document.documentElement);
 
   // Define cores para cada métrica
   const metricColors = {
-    study_time: { background: "#2196f3", border: "#2196f3" },
+    study_time: { background: "#2EC1CB", border: "#2EC1CB" },
     questions_resolved: { background: "#4caf50", border: "#4caf50" },
     correct_answers: { background: "#2196f3", border: "#2196f3" },
     incorrect_answers: { background: "#f44336", border: "#f44336" }
@@ -136,16 +135,13 @@ const updateChartData = () => {
       }
     ]
   };
-
-  console.log("Dados do gráfico:", chartData.value);
 };
 
 // Define opções do gráfico com tooltip ajustado para cada métrica
 const setChartOptions = () => {
-  const documentStyle = getComputedStyle(document.documentElement);
-  const textColor = documentStyle.getPropertyValue("--p-text-color");
-  const textColorSecondary = documentStyle.getPropertyValue("--p-text-muted-color");
-  const surfaceBorder = documentStyle.getPropertyValue("--p-content-border-color");
+  const textColor = '#6B7280';
+  const textColorSecondary = '#6B7280';
+  const surfaceBorder = '#eee';
   return {
     maintainAspectRatio: false,
     aspectRatio: 0.8,
@@ -194,8 +190,6 @@ const initialize = () => {
       const start = new Date(parts[2], parts[1] - 1, parts[0]);
       return start <= currentDate;
     });
-  
-  console.log("Semanas disponíveis:", weeks.value);
   
   if (weeks.value.length > 0) {
     selectedWeek.value = weeks.value[0].number;

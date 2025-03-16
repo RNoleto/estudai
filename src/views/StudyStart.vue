@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, ref, computed, watch } from 'vue';
 
-import DefaultLayout from '../layouts/DefaultLayout.vue';
 import StudyCard from '../layouts/StudyCard.vue';
 import StudySummaryModal from '../layouts/StudySummaryModal.vue';
 
@@ -274,7 +273,6 @@ const totalCorrectAnswers = computed(() => {
         image="https://estuday.com.br/img/wallpaper.png"
         url="https://estuday.com.br"
     />
-  <DefaultLayout backgroundOpacity="opacity-20">
     <div class="p-4 mt-12 gap-4 sm:mt-0">
       <div class="flex items-center justify-between">
         <div>
@@ -342,5 +340,4 @@ const totalCorrectAnswers = computed(() => {
     <!-- Modal para inserir informações manualmente -->
     <ManualStudyEntryModal :isVisible="isManualEntryModalVisible" :selectedSubject="selectedSubject"
       @close="isManualEntryModalVisible = false" :onSave="handleSaveManualEntry" />
-  </DefaultLayout>
 </template>

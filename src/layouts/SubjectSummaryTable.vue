@@ -76,8 +76,8 @@ const summarizedData = computed(() => {
 
 <template>
   <!-- <IsLoading v-if="isLoading" /> -->
-  <div class="hidden sm:block">  
-    <table  class="bg-white shadow-md rounded-xl overflow-hidden">
+  <div class="hidden sm:block sm:w-full">  
+    <table  class="bg-white shadow-md rounded-xl overflow-hidden sm:w-full">
       <thead class="bg-primary text-white sm:text-xs">
         <tr>
           <th class="px-4 py-2 text-left">Matérias</th>
@@ -101,7 +101,7 @@ const summarizedData = computed(() => {
       </tbody>
     </table>
   </div>
-  <div class="col-span-2 shadow-md rounded-2xl sm:hidden">
+  <div class="w-full shadow-md rounded-2xl sm:hidden">
     <div class="bg-primary text-zinc-100 px-1 py-1.5 rounded-t-2xl">
       <p class="text-base ml-2">Matérias estudadas</p>
     </div>
