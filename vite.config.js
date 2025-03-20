@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import vitePrerender from 'vite-plugin-prerender';
+const vitePrerender = require('vite-plugin-prerender');
 
 // https://vitejs.dev/config/
 export default defineConfig({
