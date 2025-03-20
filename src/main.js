@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import { clerkPlugin } from 'vue-clerk';
+import { createHead } from '@vueuse/head';
 import './style.css';
 import App from './App.vue';
 import axios from 'axios';
@@ -16,6 +17,7 @@ const pinia = createPinia();
 axios.defaults.baseURL = 'https://gerenciamento-de-estudo-api.vercel.app/api/api';
 
 const app = createApp(App);
+const head = createHead();
 
 app.use(clerkPlugin, {
   publishableKey: import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
@@ -23,5 +25,5 @@ app.use(clerkPlugin, {
 
 app.use(pinia);
 app.use(router);
-
+app.use(head);
 app.mount('#app');
