@@ -1,8 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [],
-  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-  darkMode: false,
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'], // Paths atualizados
+  darkMode: 'media', // ou 'class', ou simplesmente remova se não for necessário
   theme: {
     extend: {
       colors: {
@@ -24,4 +23,3 @@ export default {
     require('@tailwindcss/typography'),
   ],
 }
-
