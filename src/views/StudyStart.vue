@@ -14,12 +14,11 @@ import EditModal from '../components/EditModal.vue';
 import ManualStudyEntryModal from '../components/ManualStudyEntryModal.vue';
 import Card from '../components/Card.vue';
 
-import Head from '../components/Head.vue';
-
 import { useUserStore } from "../stores/useUserStore";
 import { useStudyStore } from "../stores/useStudyStore";
 import { useSubjectStore } from "../stores/useSubjectStore";
 import { useTimeFormatter } from '../composables/useTimeFormatter';
+import { useHead } from '@vueuse/head';
 
 
 function openFocus() { isFocus.value = true; }
@@ -264,15 +263,24 @@ const totalCorrectAnswers = computed(() => {
     return isToday ? total + record.correct_answers : total;
   }, 0);
 });
+
+useHead({
+  title: "Estuday | Estudar - Registre Seu Tempo e Acompanhe Seu Progresso",
+  meta: [
+    { name: "description", content: "Otimize seus estudos com nosso temporizador! Registre o tempo de estudo, matérias, tópicos e questões resolvidas. Acompanhe seu desempenho e organize seu aprendizado de forma eficiente com o Estuday!" },
+    { property: "og:title", content: "Estuday | Estudar - Registre Seu Tempo e Acompanhe Seu Progresso" },
+    { property: "og:description", content: "Otimize seus estudos com nosso temporizador! Registre o tempo de estudo, matérias, tópicos e questões resolvidas. Acompanhe seu desempenho e organize seu aprendizado de forma eficiente com o Estuday!" },
+    { property: "og:image", content: "https://estuday.com.br/img/wallpaper.png" },
+    { property: "og:url", content: "https://estuday.com.br/estudar" },
+    { name: "twitter:title", content: "Estuday | Estudar - Registre Seu Tempo e Acompanhe Seu Progresso" },
+    { name: "twitter:description", content: "Otimize seus estudos com nosso temporizador! Registre o tempo de estudo, matérias, tópicos e questões resolvidas. Acompanhe seu desempenho e organize seu aprendizado de forma eficiente com o Estuday!" },
+    { name: "twitter:image", content: "https://estuday.com.br/img/wallpaper.png" },
+    { name: "keywords", content: "estudar, temporizador, registro de tempo, desempenho, aprendizado, métricas, Estuday" }
+  ]
+});
 </script>
 
 <template>
-  <Head 
-        title="Estuday | Estudar - Registre Seu Tempo e Acompanhe Seu Progresso"
-        description="Otimize seus estudos com nosso temporizador! Registre o tempo de estudo, matérias, tópicos e questões resolvidas. Acompanhe seu desempenho e organize seu aprendizado de forma eficiente com o Estuday!"
-        image="https://estuday.com.br/img/wallpaper.png"
-        url="https://estuday.com.br"
-    />
     <div class="p-4 mt-12 gap-4 sm:mt-0">
       <div class="flex items-center justify-between">
         <div>
