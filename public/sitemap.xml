@@ -1,39 +1,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <!--  created with Free Online Sitemap Generator www.xml-sitemaps.com  -->
+    <!-- Página principal -->
     <url>
         <loc>https://estuday.com.br/</loc>
         <lastmod>2025-03-09T17:50:10+00:00</lastmod>
-        <changefreq>monthly</changefreq>
+        <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
+    <!-- Página de Carreiras -->
     <url>
         <loc>https://estuday.com.br/carreiras</loc>
         <lastmod>2025-03-09T17:50:10+00:00</lastmod>
         <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
+        <priority>0.8</priority>
     </url>
+    <!-- Páginas de Área do Aluno - Modificado com prioridade mais baixa -->
     <url>
         <loc>https://estuday.com.br/area-do-aluno</loc>
         <lastmod>2025-03-09T17:50:10+00:00</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
     </url>
+    <!-- Subpáginas do Área do Aluno -->
     <url>
         <loc>https://estuday.com.br/area-do-aluno/estudar</loc>
         <lastmod>2025-03-09T17:50:10+00:00</lastmod>
-        <changefreq>weekly</changefreq>
+        <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://estuday.com.br/area-do-aluno/historico-de-estudos</loc>
         <lastmod>2025-03-09T17:50:10+00:00</lastmod>
-        <changefreq>weekly</changefreq>
+        <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://estuday.com.br/area-do-aluno/materias</loc>
         <lastmod>2025-03-09T17:50:10+00:00</lastmod>
-        <changefreq>weekly</changefreq>
+        <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
 </urlset>
