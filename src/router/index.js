@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { initializeAuth, getAuthState } from '../services/AuthService';
+import { initializeAuth } from '../services/AuthService';
 import { useUserStore } from '../stores/useUserStore';
 import Home from '../views/Home.vue';
 import Career from '../views/CareerSelection.vue';
@@ -16,80 +16,104 @@ import Dashboard from '../views/Dashboard.vue';
 import DashboardHome from '../views/DashboardHome.vue';
 import StudyHistory from '../views/StudyHistory.vue';
 
-
 const routes = [
   {
     path: '/',
     component: Home,
+    meta: {
+      title: 'Estuday - Aprenda de Forma Inteligente',
+      description: 'Estude com o melhor método de aprendizado online e acelere sua carreira.'
+    }
   },
   {
     path: '/carreiras',
     name: 'Carreiras',
     component: Career,
-    meta: { requiresAuth: true },
+    meta: { 
+      requiresAuth: true,
+      title: 'Escolha sua Carreira | Estuday',
+      description: 'Descubra as melhores carreiras e trilhe seu caminho profissional com a Estuday.'
+    }
   },
   {
     path: '/materias',
     name: 'Materias',
     component: Subjects,
-    meta: { requiresAuth: true },
+    meta: { 
+      requiresAuth: true,
+      title: 'Matérias Disponíveis | Estuday',
+      description: 'Confira todas as matérias disponíveis para estudo na Estuday.'
+    }
   },
   {
     path: '/ciclo-de-estudos',
     name: 'Ciclo',
     component: StudyCycle,
-    meta: { requiresAuth: true },
+    meta: { 
+      requiresAuth: true,
+      title: 'Ciclo de Estudos | Estuday',
+      description: 'Crie e gerencie seu ciclo de estudos de maneira eficiente.'
+    }
   },
   {
     path: '/area-do-aluno',
     name: 'Dashboard',
     component: Dashboard,
-    meta: {requiresAuth: true},
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',
         name: 'DashboardHome',
         component: DashboardHome,
+        meta: { title: 'Área do Aluno | Estuday' }
       },
       {
         path: 'estudar',
         name: 'Estudar',
         component: StudyStart,
+        meta: { title: 'Estudar Agora | Estuday' }
       },
       {
         path: 'historico-de-estudos',
         name: 'Historico',
         component: StudyHistory,
+        meta: { title: 'Histórico de Estudos | Estuday' }
       },
       {
         path: 'carreiras',
         name: 'DashboardCarreiras',
         component: Career,
+        meta: { title: 'Gerenciar Carreiras | Estuday' }
       },
       {
         path: 'materias',
         name: 'DashboardMaterias',
         component: Subjects,
+        meta: { title: 'Gerenciar Matérias | Estuday' }
       },
       {
         path: 'ciclo-de-estudos',
         name: 'DashboardCiclo',
         component: StudyCycle,
+        meta: { title: 'Gerenciar Ciclo de Estudos | Estuday' }
       },
       {
         path: 'planos',
         name: 'DashboardSubscriptions',
         component: SubscriptionsPage,
+        meta: { title: 'Planos de Assinatura | Estuday' }
       },
       {
         path: 'pagamento-sucesso',
         name: 'DashboardSuccess',
         component: Success,
+        meta: { title: 'Pagamento Realizado com Sucesso | Estuday' }
       },
       {
         path: 'pagamento-cancelado',
         name: 'DashboardCancel',
         component: Cancel,
+        meta: { title: 'Pagamento Cancelado | Estuday' }
       },
     ]
   }
@@ -102,6 +126,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const auth = initializeAuth();
+  const userStore = useUserStore();
 
   if (!auth.isLoaded.value) {
     await new Promise(resolve => {
@@ -114,10 +139,9 @@ router.beforeEach(async (to, from, next) => {
     });
   }
 
-  const userStore = useUserStore();
-
+  // Se a rota exige autenticação e o usuário não está logado, não redirecionamos para "/", apenas mostramos conteúdo público
   if (to.meta.requiresAuth && !auth.isSignedIn.value) {
-    next({ path: '/' });
+    next();
     return;
   }
 
@@ -127,15 +151,15 @@ router.beforeEach(async (to, from, next) => {
       const hasCareer = await userStore.checkUserCareer();
       await userStore.fetchUserSubjects();
       
-      if (to.path === '/') { 
-
-        if(!hasCareer){
-          next({path: '/carreiras'});
+      // Não redirecionar a home para /area-do-aluno automaticamente para evitar problemas de indexação
+      if (to.path === '/' && auth.isSignedIn.value) {
+        if (!hasCareer) {
+          next({ path: '/carreiras' });
           return;
         }
 
-        if(userStore.userSubjects.length <= 0){
-          next({path: '/materias'});
+        if (userStore.userSubjects.length <= 0) {
+          next({ path: '/materias' });
           return;
         }
 
@@ -144,12 +168,22 @@ router.beforeEach(async (to, from, next) => {
       }
     } catch (error) {
       console.error("Erro durante a verificação de redirecionamento:", error);
-      next(); // Continua a navegação em caso de erro inesperado
+      next();
       return;
     }
   }
 
   next();
+});
+
+// Atualiza título e meta descrição dinamicamente
+router.afterEach((to) => {
+  document.title = to.meta.title || 'Estuday';
+
+  const metaDescription = document.querySelector("meta[name='description']");
+  if (metaDescription) {
+    metaDescription.setAttribute("content", to.meta.description || 'A melhor plataforma de estudos online.');
+  }
 });
 
 export default router;
