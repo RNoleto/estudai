@@ -102,19 +102,7 @@ const routes = [
         name: 'DashboardSubscriptions',
         component: SubscriptionsPage,
         meta: { title: 'Planos de Assinatura | Estuday' }
-      },
-      {
-        path: 'pagamento-sucesso',
-        name: 'DashboardSuccess',
-        component: Success,
-        meta: { title: 'Pagamento Realizado com Sucesso | Estuday' }
-      },
-      {
-        path: 'pagamento-cancelado',
-        name: 'DashboardCancel',
-        component: Cancel,
-        meta: { title: 'Pagamento Cancelado | Estuday' }
-      },
+      }
     ]
   }
 ];

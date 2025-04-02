@@ -66,8 +66,11 @@ const handleTimerStopped = () => {
 
 const handleCloseModal = () => {
   isOpen.value = false;
+}
+
+const handleSaveSuccess = () =>{
   selectedSubject.value = null;
-  studyStore.topic = ""; //Aqui está limpando
+  studyStore.topic = "";   
 }
 
 // Gera os dados do gráfico para cada registro
@@ -325,7 +328,7 @@ useHead({
             </template>
           </Card>
           <!-- Modal para inserir dados de estudo após o timer -->
-          <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" />
+          <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" @onSaveSuccess="handleSaveSuccess"/>
         </div>
         <!-- Exibe cards com registros de estudo -->
         <div class="grid grid-cols-1 gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

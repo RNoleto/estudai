@@ -7,9 +7,7 @@ import { useUserStore } from '../stores/useUserStore';
 import { useTimeFormatter } from '../composables/useTimeFormatter';
 const { formatStudyTime } = useTimeFormatter();
 
-const props = defineProps({
-  isOpen: Boolean, 
-});
+const { props } = defineProps({isOpen: Boolean});
 
 const emit = defineEmits(['onClose']);
 
@@ -63,9 +61,15 @@ const saveData = async () => {
     
     // Recarregar os registros de estudo após salvar
     await userStore.fetchUserStudyRecords(); 
+
+    // Reinicia os valores do timer
+    timerStore.resetTimer();
     
     clearForm();
     closeModal();
+
+    emit('onSaveSuccess');
+
   } catch (error) {
     console.error('Erro ao salvar:', error);
   } finally {

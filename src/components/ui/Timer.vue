@@ -69,8 +69,7 @@ const addCustomTime = () => {
                 :disabled="props.isDisabled">
           {{ timerStore.isRunning ? (timerStore.isPaused ? 'Continuar' : 'Pausar') : 'Iniciar' }}
         </Button>
-        <Button @click="stopTimer" variant="delete" 
-                :disabled="!timerStore.isRunning">Parar</Button>
+        <Button @click="stopTimer" variant="delete">Parar</Button>
       </div>
       <!-- Campo de entrada para o usuário adicionar tempo customizado -->
       <div class="mt-4 flex flex-col items-center">

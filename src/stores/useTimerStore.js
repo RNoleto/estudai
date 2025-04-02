@@ -74,8 +74,16 @@ export const useTimerStore = defineStore('timer', () => {
     isPaused.value = false;
 
     // Reinicia o timer
+    // elapsedTime.value = 0; // Não resetar o timer do usuário ao parar o tempo
+    pauses.value = [];
+  };
+
+  const resetTimer = () => {
     elapsedTime.value = 0;
     pauses.value = [];
+    finalElapsedTime.value = 0;
+    finalElapsedTime.value = 0;
+    finalTotalPausesLength.value = 0;
   };
 
   const formattedTime = computed(() => {
@@ -110,6 +118,7 @@ export const useTimerStore = defineStore('timer', () => {
     elapsedTime,
     pauses,
     start,
+    resetTimer,
     togglePause,
     stop,
     formattedTime,
