@@ -6,9 +6,7 @@ import Career from '../views/CareerSelection.vue';
 import Subjects from '../views/Subjects.vue';
 import StudyCycle from '../views/StudyCycle.vue';
 import StudyStart from '../views/StudyStart.vue';
-
-import Success from '../layouts/Success.vue';
-import Cancel from '../layouts/Cancel.vue';
+import ErrorPage from '../views/ErrorPage.vue';
 
 import SubscriptionsPage from '../views/SubscriptionsPage.vue';
 
@@ -53,6 +51,15 @@ const routes = [
       requiresAuth: true,
       title: 'Ciclo de Estudos | Estuday',
       description: 'Crie e gerencie seu ciclo de estudos de maneira eficiente.'
+    }
+  },
+  {
+    path: '/:pathMatch(.*)*', 
+    name: 'NotFound', 
+    component: ErrorPage,
+    meta: {
+      title: 'Página de erro | Estuday',
+      description: 'Página de erro do Estuday.'
     }
   },
   {
@@ -102,7 +109,13 @@ const routes = [
         name: 'DashboardSubscriptions',
         component: SubscriptionsPage,
         meta: { title: 'Planos de Assinatura | Estuday' }
-      }
+      },
+      {
+        path: '/:pathMatch(.*)*', 
+        name: 'DashboardNotFound', 
+        component: ErrorPage,
+        meta: {title: 'Página de erro | Estuday '}
+      },
     ]
   }
 ];
