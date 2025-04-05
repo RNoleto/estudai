@@ -18,7 +18,7 @@ const studyStore = useStudyStore();
 const hours = ref('');
 const minutes = ref('');
 const totalQuestions = ref(0);
-const correctAnswers = ref(0);
+const incorrectAnswers = ref(0);
 const questionsResolved = ref(null);
 const pause = ref(null);
 const totalPauses = ref('null');
@@ -29,14 +29,14 @@ const type = ref(null);
 const title = ref(null);
 const message = ref(null);
 
-const incorrectAnswers = computed(() => totalQuestions.value - correctAnswers.value);
+const correctAnswers = computed(() => totalQuestions.value - incorrectAnswers.value);
 
 const resetForm = () => {
     studyStore.topic = '';
     hours.value = '';
     minutes.value = '';
     totalQuestions.value = 0;
-    correctAnswers.value = 0;
+    incorrectAnswers.value = 0;
     questionsResolved.value = null;
     pause.value = null;
     totalPauses.value = null;
@@ -95,15 +95,15 @@ const validateInputs = () => {
     }
 
     // Validações adicionais
-    if (totalQuestions.value < 0 || correctAnswers.value < 0) {
+    if (totalQuestions.value < 0 || incorrectAnswers.value < 0) {
         alert('Os valores de questões devem ser positivos.');
         return false;
     }
-    if (correctAnswers.value > totalQuestions.value) {
+    if (incorrectAnswers.value > totalQuestions.value) {
         showModal.value = true;
         type.value = 'error';
         title.value = 'Erro';
-        message.value = 'Questões corretas não podem exceder o total de questões!';
+        message.value = 'Questões incorretas não podem exceder o total de questões!';
         
         setTimeout(() => {
             showModal.value = false;
@@ -192,8 +192,8 @@ const handleCancel = () => {
                                 class="w-[110px] mt-1 border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-primary" />
                         </label>
                         <label class="flex flex-col">
-                            <span class="text-sm font-medium sm:text-base">Corretas</span>
-                            <input type="number" v-model="correctAnswers" min="0" placeholder="Ex.: 15"
+                            <span class="text-sm font-medium sm:text-base">Incorretas</span>
+                            <input type="number" v-model="incorrectAnswers" min="0" placeholder="Ex.: 15"
                                 class="w-[110px] mt-1 border rounded px-3 py-2 outline-none focus:ring-2 focus:ring-primary" />
                         </label>
                     </div>
