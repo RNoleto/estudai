@@ -34,12 +34,13 @@ const type = ref(null);
 const title = ref(null);
 const message = ref(null);
 
-// Atualize o formData para ter 3 propriedades de tempo separadas
+// Estado reativo para os dados do formulário
 const formData = reactive({
   subject_id: null,
   subjectName: '',
   topic: '',
   studyHours: '0',    // horas
+
   studyMinutes: '00', // minutos
   studySeconds: '00', // segundos
   total_pauses: 0,
@@ -90,11 +91,11 @@ const subjects = computed(() => {
     .filter(Boolean);
 });
 
-// Atualiza automaticamente as questões incorretas
+// Atualiza automaticamente as questões corretas
 watch(
-  [() => formData.questions_resolved, () => formData.correct_answers],
-  ([total, correct]) => {
-    formData.incorrect_answers = Math.max(0, total - correct);
+  [() => formData.questions_resolved, () => formData.incorrect_answers],
+  ([total, incorrect]) => {
+    formData.correct_answers = Math.max(0, total - incorrect);
   }
 );
 
@@ -233,7 +234,7 @@ const saveChanges = async () => {
               <Input v-model="formData.questions_resolved" type="number" id="questions_resolved" label="Total"/>
             </div>
             <div class="mb-4">
-              <Input v-model="formData.correct_answers" type="number" id="correct_answers" label="Corretas"/>
+              <Input v-model="formData.incorrect_answers" type="number" id="incorrect_answers" label="Incorretas"/>
             </div>
           </div>
           <div class="flex justify-end gap-2">
