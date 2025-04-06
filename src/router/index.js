@@ -17,6 +17,8 @@ import StudyHistory from '../views/StudyHistory.vue';
 // Partes da landing page que não estão no dashboard
 import LanginPage from '../views/LandingPage/LanginPage.vue';
 
+// Rotas comentadas estão em desenvolvimento e não estão sendo utilizadas no momento
+
 const routes = [
   {
     path: '/',
@@ -26,16 +28,16 @@ const routes = [
       description: 'Estude com o melhor método de aprendizado online e acelere sua carreira.'
     }
   },
-  {
-    path: '/landing-page',
-    name: 'LandingPage',
-    component: LanginPage,
-    meta: {
-      requiresAuth: false,
-      title: 'Estuday - Landing Page',
-      description: 'Estude com o melhor método de aprendizado online e acelere sua carreira.'
-    }
-  },
+  // {
+  //   path: '/landing-page',
+  //   name: 'LandingPage',
+  //   component: LanginPage,
+  //   meta: {
+  //     requiresAuth: false,
+  //     title: 'Estuday - Landing Page',
+  //     description: 'Estude com o melhor método de aprendizado online e acelere sua carreira.'
+  //   }
+  // },
   {
     path: '/carreiras',
     name: 'Carreiras',
@@ -56,16 +58,16 @@ const routes = [
       description: 'Confira todas as matérias disponíveis para estudo na Estuday.'
     }
   },
-  {
-    path: '/ciclo-de-estudos',
-    name: 'Ciclo',
-    component: StudyCycle,
-    meta: { 
-      requiresAuth: true,
-      title: 'Ciclo de Estudos | Estuday',
-      description: 'Crie e gerencie seu ciclo de estudos de maneira eficiente.'
-    }
-  },
+  // {
+  //   path: '/ciclo-de-estudos',
+  //   name: 'Ciclo',
+  //   component: StudyCycle,
+  //   meta: { 
+  //     requiresAuth: true,
+  //     title: 'Ciclo de Estudos | Estuday',
+  //     description: 'Crie e gerencie seu ciclo de estudos de maneira eficiente.'
+  //   }
+  // },
   {
     path: '/:pathMatch(.*)*', 
     name: 'NotFound', 
@@ -111,18 +113,18 @@ const routes = [
         component: Subjects,
         meta: { title: 'Gerenciar Matérias | Estuday' }
       },
-      {
-        path: 'ciclo-de-estudos',
-        name: 'DashboardCiclo',
-        component: StudyCycle,
-        meta: { title: 'Gerenciar Ciclo de Estudos | Estuday' }
-      },
-      {
-        path: 'planos',
-        name: 'DashboardSubscriptions',
-        component: SubscriptionsPage,
-        meta: { title: 'Planos de Assinatura | Estuday' }
-      },
+      // {
+      //   path: 'ciclo-de-estudos',
+      //   name: 'DashboardCiclo',
+      //   component: StudyCycle,
+      //   meta: { title: 'Gerenciar Ciclo de Estudos | Estuday' }
+      // },
+      // {
+      //   path: 'planos',
+      //   name: 'DashboardSubscriptions',
+      //   component: SubscriptionsPage,
+      //   meta: { title: 'Planos de Assinatura | Estuday' }
+      // },
       {
         path: '/:pathMatch(.*)*', 
         name: 'DashboardNotFound', 
