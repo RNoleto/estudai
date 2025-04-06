@@ -4,6 +4,8 @@ import { SignInButton } from 'vue-clerk';
 import Button from '../components/ui/Button.vue';
 import Head from '../components/Head.vue';
 
+import { useHead } from '@vueuse/head';
+
 </script>
 
 <template>

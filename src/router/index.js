@@ -14,12 +14,25 @@ import Dashboard from '../views/Dashboard.vue';
 import DashboardHome from '../views/DashboardHome.vue';
 import StudyHistory from '../views/StudyHistory.vue';
 
+// Partes da landing page que não estão no dashboard
+import LanginPage from '../views/LandingPage/LanginPage.vue';
+
 const routes = [
   {
     path: '/',
     component: Home,
     meta: {
       title: 'Estuday - Aprenda de Forma Inteligente',
+      description: 'Estude com o melhor método de aprendizado online e acelere sua carreira.'
+    }
+  },
+  {
+    path: '/landing-page',
+    name: 'LandingPage',
+    component: LanginPage,
+    meta: {
+      requiresAuth: false,
+      title: 'Estuday - Landing Page',
       description: 'Estude com o melhor método de aprendizado online e acelere sua carreira.'
     }
   },

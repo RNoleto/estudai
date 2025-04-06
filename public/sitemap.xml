@@ -6,6 +6,13 @@
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
+    <!-- Página de Sobre Nós -->
+    <url>
+        <loc>https://estuday.com.br/lading-page</loc>
+        <lastmod>2025-03-09T17:50:10+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
     <!-- Página de Carreiras -->
     <url>
         <loc>https://estuday.com.br/carreiras</loc>
