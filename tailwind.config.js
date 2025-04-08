@@ -5,7 +5,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#2EC1CB',
+        // primary: '#2EC1CB',
+        primary: '#115566', //Ajuste de constraste para o google light house
         secondary: '#AFEBEF',
         tertiary: '#3AB3BB',
         baseGreen: '#00B884',

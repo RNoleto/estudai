@@ -119,7 +119,7 @@ onMounted(async () => {
       ]">
         <div class="p-4 text-lg text-gray-700 font-bold border-b border-secondary flex items-center" :class="[isSidebarCollapsed ? 'justify-center' : 'justify-between']">
           <span v-if="!isSidebarCollapsed" ><router-link to="/area-do-aluno">Estuday</router-link></span>
-          <button @click="toggleSidebar" class="text-primary hover:bg-gray-200 rounded" :class="isSidebarCollapsed ? 'px-4' : 'px-2'">
+          <button @click="toggleSidebar" class="text-primary hover:bg-gray-200 rounded" :class="isSidebarCollapsed ? 'px-4' : 'px-2'" :aria-label="isSidebarCollapsed ? 'Expandir barra lateral' : 'Recolher barra lateral'">
             <i :class="isSidebarCollapsed ? 'fa-solid fa-caret-right' : 'fa-solid fa-caret-left'"></i>
           </button>
         </div>
@@ -129,12 +129,12 @@ onMounted(async () => {
             <router-link to="/area-do-aluno" :class="[
               'flex items-center gap-2 px-4 py-2 mt-4 rounded-lg hover:shadow-md',
               route.path === '/area-do-aluno'
-                ? 'bg-secondary text-baseBlue shadow-sm'
+                ? 'bg-secondary text-gray-700 shadow-sm'
                 : 'text-gray-700 hover:bg-gray-100'
             ]">
               <i :class="[
                 'fas fa-home',
-                route.path === '/area-do-aluno' ? 'text-baseBlue' : 'text-primary hover:text-gray-500'
+                route.path === '/area-do-aluno' ? 'text-gray-700' : 'text-primary hover:text-gray-500'
               ]"></i>
               <span v-show="!isSidebarCollapsed" >
                 Home
@@ -145,12 +145,12 @@ onMounted(async () => {
           <div>
             <router-link to="/area-do-aluno/estudar" :class="[
               'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-              route.path === '/area-do-aluno/estudar' ? 'bg-secondary text-baseBlue shadow-sm' : 'text-gray-700 hover:bg-gray-100'
+              route.path === '/area-do-aluno/estudar' ? 'bg-secondary text-gray-700 shadow-sm' : 'text-gray-700 hover:bg-gray-100'
             ]">
               <i :class="[
                 'fa-solid fa-stopwatch',
                 route.path === '/area-do-aluno/estudar'
-                  ? 'bg-secondary text-baseBlue shadow-sm'
+                  ? 'bg-secondary text-gray-700 shadow-sm'
                   : 'text-primary hover:text-gray-500'
               ]"></i>
               <span v-if="!isSidebarCollapsed" >Estudar</span>
@@ -161,13 +161,13 @@ onMounted(async () => {
             <router-link to="/area-do-aluno/historico-de-estudos" :class="[
               'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
               route.path === '/area-do-aluno/historico-de-estudos'
-                ? 'bg-secondary text-baseBlue shadow-sm'
+                ? 'bg-secondary text-gray-700 shadow-sm'
                 : 'text-gray-700 hover:bg-gray-100'
             ]">
               <i :class="[
                 'fa-solid fa-pen-clip',
                 route.path === '/area-do-aluno/historico-de-estudos'
-                  ? 'bg-secondary text-baseBlue shadow-sm'
+                  ? 'bg-secondary text-gray-700 shadow-sm'
                   : 'text-primary hover:text-gray-500'
               ]"></i>
               <span v-if="!isSidebarCollapsed" >Histórico de Estudo</span>
@@ -177,11 +177,11 @@ onMounted(async () => {
           <div class="hidden">
             <a href="/area-do-aluno/planos" :class="[
               'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-              route.path === '/area-do-aluno/planos' ? 'bg-secondary text-baseBlue shadow-sm' : 'text-gray-700 hover:bg-gray-100'
+              route.path === '/area-do-aluno/planos' ? 'bg-secondary text-gray-700 shadow-sm' : 'text-gray-700 hover:bg-gray-100'
             ]">
               <i :class="['fa-solid fa-file-signature',
                 route.path === '/area-do-aluno/planos'
-                  ? 'bg-secondary text-baseBlue shadow-sm'
+                  ? 'bg-secondary text-gray-700 shadow-sm'
                   : 'text-primary hover:text-gray-500'
               ]"></i>
               <span v-if="!isSidebarCollapsed" >Planos</span>
@@ -192,23 +192,23 @@ onMounted(async () => {
             <button @click="toggleMenu3" :class="[
               'flex gap-1 items-center justify-between w-full px-4 py-2 text-left text-gray-700 rounded-lg hover:shadow-md',
               route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
-                ? 'bg-secondary text-baseBlue shadow-sm'
+                ? 'bg-secondary text-gray-700 shadow-sm'
                 : 'text-gray-700 hover:bg-gray-100'
             ]">
               <div class="flex items-center gap-2">
                 <i :class="['fas fa-cog',
                   route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
-                    ? 'text-baseBlue'
+                    ? 'text-gray-700'
                     : 'text-primary hover:text-gray-500'
                 ]"></i>
                 <span v-if="!isSidebarCollapsed" :class="[
                   route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
-                    ? 'text-baseBlue' : 'text-gray-700 hover:bg-gray-100'
+                    ? 'text-gray-700' : 'text-gray-700 hover:bg-gray-100'
                 ]" >Configurações</span>
               </div>
               <i v-if="!isSidebarCollapsed" class="text-xs text-primary fas" :class="[isMenu3Open ? 'fa-solid fa-caret-up' : 'fa-solid fa-caret-down', isSidebarCollapsed ? 'text-xs' : 'text-base',
               route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
-                ? 'text-baseBlue'
+                ? 'text-gray-700'
                 : 'text-primary hover:text-gray-100'
               ]"></i>
             </button>
@@ -226,7 +226,7 @@ onMounted(async () => {
           <div class="mt-auto bg-secondary p-2 rounded-lg w-full shadow-md">
             <div class="flex items-center gap-2" :class="isSidebarCollapsed ? 'justify-center' : ''">
               <UserButton />
-              <p v-if="!isSidebarCollapsed" class="text-baseBlue text-sm font-medium">{{ user.fullName }}</p>
+              <p v-if="!isSidebarCollapsed" class="text-gray-700 text-sm font-medium">{{ user.fullName }}</p>
             </div>
           </div>
         </nav>
