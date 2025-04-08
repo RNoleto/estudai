@@ -135,11 +135,11 @@ useHead({
     { name: "description", content: "Selecione a carreira desejada e prepare-se de forma eficiente para concursos públicos com o Estuday. Oferecemos ferramentas personalizadas para otimizar seus estudos e alcançar seus objetivos." },
     { property: "og:title", content: "Estuday | Escolha Sua Carreira - Prepare-se para Concursos Públicos" },
     { property: "og:description", content: "Selecione a carreira desejada e prepare-se de forma eficiente para concursos públicos com o Estuday. Oferecemos ferramentas personalizadas para otimizar seus estudos e alcançar seus objetivos." },
-    { property: "og:image", content: "https://estuday.com.br/img/carreira.png" },
+    { property: "og:image", content: "https://estuday.com.br/img/metaImg.webp" },
     { property: "og:url", content: "https://estuday.com.br/carreiras" },
     { name: "twitter:title", content: "Estuday | Escolha Sua Carreira - Prepare-se para Concursos Públicos" },
     { name: "twitter:description", content: "Selecione a carreira desejada e prepare-se de forma eficiente para concursos públicos com o Estuday. Oferecemos ferramentas personalizadas para otimizar seus estudos e alcançar seus objetivos." },
-    { name: "twitter:image", content: "https://estuday.com.br/img/carreira.png" },
+    { name: "twitter:image", content: "https://estuday.com.br/img/metaImg.webp" },
     { name: "keywords", content: "concursos públicos, escolha de carreira, preparação para concursos, planejamento de estudos, Estuday" }
   ]
 });

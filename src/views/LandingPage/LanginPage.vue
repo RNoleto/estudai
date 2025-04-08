@@ -25,7 +25,7 @@ useHead({
     },
     {
       property: 'og:image',
-      content: 'https://estuday.com.br/img/carreira.png'
+      content: 'https://estuday.com.br/img/metaImg.webp'
     },
     {
       property: 'og:url',
@@ -41,7 +41,7 @@ useHead({
     },
     {
       name: 'twitter:image',
-      content: 'https://estuday.com.br/img/carreira.png'
+      content: 'https://estuday.com.br/img/metaImg.webp'
     },
     {
       name: 'keywords',

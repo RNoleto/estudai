@@ -74,7 +74,7 @@ onMounted(async () => {
 
     <Head title="Estuday | Resumo de Estudos - Seu Desempenho e Progresso"
         description="Acompanhe seu desempenho nos estudos! Veja o total de tempo estudado, questões respondidas, acertos e erros, além das matérias revisadas. Organize seu aprendizado e evolua com o Estuday!"
-        image="https://estuday.com.br/img/wallpaper.png" url="https://estuday.com.br" />
+        image="https://estuday.com.br/img/metaImg.webp" url="https://estuday.com.br" />
     <div class="flex flex-col p-2 mt-12 gap-4 sm:mt-0 sm:px-4">
         <div class="flex flex-col gap-2">
             <h3 class="text-2xl font-bold text-gray-700 sm:text-4xl">Resumo dos <span

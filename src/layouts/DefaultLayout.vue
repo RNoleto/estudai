@@ -4,7 +4,7 @@
       <div 
         class="absolute top-0 left-0 w-full h-full bg-cover bg-center transition-opacity duration-300"
         :class="backgroundOpacity"
-        style="background-image: url('/img/wallpaper.png');"
+        style="background-image: url('/img/wallpaper.webp');"
       ></div>
       <!-- Conteúdo da página (slot padrão) -->
       <div class="relative z-10">

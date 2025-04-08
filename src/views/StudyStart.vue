@@ -273,11 +273,11 @@ useHead({
     { name: "description", content: "Otimize seus estudos com nosso temporizador! Registre o tempo de estudo, matérias, tópicos e questões resolvidas. Acompanhe seu desempenho e organize seu aprendizado de forma eficiente com o Estuday!" },
     { property: "og:title", content: "Estuday | Estudar - Registre Seu Tempo e Acompanhe Seu Progresso" },
     { property: "og:description", content: "Otimize seus estudos com nosso temporizador! Registre o tempo de estudo, matérias, tópicos e questões resolvidas. Acompanhe seu desempenho e organize seu aprendizado de forma eficiente com o Estuday!" },
-    { property: "og:image", content: "https://estuday.com.br/img/wallpaper.png" },
+    { property: "og:image", content: "https://estuday.com.br/img/metaImg.webp" },
     { property: "og:url", content: "https://estuday.com.br/estudar" },
     { name: "twitter:title", content: "Estuday | Estudar - Registre Seu Tempo e Acompanhe Seu Progresso" },
     { name: "twitter:description", content: "Otimize seus estudos com nosso temporizador! Registre o tempo de estudo, matérias, tópicos e questões resolvidas. Acompanhe seu desempenho e organize seu aprendizado de forma eficiente com o Estuday!" },
-    { name: "twitter:image", content: "https://estuday.com.br/img/wallpaper.png" },
+    { name: "twitter:image", content: "https://estuday.com.br/img/metaImg.webp" },
     { name: "keywords", content: "estudar, temporizador, registro de tempo, desempenho, aprendizado, métricas, Estuday" }
   ]
 });
