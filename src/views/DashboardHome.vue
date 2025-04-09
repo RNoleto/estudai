@@ -122,27 +122,27 @@ useHead({
                 "Carregando..." }}</p>
         </div>
         <div>
-            <div class="grid grid-cols-6 gap-2 sm:flex sm:flex-row sm:justify-normal sm:flex-wrap sm:gap-2">
+            <div class="grid grid-cols-2 gap-1 sm:grid-cols-4 md:grid-cols-4">
                 <!-- Card com total de questões -->
-                <Card icon="fa-solid fa-book" title="Total de matérias" class="col-span-3 sm:flex-1">
+                <Card icon="fa-solid fa-book" title="Total de matérias">
                     <template #content>
                         {{ userStore.userSubjects.length }}
                     </template>
                 </Card>
                 <!-- Card com total de topicos estudados -->
-                <Card icon="fa-solid fa-tags" title="Total de tópicos" class="col-span-3 sm:flex-1">
+                <Card icon="fa-solid fa-tags" title="Total de tópicos">
                     <template #content>
                         {{ TotalUniqueTopics }}
                     </template>
                 </Card>
                 <!-- Card de tempo de estudo -->
-                <Card title="Tempo de estudo" icon="fa-solid fa-stopwatch-20" class="col-span-2 sm:flex-1">
+                <Card title="Tempo de estudo" icon="fa-solid fa-stopwatch-20" >
                     <template #content>
                         {{ formatStudyTime(totalStudyTime) }}
                     </template>
                 </Card>
                 <!-- Card com questões respondidas -->
-                <Card title="Questões respondidas" icon="fa-solid fa-pen-clip" class="col-span-4 sm:flex-1">
+                <Card title="Questões respondidas" icon="fa-solid fa-pen-clip" >
                     <template #content>
                         <div class="flex flex-col-reverse sm:flex-row w-full items-end gap-4 justify-between">
                             <div class="flex flex-col gap-2">
