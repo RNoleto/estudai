@@ -50,15 +50,7 @@ useHead({
 </script>
 
 <template>
-  <!-- <Head 
-    title="Estuday - Acompanhe seus estudos de forma eficiente"
-    description="Estuday é uma plataforma para aprendizado rápido e eficiente. Venha aprender agora!"
-    image="https://estuday.com.br/img/wallpaper.webp"
-    url="https://estuday.com.br"
-  /> -->
-  <!-- Aqui definimos a opacidade do background para 100% (padrão) -->
   <DefaultLayout backgroundOpacity="opacity-100" class="p-2 sm:p-0">
-    <!-- Seu card posicionado com o conteúdo -->
     <div
       class="absolute bg-white p-4 border rounded-[18px] shadow-md top-[200px] sm:top-[200px] sm:left-[200px] sm:p-[30px] sm:w-[460px]">
       <h1 class="font-bold mb-3 text-2xl sm:text-4xl w-[250px] text-gray-700">

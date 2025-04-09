@@ -1,9 +1,10 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
-import Head from '../components/Head.vue';
 import Card from '../components/Card.vue';
 import SubjectBarChart from '../layouts/SubjectBarChart.vue';
+
+import { useHead } from '@vueuse/head';
 
 
 import { useUserStore } from '../stores/useUserStore';
@@ -68,13 +69,51 @@ onMounted(async () => {
         console.error(error);
     }
 })
+
+useHead({
+  title: "Estuday | Resumo de Estudos - Seu Desempenho e Progresso",
+  meta: [
+    {
+      name: "description",
+      content: "Acompanhe seu desempenho nos estudos! Veja o total de tempo estudado, questões respondidas, acertos e erros, além das matérias revisadas. Organize seu aprendizado e evolua com o Estuday!"
+    },
+    {
+      property: "og:title",
+      content: "Estuday | Seu Gerenciador de Estudos Personalizado"
+    },
+    {
+      property: "og:description",
+      content: "Acompanhe seu desempenho nos estudos! Veja o total de tempo estudado, questões respondidas, acertos e erros, além das matérias revisadas. Organize seu aprendizado e evolua com o Estuday!"
+    },
+    {
+      property: "og:image",
+      content: "https://estuday.com.br/img/metaImg.webp"
+    },
+    {
+      property: "og:url",
+      content: "https://estuday.com.br"
+    },
+    {
+      name: "twitter:title",
+      content: "Estuday | Resumo de Estudos - Seu Desempenho e Progresso"
+    },
+    {
+      name: "twitter:description",
+      content: "Acompanhe seu desempenho nos estudos! Veja o total de tempo estudado, questões respondidas, acertos e erros, além das matérias revisadas. Organize seu aprendizado e evolua com o Estuday!"
+    },
+    {
+      name: "twitter:image",
+      content: "https://estuday.com.br/img/metaImg.webp"
+    },
+    {
+      name: "keywords",
+      content: "gerenciador de estudos, organização de estudos, acompanhamento de desempenho, planejamento de estudos, eficiência nos estudos, metricas de estudos, concursos públicos, editais, edital, Estuday"
+    }
+  ]
+});
 </script>
 
 <template>
-
-    <Head title="Estuday | Resumo de Estudos - Seu Desempenho e Progresso"
-        description="Acompanhe seu desempenho nos estudos! Veja o total de tempo estudado, questões respondidas, acertos e erros, além das matérias revisadas. Organize seu aprendizado e evolua com o Estuday!"
-        image="https://estuday.com.br/img/metaImg.webp" url="https://estuday.com.br" />
     <div class="flex flex-col p-2 mt-12 gap-4 sm:mt-0 sm:px-4">
         <div class="flex flex-col gap-2">
             <h3 class="text-2xl font-bold text-gray-700 sm:text-4xl">Resumo dos <span
