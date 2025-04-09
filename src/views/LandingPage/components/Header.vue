@@ -19,7 +19,7 @@
         <!-- <a href="#contato" class="text-gray-700 hover:text-primary">Contato</a> -->
       </nav>
       <!-- Botão para mobile (hamburger menu) -->
-      <button @click="toggleMenu" class="md:hidden focus:outline-none transition">
+      <button @click="toggleMenu" class="md:hidden focus:outline-none transition" aria-label="Abrir menu de navegação">
         <svg v-if="!isOpen" class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
         </svg>

@@ -145,7 +145,7 @@ useHead({
                 <Card title="Questões respondidas" icon="fa-solid fa-pen-clip" class="col-span-4 sm:flex-1">
                     <template #content>
                         <div class="flex flex-col-reverse sm:flex-row w-full items-end gap-4 justify-between">
-                            <div class="flex  flex-col gap-2">
+                            <div class="flex flex-col gap-2">
                                 <label class="text-xs text-gray-600">
                                     Escolha uma opção:
                                     <select v-model="selectedOption"

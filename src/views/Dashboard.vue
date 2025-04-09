@@ -1,6 +1,6 @@
 <script setup>
 import { RouterView, useRoute, RouterLink } from 'vue-router';
-import { onMounted, ref, computed } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
 import { UserButton, useUser } from 'vue-clerk';
 
@@ -9,7 +9,20 @@ const route = useRoute();
 
 const userStore = useUserStore();
 
-const isMobileView = computed(() => window.innerWidth <= 490);
+const isMobileView = ref(window.innerWidth <= 490);
+
+const updateIsMobileView = () => {
+  isMobileView.value = window.innerWidth <= 490;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', updateIsMobileView);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateIsMobileView);
+});
+
 const isMenuMobileOpen = ref(false);
 
 const toggleMenu = () => {
@@ -47,7 +60,11 @@ onMounted(async () => {
       <router-link to="/area-do-aluno">
         <p class="font-bold text-lg">Estuday</p>
       </router-link>
-      <button @click="toggleMenu" class="text-xl p-2 rounded focus:outline-none">
+      <button
+        @click="toggleMenu"
+        class="md:hidden focus:outline-none transition"
+        :aria-label="isMenuMobileOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação'"
+      >
         <i :class="isMenuMobileOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
       </button>
     </nav>
