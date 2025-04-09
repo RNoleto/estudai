@@ -10,6 +10,8 @@ import Search from '../components/ui/Search.vue';
 import Modal from '../components/ui/Modal.vue';
 import AlertModal from '../components/ui/AlertModal.vue';
 
+import { useHead } from '@vueuse/head';
+
 // Acessando os stores
 const subjectStore = useSubjectStore();
 const userStore = useUserStore();
@@ -118,6 +120,20 @@ const handleAlertClose = () => {
   }
 };
 
+useHead({
+  title: "Estuday | Escolha Suas Matérias - Prepare-se para Concursos Públicos",
+  meta: [
+    { name: "description", content: "Selecione as matérias desejadas e prepare-se de forma eficiente para concursos públicos com o Estuday. Oferecemos ferramentas personalizadas para otimizar seus estudos e alcançar seus objetivos." },
+    { property: "og:title", content: "Estuday | Escolha Sua Matérias - Prepare-se para Concursos Públicos" },
+    { property: "og:description", content: "Selecione as matérias desejada e prepare-se de forma eficiente para concursos públicos com o Estuday. Oferecemos ferramentas personalizadas para otimizar seus estudos e alcançar seus objetivos." },
+    { property: "og:image", content: "https://estuday.com.br/img/metaImg.webp" },
+    { property: "og:url", content: "https://estuday.com.br/carreiras" },
+    { name: "twitter:title", content: "Estuday | Escolha Suas Matérias - Prepare-se para Concursos Públicos" },
+    { name: "twitter:description", content: "Selecione as matérias desejada e prepare-se de forma eficiente para concursos públicos com o Estuday. Oferecemos ferramentas personalizadas para otimizar seus estudos e alcançar seus objetivos." },
+    { name: "twitter:image", content: "https://estuday.com.br/img/metaImg.webp" },
+    { name: "keywords", content: "concursos públicos, escolha de matérias, preparação para concursos, planejamento de estudos, estudos, edital, editais, Estuday" }
+  ]
+});
 </script>
 
 <template>
