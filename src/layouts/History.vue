@@ -146,10 +146,7 @@ const totalQuestions = computed(() => {
   return filteredRecords.value.reduce((acc, record) => acc + record.questions_resolved, 0);
 });
 
-// Computada para o total de acertos no período filtrado
-const totalCorrectAnswers = computed(() => {
-  return filteredRecords.value.reduce((acc, record) => acc + record.correct_answers, 0);
-});
+
 
 // Computada para calcular o total de questões e acertos no período filtrado
 const totalQuestionsAndAccuracy = computed(() => {
@@ -165,15 +162,6 @@ const totalQuestionsAndAccuracy = computed(() => {
     totalCorrectAnswers,
     accuracyPercentage,
   };
-});
-
-const totalAccuracyBgClass = computed(() => {
-  const { accuracyPercentage } = totalQuestionsAndAccuracy.value;
-  return accuracyPercentage >= 70
-    ? 'text-baseBlue border-baseBlue'
-    : accuracyPercentage > 50
-      ? 'text-baseYellow border-baseYellow'
-      : 'text-baseRed border-baseRed';
 });
 
 import { useHead } from '@vueuse/head';
@@ -254,9 +242,9 @@ useHead({
           <p>{{ totalQuestions }}</p>
         </template>
       </Card>
-      <Card title="" :icon="`fa-solid fa-check ${totalAccuracyBgClass}`" footer="Total de acertos" :class="`items-center ${totalAccuracyBgClass}`">
+      <Card title="" icon="fa-solid fa-check" footer="Total de acertos" class="items-center">
         <template #content>
-          <p :class="`${totalAccuracyBgClass}`">{{ totalQuestionsAndAccuracy.totalCorrectAnswers }} - ({{
+          <p>{{ totalQuestionsAndAccuracy.totalCorrectAnswers }} - ({{
           totalQuestionsAndAccuracy.accuracyPercentage }}%)</p>
         </template>
       </Card>

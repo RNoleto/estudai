@@ -12,8 +12,8 @@ const button = tv({
             baseDisable: 'bg-white text-gray-600 font-bold px-[16px] py-[10px] border-[1px] border-gray-300', //NovoLaout
             primary: 'bg-gray-900 text-zinc-50 hover:bg-blue-600 ring-blue-500',
             secondary: 'bg-zinc-500 text-zinc-50 hover:bg-zinc-400 ring-zinc-900',
-            delete: 'bg-red-500 text-red-50 hover:bg-red-600 ring-red-500',
-            play: 'bg-blue-500 text-blue-50 hover:bg-blue-600 ring-blue-500',
+            delete: 'bg-red-500 text-black hover:bg-red-600 hover:text-white hover:ring-red-500',
+            play: 'bg-blue-500 text-black hover:bg-blue-600 hover:text-white hover:ring-blue-500',
             disable: 'bg-gray-400 text-gray-50 cursor-not-allowed',
             ia: 'bg-primary text-white hover:bg-tertiary ring-tertiary',
         },
