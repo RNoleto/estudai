@@ -1,8 +1,5 @@
 <script setup>
 import History from '../layouts/History.vue';
-
-import Head from '../components/Head.vue';
-
 import { useHead } from '@vueuse/head';
 
 useHead({

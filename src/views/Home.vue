@@ -2,9 +2,9 @@
 import DefaultLayout from '../layouts/DefaultLayout.vue';
 import { SignInButton } from 'vue-clerk';
 import Button from '../components/ui/Button.vue';
-import Head from '../components/Head.vue';
 
 import { useHead } from '@vueuse/head';
+
 useHead({
   title: "Estuday | Seu Gerenciador de Estudos Personalizado",
   meta: [
