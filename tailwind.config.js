@@ -14,9 +14,9 @@ export default {
         baseBlue: '#3E73ED',
         baseYellow: "#C1CB2E",
         secYellow: '#EFEDAF',
-        baseRed: '#CB2E2E',
-        secRed: '#EFAFAF',
-        terRed: '#FF5675',
+        baseRed: '#AA1122',
+        secRed: '#B21020',
+        terRed: '#990011',
       }
     },
   },
