@@ -1,13 +1,13 @@
 <template>
     <section class="py-16 bg-white" id="faq">
       <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
+        <h2 class="text-primary text-3xl md:text-4xl font-bold text-center mb-12">
           Perguntas Frequentes
         </h2>
         <div class="space-y-6">
           <!-- FAQ 1 -->
           <div class="border-b pb-4">
-            <h3 class="text-xl font-semibold text-gray-800">
+            <h3 class="text-xl font-semibold text-primary">
               Como meus dados estão protegidos?
             </h3>
             <p class="text-gray-600 mt-2">
@@ -16,7 +16,7 @@
           </div>
           <!-- FAQ 2 -->
           <div class="border-b pb-4">
-            <h3 class="text-xl font-semibold text-gray-800">
+            <h3 class="text-xl font-semibold text-primary">
               O Estuday é compatível com dispositivos móveis?
             </h3>
             <p class="text-gray-600 mt-2">
@@ -25,7 +25,7 @@
           </div>
           <!-- FAQ 3 -->
           <div class="border-b pb-4">
-            <h3 class="text-xl font-semibold text-gray-800">
+            <h3 class="text-xl font-semibold text-primary">
               Existe um período de teste gratuito?
             </h3>
             <p class="text-gray-600 mt-2">
@@ -34,7 +34,7 @@
           </div>
           <!-- FAQ 4 -->
           <div class="border-b pb-4">
-            <h3 class="text-xl font-semibold text-gray-800">
+            <h3 class="text-xl font-semibold text-primary">
               Quais funcionalidades estão disponíveis no plano gratuito?
             </h3>
             <p class="text-gray-600 mt-2">

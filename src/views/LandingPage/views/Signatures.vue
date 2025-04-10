@@ -1,17 +1,17 @@
 <template>
     <section class="py-16 bg-gray-50" id="signatures">
       <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
+        <h2 class="text-primary text-3xl md:text-4xl font-bold text-center mb-12">
           Escolha o Plano Ideal para Você
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <!-- Plano Gratuito -->
           <div class="border rounded-lg p-6 shadow-lg">
-            <h3 class="text-2xl font-bold text-gray-800 mb-4">Gratuito</h3>
+            <h3 class="text-2xl font-bold text-primary mb-4">Gratuito</h3>
             <p class="text-gray-600 mb-6">
               Experimente o Estuday gratuitamente e gerencie seu tempo de estudo de forma prática.
             </p>
-            <ul class="mb-6 space-y-2">
+            <ul class="text-primary mb-6 space-y-2">
               <li class="flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-baseGreen mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -31,7 +31,7 @@
                 Acesso a relatórios básicos
               </li>
             </ul>
-            <button class="w-full bg-baseGreen text-white py-3 rounded-full hover:bg-hoverGreen transition duration-300">
+            <button class="w-full bg-primary text-white py-3 rounded-full hover:bg-baseGreen transition duration-300">
               Comece Gratuitamente
             </button>
           </div>
@@ -39,7 +39,7 @@
           <!-- Plano Premium com Destaque -->
           <div class="relative border rounded-lg p-6 shadow-2xl bg-gradient-to-r from-primary to-secondary transform scale-105">
             <!-- Badge de destaque -->
-            <div class="absolute top-0 right-0 mt-4 mr-4 bg-baseYellow text-baseGreen text-xs font-bold px-3 py-1 rounded-full">
+            <div class="absolute top-0 right-0 mt-4 mr-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">
               Mais Popular
             </div>
             <h3 class="text-2xl font-bold text-white mb-4">Premium</h3>

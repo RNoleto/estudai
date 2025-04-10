@@ -4,7 +4,7 @@
 <template>
     <section class="py-16 bg-white" id="demonstration">
       <div class="container mx-auto px-4 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold mb-8">
+        <h2 class="text-3xl text-primary md:text-4xl font-bold mb-8">
           Funcionalidades Principais
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -22,7 +22,7 @@
                   d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 class="text-xl font-semibold mb-2">Gerenciamento de Tempo</h3>
+            <h3 class="text-xl font-semibold mb-2 text-primary">Gerenciamento de Tempo</h3>
             <p class="text-gray-600">
               Controle e monitore o tempo dedicado aos seus estudos de forma prática e eficiente.
             </p>
@@ -40,7 +40,7 @@
                   d="M9 12l2 2 4-4M7 7h10M7 17h10" />
               </svg>
             </div>
-            <h3 class="text-xl font-semibold mb-2">Resolução de Questões</h3>
+            <h3 class="text-xl font-semibold mb-2 text-primary">Resolução de Questões</h3>
             <p class="text-gray-600">
               Registre e acompanhe suas respostas, analise acertos e erros para melhorar seu desempenho.
             </p>
@@ -58,7 +58,7 @@
                   d="M13 16h-1v-4h-1m1-4h.01M12 20.5a8.5 8.5 0 100-17 8.5 8.5 0 000 17z" />
               </svg>
             </div>
-            <h3 class="text-xl font-semibold mb-2">Insights com IA</h3>
+            <h3 class="text-xl font-semibold mb-2 text-primary">Insights com IA</h3>
             <p class="text-gray-600">
               Receba recomendações personalizadas e métricas inteligentes para otimizar seus estudos.
             </p>

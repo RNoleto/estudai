@@ -15,7 +15,7 @@
         <a href="#testimonials" class="text-gray-700 hover:text-primary">Comentários</a>
         <a href="#signatures" class="text-gray-700 hover:text-primary">Planos</a>
         <a href="#faq" class="text-gray-700 hover:text-primary">FAQ</a>
-        <a href="/" class="bg-baseGreen text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-hoverGreen transition duration-300">Cadastre-se</a>
+        <a href="/" class="bg-primary text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-baseGreen transition duration-300">Cadastre-se</a>
         <!-- <a href="#contato" class="text-gray-700 hover:text-primary">Contato</a> -->
       </nav>
       <!-- Botão para mobile (hamburger menu) -->

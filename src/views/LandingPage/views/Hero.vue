@@ -18,7 +18,7 @@ function goToLogin() {
         </p>
         <button
             @click="goToLogin"
-            class="bg-baseGreen text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-hoverGreen transition duration-300"
+            class="bg-primary text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-baseGreen transition duration-300"
         >
           Comece Agora - É Grátis!
         </button>
