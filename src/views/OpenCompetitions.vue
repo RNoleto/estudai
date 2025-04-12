@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
+import { useHead } from '@vueuse/head'
 
 import Card from '../components/Card.vue'
 import Search from '../components/ui/Search.vue'
@@ -26,6 +27,21 @@ const filteredCompetitions = computed(() => {
     return concurso.titulo.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
       concurso.regiao.toLowerCase().includes(searchTerm.value.toLowerCase())
   })
+})
+
+useHead({
+  title: "Estuday | Concursos Públicos Abertos - Encontre Oportunidades Atualizadas",
+  meta: [
+    { name: 'description', content: "Confira os concursos públicos abertos organizados de forma clara e atualizada. Veja cargos, salários, vagas e períodos de inscrição em tempo real com o Estuday." },
+    { property: 'og:title', content: "Estuday | Concursos Públicos Abertos - Encontre Oportunidades Atualizadas" },
+    { property: 'og:description', content: "Confira os concursos públicos abertos organizados de forma clara e atualizada. Veja cargos, salários, vagas e períodos de inscrição em tempo real com o Estuday." },
+    { property: 'og:image', content: "https://estuday.com.br/img/metaImg.webp" },
+    { property: 'og:url', content: "https://estuday.com.br/area-do-aluno/concursos" },
+    { name: 'twitter:title', content: "Estuday | Concursos Públicos Abertos - Encontre Oportunidades Atualizadas" },
+    { name: 'twitter:description', content: "Confira os concursos públicos abertos organizados de forma clara e atualizada. Veja cargos, salários, vagas e períodos de inscrição em tempo real com o Estuday." },
+    { name: 'twitter:image', content: "https://estuday.com.br/img/metaImg.webp" },
+    { name: 'keywords', content: "concursos públicos, concursos abertos, cargos, salários, edital, oportunidades, carreira pública, estudar para concurso" }
+  ]
 })
 </script>
 
