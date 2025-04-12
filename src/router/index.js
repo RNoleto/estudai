@@ -19,6 +19,9 @@ import LanginPage from '../views/LandingPage/LanginPage.vue';
 
 // Rotas comentadas estão em desenvolvimento e não estão sendo utilizadas no momento
 
+//Rota em teste
+import OpenCompetitions from '../views/OpenCompetitions.vue';
+
 const routes = [
   {
     path: '/',
@@ -112,6 +115,15 @@ const routes = [
         name: 'DashboardMaterias',
         component: Subjects,
         meta: { title: 'Gerenciar Matérias | Estuday' }
+      },
+      {
+        path: 'concursos',
+        name: 'Concursos',
+        component: OpenCompetitions,
+        meta: { 
+          title: 'Lista de Concursos | Estuday',
+          description: 'Confira os principais concursos abertos no Brasil na Estuday.'
+        }
       },
       // {
       //   path: 'ciclo-de-estudos',

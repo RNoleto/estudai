@@ -85,15 +85,21 @@ onMounted(async () => {
             </router-link>
           </div>
           <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <router-link to="/area-do-aluno/historico-de-estudos" @click="toggleMenu">
-              <i class="fa-solid fa-pen-clip"></i>
-              Histórico de Estudo
-            </router-link>
-          </div>
-          <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
             <router-link to="/area-do-aluno/estudar" @click="toggleMenu">
               <i class="fa-solid fa-stopwatch"></i>
               Estudar
+            </router-link>
+          </div>
+          <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+            <router-link to="/area-do-aluno/concursos" @click="toggleMenu">
+              <i class="fa-solid fa-book"></i>
+              Concursos
+            </router-link>
+          </div>
+          <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+            <router-link to="/area-do-aluno/historico-de-estudos" @click="toggleMenu">
+              <i class="fa-solid fa-pen-clip"></i>
+              Histórico de Estudo
             </router-link>
           </div>
           <div class="hidden flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
@@ -194,6 +200,22 @@ onMounted(async () => {
                   : 'text-primary hover:text-gray-500'
               ]"></i>
               <span v-if="!isSidebarCollapsed" >Histórico de Estudo</span>
+            </router-link>
+          </div>
+          <div>
+            <router-link to="/area-do-aluno/concursos" :class="[
+              'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
+              route.path === '/area-do-aluno/concursos'
+                ? 'bg-secondary text-gray-700 shadow-sm'
+                : 'text-gray-700 hover:bg-gray-100'
+            ]">
+              <i :class="[
+                'fa-solid fa-book',
+                route.path === '/area-do-aluno/concursos'
+                  ? 'bg-secondary text-gray-700 shadow-sm'
+                  : 'text-primary hover:text-gray-500'
+              ]"></i>
+              <span v-if="!isSidebarCollapsed" >Concursos</span>
             </router-link>
           </div>
           <!-- Planos da Dashboard -->
