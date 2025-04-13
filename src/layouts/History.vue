@@ -115,7 +115,7 @@ const summarizedData = computed(() => {
         ? 'border border-primary bg-secondary'
         : subject.accuracyPercentage > 50
           ? 'border border-baseYellow bg-secYellow'
-          : 'border border-baseRed bg-secRed';
+          : 'border border-baseRed bg-secRed text-white';
 
     return subject;
   });
