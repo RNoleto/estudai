@@ -232,6 +232,23 @@ onMounted(async () => {
               <span v-if="!isSidebarCollapsed" >Planos</span>
             </a>
           </div>
+          <!-- Missões -->
+          <div>
+            <router-link to="/area-do-aluno/missoes" :class="[
+              'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
+              route.path === '/area-do-aluno/missoes'
+                ? 'bg-secondary text-gray-700 shadow-sm'
+                : 'text-gray-700 hover:bg-gray-100'
+            ]">
+              <i :class="[
+                'fa-solid fa-bullseye',
+                route.path === '/area-do-aluno/missoes'
+                  ? 'bg-secondary text-gray-700 shadow-sm'
+                  : 'text-primary hover:text-gray-500'
+              ]"></i>
+              <span v-if="!isSidebarCollapsed" >Missões</span>
+            </router-link>
+          </div>
           <!-- Menu de Configuração -->
           <div>
             <button @click="toggleMenu3" :class="[
