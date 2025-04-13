@@ -1,6 +1,7 @@
 <script setup>
 import { SignInButton } from 'vue-clerk';
 import Button from '../components/ui/Button.vue';
+import DefaultLayout from '../layouts/DefaultLayout.vue';
 
 import { useHead } from '@vueuse/head';
 
@@ -49,6 +50,7 @@ useHead({
 </script>
 
 <template>
+  <DefaultLayout backgroundOpacity="opacity-100" class="p-2 sm:p-0">
     <div
       class="absolute bg-white p-4 border rounded-[18px] shadow-md top-[200px] sm:top-[200px] sm:left-[200px] sm:p-[30px] sm:w-[460px]">
       <h1 class="font-bold mb-3 text-2xl sm:text-4xl w-[250px] text-gray-700">
@@ -64,4 +66,5 @@ useHead({
         </Button>
       </SignInButton>
     </div>
+  </DefaultLayout>
 </template>
