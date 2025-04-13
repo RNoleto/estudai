@@ -5,6 +5,7 @@ import Home from '../views/Home.vue';
 import Career from '../views/CareerSelection.vue';
 import Subjects from '../views/Subjects.vue';
 import StudyCycle from '../views/StudyCycle.vue';
+import OpenCompetitions from '../views/OpenCompetitions.vue';
 import StudyStart from '../views/StudyStart.vue';
 import ErrorPage from '../views/ErrorPage.vue';
 
@@ -20,7 +21,7 @@ import LanginPage from '../views/LandingPage/LanginPage.vue';
 // Rotas comentadas estão em desenvolvimento e não estão sendo utilizadas no momento
 
 //Rota em teste
-import OpenCompetitions from '../views/OpenCompetitions.vue';
+import Missions from '../views/Missions.vue';
 
 const routes = [
   {
@@ -122,6 +123,15 @@ const routes = [
         component: OpenCompetitions,
         meta: { 
           title: 'Lista de Concursos | Estuday',
+          description: 'Confira os principais concursos abertos no Brasil na Estuday.'
+        }
+      },
+      {
+        path: 'missoes',
+        name: 'Missoes',
+        component: Missions,
+        meta: { 
+          title: 'Missões | Estuday',
           description: 'Confira os principais concursos abertos no Brasil na Estuday.'
         }
       },
