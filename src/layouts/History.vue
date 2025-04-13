@@ -186,7 +186,7 @@ useHead({
   <!-- <IsLoading v-if="isLoading" /> -->
   <div>
     <!-- Filtro por data -->
-    <div class="flex justify-between gap-1 sm:justify-start sm:items-end sm:gap-4">
+    <div class="flex justify-between flex-wrap gap-1 sm:justify-start sm:items-end sm:gap-4">
       <div class="flex flex-col">
         <label for="start-date" class="ml-1">Data inicial</label>
         <input id="start-date" type="date" class="rounded-md p-1 text-zinc-500 shadow-sm" v-model="startDate" />
@@ -204,7 +204,7 @@ useHead({
         </select>
       </div>
       <!-- botão desktop -->
-      <div class="hidden sm:block">
+      <div class="mt-1 sm:mt-0">
         <Button 
           @click="openReport" 
           :variant="summarizedData.length <= 0 ? 'baseDisable' : 'base'"
@@ -225,11 +225,6 @@ useHead({
         <option value="accuracy" class="text-base">Porcentagem de Acertos</option>
       </select>
     </div>
-    <!-- botão mobile -->
-    <!-- <div class="mt-2 sm:hidden">
-      <Button @click="openReport" variant="ia" class="w-full">Gerar Insight</Button>
-      <StudyReportModal ref="studyModal" />
-    </div> -->
     <!-- Tempo total de estudo no período -->
     <div class="grid grid-cols-2 mt-2 sm:flex gap-2">
       <Card title="Tempo total de estudo" icon="fa-solid fa-stopwatch-20" class="col-span-3">
