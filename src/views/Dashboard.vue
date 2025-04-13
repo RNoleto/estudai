@@ -233,7 +233,7 @@ onMounted(async () => {
             </a>
           </div>
           <!-- Missões -->
-          <div>
+          <div class="hidden">
             <router-link to="/area-do-aluno/missoes" :class="[
               'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
               route.path === '/area-do-aluno/missoes'
