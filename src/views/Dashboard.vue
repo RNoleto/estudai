@@ -285,6 +285,23 @@ onMounted(async () => {
                 Minhas Matérias</router-link>
             </div>
           </div>
+          <!-- Suporte ao Usuário -->
+          <div class="hidden">
+            <router-link to="/area-do-aluno/suporte" :class="[
+              'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
+              route.path === '/area-do-aluno/suporte'
+                ? 'bg-secondary text-gray-700 shadow-sm'
+                : 'text-gray-700 hover:bg-gray-100'
+            ]">
+              <i :class="[
+                'fa-solid fa-headset',
+                route.path === '/area-do-aluno/missoes'
+                  ? 'bg-secondary text-gray-700 shadow-sm'
+                  : 'text-primary hover:text-gray-500'
+              ]"></i>
+              <span v-if="!isSidebarCollapsed" >Suporte ao usuário</span>
+            </router-link>
+          </div>
           <div class="mt-auto bg-secondary p-2 rounded-lg w-full shadow-md">
             <div class="flex items-center gap-2" :class="isSidebarCollapsed ? 'justify-center' : ''">
               <UserButton />

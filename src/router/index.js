@@ -9,7 +9,9 @@ import OpenCompetitions from '../views/OpenCompetitions.vue';
 import StudyStart from '../views/StudyStart.vue';
 import ErrorPage from '../views/ErrorPage.vue';
 
+//Rotas em teste
 import SubscriptionsPage from '../views/SubscriptionsPage.vue';
+import SupportPage from '../views/SupportPage.vue';
 
 import Dashboard from '../views/Dashboard.vue';
 import DashboardHome from '../views/DashboardHome.vue';
@@ -124,6 +126,15 @@ const routes = [
         meta: { 
           title: 'Lista de Concursos | Estuday',
           description: 'Confira os principais concursos abertos no Brasil na Estuday.'
+        }
+      },
+      {
+        path: 'suporte',
+        name: 'Suporte',
+        component: SupportPage,
+        meta: { 
+          title: 'Suporte ao usuário | Estuday',
+          description: 'Precisa de suporte? Entre em contato com Estuday.'
         }
       },
       // {
