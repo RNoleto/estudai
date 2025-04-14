@@ -126,15 +126,15 @@ const routes = [
           description: 'Confira os principais concursos abertos no Brasil na Estuday.'
         }
       },
-      {
-        path: 'missoes',
-        name: 'Missoes',
-        component: Missions,
-        meta: { 
-          title: 'Missões | Estuday',
-          description: 'Confira os principais concursos abertos no Brasil na Estuday.'
-        }
-      },
+      // {
+      //   path: 'missoes',
+      //   name: 'Missoes',
+      //   component: Missions,
+      //   meta: { 
+      //     title: 'Missões | Estuday',
+      //     description: 'Confira os principais concursos abertos no Brasil na Estuday.'
+      //   }
+      // },
       // {
       //   path: 'ciclo-de-estudos',
       //   name: 'DashboardCiclo',

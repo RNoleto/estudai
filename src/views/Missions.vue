@@ -1,8 +1,9 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useHead } from '@vueuse/head';
-
 import { useUserStore } from '../stores/useUserStore';
+
+import CardChallenger from '../components/CardChallenger.vue';
 
 const userStore = useUserStore();
 
@@ -41,27 +42,31 @@ const totalQuestionsCorrects = computed(() =>
 
 // Total de matérias estudadas hoje
 const totalSubjectsStudied = computed(() => {
-  //Retornar a data de hoje no formato YYYY-MM-DD
   const today = new Date().toISOString().split('T')[0];
 
-  //Filtrar registros
   const todayRecords = records.value.filter(record => {
     const recordDate = new Date(record.created_at).toISOString().split('T')[0];
     return recordDate === today && record.ativo === 1;
   });
 
-  // Extrair o subject_id de cada registro do dia e colocar em um Set para obter somente os registros unicos
-  const uniqueSubjects = new Set(todayRecords.map(record => record.subject_id));
+  const uniqueSubjects = new Set(
+    todayRecords.map(record => {
+      // Verifica se subject_id é um objeto e extrai o ID corretamente
+      return typeof record.subject_id === 'object' ? record.subject_id.id : record.subject_id;
+    })
+  );
 
   return uniqueSubjects.size;
 });
 
+
 // Definindo as missões e condições
 const missions = ref([
-    { id: 1, icon: 'fa-solid fa-chart-line' , title: 'Estudar 3h', type: 'Diária', requiredStudyTime: 3, completed: false },
-    { id: 2, icon: 'fa-solid fa-chart-line' , title: "Resolver 100 Questões", type: 'Meta', requiredQuestions: 100, completed: false },
-    { id: 3, icon: 'fa-solid fa-chart-line' , title: "50 Questões Corretas", type: 'Meta', requiredCorrectAnswers: 50, completed: false },
-    { id: 4, icon: 'fa-solid fa-chart-line' , title: 'Estudar 2 matérias', type: 'Diária', requiredSubjects: 2, completed: false }
+    { id: 1, icon: 'fa-solid fa-bullseye' , title: 'Estudar 3h', type: 'Diária', requiredStudyTime: 3, completed: false },
+    { id: 2, icon: 'fa-solid fa-chart-line' , title: "50 Questões Corretas", type: 'Meta', requiredCorrectAnswers: 50, completed: false },
+    { id: 3, icon: 'fa-solid fa-bullseye' , title: 'Estudar 5h', type: 'Diária', requiredStudyTime: 5, completed: false },
+    { id: 4, icon: 'fa-solid fa-chart-line' , title: "Resolver 100 Questões", type: 'Meta', requiredQuestions: 100, completed: false },
+    { id: 5, icon: 'fa-solid fa-bullseye' , title: 'Estudar 2 matérias', type: 'Diária', requiredSubjects: 2, completed: false }
 ])
 
 // Computed para atualizar o status das missões
@@ -93,6 +98,29 @@ const dailyMissions = computed(() => {
 const metaMissions = computed(() => {
   return updatedMissions.value.filter(mission => mission.type === 'Meta');
 });
+
+// Função para calcular o progresso da missão em porcentagem
+function getMissionProgress(mission) {
+  if (mission.requiredStudyTime !== undefined) {
+    const progress = (totalStudyTime.value / mission.requiredStudyTime) * 100;
+    return Math.min(progress, 100);
+  }
+  if (mission.requiredQuestions !== undefined) {
+    const progress = (totalQuestionsResolved.value / mission.requiredQuestions) * 100;
+    return Math.min(progress, 100);
+  }
+  if (mission.requiredCorrectAnswers !== undefined) {
+    const progress = (totalQuestionsCorrects.value / mission.requiredCorrectAnswers) * 100;
+    return Math.min(progress, 100);
+  }
+  if (mission.requiredSubjects !== undefined) {
+    const progress = (totalSubjectsStudied.value / mission.requiredSubjects) * 100;
+    return Math.min(progress, 100);
+  }
+
+  return Math.min(progress, 100).toFixed(2);
+}
+
 
 
 useHead({
@@ -144,41 +172,35 @@ useHead({
             class="text-primary">missões.</span>
         </h3>
         <p>Missões diarias</p>
-        <div class="flex flex-wrap gap-2">              
-            <div 
+        <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">              
+            <CardChallenger 
                 v-for="mission in dailyMissions"
                 :key="mission.id"
-                class="flex flex-col items-center space-y-2 border p-4 rounded-lg shadow transition duration-200 ease-in-out hover:shadow-lg"
+                :title="mission.title"
+                :icon="mission.icon"
+                :progress="getMissionProgress(mission)"
                 :class="mission.completed ? 'bg-green-100 border-green-300' : 'bg-white'"
-            >
-                <i :class="mission.icon" class="text-2xl text-gray-700"></i>
-                <p>{{ mission.title }}</p>
-            </div>
+            />
         </div>
         <p>Metas</p>
         <div>
-            <div class="flex flex-wrap gap-2">
-                <div 
-                v-for="mission in metaMissions"
-                :key="mission.id"
-                class="flex flex-col items-center space-y-2 border p-4 rounded-lg shadow transition duration-200 ease-in-out hover:shadow-lg"
-                :class="mission.completed ? 'bg-green-100 border-green-300' : 'bg-white'"
-            >
-                <i :class="mission.icon" class="text-2xl text-gray-700"></i>
-                <p>{{ mission.title }}</p>
-            </div>
+            <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                <CardChallenger 
+                    v-for="mission in metaMissions"
+                    :key="mission.id"
+                    :title="mission.title"
+                    :icon="mission.icon"
+                    :progress="getMissionProgress(mission)"
+                    :class="mission.completed ? 'bg-green-100 border-green-300' : 'bg-white'"
+                />
             </div>
         </div>
         <div class="flex flex-col">
-            <p class="my-2">Referencias do Sistema</p>
-            <pre>Tempo total: {{ totalStudyTime }} horas</pre>
+            <p class="my-2">Valores fornecidos pelo Sistema</p>
+            <pre>Tempo total: {{ totalStudyTime.toFixed(2) }} horas</pre>
             <pre>Total de questões resolvidas: {{ totalQuestionsResolved }}</pre>
             <pre>Total de questões corretas: {{ totalQuestionsCorrects }}</pre>
             <pre>Total de matérias estudadas hoje: {{ totalSubjectsStudied }}</pre>
         </div>
     </div>
 </template>
-
-<style scoped>
-
-</style>
