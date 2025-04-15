@@ -16,15 +16,13 @@ const error = ref('');
 async function submitSupport() {
   try {
     error.value = '';
-    // Envie os dados para o endpoint no backend
-    // Certifique-se de que a rota /api/support esteja configurada no Laravel.
-    await axios.post('/api/support', form.value);
+    await axios.post('/support', form.value);
     success.value = true;
 
     // Limpar os campos após enviar
     form.value = { name: '', email: '', subject: '', message: '' };
   } catch (err) {
-    error.value = 'Ocorreu um erro ao enviar sua mensagem. Tente novamente.';
+    error.value = 'Front Ocorreu um erro ao enviar sua mensagem. Tente novamente.';
     console.error(err);
   }
 }
