@@ -102,12 +102,12 @@ onMounted(async () => {
               Histórico de Estudo
             </router-link>
           </div>
-          <div class="hidden flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+          <!-- <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
             <router-link to="/area-do-aluno/planos" @click="toggleMenu">
               <i class="fa-solid fa-file-signature"></i>
               Planos
             </router-link>
-          </div>
+          </div> -->
           <div>
             <button @click="toggleMenu3"
               class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl hover:bg-blue-100">
@@ -127,10 +127,12 @@ onMounted(async () => {
               </div>
             </transition>
           </div>
-          <!-- <router-link to="/area-do-aluno/configuracoes" class="flex items-center gap-2 text-gray-700 text-lg  font-semibold  p-2 rounded-xlhover:bg-blue-100">
-            <i class="fas fa-cog"></i>
-            Configurações
-          </router-link> -->
+          <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+            <router-link to="/area-do-aluno/suporte" @click="toggleMenu">
+              <i class="fa-solid fa-headset"></i>
+              Suporte ao Usuário
+            </router-link>
+          </div>
           <div class="bottom-10 right-4 fixed">
             <div class="flex items-center gap-2">
               <p class="text-gray-700 text-lg font-semibold">{{ user.fullName }}</p>
@@ -286,7 +288,7 @@ onMounted(async () => {
             </div>
           </div>
           <!-- Suporte ao Usuário -->
-          <div class="hidden">
+          <div>
             <router-link to="/area-do-aluno/suporte" :class="[
               'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
               route.path === '/area-do-aluno/suporte'
@@ -299,7 +301,7 @@ onMounted(async () => {
                   ? 'bg-secondary text-gray-700 shadow-sm'
                   : 'text-primary hover:text-gray-500'
               ]"></i>
-              <span v-if="!isSidebarCollapsed" >Suporte ao usuário</span>
+              <span v-if="!isSidebarCollapsed" >Suporte ao Usuário</span>
             </router-link>
           </div>
           <div class="mt-auto bg-secondary p-2 rounded-lg w-full shadow-md">

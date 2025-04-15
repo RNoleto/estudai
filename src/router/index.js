@@ -128,15 +128,15 @@ const routes = [
           description: 'Confira os principais concursos abertos no Brasil na Estuday.'
         }
       },
-      // {
-      //   path: 'suporte',
-      //   name: 'Suporte',
-      //   component: SupportPage,
-      //   meta: { 
-      //     title: 'Suporte ao usuário | Estuday',
-      //     description: 'Precisa de suporte? Entre em contato com Estuday.'
-      //   }
-      // },
+      {
+        path: 'suporte',
+        name: 'Suporte',
+        component: SupportPage,
+        meta: { 
+          title: 'Suporte ao usuário | Estuday',
+          description: 'Precisa de suporte? Entre em contato com Estuday.'
+        }
+      },
       // {
       //   path: 'missoes',
       //   name: 'Missoes',
