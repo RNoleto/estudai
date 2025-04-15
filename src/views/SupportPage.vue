@@ -29,12 +29,12 @@ async function submitSupport() {
 </script>
 
 <template>
-  <div class="flex flex-col p-2 mt-12 gap-4 sm:mt-0 sm:px-4">
+  <div class="flex flex-col p-2 mt-12 gap-4 sm:mt-0 sm:px-4 sm:min-h-[100vh]">
     <h3 class="text-2xl font-bold text-gray-700 sm:text-4xl">Suporte ao
       <span class="text-primary">usuário.</span>
     </h3>
-    <div class="grid grid-cols-2 gap-2">
-      <div class="max-w-2xl">
+    <div class="mt-1 gap-6 items-center justify-center md:mt-10 lg:flex">
+      <div class="max-w-[700px] mx-auto lg:w-full lg:mx-0">
         <form @submit.prevent="submitSupport">
           <!-- Nome -->
           <div class="mb-4">
@@ -63,8 +63,8 @@ async function submitSupport() {
           <!-- Mensagem -->
           <div class="mb-4">
             <label for="message" class="block text-sm font-medium text-gray-700">Mensagem</label>
-            <textarea id="message" v-model="form.message" rows="10"
-              class="mt-1 block w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-indigo-500"
+            <textarea id="message" v-model="form.message" rows="8"
+              class="mt-1 block w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-indigo-500 resize-none"
               required></textarea>
           </div>
   
@@ -83,7 +83,7 @@ async function submitSupport() {
         </form>
       </div>
       <!-- Aparece somente em telas apartir de 640px -->
-      <div class="hidden max-w-2xl sm:flex flex-col justify-center bg-gray-50 border border-gray-200 rounded-lg p-6 shadow-md">
+      <div class="hidden mt-[-80px] max-w-[450px] lg:flex flex-col justify-center bg-gray-50 border border-gray-200 rounded-lg p-6 shadow-md">
         <h4 class="text-2xl font-semibold text-primary mb-2">Precisa de ajuda?</h4>
         <p class="text-sm text-gray-600">
           Preencha o formulário ao lado com sua dúvida ou problema. Nossa equipe responderá o mais breve possível pelo

@@ -9,10 +9,10 @@ const route = useRoute();
 
 const userStore = useUserStore();
 
-const isMobileView = ref(window.innerWidth <= 490);
+const isMobileView = ref(window.innerWidth <= 640);
 
 const updateIsMobileView = () => {
-  isMobileView.value = window.innerWidth <= 490;
+  isMobileView.value = window.innerWidth <= 640;
 };
 
 onMounted(() => {
