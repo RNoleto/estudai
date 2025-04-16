@@ -56,6 +56,53 @@ const handleSettingsLinkClick = () => {
 onMounted(async () => {
   await userStore.checkUserCareer();
 });
+
+const menuItems = [
+  {
+    label: 'Home',
+    icon: 'fas fa-home',
+    route: '/area-do-aluno'
+  },
+  {
+    label: 'Estudar',
+    icon: 'fa-solid fa-stopwatch',
+    route: '/area-do-aluno/estudar'
+  },
+  {
+    label: 'Concursos',
+    icon: 'fa-solid fa-book',
+    route: '/area-do-aluno/concursos'
+  },
+  {
+    label: 'Histórico de Estudo',
+    icon: 'fa-solid fa-pen-clip',
+    route: '/area-do-aluno/historico-de-estudos'
+  },
+  // {
+  //   label: 'Desafios',
+  //   icon: 'fa-solid fa-flag-checkered',
+  //   route: '/area-do-aluno/challenges'
+  // },
+  {
+    label: 'Minhas Configurações',
+    icon: 'fas fa-cog',
+    subItems: [
+      {
+        label: 'Minha Carreira',
+        route: '/area-do-aluno/carreiras'
+      },
+      {
+        label: 'Minhas Matérias',
+        route: '/area-do-aluno/materias'
+      }
+    ]
+  },
+  {
+    label: 'Suporte ao Usuário',
+    icon: 'fa-solid fa-headset',
+    route: '/area-do-aluno/suporte'
+  }
+];
 </script>
 
 <template>
@@ -66,11 +113,8 @@ onMounted(async () => {
       <router-link to="/area-do-aluno">
         <p class="font-bold text-lg">Estuday</p>
       </router-link>
-      <button
-        @click="toggleMenu"
-        class="md:hidden focus:outline-none transition"
-        :aria-label="isMenuMobileOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação'"
-      >
+      <button @click="toggleMenu" class="md:hidden focus:outline-none transition"
+        :aria-label="isMenuMobileOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação'">
         <i :class="isMenuMobileOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
       </button>
     </nav>
@@ -78,66 +122,33 @@ onMounted(async () => {
     <div v-if="isMenuMobileOpen" class="fixed inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm z-40">
       <transition name="fade-slide" mode="out-in" appear>
         <div class="fixed top-0 right-0 h-screen bg-zinc-100 z-10 flex flex-col justify-start pt-16 gap-2 mt-10 px-6">
-          <div class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <router-link to="/area-do-aluno" @click="toggleMenu">
-              <i class="fas fa-home"></i>
-              Home
-            </router-link>
-          </div>
-          <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <router-link to="/area-do-aluno/estudar" @click="toggleMenu">
-              <i class="fa-solid fa-stopwatch"></i>
-              Estudar
-            </router-link>
-          </div>
-          <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <router-link to="/area-do-aluno/concursos" @click="toggleMenu">
-              <i class="fa-solid fa-book"></i>
-              Concursos
-            </router-link>
-          </div>
-          <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <router-link to="/area-do-aluno/historico-de-estudos" @click="toggleMenu">
-              <i class="fa-solid fa-pen-clip"></i>
-              Histórico de Estudo
-            </router-link>
-          </div>
-          <!-- <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <router-link to="/area-do-aluno/planos" @click="toggleMenu">
-              <i class="fa-solid fa-file-signature"></i>
-              Planos
-            </router-link>
-          </div> -->
-          <div>
-            <button @click="toggleMenu3"
-              class="flex items-center gap-2 text-gray-700 text-lg  font-semibold p-2 rounded-xl hover:bg-blue-100">
-              <div>
-                <i class="fas fa-cog"></i>
-                Configurações
-              </div>
-            </button>
-            <transition name="fade-slide" mode="out-in" appear>
-              <div v-if="isMenu3Open" class="text-zinc-700 mt-1 ml-8 flex flex-col gap-2">
-                <router-link to="/area-do-aluno/carreiras" class="flex items-center  gap-1 text-sm hover:text-blue-800" @click="toggleMenu">
-                  Minha Carreira
-                </router-link>
-                <router-link to="/area-do-aluno/materias" class="flex items-center gap-1 text-sm hover:text-blue-800" @click="toggleMenu">
-                  Minhas Matérias
-                </router-link>
-              </div>
-            </transition>
-          </div>
-          <div class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
-            <router-link to="/area-do-aluno/suporte" @click="toggleMenu">
-              <i class="fa-solid fa-headset"></i>
-              Suporte ao Usuário
-            </router-link>
-          </div>
-          <div class="bottom-10 right-4 fixed">
-            <div class="flex items-center gap-2">
-              <p class="text-gray-700 text-lg font-semibold">{{ user.fullName }}</p>
-              <UserButton />
+          <div v-for="item in menuItems" :key="item.label">
+            <div v-if="!item.subItems">
+              <router-link :to="item.route" @click="toggleMenu"
+                class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+                <i :class="item.icon"></i>
+                {{ item.label }}
+              </router-link>
             </div>
+            <div v-else>
+              <button @click="toggleMenu3"
+                class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+                <i :class="item.icon"></i>
+                {{ item.label }}
+              </button>
+              <transition name="fade-slide" mode="out-in" appear>
+                <div v-if="isMenu3Open" class="text-zinc-700 mt-1 ml-8 flex flex-col gap-2">
+                  <router-link v-for="sub in item.subItems" :key="sub.label" :to="sub.route"
+                    class="flex items-center gap-1 text-sm hover:text-blue-800" @click="toggleMenu">
+                    {{ sub.label }}
+                  </router-link>
+                </div>
+              </transition>
+            </div>
+          </div>
+          <div class="flex mt-[12rem] items-center gap-2" :class="isSidebarCollapsed ? 'justify-center' : ''">
+              <UserButton />
+              <p v-if="!isSidebarCollapsed" class="text-gray-700 text-sm font-medium">{{ user.fullName }}</p>
           </div>
         </div>
       </transition>
@@ -148,161 +159,45 @@ onMounted(async () => {
         'flex flex-col h-full rounded-lg border border-secondary bg-white shadow-md text-sm transition-[width] duration-300 ease-in-out',
         isSidebarCollapsed ? 'w-[4.5rem]' : 'w-[15rem]'
       ]">
-        <div class="p-4 text-lg text-gray-700 font-bold border-b border-secondary flex items-center" :class="[isSidebarCollapsed ? 'justify-center' : 'justify-between']">
-          <span v-if="!isSidebarCollapsed" ><router-link to="/area-do-aluno">Estuday</router-link></span>
-          <button @click="toggleSidebar" class="text-primary hover:bg-gray-200 rounded" :class="isSidebarCollapsed ? 'px-4' : 'px-2'" :aria-label="isSidebarCollapsed ? 'Expandir barra lateral' : 'Recolher barra lateral'">
+        <div class="p-4 text-lg text-gray-700 font-bold border-b border-secondary flex items-center"
+          :class="[isSidebarCollapsed ? 'justify-center' : 'justify-between']">
+          <span v-if="!isSidebarCollapsed"><router-link to="/area-do-aluno">Estuday</router-link></span>
+          <button @click="toggleSidebar" class="text-primary hover:bg-gray-200 rounded"
+            :class="isSidebarCollapsed ? 'px-4' : 'px-2'"
+            :aria-label="isSidebarCollapsed ? 'Expandir barra lateral' : 'Recolher barra lateral'">
             <i :class="isSidebarCollapsed ? 'fa-solid fa-caret-right' : 'fa-solid fa-caret-left'"></i>
           </button>
         </div>
         <nav class="flex flex-col h-full gap-1" :class="isSidebarCollapsed ? 'p-1 items-center' : 'p-2'">
           <!-- Home da Dashboard -->
-          <div :class="[isSidebarCollapsed ? 'justify-center' : 'justify-between']">
-            <router-link to="/area-do-aluno" :class="[
-              'flex items-center gap-2 px-4 py-2 mt-4 rounded-lg hover:shadow-md',
-              route.path === '/area-do-aluno'
-                ? 'bg-secondary text-gray-700 shadow-sm'
-                : 'text-gray-700 hover:bg-gray-100'
-            ]">
-              <i :class="[
-                'fas fa-home',
-                route.path === '/area-do-aluno' ? 'text-gray-700' : 'text-primary hover:text-gray-500'
-              ]"></i>
-              <span v-show="!isSidebarCollapsed" >
-                Home
-              </span>
-            </router-link>
-          </div>
-          <!-- Estudar da Dashboard -->
-          <div>
-            <router-link to="/area-do-aluno/estudar" :class="[
-              'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-              route.path === '/area-do-aluno/estudar' ? 'bg-secondary text-gray-700 shadow-sm' : 'text-gray-700 hover:bg-gray-100'
-            ]">
-              <i :class="[
-                'fa-solid fa-stopwatch',
-                route.path === '/area-do-aluno/estudar'
+          <div v-for="item in menuItems" :key="item.label">
+            <div v-if="!item.subItems">
+              <router-link :to="item.route" :class="[
+                'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
+                route.path === item.route
                   ? 'bg-secondary text-gray-700 shadow-sm'
-                  : 'text-primary hover:text-gray-500'
-              ]"></i>
-              <span v-if="!isSidebarCollapsed" >Estudar</span>
-            </router-link>
-          </div>
-          <!-- Historico de Estudos -->
-          <div>
-            <router-link to="/area-do-aluno/historico-de-estudos" :class="[
-              'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-              route.path === '/area-do-aluno/historico-de-estudos'
-                ? 'bg-secondary text-gray-700 shadow-sm'
-                : 'text-gray-700 hover:bg-gray-100'
-            ]">
-              <i :class="[
-                'fa-solid fa-pen-clip',
-                route.path === '/area-do-aluno/historico-de-estudos'
-                  ? 'bg-secondary text-gray-700 shadow-sm'
-                  : 'text-primary hover:text-gray-500'
-              ]"></i>
-              <span v-if="!isSidebarCollapsed" >Histórico de Estudo</span>
-            </router-link>
-          </div>
-          <div>
-            <router-link to="/area-do-aluno/concursos" :class="[
-              'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-              route.path === '/area-do-aluno/concursos'
-                ? 'bg-secondary text-gray-700 shadow-sm'
-                : 'text-gray-700 hover:bg-gray-100'
-            ]">
-              <i :class="[
-                'fa-solid fa-book',
-                route.path === '/area-do-aluno/concursos'
-                  ? 'bg-secondary text-gray-700 shadow-sm'
-                  : 'text-primary hover:text-gray-500'
-              ]"></i>
-              <span v-if="!isSidebarCollapsed" >Concursos</span>
-            </router-link>
-          </div>
-          <!-- Planos da Dashboard -->
-          <div class="hidden">
-            <a href="/area-do-aluno/planos" :class="[
-              'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-              route.path === '/area-do-aluno/planos' ? 'bg-secondary text-gray-700 shadow-sm' : 'text-gray-700 hover:bg-gray-100'
-            ]">
-              <i :class="['fa-solid fa-file-signature',
-                route.path === '/area-do-aluno/planos'
-                  ? 'bg-secondary text-gray-700 shadow-sm'
-                  : 'text-primary hover:text-gray-500'
-              ]"></i>
-              <span v-if="!isSidebarCollapsed" >Planos</span>
-            </a>
-          </div>
-          <!-- Missões -->
-          <div class="hidden">
-            <router-link to="/area-do-aluno/missoes" :class="[
-              'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-              route.path === '/area-do-aluno/missoes'
-                ? 'bg-secondary text-gray-700 shadow-sm'
-                : 'text-gray-700 hover:bg-gray-100'
-            ]">
-              <i :class="[
-                'fa-solid fa-bullseye',
-                route.path === '/area-do-aluno/missoes'
-                  ? 'bg-secondary text-gray-700 shadow-sm'
-                  : 'text-primary hover:text-gray-500'
-              ]"></i>
-              <span v-if="!isSidebarCollapsed" >Missões</span>
-            </router-link>
-          </div>
-          <!-- Menu de Configuração -->
-          <div>
-            <button @click="toggleMenu3" :class="[
-              'flex gap-1 items-center justify-between w-full px-4 py-2 text-left text-gray-700 rounded-lg hover:shadow-md',
-              route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
-                ? 'bg-secondary text-gray-700 shadow-sm'
-                : 'text-gray-700 hover:bg-gray-100'
-            ]">
-              <div class="flex items-center gap-2">
-                <i :class="['fas fa-cog',
-                  route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
-                    ? 'text-gray-700'
-                    : 'text-primary hover:text-gray-500'
-                ]"></i>
-                <span v-if="!isSidebarCollapsed" :class="[
-                  route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
-                    ? 'text-gray-700' : 'text-gray-700 hover:bg-gray-100'
-                ]" >Configurações</span>
-              </div>
-              <i v-if="!isSidebarCollapsed" class="text-xs text-primary fas" :class="[isMenu3Open ? 'fa-solid fa-caret-up' : 'fa-solid fa-caret-down', isSidebarCollapsed ? 'text-xs' : 'text-base',
-              route.path === '/area-do-aluno/carreiras' || route.path === '/area-do-aluno/materias'
-                ? 'text-gray-700'
-                : 'text-primary hover:text-gray-100'
-              ]"></i>
-            </button>
-            <div v-if="isMenu3Open"
-              :class="['mt-1 space-y-2 transition-all duration-300', isSidebarCollapsed ? 'absolute z-20 rounded-xl left-10 bg-gray-50 border border-secondary shadow-lg w-48 p-2' : 'pl-8']">
-              <router-link to="/area-do-aluno/carreiras"
-                class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900" @click="handleSettingsLinkClick"><i
-                  class="fa-solid fa-user-astronaut text-primary"></i> Minha Carreira</router-link>
-              <router-link to="/area-do-aluno/materias"
-                class="flex gap-2 items-center text-sm text-gray-600 hover:text-gray-900" @click="handleSettingsLinkClick"><i
-                  class="fa-solid fa-book text-primary"></i>
-                Minhas Matérias</router-link>
+                  : 'text-gray-700 hover:bg-gray-100'
+              ]">
+                <i
+                  :class="[item.icon, route.path === item.route ? 'text-gray-700' : 'text-primary hover:text-gray-500']"></i>
+                <span v-show="!isSidebarCollapsed">{{ item.label }}</span>
+              </router-link>
             </div>
-          </div>
-          <!-- Suporte ao Usuário -->
-          <div>
-            <router-link to="/area-do-aluno/suporte" :class="[
-              'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-              route.path === '/area-do-aluno/suporte'
-                ? 'bg-secondary text-gray-700 shadow-sm'
-                : 'text-gray-700 hover:bg-gray-100'
-            ]">
-              <i :class="[
-                'fa-solid fa-headset',
-                route.path === '/area-do-aluno/missoes'
-                  ? 'bg-secondary text-gray-700 shadow-sm'
-                  : 'text-primary hover:text-gray-500'
-              ]"></i>
-              <span v-if="!isSidebarCollapsed" >Suporte ao Usuário</span>
-            </router-link>
+            <div v-else>
+              <button @click="toggleMenu3"
+                class="flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md text-gray-700 w-full">
+                <i :class="item.icon"></i>
+                <span v-show="!isSidebarCollapsed">{{ item.label }}</span>
+              </button>
+              <transition name="fade-slide" mode="out-in" appear>
+                <div v-if="isMenu3Open && !isSidebarCollapsed" class="ml-8 flex flex-col gap-1">
+                  <router-link v-for="sub in item.subItems" :key="sub.label" :to="sub.route"
+                    class="text-sm text-gray-700 hover:text-blue-800">
+                    {{ sub.label }}
+                  </router-link>
+                </div>
+              </transition>
+            </div>
           </div>
           <div class="mt-auto bg-secondary p-2 rounded-lg w-full shadow-md">
             <div class="flex items-center gap-2" :class="isSidebarCollapsed ? 'justify-center' : ''">

@@ -23,7 +23,7 @@ import LanginPage from '../views/LandingPage/LanginPage.vue';
 // Rotas comentadas estão em desenvolvimento e não estão sendo utilizadas no momento
 
 //Rota em teste
-import Missions from '../views/Missions.vue';
+import Challenges from '../views/Challenges.vue';
 
 const routes = [
   {
@@ -138,12 +138,12 @@ const routes = [
         }
       },
       // {
-      //   path: 'missoes',
-      //   name: 'Missoes',
-      //   component: Missions,
+      //   path: 'challenges',
+      //   name: 'Challenges',
+      //   component: Challenges,
       //   meta: { 
-      //     title: 'Missões | Estuday',
-      //     description: 'Confira os principais concursos abertos no Brasil na Estuday.'
+      //     title: 'Desafios | Estuday',
+      //     description: 'Que tal fazer um desafio? Chegue mais perto da sua aprovação com Estuday.'
       //   }
       // },
       // {
