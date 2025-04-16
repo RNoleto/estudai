@@ -73,11 +73,41 @@ const totalSubjectsStudied = computed(() => {
 
 // Definindo as missões e suas condições
 const missions = ref([
-  { id: 1, icon: 'fa-solid fa-bullseye', title: 'Estudar 3h', type: 'Diária', requiredStudyTime: 3, completed: false },
-  { id: 2, icon: 'fa-solid fa-chart-line', title: "50 Questões Corretas", type: 'Meta', requiredCorrectAnswers: 50, completed: false },
-  { id: 3, icon: 'fa-solid fa-bullseye', title: 'Estudar 5h', type: 'Diária', requiredStudyTime: 5, completed: false },
-  { id: 4, icon: 'fa-solid fa-chart-line', title: "Resolver 100 Questões", type: 'Meta', requiredQuestions: 100, completed: false },
-  { id: 5, icon: 'fa-solid fa-bullseye', title: 'Estudar 2 matérias', type: 'Diária', requiredSubjects: 2, completed: false }
+  //Missões Diárias de tempo
+  { id: 1, icon: 'fa-solid fa-stopwatch', title: 'Estudar 1h', type: 'Diária', requiredStudyTime: 1, completed: false },
+  { id: 2, icon: 'fa-solid fa-stopwatch', title: 'Estudar 2h', type: 'Diária', requiredStudyTime: 2, completed: false },
+  { id: 3, icon: 'fa-solid fa-stopwatch', title: 'Estudar 3h', type: 'Diária', requiredStudyTime: 3, completed: false },
+  { id: 4, icon: 'fa-solid fa-stopwatch', title: 'Estudar 4h', type: 'Diária', requiredStudyTime: 4, completed: false },
+  //Missões Diárias para Questões
+  { id: 5, icon: 'fa-solid fa-chart-line', title: 'Resolver 50 Questões', type: 'Diária', requiredQuestions: 50, completed: false },
+  { id: 6, icon: 'fa-solid fa-chart-line', title: 'Resolver 100 Questões', type: 'Diária', requiredQuestions: 100, completed: false },
+  { id: 7, icon: 'fa-solid fa-chart-line', title: 'Resolver 150 Questões', type: 'Diária', requiredQuestions: 150, completed: false },
+  { id: 8, icon: 'fa-solid fa-chart-line', title: 'Resolver 200 Questões', type: 'Diária', requiredQuestions: 200, completed: false },
+  //Missões Diárias para Questões Corretas
+  { id: 9, icon: 'fa-solid fa-chart-line', title: 'Acertar 50 Questões', type: 'Diária', requiredCorrectAnswers: 50, completed: false },
+  { id: 10, icon: 'fa-solid fa-chart-line', title: 'Acertar 100 Questões', type: 'Diária', requiredCorrectAnswers: 100, completed: false },
+  { id: 11, icon: 'fa-solid fa-chart-line', title: 'Acertar 150 Questões', type: 'Diária', requiredCorrectAnswers: 150, completed: false },
+  { id: 12, icon: 'fa-solid fa-chart-line', title: 'Acertar 200 Questões', type: 'Diária', requiredCorrectAnswers: 200, completed: false },
+  //Missões Diárias para matérias estudadas
+  { id: 13, icon: 'fa-solid fa-stopwatch', title: 'Estudar 2 matérias', type: 'Diária', requiredSubjects: 2, completed: false },
+  { id: 14, icon: 'fa-solid fa-stopwatch', title: 'Estudar 3 matérias', type: 'Diária', requiredSubjects: 3, completed: false },
+  { id: 15, icon: 'fa-solid fa-stopwatch', title: 'Estudar 4 matérias', type: 'Diária', requiredSubjects: 4, completed: false },
+  { id: 16, icon: 'fa-solid fa-stopwatch', title: 'Estudar 5 matérias', type: 'Diária', requiredSubjects: 5, completed: false },
+  //Metas de tempo (geralmente mais longas)
+  { id: 17, icon: 'fa-solid fa-stopwatch', title: "Estudar 10h", type: 'Meta', requiredStudyTime: 10, completed: false },
+  { id: 18, icon: 'fa-solid fa-stopwatch', title: "Estudar 20h", type: 'Meta', requiredStudyTime: 20, completed: false },
+  { id: 19, icon: 'fa-solid fa-stopwatch', title: "Estudar 30h", type: 'Meta', requiredStudyTime: 30, completed: false },
+  { id: 20, icon: 'fa-solid fa-stopwatch', title: "Estudar 40h", type: 'Meta', requiredStudyTime: 40, completed: false },
+  //Metas de questões (geralmente mais cansativas)
+  { id: 21, icon: 'fa-solid fa-chart-line', title: "Resolver 500 Questões", type: 'Meta', requiredQuestions: 500, completed: false },
+  { id: 22, icon: 'fa-solid fa-chart-line', title: "Resolver 600 Questões", type: 'Meta', requiredQuestions: 600, completed: false },
+  { id: 23, icon: 'fa-solid fa-chart-line', title: "Resolver 700 Questões", type: 'Meta', requiredQuestions: 700, completed: false },
+  { id: 24, icon: 'fa-solid fa-chart-line', title: "Resolver 800 Questões", type: 'Meta', requiredQuestions: 800, completed: false },
+  //Metas de questões corretas (geralmente mais difíceis)
+  { id: 25, icon: 'fa-solid fa-chart-line', title: "Acertar 300 Questões", type: 'Meta', requiredCorrectAnswers: 300, completed: false },
+  { id: 26, icon: 'fa-solid fa-chart-line', title: "Acertar 400 Questões", type: 'Meta', requiredCorrectAnswers: 400, completed: false },
+  { id: 27, icon: 'fa-solid fa-chart-line', title: "Acertar 500 Questões", type: 'Meta', requiredCorrectAnswers: 500, completed: false },
+  { id: 28, icon: 'fa-solid fa-chart-line', title: "Acertar 600 Questões", type: 'Meta', requiredCorrectAnswers: 600, completed: false },
 ]);
 
 // Atualizando as missões com base nas métricas correspondentes
@@ -209,7 +239,7 @@ useHead({
       Minhas <span class="text-primary">missões.</span>
     </h3>
     <p>Missões diárias</p>
-    <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+    <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
       <CardChallenger 
         v-for="mission in dailyMissions"
         :key="mission.id"
@@ -220,7 +250,7 @@ useHead({
       />
     </div>
     <p>Metas</p>
-    <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+    <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
       <CardChallenger 
         v-for="mission in metaMissions"
         :key="mission.id"
@@ -230,12 +260,21 @@ useHead({
         :class="mission.completed ? 'bg-green-100 border-green-300' : 'bg-white'"
       />
     </div>
-    <div class="flex flex-col">
-      <p class="my-2">Valores fornecidos pelo Sistema</p>
-      <pre>Tempo total: {{ totalStudyTime.toFixed(2) }} horas</pre>
-      <pre>Total de questões resolvidas: {{ totalQuestionsResolved }}</pre>
-      <pre>Total de questões corretas: {{ totalQuestionsCorrects }}</pre>
-      <pre>Total de matérias estudadas hoje: {{ totalSubjectsStudied }}</pre>
+    <h1>Apenas informativo</h1>
+    <div class="flex gap-10">
+      <div class="border border-gray-300 p-2 rounded-lg shadow-sm bg-white">
+        <p class="my-2">Valores fornecidos GLOBAIS pelo Sistema</p>
+        <pre>Tempo total: {{ totalStudyTime.toFixed(2) }} horas</pre>
+        <pre>Questões resolvidas: {{ totalQuestionsResolved }}</pre>
+        <pre>Questões corretas: {{ totalQuestionsCorrects }}</pre>
+      </div>
+      <div class="border border-gray-300 p-2 rounded-lg shadow-sm bg-white">
+        <p class="my-2">Dados do DIA gerado pelo sistema</p>
+        <pre>Tempo total: {{ dailyStudyTime.toFixed(2) }} horas</pre>
+        <pre>Questões resolvidas: {{ dailyQuestionsResolved }}</pre>
+        <pre>Questões corretas: {{ dailyQuestionsCorrects }}</pre>
+        <pre>Matérias estudadas: {{ totalSubjectsStudied }}</pre>
+      </div>
     </div>
   </div>
 </template>
