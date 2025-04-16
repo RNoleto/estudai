@@ -137,15 +137,15 @@ const routes = [
           description: 'Precisa de suporte? Entre em contato com Estuday.'
         }
       },
-      {
-        path: 'missoes',
-        name: 'Missoes',
-        component: Missions,
-        meta: { 
-          title: 'Missões | Estuday',
-          description: 'Confira os principais concursos abertos no Brasil na Estuday.'
-        }
-      },
+      // {
+      //   path: 'missoes',
+      //   name: 'Missoes',
+      //   component: Missions,
+      //   meta: { 
+      //     title: 'Missões | Estuday',
+      //     description: 'Confira os principais concursos abertos no Brasil na Estuday.'
+      //   }
+      // },
       // {
       //   path: 'ciclo-de-estudos',
       //   name: 'DashboardCiclo',
