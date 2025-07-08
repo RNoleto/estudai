@@ -103,10 +103,15 @@ const menuItems = [
     route: '/area-do-aluno/suporte'
   }
 ];
+
+const isSettingsMenuActive = () => {
+  const settingsRoutes = menuItems.find(item => item.label === 'Minhas Configurações').subItems.map(sub => sub.route);
+  return settingsRoutes.includes(route.path);
+};
 </script>
 
 <template>
-  <div class="grid bg-gray-100 text-gray-700 sm:flex">
+  <div class="flex h-screen bg-gray-100 text-gray-700">
     <!-- navbar mobile -->
     <nav v-if="isMobileView"
       class="fixed top-0 left-0 w-full bg-gray-800 text-white shadow-zinc-500 shadow-sm z-50 flex items-center justify-between p-4">
@@ -125,21 +130,31 @@ const menuItems = [
           <div v-for="item in menuItems" :key="item.label">
             <div v-if="!item.subItems">
               <router-link :to="item.route" @click="toggleMenu"
-                class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+                class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100"
+                :class="route.path === item.route ? 'bg-secondary text-gray-700 shadow-sm' : ''">
                 <i :class="item.icon"></i>
                 {{ item.label }}
               </router-link>
             </div>
             <div v-else>
               <button @click="toggleMenu3"
-                class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100">
+                class="flex items-center gap-2 text-gray-700 text-lg font-semibold p-2 rounded-xl hover:bg-blue-100"
+                :class="isSettingsMenuActive() ? 'bg-secondary text-gray-700 shadow-sm' : ''">
                 <i :class="item.icon"></i>
                 {{ item.label }}
               </button>
               <transition name="fade-slide" mode="out-in" appear>
                 <div v-if="isMenu3Open" class="text-zinc-700 mt-1 ml-8 flex flex-col gap-2">
-                  <router-link v-for="sub in item.subItems" :key="sub.label" :to="sub.route"
-                    class="flex items-center gap-1 text-sm hover:text-blue-800" @click="toggleMenu">
+                  <router-link
+                    v-for="sub in item.subItems"
+                    :key="sub.label"
+                    :to="sub.route"
+                    :class="[
+                      'flex items-center gap-1 text-sm hover:text-blue-800',
+                      route.path === sub.route ? 'font-bold text-blue-800' : ''
+                    ]"
+                    @click="toggleMenu"
+                  >
                     {{ sub.label }}
                   </router-link>
                 </div>
@@ -184,15 +199,27 @@ const menuItems = [
               </router-link>
             </div>
             <div v-else>
-              <button @click="toggleMenu3"
-                class="flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md text-gray-700 w-full">
+              <button
+                @click="toggleMenu3"
+                :class="[
+                  'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md text-gray-700 w-full',
+                  isSettingsMenuActive() ? 'bg-secondary text-gray-700 shadow-sm' : 'hover:bg-gray-100'
+                ]"
+              >
                 <i :class="item.icon"></i>
                 <span v-show="!isSidebarCollapsed">{{ item.label }}</span>
               </button>
               <transition name="fade-slide" mode="out-in" appear>
                 <div v-if="isMenu3Open && !isSidebarCollapsed" class="ml-8 flex flex-col gap-1">
-                  <router-link v-for="sub in item.subItems" :key="sub.label" :to="sub.route"
-                    class="text-sm text-gray-700 hover:text-blue-800">
+                  <router-link
+                    v-for="sub in item.subItems"
+                    :key="sub.label"
+                    :to="sub.route"
+                    :class="[
+                      'text-sm text-gray-700 hover:text-blue-800',
+                      route.path === sub.route ? 'font-bold text-blue-800' : ''
+                    ]"
+                  >
                     {{ sub.label }}
                   </router-link>
                 </div>
@@ -209,7 +236,7 @@ const menuItems = [
       </aside>
     </div>
     <!-- Conteúdo Principal -->
-    <main class="flex-1 mt-6 sm:mt-0">
+    <main class="flex-1 overflow-y-auto h-full">
       <!-- Conteudo a ser carregado na página -->
       <router-view />
     </main>
