@@ -1,5 +1,5 @@
 <script setup>
-import { UserButton } from 'vue-clerk';
+
 // import { onMounted } from 'vue';
 // import { useUserStore } from '../stores/useUserStore';
 

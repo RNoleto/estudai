@@ -33,6 +33,14 @@ const handleLogin = async () => {
   }
 };
 
+const handleGoogleLogin = async () => {
+  try {
+    await userStore.loginWithGoogle();
+  } catch (error) {
+    console.error('Erro ao fazer login com Google:', error);
+  }
+}
+
 const handleRegister = () => {
   console.log('Cadastro:', name.value, email.value, password.value);
 };
@@ -61,6 +69,7 @@ const handleRegister = () => {
                 <Input label="Senha" type="password" v-model="password" />
                 <div class="flex gap-1 mt-4">
                   <Button size="full" @click="handleLogin">Entrar</Button>
+                  <Button @click="handleGoogleLogin">Entrar com Google</Button>
                   <Button size="full" @click="toggleMode" class="text-blue-500">
                     Não tenho cadastro
                   </Button>

@@ -1,7 +1,9 @@
+import * as AuthService from '../services/AuthService';
 import { defineStore } from 'pinia';
-import { getAuthState } from '../services/AuthService';
 // import { useAuth } from 'vue-clerk';
 import axios from 'axios';
+import { auth } from '../firebase';
+import { updateProfile } from "firebase/auth";
 
 import { useSubjectStore } from './useSubjectStore';
 import { useTimerStore } from './useTimerStore';
@@ -40,14 +42,29 @@ export const useUserStore = defineStore('user', {
     },
     async fetchUserId() {
       try {
-        const auth = getAuthState();
-        if(auth.userId.value){
-          this.userId = auth.userId.value;
+        const user = auth.currentUser;
+        if (user && user.uid) {
+          this.userId = user.uid;
           localStorage.setItem('userId', this.userId);
         }
       } catch (error) {
         console.error("Erro ao buscar o ID do usuário:", error);
       }
+    },
+    async login({ email, password }){
+      await AuthService.login(email, password);
+    },
+    async register({ email, password, name }) {
+      const userCredential = await AuthService.register(email, password);
+      if (name) {
+        await updateProfile(userCredential.user, { displayName: name });
+      }
+    },
+    async loginWithGoogle(){
+      await AuthService.loginWithGoogle();
+    },
+    async logout(){
+      await AuthService.logout();
     },
     clearUserData() {
       // Limpa as propriedades do usuário no Pinia

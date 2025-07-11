@@ -1,6 +1,6 @@
 <script setup>
 import DefaultLayout from '../layouts/DefaultLayout.vue';
-import { UserButton } from 'vue-clerk';
+
 
 import { computed, onMounted, ref } from 'vue';
 import { useCareerStore } from '../stores/useCareerStore';
