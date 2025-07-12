@@ -2,12 +2,15 @@
 import { RouterView, useRoute, RouterLink } from 'vue-router';
 import { ref, onMounted, onUnmounted } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
-import { UserButton, useUser } from 'vue-clerk';
 
-const { user } = useUser();
-const route = useRoute();
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const userStore = useUserStore();
+const user = userStore.userId;
+
+const route = useRoute();
 
 const isMobileView = ref(window.innerWidth <= 640);
 
@@ -108,6 +111,11 @@ const isSettingsMenuActive = () => {
   const settingsRoutes = menuItems.find(item => item.label === 'Minhas Configurações').subItems.map(sub => sub.route);
   return settingsRoutes.includes(route.path);
 };
+
+async function handleLogout(){
+  await userStore.logout();
+  router.push('/');
+}
 </script>
 
 <template>
@@ -228,7 +236,9 @@ const isSettingsMenuActive = () => {
           </div>
           <div class="mt-auto bg-secondary p-2 rounded-lg w-full shadow-md">
             <div class="flex items-center gap-2" :class="isSidebarCollapsed ? 'justify-center' : ''">
-              <UserButton />
+              <Button variant="baseDisable" size="sm" @click="handleLogout">
+                Sair
+              </Button>
               <p v-if="!isSidebarCollapsed" class="text-gray-700 text-sm font-medium">{{ user.fullName }}</p>
             </div>
           </div>

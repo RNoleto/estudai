@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { initializeAuth } from '../services/AuthService';
+import { auth } from '../firebase';
+import { waitForAuthReady } from '../utils/authReady';
 import { useUserStore } from '../stores/useUserStore';
 import Home from '../views/Home.vue';
 import Career from '../views/CareerSelection.vue';
@@ -174,44 +175,32 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const auth = initializeAuth();
+  await waitForAuthReady();
+  
   const userStore = useUserStore();
+  const currentUser = auth.currentUser;
 
-  if (!auth.isLoaded.value) {
-    await new Promise(resolve => {
-      const interval = setInterval(() => {
-        if (auth.isLoaded.value) {
-          clearInterval(interval);
-          resolve();
-        }
-      }, 50);
-    });
-  }
-
-  // Se a rota exige autenticação e o usuário não está logado, não redirecionamos para "/", apenas mostramos conteúdo público
-  if (to.meta.requiresAuth && !auth.isSignedIn.value) {
-    next();
+  // Se a rota exige autenticação e o usuário não está logado
+  if (to.meta.requiresAuth && !currentUser) {
+    next({ path: '/' }); // ou para uma página de login
     return;
   }
 
-  if (auth.isSignedIn.value) {
+  if (currentUser) {
     try {
       await userStore.fetchUserId();
       const hasCareer = await userStore.checkUserCareer();
       await userStore.fetchUserSubjects();
-      
-      // Não redirecionar a home para /area-do-aluno automaticamente para evitar problemas de indexação
-      if (to.path === '/' && auth.isSignedIn.value) {
+
+      if (to.path === '/' && currentUser) {
         if (!hasCareer) {
           next({ path: '/carreiras' });
           return;
         }
-
         if (userStore.userSubjects.length <= 0) {
           next({ path: '/materias' });
           return;
         }
-
         next({ path: '/area-do-aluno' });
         return;
       }

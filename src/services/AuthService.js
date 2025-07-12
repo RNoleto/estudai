@@ -1,19 +1,31 @@
-import { useAuth } from "vue-clerk";
+import { auth } from '../firebase';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup
+} from "firebase/auth";
 
-let authState = null;
-
-export function initializeAuth() {
-  if (!authState) {
-    const auth = useAuth();
-    authState = {
-      isLoaded: auth.isLoaded,
-      isSignedIn: auth.isSignedIn,
-      userId: auth.userId,
-    };
-  }
-  return authState;
+// E-mail/Senha
+export async function login(email, password) {
+  return signInWithEmailAndPassword(auth, email, password);
+}
+export async function register(email, password) {
+  return createUserWithEmailAndPassword(auth, email, password);
 }
 
-export function getAuthState() {
-  return authState;
+// Google
+const provider = new GoogleAuthProvider();
+export async function loginWithGoogle() {
+  return signInWithPopup(auth, provider);
+}
+
+// Logout
+export async function logout() {
+  return signOut(auth);
+}
+
+export function getCurrentUser() {
+  return auth.currentUser;
 }
