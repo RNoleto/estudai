@@ -14,6 +14,5 @@
   <nav class="flex justify-between p-4 items-center bg-gray-800 shadow-sm shadow-zinc-500">
     <!-- <pre class="text-white">Token: {{ userStore.token }}</pre> -->
     <p class="text-white font-bold">Gerenciamento de Estudo</p>
-    <UserButton />
   </nav>
 </template>

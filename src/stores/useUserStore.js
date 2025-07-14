@@ -13,6 +13,7 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     token: null,
     userId: null,
+    userName: null,
     careerId: null,
     careerName: '',
     userSubjects: [],
@@ -45,6 +46,7 @@ export const useUserStore = defineStore('user', {
         const user = auth.currentUser;
         if (user && user.uid) {
           this.userId = user.uid;
+          this.userName = user.displayName;
           localStorage.setItem('userId', this.userId);
         }
       } catch (error) {

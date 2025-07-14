@@ -8,7 +8,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const userStore = useUserStore();
-const user = userStore.userId;
+const user = userStore.userName;
 
 const route = useRoute();
 
@@ -169,9 +169,12 @@ async function handleLogout(){
               </transition>
             </div>
           </div>
+          <!-- Botão de sair mobile -->
           <div class="flex mt-[12rem] items-center gap-2" :class="isSidebarCollapsed ? 'justify-center' : ''">
-              <UserButton />
-              <p v-if="!isSidebarCollapsed" class="text-gray-700 text-sm font-medium">{{ user.fullName }}</p>
+              <!-- <p v-if="!isSidebarCollapsed" class="text-gray-700 text-sm font-medium">{{ user.fullName }}</p> -->
+              <Button variant="baseDisable" size="sm" @click="handleLogout">
+                Sair
+              </Button>               
           </div>
         </div>
       </transition>
@@ -192,6 +195,9 @@ async function handleLogout(){
           </button>
         </div>
         <nav class="flex flex-col h-full gap-1" :class="isSidebarCollapsed ? 'p-1 items-center' : 'p-2'">
+          <div class="flex items-center gap-2 mb-4 text-sm text-gray-700" :class="isSidebarCollapsed ? 'justify-center' : ''">
+            <p v-if="!isSidebarCollapsed">Bem vindo {{ user }}!</p>
+          </div>
           <!-- Home da Dashboard -->
           <div v-for="item in menuItems" :key="item.label">
             <div v-if="!item.subItems">
@@ -234,12 +240,11 @@ async function handleLogout(){
               </transition>
             </div>
           </div>
-          <div class="mt-auto bg-secondary p-2 rounded-lg w-full shadow-md">
-            <div class="flex items-center gap-2" :class="isSidebarCollapsed ? 'justify-center' : ''">
-              <Button variant="baseDisable" size="sm" @click="handleLogout">
+          <div class="mt-auto bg-secondary rounded-lg w-full shadow-md">
+            <div class="flex items-center justify-center gap-2" :class="isSidebarCollapsed ? 'justify-center' : ''">
+              <Button variant="baseDisable" size="sm" class="flex-1 p-2" @click="handleLogout">
                 Sair
               </Button>
-              <p v-if="!isSidebarCollapsed" class="text-gray-700 text-sm font-medium">{{ user.fullName }}</p>
             </div>
           </div>
         </nav>
