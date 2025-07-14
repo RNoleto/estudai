@@ -9,7 +9,7 @@ const button = tv({
     variants: {
         variant: {
             base: 'bg-primary text-white font-bold px-[16px] py-[10px] border-[1px] border-tertiary hover:bg-hoverGreen', //Novo Layout
-            baseDisable: 'bg-white text-gray-600 font-bold px-[16px] py-[10px] border-[1px] border-gray-300', //NovoLaout
+            baseDisable: 'bg-white text-gray-600 font-bold px-[16px] py-[10px] border-[1px] border-gray-300 hover:bg-gray-100', //NovoLaout
             primary: 'bg-gray-900 text-zinc-50 hover:bg-blue-600 ring-blue-500',
             secondary: 'bg-zinc-500 text-zinc-50 hover:bg-zinc-400 ring-zinc-900',
             delete: 'bg-baseRed text-white hover:bg-red-600 hover:text-white hover:ring-red-500',
@@ -19,7 +19,7 @@ const button = tv({
         },
         size: {
             default: 'px-4 py-2.5',
-            full: 'w-full py-2',
+            full: 'w-full py-2.5',
             sm: 'px-3 py-2',
             xs: 'px-1.5 py-1',
         },

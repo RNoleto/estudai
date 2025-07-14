@@ -5,6 +5,8 @@ import { useUserStore } from '../stores/useUserStore';
 
 import { useRouter } from 'vue-router';
 
+import Button from '../components/ui/Button.vue';
+
 const router = useRouter();
 
 const userStore = useUserStore();
