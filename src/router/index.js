@@ -138,15 +138,15 @@ const routes = [
           description: 'Precisa de suporte? Entre em contato com Estuday.'
         }
       },
-      // {
-      //   path: 'challenges',
-      //   name: 'Challenges',
-      //   component: Challenges,
-      //   meta: { 
-      //     title: 'Desafios | Estuday',
-      //     description: 'Que tal fazer um desafio? Chegue mais perto da sua aprovação com Estuday.'
-      //   }
-      // },
+      {
+        path: 'challenges',
+        name: 'Challenges',
+        component: Challenges,
+        meta: { 
+          title: 'Desafios | Estuday',
+          description: 'Que tal fazer um desafio? Chegue mais perto da sua aprovação com Estuday.'
+        }
+      },
       // {
       //   path: 'ciclo-de-estudos',
       //   name: 'DashboardCiclo',

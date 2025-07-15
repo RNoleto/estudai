@@ -155,7 +155,9 @@ const selectTab = (index) => {
 
             <div class="pt-4">
               <button class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-baseGreen transition duration-300 shadow-lg">
-                Experimente Agora
+                <a href="/">
+                  Experimente Agora
+                </a>
               </button>
             </div>
           </div>
@@ -187,7 +189,7 @@ const selectTab = (index) => {
       <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
         <div class="text-center p-6 bg-white rounded-xl shadow-lg">
           <div class="text-3xl font-bold text-primary mb-2">100%</div>
-          <div class="text-gray-600">Gratuito</div>
+          <div class="text-gray-600">Online</div>
         </div>
         <div class="text-center p-6 bg-white rounded-xl shadow-lg">
           <div class="text-3xl font-bold text-primary mb-2">24/7</div>

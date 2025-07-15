@@ -83,11 +83,11 @@ const menuItems = [
     icon: 'fa-solid fa-pen-clip',
     route: '/area-do-aluno/historico-de-estudos'
   },
-  // {
-  //   label: 'Desafios',
-  //   icon: 'fa-solid fa-flag-checkered',
-  //   route: '/area-do-aluno/challenges'
-  // },
+  {
+    label: 'Desafios',
+    icon: 'fa-solid fa-flag-checkered',
+    route: '/area-do-aluno/challenges'
+  },
   {
     label: 'Minhas Configurações',
     icon: 'fas fa-cog',
