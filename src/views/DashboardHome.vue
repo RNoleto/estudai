@@ -4,6 +4,8 @@ import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
 import Card from '../components/Card.vue';
 import SubjectBarChart from '../layouts/SubjectBarChart.vue';
 
+import IconButton from '../components/ui/IconButton.vue';
+
 import { useHead } from '@vueuse/head';
 
 
@@ -71,45 +73,45 @@ onMounted(async () => {
 })
 
 useHead({
-  title: "Estuday | Resumo de Estudos - Seu Desempenho e Progresso",
-  meta: [
-    {
-      name: "description",
-      content: "Acompanhe seu desempenho nos estudos! Veja o total de tempo estudado, questões respondidas, acertos e erros, além das matérias revisadas. Organize seu aprendizado e evolua com o Estuday!"
-    },
-    {
-      property: "og:title",
-      content: "Estuday | Seu Gerenciador de Estudos Personalizado"
-    },
-    {
-      property: "og:description",
-      content: "Acompanhe seu desempenho nos estudos! Veja o total de tempo estudado, questões respondidas, acertos e erros, além das matérias revisadas. Organize seu aprendizado e evolua com o Estuday!"
-    },
-    {
-      property: "og:image",
-      content: "https://estuday.com.br/img/metaImg.webp"
-    },
-    {
-      property: "og:url",
-      content: "https://estuday.com.br"
-    },
-    {
-      name: "twitter:title",
-      content: "Estuday | Resumo de Estudos - Seu Desempenho e Progresso"
-    },
-    {
-      name: "twitter:description",
-      content: "Acompanhe seu desempenho nos estudos! Veja o total de tempo estudado, questões respondidas, acertos e erros, além das matérias revisadas. Organize seu aprendizado e evolua com o Estuday!"
-    },
-    {
-      name: "twitter:image",
-      content: "https://estuday.com.br/img/metaImg.webp"
-    },
-    {
-      name: "keywords",
-      content: "gerenciador de estudos, organização de estudos, acompanhamento de desempenho, planejamento de estudos, eficiência nos estudos, metricas de estudos, concursos públicos, editais, edital, Estuday"
-    }
-  ]
+    title: "Estuday | Resumo de Estudos - Seu Desempenho e Progresso",
+    meta: [
+        {
+            name: "description",
+            content: "Acompanhe seu desempenho nos estudos! Veja o total de tempo estudado, questões respondidas, acertos e erros, além das matérias revisadas. Organize seu aprendizado e evolua com o Estuday!"
+        },
+        {
+            property: "og:title",
+            content: "Estuday | Seu Gerenciador de Estudos Personalizado"
+        },
+        {
+            property: "og:description",
+            content: "Acompanhe seu desempenho nos estudos! Veja o total de tempo estudado, questões respondidas, acertos e erros, além das matérias revisadas. Organize seu aprendizado e evolua com o Estuday!"
+        },
+        {
+            property: "og:image",
+            content: "https://estuday.com.br/img/metaImg.webp"
+        },
+        {
+            property: "og:url",
+            content: "https://estuday.com.br"
+        },
+        {
+            name: "twitter:title",
+            content: "Estuday | Resumo de Estudos - Seu Desempenho e Progresso"
+        },
+        {
+            name: "twitter:description",
+            content: "Acompanhe seu desempenho nos estudos! Veja o total de tempo estudado, questões respondidas, acertos e erros, além das matérias revisadas. Organize seu aprendizado e evolua com o Estuday!"
+        },
+        {
+            name: "twitter:image",
+            content: "https://estuday.com.br/img/metaImg.webp"
+        },
+        {
+            name: "keywords",
+            content: "gerenciador de estudos, organização de estudos, acompanhamento de desempenho, planejamento de estudos, eficiência nos estudos, metricas de estudos, concursos públicos, editais, edital, Estuday"
+        }
+    ]
 });
 </script>
 
@@ -136,13 +138,13 @@ useHead({
                     </template>
                 </Card>
                 <!-- Card de tempo de estudo -->
-                <Card title="Tempo de estudo" icon="fa-solid fa-stopwatch-20" >
+                <Card title="Tempo de estudo" icon="fa-solid fa-stopwatch-20">
                     <template #content>
                         {{ formatStudyTime(totalStudyTime) }}
                     </template>
                 </Card>
                 <!-- Card com questões respondidas -->
-                <Card title="Questões respondidas" icon="fa-solid fa-pen-clip" >
+                <Card title="Questões respondidas" icon="fa-solid fa-pen-clip">
                     <template #content>
                         <div class="flex flex-col-reverse sm:flex-row w-full items-end gap-4 justify-between">
                             <div class="flex flex-col gap-2">
@@ -156,10 +158,11 @@ useHead({
                                     </select>
                                 </label>
                                 <div class="flex items-center gap-1">
-                                        <label class="text-xs text-gray-600 flex flex-row-reverse gap-2">Exibir como porcentagem
+                                    <label class="text-xs text-gray-600 flex flex-row-reverse gap-2">Exibir como
+                                        porcentagem
                                         <input type="checkbox" v-model="displayAsPercentage"
                                             class="form-checkbox text-blue-600" />
-                                        </label>
+                                    </label>
                                 </div>
                             </div>
                             <!-- Classe condicional para colorir o valor -->
@@ -179,5 +182,7 @@ useHead({
                 <SubjectSummaryTable />
             </div>
         </div>
+        <!-- <IconButton icon="fa-solid fa-plus" color="primary" size="sm" aria-label="Adicionar"
+                tooltip="Adicionar novo item" @click="suaFuncaoAqui" /> -->
     </div>
 </template>
