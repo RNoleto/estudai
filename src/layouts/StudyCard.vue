@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
 import Chart from 'primevue/chart';
 import { useTimeFormatter } from '../composables/useTimeFormatter';
+import IconButton from '../components/ui/IconButton.vue';
 const { formatStudyTime } = useTimeFormatter();
 
 const props = defineProps({
@@ -113,43 +114,65 @@ const doughnutOptions = {
     </div>
     <div class="rounded-full bg-secondary h-[80px] w-[80px]"></div>
   </div>
-  <!-- Card de Estudo Moderno -->
-  <div v-else class="bg-white rounded-2xl shadow-md border border-secondary p-4 w-full max-w-2xl mx-auto flex flex-col sm:flex-row gap-6 items-stretch">
-    <!-- Lado Esquerdo: Infos -->
-    <div class="flex-1 flex flex-col gap-3 w-full justify-between">
-      <!-- Header -->
-      <div class="flex flex-col gap-1">
-        <span class="text-baseBlue font-bold text-lg sm:text-xl leading-tight">{{ record.subjectName }}</span>
-        <span class="text-xs bg-zinc-100 text-zinc-600 rounded px-2 py-0.5 font-medium w-fit">{{ record.topic }}</span>
-      </div>
-      <!-- Tempo de estudo -->
-      <div class="text-zinc-700 text-base font-semibold flex items-center gap-2 mt-2">
-        <i class="fa-regular fa-clock text-baseBlue"></i>
-        <span>{{ formatStudyTime(record.study_time) }}</span>
-      </div>
-      <!-- Linha de questões -->
-      <div class="flex flex-row flex-wrap gap-x-6 gap-y-1 text-sm text-zinc-700 mt-1">
-        <div class="flex items-center gap-1"><i class="fa-solid fa-list-check text-baseBlue"></i> <span class="font-medium">Questões:</span> {{ record.questions_resolved }}</div>
-        <div class="flex items-center gap-1"><i class="fa-solid fa-circle-check text-baseGreen"></i> <span class="font-medium">Acertos:</span> {{ record.correct_answers }}</div>
-        <div class="flex items-center gap-1"><i class="fa-solid fa-circle-xmark text-terRed"></i> <span class="font-medium">Erros:</span> {{ record.incorrect_answers }}</div>
+  <!-- Card de Estudo -->
+  <div v-else class="bg-white rounded-2xl shadow-md border border-secondary p-4 w-full max-w-2xl mx-auto  sm:flex-row gap-6 items-stretch overflow-hidden">
+    <!-- Header -->
+    <div class="flex flex-col">
+      <!-- Matéria + Botões -->
+      <div class="flex justify-between items-center">
+        <span class="text-baseBlue font-bold text-md sm:text-lg leading-tight">{{ record.subjectName }}</span>
+        <div class="flex  gap-1">
+         <IconButton size="xs" icon="fa-regular fa-pen-to-square" color="primary" aria-label="Editar registro" 
+            tooltip="Editar registro" @click="$emit('edit', props.record)" 
+         />
+         <IconButton size="xs" icon="fa-solid fa-trash" color="danger" aria-label="Deletar registro"
+           tooltip="Deletar registro" @click="$emit('delete', props.record)" 
+         />
       </div>
     </div>
-    <!-- Lado Direito: Botões e Gráfico ou Placeholder -->
-    <div class="flex flex-col items-end w-full sm:w-auto min-w-[120px]">
-      <div class="flex gap-1 mb-2">
-        <button class="p-1 text-baseBlue rounded hover:bg-baseBlue/10 transition" @click="$emit('edit', props.record)" aria-label="Editar registro"><i class="fa-regular fa-pen-to-square"></i></button>
-        <button class="p-1 text-terRed rounded hover:bg-terRed/10 transition" @click="$emit('delete', props.record)" aria-label="Deletar registro"><i class="fa-solid fa-trash"></i></button>
-      </div>
-      <div v-if="hasQuestions" class="relative flex flex-col items-center justify-center bg-white rounded-full shadow-lg" style="width:120px; height:120px;">
-        <Chart :type="'doughnut'" :data="doughnutData" :options="doughnutOptions" style="width:120px; height:120px;" />
-        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span :class="centerValue.color + ' font-bold text-lg sm:text-xl leading-none'">{{ centerValue.percent }}%</span>
-          <span class="text-xs sm:text-sm text-gray-500">{{ centerValue.label }}</span>
+      <span class="text-xs bg-zinc-100 text-zinc-600 rounded px-2 py-0.5 font-medium w-fit">{{ record.topic }}</span>
+    </div>
+    <div class="flex *:flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 w-full">
+      <!-- Lado Esquerdo: Infos -->
+      <div class="flex-1 flex flex-col gap-3 w-full justify-between">
+        <!-- Tempo de estudo -->
+        <div class="text-zinc-700 text-base font-semibold flex items-center gap-2 mt-2">
+          <i class="fa-regular fa-clock text-baseBlue"></i>
+          <span>{{ formatStudyTime(record.study_time) }}</span>
+        </div>
+        <!-- Linha de questões -->
+        <div v-if="hasQuestions" class="flex flex-col gap-y-0.5 text-sm text-zinc-700 mt-1">
+          <div class="flex items-center gap-1">
+            <i class="fa-solid fa-list-check text-baseBlue"></i>
+            <span class="font-medium">Questões:</span> {{ record.questions_resolved }}
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="flex items-center gap-1">
+              <i class="fa-solid fa-circle-check text-baseGreen"></i>
+              <span class="font-medium">Acertos:</span> {{ record.correct_answers }}
+            </span>
+            <span class="flex items-center gap-1">
+              <i class="fa-solid fa-circle-xmark text-terRed"></i>
+              <span class="font-medium">Erros:</span> {{ record.incorrect_answers }}
+            </span>
+          </div>
         </div>
       </div>
-      <div v-else class="flex flex-col items-center justify-center bg-white rounded-full shadow-lg" style="width:120px; height:120px;">
-        <i class="fa-solid fa-book-open text-baseBlue text-3xl mb-2"></i>
-        <span class="text-xs text-gray-500 text-center">Sem questões respondidas</span>
+      <!-- Lado Direito: Botões e Gráfico ou Placeholder -->
+      <div class="flex flex-col items-end w-full sm:w-auto">
+        <!-- Se tiver questões mostrar grafico -->
+        <div v-if="hasQuestions" class="relative flex flex-col items-center justify-center bg-white rounded-full shadow-lg"   style="width:100px; height:100px;">
+          <Chart :type="'doughnut'" :data="doughnutData" :options="doughnutOptions" style="width:100px; height:100px;" />
+          <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <span :class="centerValue.color + ' font-bold text-lg sm:text-xl leading-none'">{{ centerValue.percent }}%</span>
+            <span class="text-xs sm:text-sm text-gray-500">{{ centerValue.label }}</span>
+          </div>
+        </div>
+        <!-- Senão mostra imagem de sem questões -->
+        <div v-else class="flex flex-col items-center justify-center bg-white rounded-full shadow-lg" style="width:100px; height:100px;">
+          <i class="fa-solid fa-book-open text-baseBlue text-3xl mb-2"></i>
+          <span class="text-xs text-gray-500 text-center">Sem questões respondidas</span>
+        </div>
       </div>
     </div>
   </div>

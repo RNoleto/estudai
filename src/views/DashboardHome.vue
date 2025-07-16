@@ -182,7 +182,7 @@ useHead({
                 <SubjectSummaryTable />
             </div>
         </div>
-        <!-- <IconButton icon="fa-solid fa-plus" color="primary" size="sm" aria-label="Adicionar"
-                tooltip="Adicionar novo item" @click="suaFuncaoAqui" /> -->
+        <IconButton icon="fa-solid fa-plus" color="primary" size="sm" aria-label="Adicionar"
+                tooltip="Adicionar novo item" @click="suaFuncaoAqui" />
     </div>
 </template>

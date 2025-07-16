@@ -306,32 +306,32 @@ useHead({
             class="min-w-max" @click="openManualEntryModal"
             :title="!isSubjectSelected ? 'Você precisa selecionar uma matéria' : ''">Inserir Manualmente</Button>
         </div>
-        <div class="grid sm:items-start grid-cols-3 gap-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-6">
+        <div class="flex flex-col gap-2 xl:grid grid-cols-6">
           <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus"
-            class="col-span-3 sm:col-span-3" />
-          <Card v-if="totalTimeStudyToday" title="Hoje você estudou" icon="fa-solid fa-stopwatch-20"
-            footer="Soma do tempo de estudo de hoje" class="col-span-1">
-            <template #content>
-              <p>{{ formatStudyTime(totalTimeStudyToday) }}</p>
-            </template>
-          </Card>
-          <Card v-if="questionResolved" title="Você respondeu" icon="fa-solid fa-pen-clip"
-            footer="Soma de questões respondidas hoje" class="col-span-1">
-            <template #content>
-              <p>{{ questionResolved }}</p>
-            </template>
-          </Card>
-          <Card v-if="totalCorrectAnswers" title="Você acertou" icon="fa-solid fa-check"
-            footer="Total de questões corretas hoje" class="col-span-1">
-            <template #content>
-              <p>{{ totalCorrectAnswers }}</p>
-            </template>
-          </Card>
+            class="xl:col-span-3" />
+            <!-- Cards de resumos -->
+            <div class="grid grid-cols-3 gap-1 xl:col-span-3">
+              <Card v-if="totalTimeStudyToday" title="Hoje você estudou" icon="fa-solid fa-stopwatch-20" class="">
+                <template #content>
+                  <p>{{ formatStudyTime(totalTimeStudyToday) }}</p>
+                </template>
+              </Card>
+              <Card v-if="questionResolved" title="Você respondeu" icon="fa-solid fa-pen-clip" class="">
+                <template #content>
+                  <p>{{ questionResolved }}</p>
+                </template>
+              </Card>
+              <Card v-if="totalCorrectAnswers" title="Você acertou" icon="fa-solid fa-check" class="">
+                <template #content>
+                  <p>{{ totalCorrectAnswers }}</p>
+                </template>
+              </Card>
+            </div>
           <!-- Modal para inserir dados de estudo após o timer -->
           <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" @onSaveSuccess="handleSaveSuccess"/>
         </div>
         <!-- Exibe cards com registros de estudo -->
-        <div class="grid grid-cols-1 gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div class="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           <StudyCard class="sm:col-span-1" v-for="(record, index) in todayStudyRecords" :key="record.id"
             :record="record" :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]"
             @edit="openModal" @delete="openDeleteModal(record)" />
