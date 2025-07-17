@@ -306,7 +306,7 @@ useHead({
       <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 min-h-[600px] items-stretch">
         
         <!-- Left Column: Timer and Study Setup -->
-        <div class="xl:col-span-1 flex flex-col space-y-4">
+        <div class="xl:col-span-1 flex flex-col space-y-4 h-fit">
           
           <!-- Study Setup Card -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -362,18 +362,18 @@ useHead({
           </div>
 
           <!-- Timer Card -->
-          <div class="flex-1">
+          <div class="h-fit">
             <Timer 
               :isDisabled="!isSubjectSelected" 
               @timerStopped="handleTimerStopped" 
               @openFocus="openFocus"
-              class="w-full h-full" 
+              class="w-full" 
             />
           </div>
         </div>
 
         <!-- Right Column: Statistics and Records -->
-        <div class="xl:col-span-2 flex flex-col space-y-4">
+        <div class="xl:col-span-2 flex flex-col space-y-4 h-fit">
           
           <!-- Today's Statistics -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -393,33 +393,32 @@ useHead({
                   <p class="text-blue-700">{{ formatStudyTime(totalTimeStudyToday) }}</p>
                 </template>
               </Card>
-              
-              <Card 
-                v-if="questionResolved" 
-                title="Questões Respondidas" 
-                icon="fa-solid fa-pen-clip" 
-                class="bg-gradient-to-br from-green-50 to-green-100 border-green-200"
-              >
-                <template #content>
-                  <p class="text-green-700">{{ questionResolved }}</p>
-                </template>
-              </Card>
-              
-              <Card 
-                v-if="totalCorrectAnswers" 
-                title="Acertos" 
-                icon="fa-solid fa-check" 
-                class="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200"
-              >
-                <template #content>
-                  <p class="text-emerald-700">{{ totalCorrectAnswers }}</p>
-                </template>
-              </Card>
+                <Card 
+                  v-if="questionResolved" 
+                  title="Total de Questões" 
+                  icon="fa-solid fa-pen-clip" 
+                  class="bg-gradient-to-br from-green-50 to-green-100 border-green-200"
+                >
+                  <template #content>
+                    <p class="text-green-700">{{ questionResolved }}</p>
+                  </template>
+                </Card>
+                
+                <Card 
+                  v-if="totalCorrectAnswers" 
+                  title="Acertos" 
+                  icon="fa-solid fa-check" 
+                  class="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200"
+                >
+                  <template #content>
+                    <p class="text-emerald-700">{{ totalCorrectAnswers }}</p>
+                  </template>
+                </Card>
             </div>
           </div>
 
           <!-- Study Records -->
-          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex-1 flex flex-col">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div class="flex items-center justify-between mb-6">
               <h2 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
                 <i class="fa-solid fa-book-open text-primary"></i>
@@ -432,7 +431,7 @@ useHead({
             </div>
             
             <!-- Records Grid -->
-            <div v-if="todayStudyRecords.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1">
+            <div v-if="todayStudyRecords.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <StudyCard 
                 v-for="(record, index) in todayStudyRecords" 
                 :key="record.id"
@@ -447,7 +446,7 @@ useHead({
             </div>
             
             <!-- Empty State -->
-            <div v-else class="text-center py-12 flex-1 flex flex-col justify-center">
+            <div v-else class="text-center py-12">
               <div class="mx-auto h-24 w-24 text-gray-300 mb-4">
                 <i class="fa-solid fa-book-open text-6xl"></i>
               </div>

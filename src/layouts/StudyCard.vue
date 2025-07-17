@@ -115,13 +115,13 @@ const doughnutOptions = {
     <div class="rounded-full bg-secondary h-[80px] w-[80px]"></div>
   </div>
   <!-- Card de Estudo -->
-  <div v-else class="bg-white rounded-2xl shadow-md border border-secondary p-4 w-full max-w-2xl mx-auto  sm:flex-row gap-6 items-stretch overflow-hidden">
+  <div v-else class="bg-white rounded-2xl shadow-md border border-secondary p-4 w-full max-w-2xl mx-auto h-fit">
     <!-- Header -->
-    <div class="flex flex-col">
+    <div class="flex flex-col mb-4">
       <!-- Matéria + Botões -->
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center mb-2">
         <span class="text-baseBlue font-bold text-md sm:text-lg leading-tight">{{ record.subjectName }}</span>
-        <div class="flex  gap-1">
+        <div class="flex gap-1">
          <IconButton size="xs" icon="fa-regular fa-pen-to-square" color="primary" aria-label="Editar registro" 
             tooltip="Editar registro" @click="$emit('edit', props.record)" 
          />
@@ -132,16 +132,18 @@ const doughnutOptions = {
     </div>
       <span class="text-xs bg-zinc-100 text-zinc-600 rounded px-2 py-0.5 font-medium w-fit">{{ record.topic }}</span>
     </div>
-    <div class="flex *:flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 w-full">
+    
+    <!-- Content -->
+    <div class="flex items-center justify-between gap-4">
       <!-- Lado Esquerdo: Infos -->
-      <div class="flex-1 flex flex-col gap-3 w-full justify-between">
+      <div class="flex-1 flex flex-col gap-3">
         <!-- Tempo de estudo -->
-        <div class="text-zinc-700 text-base font-semibold flex items-center gap-2 mt-2">
+        <div class="text-zinc-700 text-base font-semibold flex items-center gap-2">
           <i class="fa-regular fa-clock text-baseBlue"></i>
           <span>{{ formatStudyTime(record.study_time) }}</span>
         </div>
         <!-- Linha de questões -->
-        <div v-if="hasQuestions" class="flex flex-col gap-y-0.5 text-sm text-zinc-700 mt-1">
+        <div v-if="hasQuestions" class="flex flex-col gap-y-0.5 text-sm text-zinc-700">
           <div class="flex items-center gap-1">
             <i class="fa-solid fa-list-check text-baseBlue"></i>
             <span class="font-medium">Questões:</span> {{ record.questions_resolved }}
@@ -158,10 +160,10 @@ const doughnutOptions = {
           </div>
         </div>
       </div>
-      <!-- Lado Direito: Botões e Gráfico ou Placeholder -->
-      <div class="flex flex-col items-end w-full sm:w-auto">
+      <!-- Lado Direito: Gráfico ou Placeholder -->
+      <div class="flex-shrink-0">
         <!-- Se tiver questões mostrar grafico -->
-        <div v-if="hasQuestions" class="relative flex flex-col items-center justify-center bg-white rounded-full shadow-lg"   style="width:100px; height:100px;">
+        <div v-if="hasQuestions" class="relative flex flex-col items-center justify-center bg-white rounded-full shadow-lg" style="width:100px; height:100px;">
           <Chart :type="'doughnut'" :data="doughnutData" :options="doughnutOptions" style="width:100px; height:100px;" />
           <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
             <span :class="centerValue.color + ' font-bold text-lg sm:text-xl leading-none'">{{ centerValue.percent }}%</span>
