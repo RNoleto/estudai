@@ -147,47 +147,142 @@ useHead({
 
 <template>
   <DefaultLayout backgroundOpacity="opacity-20">
-    <div class="p-4 flex flex-col gap-4 m-auto">
-      <div class="mt-[50px] sm:mt-0 flex items-center justify-between">
-        <h3 class="text-2xl font-bold text-gray-700 sm:text-4xl">Escolha uma <span class="text-primary">carreira.</span></h3>
-      </div>
-      <div class="grid gap-2 sm:flex flex-wrap">
-        <Search placeholder="Pesquise a carreira..." v-model="searchTerm" />
-        <div class="grid grid-cols-1 gap-2 w-full sm:grid-cols-2 lg:grid-cols-3  xl:grid-cols-5">
-          <OptionCard v-for="career in filteredCareers" :key="career.id" @click="selectCareer(career)" :icon="career.icon"
-            :careerName="career.name"
-            :variant="selectedCareer && career.id === selectedCareer.id ? 'selected' : 'primary'" />
-        </div>
-        <!-- Mensagem de busca sem sucesso -->
-        <div v-if="!filteredCareers.length" class="m-auto text-center p-4">
-          <p class="text-lg sm:text-2xl text-zinc-700">Carreira não encontrada</p>
-        </div>
-        <!-- Modelo de card sem componetização -->
-        <div v-if="newCareerModal"
-          class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm z-50">
-          <div class="border rounded-md flex flex-col gap-2 p-4 bg-gray-200">
-            <p class="text-base text-zinc-800 text-center font-semibold sm:text-xl">Criar nova carreira</p>
-            <Input v-model="newCareerName" type="text" class="w-full rounded-md" placeholder="Nome da carreira"
-              :showLabel="false" />
-            <Button @click="saveCareer">Salvar carreira</Button>
-            <Button @click="closeCareerModal">Cancelar</Button>
+    <div class="min-h-screen bg-gray-50">
+      <!-- Header Section -->
+      <div class="bg-white border-b border-gray-200 px-4 py-6 sm:px-6 lg:px-8 pt-20 sm:pt-6">
+        <div class="mx-auto">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex-1 min-w-0">
+              <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">               Escolha uma <span class="text-primary">carreira</span>
+              </h1>
+              <p class="mt-1 text-sm text-gray-600">                Selecione a carreira que você deseja seguir e prepare-se para concursos públicos de forma eficiente.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-      <div class="flex justify-end mt-10">
-        <!-- <Button @click="createCareer">Adicionar nova carreira</Button> -->
-        <Button :variant="selectedCareer ? 'base' : 'baseDisable'" :disabled="!selectedCareer"
-          class="disabled:opacity-100 w-full sm:w-auto" @click="saveCareerAndNavigate" :title="!selectedCareer ? 'Você precisa selecionar uma carreira antes' : ''">
-          Avançar
-        </Button>
+
+      <!-- Main Content -->
+      <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        
+        <!-- Search Section -->
+        <div class="mb-6">
+          <Search 
+            placeholder="Pesquise a carreira..." 
+            v-model="searchTerm" 
+            class="max-w-md"
+          />
+        </div>
+
+        <!-- Careers Grid -->
+        <div class="mb-8">
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+            <OptionCard 
+              v-for="career in filteredCareers" 
+              :key="career.id" 
+              @click="selectCareer(career)" 
+              :icon="career.icon"
+              :careerName="career.name"
+              :variant="selectedCareer && career.id === selectedCareer.id ? 'selected' : 'primary'"
+              class="transition-all duration-200 hover:scale-105"
+            />
+          </div>
+          
+          <!-- Empty State -->
+          <div v-if="!filteredCareers.length" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="mx-auto h-24 w-24 text-gray-300 mb-4">
+              <i class="fa-solid fa-search text-6xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Carreira não encontrada</h3>
+            <p class="text-gray-500">             Tente ajustar os termos de pesquisa ou criar uma nova carreira.
+            </p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
+          <Button 
+            variant="base" 
+            @click="createCareer"
+            class="w-full sm:w-auto"
+          >
+            <i class="fa-solid fa-plus mr-2"></i>
+            Criar Nova Carreira
+          </Button>
+          
+          <Button 
+            :variant="selectedCareer ? 'base' : 'baseDisable'" 
+            :disabled="!selectedCareer"
+            class="w-full sm:w-auto" 
+            @click="saveCareerAndNavigate" 
+            :title="!selectedCareer ? 'Você precisa selecionar uma carreira antes' : ''"
+          >
+            <i class="fa-solid fa-arrow-right mr-2"></i>
+            Avançar
+          </Button>
+        </div>
       </div>
+
+      <!-- Create Career Modal -->
+      <div v-if="newCareerModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm z-50">
+        <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <i class="fa-solid fa-plus text-primary"></i>
+              Criar Nova Carreira
+            </h2>
+            <button 
+              @click="closeCareerModal"
+              class="text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+          </div>
+          
+          <div class="space-y-4">
+            <div>
+              <label for="careerName" class="block text-sm font-medium text-gray-700 mb-2">
+                Nome da Carreira
+              </label>
+              <Input 
+                id="careerName"
+                v-model="newCareerName" 
+                type="text" 
+                class="w-full"
+                placeholder="Digite o nome da carreira"
+                :showLabel="false" 
+              />
+            </div>
+            
+            <div class="flex gap-3 pt-4">
+              <Button 
+                variant="secondary"
+                @click="closeCareerModal"
+                class="flex-1"
+              >
+                Cancelar
+              </Button>
+              <Button 
+                variant="base"
+                @click="saveCareer"
+                class="flex-1"
+              >
+                <i class="fa-solid fa-save mr-2"></i>
+                Salvar
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alert Modal -->
       <AlertModal 
-          :visible="alertVisible" 
-          :title="alertTitle" 
-          :message="alertMessage" 
-          :type="alertType" 
-          @close="handleAlertClose" 
-        />
+        :visible="alertVisible" 
+        :title="alertTitle" 
+        :message="alertMessage" 
+        :type="alertType" 
+        @close="handleAlertClose" 
+      />
     </div>
   </DefaultLayout>
 </template>

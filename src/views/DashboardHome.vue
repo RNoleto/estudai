@@ -116,73 +116,149 @@ useHead({
 </script>
 
 <template>
-    <div class="flex flex-col p-2 mt-12 gap-4 sm:mt-0 sm:px-4">
-        <div class="flex flex-col gap-2">
-            <h3 class="text-2xl font-bold text-gray-700 sm:text-4xl">Resumo dos <span
-                    class="text-primary">estudos.</span></h3>
-            <p class="text-md text-gray-700">Carreira: {{ userStore.careerName ? userStore.careerName :
-                "Carregando..." }}</p>
+  <div class="min-h-screen bg-gray-50">
+          <!-- Header Section -->
+      <div class="bg-white border-b border-gray-200 px-4 py-6 sm:px-6 lg:px-8 pt-20 sm:pt-6">
+      <div class="mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div class="flex-1 min-w-0">
+            <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl">
+              Resumo dos <span class="text-primary">estudos</span>
+            </h1>
+            <p class="mt-1 text-sm text-gray-600 sm:text-base">
+              Carreira: {{ userStore.careerName ? userStore.careerName : "Carregando..." }}
+            </p>
+          </div>
         </div>
-        <div>
-            <div class="grid grid-cols-2 gap-1 sm:grid-cols-4 md:grid-cols-4">
-                <!-- Card com total de questões -->
-                <Card icon="fa-solid fa-book" title="Total de matérias">
-                    <template #content>
-                        {{ userStore.userSubjects.length }}
-                    </template>
-                </Card>
-                <!-- Card com total de topicos estudados -->
-                <Card icon="fa-solid fa-tags" title="Total de tópicos">
-                    <template #content>
-                        {{ TotalUniqueTopics }}
-                    </template>
-                </Card>
-                <!-- Card de tempo de estudo -->
-                <Card title="Tempo de estudo" icon="fa-solid fa-stopwatch-20">
-                    <template #content>
-                        {{ formatStudyTime(totalStudyTime) }}
-                    </template>
-                </Card>
-                <!-- Card com questões respondidas -->
-                <Card title="Questões respondidas" icon="fa-solid fa-pen-clip">
-                    <template #content>
-                        <div class="flex flex-col-reverse sm:flex-row w-full items-end gap-4 justify-between">
-                            <div class="flex flex-col gap-2">
-                                <label class="text-xs text-gray-600">
-                                    Escolha uma opção:
-                                    <select v-model="selectedOption"
-                                        class="text-xs text-gray-500 p-1 border border-tertiary rounded-lg">
-                                        <option v-for="option in options" :key="option.value" :value="option.value">
-                                            {{ option.label }}
-                                        </option>
-                                    </select>
-                                </label>
-                                <div class="flex items-center gap-1">
-                                    <label class="text-xs text-gray-600 flex flex-row-reverse gap-2">Exibir como
-                                        porcentagem
-                                        <input type="checkbox" v-model="displayAsPercentage"
-                                            class="form-checkbox text-blue-600" />
-                                    </label>
-                                </div>
-                            </div>
-                            <!-- Classe condicional para colorir o valor -->
-                            <p class="text-2xl sm:text-5xl font-extrabold" :class="{
-                                'text-primary': selectedOption === 'questions_resolved',
-                                'text-baseBlue': selectedOption === 'correct_answers',
-                                'text-baseRed': selectedOption === 'incorrect_answers'
-                            }">
-                                {{ totalValue }}
-                            </p>
-                        </div>
-                    </template>
-                </Card>
-            </div>
-            <div v-if="hasStudyRecords" class="flex flex-wrap gap-2 mt-2">
-                <!-- <SubjectBarChart/> -->
-                <SubjectSummaryTable />
-            </div>
-        </div>
-        <IconButton icon="fa-solid fa-plus" color="primary" size="sm" aria-label="Adicionar"
-                tooltip="Adicionar novo item" @click="suaFuncaoAqui" />
+      </div>
     </div>
+
+    <!-- Main Content -->
+    <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8">
+      
+      <!-- Statistics Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total de Matérias -->
+        <Card 
+          icon="fa-solid fa-book" 
+          title="Total de Matérias"
+          class="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200"
+        >
+          <template #content>
+            <p class="text-blue-700 text-2xl font-bold">{{ userStore.userSubjects.length }}</p>
+          </template>
+        </Card>
+
+        <!-- Total de Tópicos -->
+        <Card 
+          icon="fa-solid fa-tags" 
+          title="Total de Tópicos"
+          class="bg-gradient-to-br from-green-50 to-green-100 border-green-200"
+        >
+          <template #content>
+            <p class="text-green-700 text-2xl font-bold">{{ TotalUniqueTopics }}</p>
+          </template>
+        </Card>
+
+        <!-- Tempo de Estudo -->
+        <Card 
+          title="Tempo de Estudo" 
+          icon="fa-solid fa-stopwatch-20"
+          class="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200"
+        >
+          <template #content>
+            <p class="text-purple-700 text-lg font-bold">{{ formatStudyTime(totalStudyTime) }}</p>
+          </template>
+        </Card>
+
+        <!-- Questões Respondidas -->
+        <Card 
+          title="Questões Respondidas" 
+          icon="fa-solid fa-pen-clip"
+          class="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200"
+        >
+          <template #content>
+            <div class="flex flex-col gap-3">
+              <!-- Controles -->
+              <div class="flex flex-col gap-2">
+                <label class="text-xs font-medium text-gray-700">
+                  Tipo de Questão:
+                </label>
+                <select 
+                  v-model="selectedOption"
+                  class="text-xs p-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                >
+                  <option v-for="option in options" :key="option.value" :value="option.value">
+                    {{ option.label }}
+                  </option>
+                </select>
+                
+                <div class="flex items-center gap-2">
+                  <input 
+                    type="checkbox" 
+                    v-model="displayAsPercentage"
+                    id="percentage-toggle"
+                    class="rounded border-gray-300 text-primary focus:ring-primary" 
+                  />
+                  <label for="percentage-toggle" class="text-xs text-gray-700">
+                    Exibir como porcentagem
+                  </label>
+                </div>
+              </div>
+              
+              <!-- Valor -->
+              <p class="text-2xl font-bold" :class="{
+                'text-primary': selectedOption === 'questions_resolved',
+                'text-baseBlue': selectedOption === 'correct_answers',
+                'text-baseRed': selectedOption === 'incorrect_answers'
+              }">
+                {{ totalValue }}
+              </p>
+            </div>
+          </template>
+        </Card>
+      </div>
+
+      <!-- Charts and Tables Section -->
+      <div v-if="hasStudyRecords" class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        
+        <!-- Subject Summary Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-table text-primary"></i>
+            Resumo por Matéria
+          </h2>
+          <SubjectSummaryTable />
+        </div>
+
+        <!-- Subject Bar Chart -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-chart-bar text-primary"></i>
+            Gráfico de Desempenho
+          </h2>
+          <SubjectBarChart />
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div v-else class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
+        <div class="mx-auto h-24 w-24 text-gray-300 mb-4">
+          <i class="fa-solid fa-chart-line text-6xl"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum registro encontrado</h3>
+        <p class="text-gray-500 mb-6">
+          Comece a estudar para ver estatísticas e gráficos do seu desempenho.
+        </p>
+        <IconButton 
+          icon="fa-solid fa-plus" 
+          color="primary" 
+          size="sm" 
+          aria-label="Adicionar"
+          tooltip="Adicionar novo item" 
+          @click="suaFuncaoAqui" 
+        />
+      </div>
+    </div>
+  </div>
 </template>

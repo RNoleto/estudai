@@ -240,64 +240,114 @@ useHead({
 </script>
 
 <template>
-  <div class="flex flex-col p-2 mt-10 gap-6 sm:mt-0 sm:px-4 mx-auto w-full">
-    <h3 class="text-2xl font-bold text-gray-700 sm:text-4xl mb-2">
-      Minhas <span class="text-primary">missões</span>
-    </h3>
-    <p class="text-gray-600 mb-2 text-sm sm:text-base max-w-2xl">
-      Complete missões diárias para se manter motivado e alcance metas de longo prazo para evoluir nos estudos! O progresso é salvo automaticamente.
-    </p>
-    <!-- Missões Diárias -->
-    <div>
-      <h4 class="text-lg sm:text-xl font-semibold text-baseBlue mb-2">
-        Missões Diárias
-      </h4>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <CardChallenger 
-          v-for="mission in dailyMissions"
-          :key="mission.id"
-          :title="mission.title"
-          :icon="mission.icon"
-          :progress="getMissionProgress(mission)"
-          :class="mission.completed ? 'border-green-300 bg-green-50' : ''"
-        />
+  <div class="min-h-screen bg-gray-50">
+          <!-- Header Section -->
+      <div class="bg-white border-b border-gray-200 px-4 py-6 sm:px-6 lg:px-8 pt-20 sm:pt-6">
+      <div class="mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div class="flex-1 min-w-0">
+            <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl">
+              Minhas <span class="text-primary">missões</span>
+            </h1>
+            <p class="mt-1 text-sm text-gray-600 sm:text-base max-w-2xl">
+              Complete missões diárias para se manter motivado e alcance metas de longo prazo para evoluir nos estudos! O progresso é salvo automaticamente.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-    <!-- Metas de Longo Prazo -->
-    <!-- <div>
-      <h4 class="text-lg sm:text-xl font-semibold text-purple-700 mb-2">
-        Metas de Longo Prazo
-      </h4>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <CardChallenger 
-          v-for="mission in metaMissions"
-          :key="mission.id"
-          :title="mission.title"
-          :icon="mission.icon"
-          :progress="getMissionProgress(mission)"
-          :class="mission.completed ? 'border-green-300 bg-green-50' : ''"
-        />
-      </div>
-    </div> -->
-    <!-- Painéis informativos apenas para referenciar nos cards -->
-    <div class="flex flex-col md:flex-row gap-4 mt-6">
-      <div class="flex-1 border border-secondary p-4 rounded-2xl shadow-md bg-white">
-        <p class="mb-2 font-semibold text-baseBlue">Resumo Global</p>
-        <div class="text-xs sm:text-sm text-gray-700 space-y-1">
-          <div>Tempo total: <span class="font-bold">{{ totalStudyTime.toFixed(2) }}h</span></div>
-          <div>Questões resolvidas: <span class="font-bold">{{ totalQuestionsResolved }}</span></div>
-          <div>Questões corretas: <span class="font-bold">{{ totalQuestionsCorrects }}</span></div>
+
+    <!-- Main Content -->
+    <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8">
+      
+      <!-- Statistics Summary -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Global Summary -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-globe text-primary"></i>
+            Resumo Global
+          </h2>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Tempo total:</span>
+              <span class="font-bold text-gray-900">{{ totalStudyTime.toFixed(2) }}h</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Questões resolvidas:</span>
+              <span class="font-bold text-gray-900">{{ totalQuestionsResolved }}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Questões corretas:</span>
+              <span class="font-bold text-gray-900">{{ totalQuestionsCorrects }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Daily Summary -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-calendar-day text-primary"></i>
+            Resumo do Dia
+          </h2>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Tempo total:</span>
+              <span class="font-bold text-gray-900">{{ dailyStudyTime.toFixed(2) }}h</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Questões resolvidas:</span>
+              <span class="font-bold text-gray-900">{{ dailyQuestionsResolved }}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Questões corretas:</span>
+              <span class="font-bold text-gray-900">{{ dailyQuestionsCorrects }}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Matérias estudadas:</span>
+              <span class="font-bold text-gray-900">{{ totalSubjectsStudied }}</span>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="flex-1 border border-secondary p-4 rounded-2xl shadow-md bg-white">
-        <p class="mb-2 font-semibold text-primary">Resumo do Dia</p>
-        <div class="text-xs sm:text-sm text-gray-700 space-y-1">
-          <div>Tempo total: <span class="font-bold">{{ dailyStudyTime.toFixed(2) }}h</span></div>
-          <div>Questões resolvidas: <span class="font-bold">{{ dailyQuestionsResolved }}</span></div>
-          <div>Questões corretas: <span class="font-bold">{{ dailyQuestionsCorrects }}</span></div>
-          <div>Matérias estudadas: <span class="font-bold">{{ totalSubjectsStudied }}</span></div>
+
+      <!-- Daily Missions -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+        <h2 class="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
+          <i class="fa-solid fa-star text-primary"></i>
+          Missões Diárias
+        </h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <CardChallenger 
+            v-for="mission in dailyMissions"
+            :key="mission.id"
+            :title="mission.title"
+            :icon="mission.icon"
+            :progress="getMissionProgress(mission)"
+            :class="mission.completed ? 'border-green-300 bg-green-50' : ''"
+          />
         </div>
       </div>
+
+      <!-- Long Term Goals (Commented out for now) -->
+      <!-- <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
+          <i class="fa-solid fa-target text-primary"></i>
+          Metas de Longo Prazo
+        </h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <CardChallenger 
+            v-for="mission in metaMissions"
+            :key="mission.id"
+            :title="mission.title"
+            :icon="mission.icon"
+            :progress="getMissionProgress(mission)"
+            :class="mission.completed ? 'border-green-300 bg-green-50' : ''"
+          />
+        </div>
+      </div> -->
     </div>
   </div>
 </template>

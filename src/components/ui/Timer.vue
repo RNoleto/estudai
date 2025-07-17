@@ -49,7 +49,7 @@ const addCustomTime = () => {
 </script>
 
 <template>
-  <div class="relative flex border border-secondary flex-col rounded-2xl bg-white shadow-md p-4"
+  <div class="relative flex border border-gray-200 flex-col rounded-2xl bg-white shadow-md p-4 h-full"
        :class="['timer', isFocusMode ? 'focus-mode' : '']">
     <div @click="!props.isDisabled && enterFocusMode()" 
          class="absolute right-4 text-sm p-1"
@@ -60,9 +60,9 @@ const addCustomTime = () => {
           }">
       <i class="fa-solid fa-arrows-to-circle"></i>
     </div>
-    <div class="flex flex-col items-center gap-1 py-4 sm:gap-6">
+    <div class="flex flex-col items-center justify-center gap-1 py-4 sm:gap-6 h-full">
       <h2 class="w-full text-xl text-center border-zinc-100 sm:text-2xl sm:font-semibold">Temporizador</h2>
-      <div class="font-mono text-6xl">{{ timerStore.formattedTime }}</div>
+      <div class="font-mono text-6xl flex-1 flex items-center">{{ timerStore.formattedTime }}</div>
       <div class="flex space-x-2">
         <Button variant="play" 
                 @click="timerStore.isRunning ? timerStore.togglePause() : timerStore.start()" 

@@ -46,50 +46,131 @@ useHead({
 </script>
 
 <template>
-        <div class="flex flex-col p-2 mt-12 gap-4 sm:mt-0 sm:px-4">
-            <h3 class="text-2xl font-bold text-gray-700 sm:text-4xl">Concursos <span
-                class="text-primary">Abertos.</span>
-            </h3>
-            <p class="text-sm italic text-gray-700">Fonte de pesquisa PCI Concursos</p>
-
-            <Search placeholder="Pesquise o concurso..." v-model="searchTerm" />
-            
-            <div v-if="loading">Carregando concursos...</div>
-            <div v-else-if="competitions.length === 0">Nenhum concurso encontrado.</div>
-            
-            <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-2 lg:grid-cols-3">
-                <Card v-for="concurso in filteredCompetitions" :key="concurso.index" icon="fa-solid fa-book" :title="concurso.regiao" class="flex justify-between">
-                    <!-- <img :src="concurso.imagem" alt="Imagem do concurso" /> -->
-                    <template #content>
-                        <div class="text-sm justify-start w-full space-y-1 text-gray-600">
-                            <p>{{ concurso.titulo }}</p>
-                            <p class="font-normal">{{ concurso.resumo }}</p>
-                            <div class="flex justify-between font-normal">
-                                <p><strong>Inscrição:</strong> {{ concurso.periodo_inscricao }}</p>
-                                <p><strong>Situação:</strong> {{ concurso.situacao }}</p>
-                            </div>
-                        </div>
-                    </template>
-                    <template #footer>
-                        <div v-if="concurso.link_edital?.length">
-                            <p class="text-sm font-bold text-primary">Ultimo edital atualizado:</p>
-                            <ul class="mt-2 space-y-2">
-                                <!-- Listando todos os anexos -->
-                                <!-- <li v-for="(edital, i) in concurso.link_edital" :key="i">
-                                    <a :href="edital.url" target="_blank">{{ edital.titulo }}</a>
-                                </li> -->
-                                <!-- Pegando apenas o ultimo anexo -->
-                                <li v-if="concurso.link_edital.length > 0">
-                                    <a :href="concurso.link_edital[0].url" target="_blank">{{ concurso.link_edital[0].titulo }}</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="flex mt-2 text-sm font-bold text-primary justify-end">
-                            <a :href="concurso.link" target="_blank">Ver mais</a>
-                        </div>
-                    </template>
-
-                </Card>
-            </div>
+  <div class="min-h-screen bg-gray-50">
+    <!-- Header Section -->
+    <div class="bg-white border-b border-gray-200 px-4 py-6 sm:px-6 lg:px-8 pt-20 sm:pt-6">
+      <div class="mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div class="flex-1 min-w-0">         <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">
+              Concursos <span class="text-primary">Abertos</span>
+            </h1>
+            <p class="mt-1 text-sm text-gray-600">
+              Encontre oportunidades atualizadas de concursos públicos organizadas de forma clara e eficiente.
+            </p>
+            <p class="mt-2 text-xs text-gray-500 italic">             Fonte de pesquisa: PCI Concursos
+            </p>
+          </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8">
+      
+      <!-- Search Section -->
+      <div class="mb-6">
+        <Search 
+          placeholder="Pesquise o concurso..." 
+          v-model="searchTerm"
+          class="max-w-md"       />
+      </div>
+
+      <!-- Loading State -->
+      <div v-if="loading" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
+        <div class="mx-auto h-24 w-24 text-gray-300 mb-4">
+          <i class="fa-solid fa-spinner fa-spin text-6xl"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Carregando concursos...</h3>
+        <p class="text-gray-500">       Buscando as melhores oportunidades para você.
+        </p>
+      </div>
+
+      <!-- Empty State -->
+      <div v-else-if="competitions.length === 0" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
+        <div class="mx-auto h-24 w-24 text-gray-300 mb-4">
+          <i class="fa-solid fa-search text-6xl"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum concurso encontrado</h3>
+        <p class="text-gray-500">       Não foi possível carregar os concursos no momento. Tente novamente mais tarde.
+        </p>
+      </div>
+
+      <!-- Competitions Grid -->
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">  <Card 
+          v-for="concurso in filteredCompetitions" 
+          :key="concurso.index" 
+          icon="fa-solid fa-graduation-cap" 
+          :title="concurso.regiao"
+          class="bg-white hover:shadow-md transition-shadow duration-200"
+        >
+          <template #content>
+            <div class="space-y-3">              <!-- Título do Concurso -->
+              <div>
+                <h3 class="font-semibold text-gray-900 text-sm leading-tight">
+                  {{ concurso.titulo }}
+                </h3>
+              </div>
+              
+              <!-- Resumo -->
+              <div v-if="concurso.resumo" class="text-sm text-gray-600">
+                <p>{{ concurso.resumo }}</p>
+              </div>
+              
+              <!-- Informações do Concurso -->
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-600 font-medium">Inscrição:</span>
+                  <span class="text-gray-900">{{ concurso.periodo_inscricao }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-600 font-medium">Situação:</span>
+                  <span class="text-gray-900">{{ concurso.situacao }}</span>
+                </div>
+              </div>
+            </div>
+          </template>
+          
+          <template #footer>
+            <div class="space-y-3">              <!-- Link do Edital -->
+              <div v-if="concurso.link_edital?.length" class="border-t border-gray-100 pt-3">
+                <p class="text-xs font-semibold text-primary mb-2">Último edital atualizado:</p>
+                <div class="space-y-1">
+                  <a 
+                    v-if="concurso.link_edital.length > 0"
+                    :href="concurso.link_edital[0].url" 
+                    target="_blank"
+                    class="text-xs text-primary hover:text-primary/80 underline transition-colors"
+                  >
+                   {{ concurso.link_edital[0].titulo }}
+                  </a>
+                </div>
+              </div>
+              
+              <!-- Link Ver Mais -->
+              <div class="flex justify-end">
+                <a 
+                  :href="concurso.link" 
+                  target="_blank"
+                  class="inline-flex items-center text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
+                >
+                  Ver mais detalhes
+                  <i class="fa-solid fa-external-link-alt ml-1"></i>
+                </a>
+              </div>
+            </div>
+          </template>
+        </Card>
+      </div>
+
+      <!-- No Results State -->
+      <div v-if="!loading && competitions.length > 0 && filteredCompetitions.length === 0" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center mt-6">
+        <div class="mx-auto h-24 w-24 text-gray-300 mb-4">
+          <i class="fa-solid fa-search text-6xl"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum concurso encontrado</h3>
+        <p class="text-gray-500">       Tente ajustar os termos de pesquisa para encontrar concursos que correspondam aos seus critérios.
+        </p>
+      </div>
+    </div>
+  </div>
 </template>
