@@ -18,7 +18,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="flex flex-col p-[10px] bg-white shadow-md rounded-2xl border border-secondary">
+  <div class="flex flex-col p-[10px] bg-white shadow-md rounded-2xl border">
     <!-- Título com ícone dinâmico -->
     <slot name="title">
       <div class="flex items-center gap-2 text-gray-500 font-medium">
@@ -33,7 +33,7 @@ defineProps({
     </div>
 
     <!-- Slot para o conteúdo com estilos padrão -->
-    <div class="flex justify-end text-sx mt-2 font-bold sm:text-2xl text-primary">
+    <div class="flex text-sx mt-2 font-bold text-primary sm:text-2xl md:text-4xl">
       <slot name="content">Conteúdo padrão</slot>
     </div>
 

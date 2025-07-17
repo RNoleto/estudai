@@ -258,7 +258,7 @@ async function handleLogout(){
     <!-- Sidebar desktop -->
     <div class="sm:min-h-screen">
       <aside v-if="!isMobileView" :class="[
-        'flex flex-col h-full bg-white shadow-md text-sm transition-[width] duration-300 ease-in-out',
+        'flex flex-col h-full bg-white border border-gray-200 shadow-md text-sm transition-[width] duration-300 ease-in-out',
         isSidebarCollapsed ? 'w-[4.5rem]' : 'w-[15rem]'
       ]">
         <div class="p-4 text-lg text-gray-700 font-bold border-b border-secondary flex items-center"

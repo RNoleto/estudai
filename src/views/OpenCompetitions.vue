@@ -104,7 +104,8 @@ useHead({
           class="bg-white hover:shadow-md transition-shadow duration-200"
         >
           <template #content>
-            <div class="space-y-3">              <!-- Título do Concurso -->
+            <!-- Título do Concurso -->
+            <div class="flex-1 space-y-3">
               <div>
                 <h3 class="font-semibold text-gray-900 text-sm leading-tight">
                   {{ concurso.titulo }}

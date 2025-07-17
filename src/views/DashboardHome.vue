@@ -145,7 +145,9 @@ useHead({
           class="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200"
         >
           <template #content>
-            <p class="text-blue-700 text-2xl font-bold">{{ userStore.userSubjects.length }}</p>
+            <div class="flex flex-1 flex-end justify-end">
+              <p class="text-blue-700 font-bold">{{ userStore.userSubjects.length }}</p>
+            </div>
           </template>
         </Card>
 
@@ -156,7 +158,9 @@ useHead({
           class="bg-gradient-to-br from-green-50 to-green-100 border-green-200"
         >
           <template #content>
-            <p class="text-green-700 text-2xl font-bold">{{ TotalUniqueTopics }}</p>
+            <div class="flex flex-1 flex-end justify-end">
+              <p class="text-green-700 font-bold">{{ TotalUniqueTopics }}</p>
+            </div>
           </template>
         </Card>
 
@@ -167,7 +171,9 @@ useHead({
           class="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200"
         >
           <template #content>
-            <p class="text-purple-700 text-lg font-bold">{{ formatStudyTime(totalStudyTime) }}</p>
+            <div class="flex flex-1 flex-end justify-end">
+              <p class="text-purple-700 font-bold">{{ formatStudyTime(totalStudyTime) }}</p>
+            </div>
           </template>
         </Card>
 
@@ -178,12 +184,9 @@ useHead({
           class="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200"
         >
           <template #content>
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-1  justify-between gap-3">
               <!-- Controles -->
               <div class="flex flex-col gap-2">
-                <label class="text-xs font-medium text-gray-700">
-                  Tipo de Questão:
-                </label>
                 <select 
                   v-model="selectedOption"
                   class="text-xs p-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-primary focus:border-transparent"
@@ -207,7 +210,7 @@ useHead({
               </div>
               
               <!-- Valor -->
-              <p class="text-2xl font-bold" :class="{
+              <p class="font-bold" :class="{
                 'text-primary': selectedOption === 'questions_resolved',
                 'text-baseBlue': selectedOption === 'correct_answers',
                 'text-baseRed': selectedOption === 'incorrect_answers'

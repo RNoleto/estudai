@@ -1,5 +1,5 @@
 <template>
-    <div class="card max-w-[500px] max-h-[320px] bg-white shadow-md rounded-2xl border border-secondary overflow-hidden p-2">
+    <div class="card max-h-[320px] bg-white shadow-md rounded-2xl border border-secondary overflow-hidden p-2">
       <div class="flex flex-wrap gap-2 items-center">
         <!-- Seletor de semana -->
         <select v-model="selectedWeek" @change="updateChartData" class="p-inputtext p-component text-sm bg-zinc-50">
