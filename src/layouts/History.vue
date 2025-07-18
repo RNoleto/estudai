@@ -204,6 +204,7 @@ useHead({
           </select>
         </div>
       </div>
+      
       <div class="flex justify-end w-full sm:w-auto">
         <Button 
           @click="openReport" 

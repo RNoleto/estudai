@@ -35,16 +35,16 @@ const routes = [
       description: 'Estude com o melhor método de aprendizado online e acelere sua carreira.'
     }
   },
-  // {
-  //   path: '/landing-page',
-  //   name: 'LandingPage',
-  //   component: LanginPage,
-  //   meta: {
-  //     requiresAuth: false,
-  //     title: 'Estuday - Landing Page',
-  //     description: 'Estude com o melhor método de aprendizado online e acelere sua carreira.'
-  //   }
-  // },
+  {
+    path: '/landing-page',
+    name: 'LandingPage',
+    component: LanginPage,
+    meta: {
+      requiresAuth: false,
+      title: 'Estuday - Landing Page',
+      description: 'Estude com o melhor método de aprendizado online e acelere sua carreira.'
+    }
+  },
   {
     path: '/carreiras',
     name: 'Carreiras',
@@ -139,7 +139,7 @@ const routes = [
         }
       },
       {
-        path: 'challenges',
+        path: 'desafios',
         name: 'Challenges',
         component: Challenges,
         meta: { 

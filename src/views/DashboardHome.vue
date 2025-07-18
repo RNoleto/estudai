@@ -118,11 +118,11 @@ useHead({
 <template>
   <div class="min-h-screen bg-gray-50">
           <!-- Header Section -->
-      <div class="bg-white border-b border-gray-200 px-4 py-6 sm:px-6 lg:px-8 pt-20 sm:pt-6">
+      <div class="bg-white border-b border-gray-200 px-4 py-4 sm:py-6 sm:px-6 lg:px-8 pt-16 sm:pt-6">
       <div class="mx-auto">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div class="flex-1 min-w-0">
-            <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl">
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900 lg:text-3xl xl:text-4xl">
               Resumo dos <span class="text-primary">estudos</span>
             </h1>
             <p class="mt-1 text-sm text-gray-600 sm:text-base">
@@ -137,7 +137,7 @@ useHead({
     <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8">
       
       <!-- Statistics Cards -->
-      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
         <!-- Total de Matérias -->
         <Card 
           icon="fa-solid fa-book" 
@@ -145,8 +145,8 @@ useHead({
           class="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200"
         >
           <template #content>
-            <div class="flex flex-1 flex-end justify-end">
-              <p class="text-blue-700 font-bold">{{ userStore.userSubjects.length }}</p>
+            <div class="flex flex-1 justify-end">
+              <p class="text-blue-700 font-bold xl:text-4xl">{{ userStore.userSubjects.length }}</p>
             </div>
           </template>
         </Card>
@@ -158,8 +158,8 @@ useHead({
           class="bg-gradient-to-br from-green-50 to-green-100 border-green-200"
         >
           <template #content>
-            <div class="flex flex-1 flex-end justify-end">
-              <p class="text-green-700 font-bold">{{ TotalUniqueTopics }}</p>
+            <div class="flex flex-1 justify-end">
+              <p class="text-green-700 font-bold xl:text-4xl">{{ TotalUniqueTopics }}</p>
             </div>
           </template>
         </Card>
@@ -171,8 +171,8 @@ useHead({
           class="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200"
         >
           <template #content>
-            <div class="flex flex-1 flex-end justify-end">
-              <p class="text-purple-700 font-bold">{{ formatStudyTime(totalStudyTime) }}</p>
+            <div class="flex flex-1 justify-end">
+              <p class="text-purple-700 font-bold text-sm sm:text-base lg:text-lg xl:text-4xl">{{ formatStudyTime(totalStudyTime) }}</p>
             </div>
           </template>
         </Card>
@@ -184,12 +184,12 @@ useHead({
           class="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200"
         >
           <template #content>
-            <div class="flex flex-1  justify-between gap-3">
-              <!-- Controles -->
-              <div class="flex flex-col gap-2">
+            <div class="flex flex-col sm:flex-row sm:justify-between gap-3 w-full">
+              <!-- Controles - Ocultos em mobile, mostrados em tablet+ -->
+              <div class="hidden sm:flex flex-col gap-2">
                 <select 
                   v-model="selectedOption"
-                  class="text-xs p-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                  class="text-xs p-1.5 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-primary focus:border-transparent"
                 >
                   <option v-for="option in options" :key="option.value" :value="option.value">
                     {{ option.label }}
@@ -204,30 +204,56 @@ useHead({
                     class="rounded border-gray-300 text-primary focus:ring-primary" 
                   />
                   <label for="percentage-toggle" class="text-xs text-gray-700">
-                    Exibir como porcentagem
+                    Exibir como %
                   </label>
                 </div>
               </div>
               
               <!-- Valor -->
-              <p class="font-bold" :class="{
-                'text-primary': selectedOption === 'questions_resolved',
-                'text-baseBlue': selectedOption === 'correct_answers',
-                'text-baseRed': selectedOption === 'incorrect_answers'
-              }">
-                {{ totalValue }}
-              </p>
+              <div class="flex justify-between sm:justify-end items-center">
+                <!-- Controles mobile -->
+                <div class="sm:hidden flex flex-col gap-1">
+                  <select 
+                    v-model="selectedOption"
+                    class="text-xs p-1 border border-gray-300 rounded bg-white focus:ring-1 focus:ring-primary focus:border-transparent"
+                  >
+                    <option v-for="option in options" :key="option.value" :value="option.value">
+                      {{ option.label }}
+                    </option>
+                  </select>
+                  
+                  <div class="flex items-center gap-1">
+                    <input 
+                      type="checkbox" 
+                      v-model="displayAsPercentage"
+                      id="percentage-toggle-mobile"
+                      class="rounded border-gray-300 text-primary focus:ring-primary" 
+                    />
+                    <label for="percentage-toggle-mobile" class="text-xs text-gray-700">
+                      %
+                    </label>
+                  </div>
+                </div>
+                
+                <p class="font-bold text-lg sm:text-xl lg:text-2xl xl:text-4xl" :class="{
+                  'text-primary': selectedOption === 'questions_resolved',
+                  'text-baseBlue': selectedOption === 'correct_answers',
+                  'text-baseRed': selectedOption === 'incorrect_answers'
+                }">
+                  {{ totalValue }}
+                </p>
+              </div>
             </div>
           </template>
         </Card>
       </div>
 
       <!-- Charts and Tables Section -->
-      <div v-if="hasStudyRecords" class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div v-if="hasStudyRecords" class="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
         
         <!-- Subject Summary Table -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+          <h2 class="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
             <i class="fa-solid fa-table text-primary"></i>
             Resumo por Matéria
           </h2>
@@ -235,8 +261,8 @@ useHead({
         </div>
 
         <!-- Subject Bar Chart -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+          <h2 class="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
             <i class="fa-solid fa-chart-bar text-primary"></i>
             Gráfico de Desempenho
           </h2>
@@ -245,12 +271,12 @@ useHead({
       </div>
 
       <!-- Empty State -->
-      <div v-else class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
-        <div class="mx-auto h-24 w-24 text-gray-300 mb-4">
-          <i class="fa-solid fa-chart-line text-6xl"></i>
+      <div v-else class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 sm:p-12 text-center">
+        <div class="mx-auto h-16 w-16 sm:h-24 sm:w-24 text-gray-300 mb-4">
+          <i class="fa-solid fa-chart-line text-4xl sm:text-6xl"></i>
         </div>
-        <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum registro encontrado</h3>
-        <p class="text-gray-500 mb-6">
+        <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">Nenhum registro encontrado</h3>
+        <p class="text-sm sm:text-base text-gray-500 mb-6">
           Comece a estudar para ver estatísticas e gráficos do seu desempenho.
         </p>
         <IconButton 

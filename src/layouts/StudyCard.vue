@@ -164,7 +164,7 @@ const doughnutOptions = {
       <div class="flex-shrink-0">
         <!-- Se tiver questões mostrar grafico -->
         <div v-if="hasQuestions" class="relative flex flex-col items-center justify-center bg-white rounded-full shadow-lg" style="width:100px; height:100px;">
-          <Chart :type="'doughnut'" :data="doughnutData" :options="doughnutOptions" style="width:100px; height:100px;" />
+            <Chart :type="'doughnut'" :data="doughnutData" :options="doughnutOptions" style="width:100px; height:100px;" />
           <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
             <span :class="centerValue.color + ' font-bold text-lg sm:text-xl leading-none'">{{ centerValue.percent }}%</span>
             <span class="text-xs sm:text-sm text-gray-500">{{ centerValue.label }}</span>

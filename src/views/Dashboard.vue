@@ -86,7 +86,7 @@ const menuItems = [
   {
     label: 'Desafios',
     icon: 'fa-solid fa-flag-checkered',
-    route: '/area-do-aluno/challenges'
+    route: '/area-do-aluno/desafios'
   },
   {
     label: 'Minhas Configurações',

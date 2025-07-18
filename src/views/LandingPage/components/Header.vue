@@ -12,6 +12,7 @@
       <nav class="hidden items-center md:flex space-x-6">
         <a href="#hero" class="text-gray-700 hover:text-primary">Home</a>
         <a href="#demonstration" class="text-gray-700 hover:text-primary">Funcionalidades</a>
+        <a href="#prints-showcase" class="text-gray-700 hover:text-primary">Galeria</a>
         <a href="#testimonials" class="text-gray-700 hover:text-primary">Comentários</a>
         <a href="#signatures" class="text-gray-700 hover:text-primary">Planos</a>
         <a href="#faq" class="text-gray-700 hover:text-primary">FAQ</a>
@@ -34,6 +35,7 @@
         <nav class="px-4 pt-2 pb-4 space-y-1 bg-white">
           <a @click="closeMenu" href="#hero" class="block text-gray-700 hover:text-primary">Home</a>
           <a @click="closeMenu" href="#demonstration" class="block text-gray-700 hover:text-primary">Funcionalidades</a>
+          <a @click="closeMenu" href="#prints-showcase" class="block text-gray-700 hover:text-primary">Galeria</a>
           <a @click="closeMenu" href="#testimonials" class="block text-gray-700 hover:text-primary">Comentários</a>
           <a @click="closeMenu" href="#signatures" class="block text-gray-700 hover:text-primary">Planos</a>
           <a @click="closeMenu" href="#faq" class="block text-gray-700 hover:text-primary">FAQ</a>

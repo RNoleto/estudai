@@ -263,7 +263,8 @@ useHead({
       <!-- Statistics Summary -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <!-- Global Summary -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <!-- Ocultado -->
+        <div class="hidden bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <i class="fa-solid fa-globe text-primary"></i>
             Resumo Global
@@ -285,7 +286,8 @@ useHead({
         </div>
 
         <!-- Daily Summary -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <!-- Ocultado -->
+        <div class="hidden bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <i class="fa-solid fa-calendar-day text-primary"></i>
             Resumo do Dia

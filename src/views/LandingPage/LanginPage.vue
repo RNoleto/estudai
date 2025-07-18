@@ -1,6 +1,7 @@
 <script setup>
 import Hero from './views/Hero.vue';
 import Demonstration from './views/Demonstration.vue';
+import PrintsShowcase from './views/PrintsShowcase.vue';
 import Testimonials from './views/Testimonials.vue';
 import Signatures from './views/Signatures.vue';
 import FAQ from './views/FAQ.vue';
@@ -64,6 +65,7 @@ useHead({
         <main>
             <Hero />
             <Demonstration />
+            <PrintsShowcase />
             <Testimonials />
             <Signatures />
             <FAQ />
