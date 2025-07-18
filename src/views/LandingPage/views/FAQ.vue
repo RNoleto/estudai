@@ -26,10 +26,10 @@
           <!-- FAQ 3 -->
           <div class="border-b pb-4">
             <h3 class="text-xl font-semibold text-primary">
-              Existe um período de teste gratuito?
+              Existe um plano gratuito do Estuday?
             </h3>
             <p class="text-gray-600 mt-2">
-              Sim, você pode testar o Estuday gratuitamente antes de optar pelo plano Premium.
+              Sim, você pode optar pelo plano gratuito do Estuday antes de optar pelo plano Premium com funções mais completas.
             </p>
           </div>
           <!-- FAQ 4 -->

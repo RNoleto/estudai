@@ -8,7 +8,9 @@
           Junte-se a milhares de estudantes que já estão aproveitando o Estuday.
         </p>
         <button class="bg-white text-primary font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-gray-100 transition duration-300">
-          Cadastre-se Gratuitamente
+          <a href="/login" class="cursor-pointer">
+            Cadastre-se Gratuitamente
+          </a>
         </button>
       </div>
     </section>

@@ -155,7 +155,7 @@ const selectTab = (index) => {
 
             <div class="pt-4">
               <button class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-baseGreen transition duration-300 shadow-lg">
-                <a href="/">
+                <a href="/login">
                   Experimente Agora
                 </a>
               </button>

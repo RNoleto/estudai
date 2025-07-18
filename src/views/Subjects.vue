@@ -138,39 +138,111 @@ useHead({
 
 <template>
   <DefaultLayout backgroundOpacity="opacity-20">
-    <div class="relative p-4 flex flex-col mt-12 gap-4 sm:mt-0">
-      <h3 class="text-2xl sm:text-4xl font-bold text-gray-700">Escolha suas <span class="text-primary">matérias.</span></h3>
-      <p class="text-md text-gray-700">Carreira: {{ userStore.careerName }}</p>
-      <Search placeholder="Pesquise a matéria..." v-model="searchTerm" />
-      <div class="grid grid-cols-1 gap-2 w-full sm:grid-cols-2 lg:grid-cols-3  xl:grid-cols-5">
-        <OptionCard
-          v-for="subject in filteredSubjects"
-          :key="subject.id"
-          :icon="'basil:book-outline'"
-          :careerName="subject.name"
-          @click="toggleSubject(subject)"
-          :variant="selectedSubjects.some(s => s.id === subject.id) ? 'selected' : 'primary'"
-        />
+    <div class="min-h-screen bg-gray-50">
+              <!-- Header Section -->
+        <div class="bg-white border-b border-gray-200 px-4 py-6 sm:px-6 lg:px-8 pt-20 sm:pt-6">
+        <div class="mx-auto">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex-1 min-w-0">
+              <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl lg:text-4xl">
+                Escolha suas <span class="text-primary">matérias</span>
+              </h1>
+              <p class="mt-1 text-sm text-gray-600 sm:text-base">
+                Carreira: {{ userStore.careerName }}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div v-if="!filteredSubjects.length" class="m-auto text-center p-4">
-        <p class="text-lg sm:text-2xl text-zinc-700">Matéria não encontrada</p>
+
+      <!-- Main Content -->
+      <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        
+        <!-- Search Section -->
+        <div class="mb-6">
+          <Search 
+            placeholder="Pesquise a matéria..." 
+            v-model="searchTerm" 
+            class="max-w-md"
+          />
+        </div>
+
+        <!-- Subjects Grid -->
+        <div class="mb-8">
+          <div class="grid grid-cols-1 gap-4 w-full sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+            <OptionCard
+              v-for="subject in filteredSubjects"
+              :key="subject.id"
+              :icon="'basil:book-outline'"
+              :careerName="subject.name"
+              @click="toggleSubject(subject)"
+              :variant="selectedSubjects.some(s => s.id === subject.id) ? 'selected' : 'primary'"
+              class="transition-all duration-200 hover:scale-105"
+            />
+          </div>
+          
+          <!-- Empty State -->
+          <div v-if="!filteredSubjects.length" class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
+            <div class="mx-auto h-24 w-24 text-gray-300 mb-4">
+              <i class="fa-solid fa-search text-6xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Matéria não encontrada</h3>
+            <p class="text-gray-500">
+              Tente ajustar os termos de pesquisa ou criar uma nova matéria.
+            </p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
+          <Button 
+            v-if="route.path !== '/area-do-aluno/materias'" 
+            variant="secondary" 
+            :to="{ name: 'Carreiras' }"
+            class="w-full sm:w-auto"
+          >
+            <i class="fa-solid fa-arrow-left mr-2"></i>
+            Voltar
+          </Button>
+          
+          <Button 
+            variant="base" 
+            @click="isModal = true"
+            class="w-full sm:w-auto"
+          >
+            <i class="fa-solid fa-plus mr-2"></i>
+            Criar Matéria
+          </Button>
+          
+          <Button 
+            :variant="selectedSubjects.length ? 'base' : 'baseDisable'" 
+            :disabled="selectedSubjects.length === 0" 
+            :title="selectedSubjects.length === 0 ? 'Você precisa selecionar ao menos uma matéria antes' : ''"
+            class="w-full sm:w-auto" 
+            @click="saveSubjectsAndNavigate"
+          >
+            <i class="fa-solid fa-check mr-2"></i>
+            Salvar e Avançar
+          </Button>
+        </div>
       </div>
-      <div class="flex justify-end gap-2 mt-4 sm:mt-10">
-        <Button v-if="route.path !== '/area-do-aluno/materias'" variant="base" :to="{ name: 'Carreiras' }">Voltar</Button>
-        <Button variant="base" @click="isModal = true">Criar Matéria</Button>
-        <Button :variant="selectedSubjects.length ? 'base' : 'baseDisable'" :disabled="selectedSubjects.length === 0" :title="selectedSubjects.length === 0 ? 'Você precisa selecionar ao menos uma matéria antes' : ''"
-            class="disabled:opacity-100 w-full sm:w-auto" @click="saveSubjectsAndNavigate">
-            Salvar e avançar
-        </Button>
-      </div>
-        <Modal title="Nova Matéria" v-if="isModal" :maxlength="20" @close="isModal = false" @save="saveSubject" />
-        <AlertModal 
-          :visible="alertVisible" 
-          :title="alertTitle" 
-          :message="alertMessage" 
-          :type="alertType" 
-          @close="handleAlertClose" 
-        />
+
+      <!-- Modals -->
+      <Modal 
+        title="Nova Matéria" 
+        v-if="isModal" 
+        :maxlength="20" 
+        @close="isModal = false" 
+        @save="saveSubject" 
+      />
+      
+      <AlertModal 
+        :visible="alertVisible" 
+        :title="alertTitle" 
+        :message="alertMessage" 
+        :type="alertType" 
+        @close="handleAlertClose" 
+      />
     </div>
   </DefaultLayout>
 </template>
