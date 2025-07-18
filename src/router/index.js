@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { auth } from '../firebase';
 import { waitForAuthReady } from '../utils/authReady';
 import { useUserStore } from '../stores/useUserStore';
+
 import Home from '../views/Home.vue';
 import Career from '../views/CareerSelection.vue';
 import Subjects from '../views/Subjects.vue';

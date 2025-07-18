@@ -1,17 +1,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <!-- Página principal -->
+    <!-- Página principal LandingPage -->
     <url>
         <loc>https://estuday.com.br/</loc>
         <lastmod>2025-03-09T17:50:10+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
-    <!-- Página de Sobre Nós -->
+    <!-- Página de Login -->
     <url>
-        <loc>https://estuday.com.br/lading-page</loc>
+        <loc>https://estuday.com.br/login</loc>
         <lastmod>2025-03-09T17:50:10+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
     </url>
     <!-- Página de Carreiras -->
     <url>
@@ -20,14 +20,20 @@
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-    <!-- Páginas de Área do Aluno - Modificado com prioridade mais baixa -->
+    <!-- Página de Matérias -->
+    <url>
+        <loc>https://estuday.com.br/materias</loc>
+        <lastmod>2025-03-09T17:50:10+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <!-- Área do Aluno e subrotas -->
     <url>
         <loc>https://estuday.com.br/area-do-aluno</loc>
         <lastmod>2025-03-09T17:50:10+00:00</lastmod>
         <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
+        <priority>0.7</priority>
     </url>
-    <!-- Subpáginas do Área do Aluno -->
     <url>
         <loc>https://estuday.com.br/area-do-aluno/estudar</loc>
         <lastmod>2025-03-09T17:50:10+00:00</lastmod>
@@ -36,6 +42,12 @@
     </url>
     <url>
         <loc>https://estuday.com.br/area-do-aluno/historico-de-estudos</loc>
+        <lastmod>2025-03-09T17:50:10+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://estuday.com.br/area-do-aluno/carreiras</loc>
         <lastmod>2025-03-09T17:50:10+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
@@ -53,13 +65,13 @@
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://estuday.com.br/area-do-aluno/challenges</loc>
+        <loc>https://estuday.com.br/area-do-aluno/suporte</loc>
         <lastmod>2025-03-09T17:50:10+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://estuday.com.br/area-do-aluno/suporte</loc>
+        <loc>https://estuday.com.br/area-do-aluno/desafios</loc>
         <lastmod>2025-03-09T17:50:10+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
