@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 function goToLogin() {
-  router.push('/');
+  router.push('/login');
 }
 </script>
 

@@ -116,7 +116,7 @@ const isSettingsMenuActive = () => {
 
 async function handleLogout(){
   await userStore.logout();
-  router.push('/');
+  router.push('/login');
 }
 </script>
 

@@ -14,9 +14,9 @@
         <a href="#demonstration" class="text-gray-700 hover:text-primary">Funcionalidades</a>
         <a href="#prints-showcase" class="text-gray-700 hover:text-primary">Galeria</a>
         <a href="#testimonials" class="text-gray-700 hover:text-primary">Comentários</a>
-        <a href="#signatures" class="text-gray-700 hover:text-primary">Planos</a>
+        <!-- <a href="#signatures" class="text-gray-700 hover:text-primary">Planos</a> -->
         <a href="#faq" class="text-gray-700 hover:text-primary">FAQ</a>
-        <a href="/" class="bg-primary text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-baseGreen transition duration-300">Cadastre-se</a>
+        <a href="/login" class="bg-primary text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-baseGreen transition duration-300">Cadastre-se</a>
         <!-- <a href="#contato" class="text-gray-700 hover:text-primary">Contato</a> -->
       </nav>
       <!-- Botão para mobile (hamburger menu) -->
@@ -37,9 +37,9 @@
           <a @click="closeMenu" href="#demonstration" class="block text-gray-700 hover:text-primary">Funcionalidades</a>
           <a @click="closeMenu" href="#prints-showcase" class="block text-gray-700 hover:text-primary">Galeria</a>
           <a @click="closeMenu" href="#testimonials" class="block text-gray-700 hover:text-primary">Comentários</a>
-          <a @click="closeMenu" href="#signatures" class="block text-gray-700 hover:text-primary">Planos</a>
+          <!-- <a @click="closeMenu" href="#signatures" class="block text-gray-700 hover:text-primary">Planos</a> -->
           <a @click="closeMenu" href="#faq" class="block text-gray-700 hover:text-primary">FAQ</a>
-          <a @click="closeMenu" href="/" class="text-baseGreen font-semibold hover:text-hoverGreen transition duration-300">Cadastre-se</a>
+          <a @click="closeMenu" href="/login" class="text-baseGreen font-semibold hover:text-hoverGreen transition duration-300">Cadastre-se</a>
           <!-- <a @click="closeMenu" href="#contato" class="block text-gray-700 hover:text-primary">Contato</a> -->
         </nav>
       </div>

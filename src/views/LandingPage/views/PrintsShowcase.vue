@@ -112,7 +112,7 @@ const visiblePrints = computed(() => {
         </div>
       </div>
       <div class="text-center mt-8">
-        <a href="/" class="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:bg-baseGreen transition duration-300">
+        <a href="/login" class="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:bg-baseGreen transition duration-300">
           Experimente grátis
         </a>
       </div>

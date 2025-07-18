@@ -29,19 +29,19 @@ import Challenges from '../views/Challenges.vue';
 const routes = [
   {
     path: '/',
-    component: Home,
-    meta: {
-      title: 'Estuday - Aprenda de Forma Inteligente',
-      description: 'Estude com o melhor método de aprendizado online e acelere sua carreira.'
-    }
-  },
-  {
-    path: '/landing-page',
     name: 'LandingPage',
     component: LanginPage,
     meta: {
       requiresAuth: false,
       title: 'Estuday - Landing Page',
+      description: 'Estude com o melhor método de aprendizado online e acelere sua carreira.'
+    }
+  },
+  {
+    path: '/login',
+    component: Home,
+    meta: {
+      title: 'Estuday - Aprenda de Forma Inteligente',
       description: 'Estude com o melhor método de aprendizado online e acelere sua carreira.'
     }
   },
