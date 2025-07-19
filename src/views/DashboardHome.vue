@@ -4,8 +4,6 @@ import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
 import Card from '../components/Card.vue';
 import SubjectBarChart from '../layouts/SubjectBarChart.vue';
 
-import IconButton from '../components/ui/IconButton.vue';
-
 import { useHead } from '@vueuse/head';
 
 
@@ -279,14 +277,6 @@ useHead({
         <p class="text-sm sm:text-base text-gray-500 mb-6">
           Comece a estudar para ver estatísticas e gráficos do seu desempenho.
         </p>
-        <IconButton 
-          icon="fa-solid fa-plus" 
-          color="primary" 
-          size="sm" 
-          aria-label="Adicionar"
-          tooltip="Adicionar novo item" 
-          @click="suaFuncaoAqui" 
-        />
       </div>
     </div>
   </div>
