@@ -117,7 +117,7 @@ export const useUserStore = defineStore('user', {
 
         return true;
       } catch (error) {
-        if(error.response && error.response.status === 429){
+        if(error.response && error.response.status === 404){
           console.warn("usuário sem carreira registrada.");
           this.careerId = null;
           this.careerName = null;
@@ -180,6 +180,10 @@ export const useUserStore = defineStore('user', {
         this.userSubjects = response.data.map((subject) => subject.subject_id);
       } catch (error) {
         console.error("Erro ao carregar matérias do usuário:", error);
+        // Se não há matérias, inicializa como array vazio
+        if (error.response && error.response.status === 404) {
+          this.userSubjects = [];
+        }
       }
     },
     async saveUserSubjects(subjectIds) {

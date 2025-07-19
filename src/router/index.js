@@ -204,6 +204,18 @@ router.beforeEach(async (to, from, next) => {
         next({ path: '/area-do-aluno' });
         return;
       }
+      
+      // Verifica se o usuário está tentando acessar a dashboard sem ter carreira ou matérias
+      if (to.path.startsWith('/area-do-aluno') && currentUser) {
+        if (!hasCareer) {
+          next({ path: '/carreiras' });
+          return;
+        }
+        if (userStore.userSubjects.length <= 0) {
+          next({ path: '/materias' });
+          return;
+        }
+      }
     } catch (error) {
       console.error("Erro durante a verificação de redirecionamento:", error);
       next();
