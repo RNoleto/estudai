@@ -24,7 +24,7 @@ const toggleMenu = () => {
 
 const menuItems = [
     { name: 'Home', routeName: 'AdminHome' },
-    // { name: 'Usuários', routeName: '' },
+    { name: 'Usuários', routeName: 'AdminUsers' },
     // { name: 'Carreiras', routeName: '' },
     // { name: 'Matérias', routeName: '' }
 ];
@@ -64,7 +64,7 @@ const menuItems = [
                             </div>
                             <!-- Conteudo do menu -->
                             <div class="flex-1 overflow-y-auto p-4 bg-red-100">
-                                <nav class="text-center">
+                                <nav class="flex flex-col gap-2 text-center">
                                     <template v-for="item in menuItems" :key="item.name">
                                         <div v-if="!item.subItems">
                                             <router-link :to="{ name: item.routeName }" @click="isMenuMobileOpen = false">

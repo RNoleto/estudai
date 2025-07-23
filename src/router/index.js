@@ -25,6 +25,7 @@ import LanginPage from '../views/LandingPage/LanginPage.vue';
 //Rotas Administrativas
 import AdminDashboard from '../views/Admin/components/Dashboard.vue';
 import AdminHome from '../views/Admin/views/Home.vue';
+import AdminUsers from '../views/Admin/views/Users.vue';
 
 // Rotas comentadas estão em desenvolvimento e não estão sendo utilizadas no momento
 
@@ -90,25 +91,25 @@ const routes = [
     }
   },
   // Area Administrativa do sistema
-  {
-    path: '/admin',
-    name: 'Admin',
-    component: AdminDashboard,
-    children: [
-      {
-        path: 'home',
-        name: 'AdminHome',
-        component: AdminHome,
-        meta: {title: 'Admin Estuday | Home'}
-      },
-      // {
-      //   path: '/usuarios',
-      //   name: '',
-      //   component: ,
-      //   meta: {title: 'Admin Estuday | Lista de Usuários'}
-      // }
-    ]
-  },
+  // {
+  //   path: '/admin',
+  //   name: 'Admin',
+  //   component: AdminDashboard,
+  //   children: [
+  //     {
+  //       path: 'home',
+  //       name: 'AdminHome',
+  //       component: AdminHome,
+  //       meta: {title: 'Admin Estuday | Home'}
+  //     },
+  //     {
+  //       path: '/usuarios',
+  //       name: 'AdminUsers',
+  //       component: AdminUsers,
+  //       meta: {title: 'Admin Estuday | Lista de Usuários'}
+  //     }
+  //   ]
+  // },
   // Area do Aluno do sistema
   {
     path: '/area-do-aluno',
