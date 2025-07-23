@@ -22,6 +22,10 @@ import StudyHistory from '../views/StudyHistory.vue';
 // Partes da landing page que não estão no dashboard
 import LanginPage from '../views/LandingPage/LanginPage.vue';
 
+//Rotas Administrativas
+import AdminDashboard from '../views/Admin/components/Dashboard.vue';
+import AdminHome from '../views/Admin/Home.vue';
+
 // Rotas comentadas estão em desenvolvimento e não estão sendo utilizadas no momento
 
 //Rota em teste
@@ -85,6 +89,11 @@ const routes = [
       description: 'Página de erro do Estuday.'
     }
   },
+  // {
+  //   path: '/admin',
+  //   name: 'Admin',
+  //   component: AdminDashboard,
+  // },
   {
     path: '/area-do-aluno',
     name: 'Dashboard',
@@ -168,6 +177,7 @@ const routes = [
       },
     ]
   }
+  
 ];
 
 const router = createRouter({
