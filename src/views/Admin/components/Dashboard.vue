@@ -23,15 +23,15 @@ const toggleMenu = () => {
 
 
 const menuItems = [
-    { name: 'Home', routeName: 'AdminHome' },
-    { name: 'Usuários', routeName: 'AdminUsers' },
-    // { name: 'Carreiras', routeName: '' },
-    // { name: 'Matérias', routeName: '' }
+    { name: 'Home', routeName: 'AdminHome', icon: 'fa-solid fa-house' },
+    { name: 'Usuários', routeName: 'AdminUsers', icon: 'fa-solid fa-users' },
+    // { name: 'Carreiras', routeName: '', icon: 'fa-solid fa-brefcase' },
+    // { name: 'Matérias', routeName: '', icon: 'fa-solid fa-book-open' }
 ];
 </script>
 
 <template>
-    <div>
+    <div class="flex h-screen bg-gray-100">
         <!-- Navbar Mobile -->
         <nav v-if="isMobileView"
             class="fixed top-0 left-0 w-full bg-blue-100 border-b border-gray-200 shadow-sm z-50 flex items-center justify-between p-4">
@@ -83,17 +83,17 @@ const menuItems = [
                 </div>
             </transition>
         <!-- Menu Desktop -->
-        <div>
-            <aside v-if="!isMobileView" class="flex justify-between p-4 items-center shadow-md bg-red-200">
-                <div class="flex items-center gap-2">
+        <div class="min-h-screen z-10">
+            <aside v-if="!isMobileView" :class="['flex flex-col h-full bg-white border-r border-gray-200 shadow-md transition-[width] duration-300 ease-in-out w-[15rem] p-4']">
+                <div class="flex items-center gap-2 p-4 justify-center border-b mb-4">
                     <i class="fa-solid fa-graduation-cap"></i>
                     <p>Estuday Admin</p>
                 </div>
-                <nav class="flex gap-2">
+                <nav class="flex flex-col gap-2">
                     <template v-for="item in menuItems" :key="item.name">
                         <div v-if="!item.subItems">
-                            <router-link :to="{ name: item.routeName }" @click="isMenuMobileOpen = false">
-                                {{ item.name }}
+                            <router-link :to="{ name: item.routeName }" @click="isMenuMobileOpen = false" class="flex text-sm items-center gap-2  py-1 px-2 hover:bg-zinc-100">
+                               <i :class='item.icon' class="text-[14px]"></i> {{ item.name }}
                             </router-link>
                         </div>
                     </template>
@@ -103,10 +103,16 @@ const menuItems = [
         <!-- Desktop -->
         <main 
             :class="[
-                'flex-1 overflow-y-auto h-full px-4', 
-                isMobileView ? 'pt-16' : 'pt-4' ]">
+                'flex-1 overflow-y-auto h-full', 
+                isMobileView ? 'pt-16' : 'pt-0' ]">
             <!-- Conteudo das páginas acessadas aqui Mobile/Desktop -->
             <router-view />
         </main>
     </div>
 </template>
+
+<style scoped>
+aside {
+    box-shadow: 4px 0 8px rgba(0,0,0, 0.1);
+}
+</style>

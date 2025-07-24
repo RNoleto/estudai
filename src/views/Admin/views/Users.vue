@@ -2,6 +2,9 @@
 </script>
 
 <template>
+    <header class="bg-white p-6 shadow-md">
+        <p>Administrador | Usuarios</p>
+    </header>
     <div class="min-h-screen">
         <h1>Tela de Usuarios | Administrativa</h1>
         <p>Admin pode executar todas as ações CRUD</p>
