@@ -27,6 +27,16 @@ const chartData = {
       fill: true,
       pointRadius: 4,
       pointHoverRadius: 7
+    },
+    {
+      label: 'Questões Respondidas',
+      data: [50, 100, 300, 250, 120, 442, 560],
+      borderColor: '#20B2AA',
+      backgroundColor: 'rgba(32, 178, 170, 0.2)',
+      tension: 0.4,
+      fill: true,
+      pointRadius: 4,
+      pointHoverRadius: 7,
     }
   ]
 }
