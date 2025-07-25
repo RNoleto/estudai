@@ -1,6 +1,9 @@
 <script setup>
 import Card from '../components/ui/Card.vue';
+
+// Componentes de Gráficos
 import StudySessionChart from '../components/charts/StudySessionChart.vue';
+import CareerDistributionChart from '../components/charts/CareerDistributionChart.vue';
 
 import { useUserStore } from '../../../stores/useUserStore';
 
@@ -33,14 +36,15 @@ const datas = [
         </div>
         
         <!-- Gráfico de sessões -->
-        <StudySessionChart class="w-full my-4" />
+        <StudySessionChart class="w-full mb-4" />
+        <CareerDistributionChart class="w-full mb-4" />
         
         <div class="mt-2">
             <p>Essa tela tera as seguintes informações GERAIS:</p>
             <ul class="p-2">
-                <li># Usar cards e Graficos</li>
-                <li># 4/5 cards para usuários (totais, ativos, inativos premium e ultimo cadastro)</li>
-                <li># Criar graficos abaixo</li>
+                <li># OK - Usar cards e Graficos</li>
+                <li># OK - 4/5 cards para usuários (totais, ativos, inativos premium e ultimo cadastro)</li>
+                <li># OK - Criar graficos abaixo</li>
                 <li># Usuários cadastrados por mês</li>
                 <li># Ativo/inativo/premium</li>
                 <li># Crescimento total ao longo do tempo</li>

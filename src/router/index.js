@@ -91,25 +91,25 @@ const routes = [
     }
   },
   // Area Administrativa do sistema
-  // {
-  //   path: '/admin',
-  //   name: 'Admin',
-  //   component: AdminDashboard,
-  //   children: [
-  //     {
-  //       path: 'home',
-  //       name: 'AdminHome',
-  //       component: AdminHome,
-  //       meta: {title: 'Admin Estuday | Home'}
-  //     },
-  //     {
-  //       path: 'usuarios',
-  //       name: 'AdminUsers',
-  //       component: AdminUsers,
-  //       meta: {title: 'Admin Estuday | Lista de Usuários'}
-  //     }
-  //   ]
-  // },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: AdminDashboard,
+    children: [
+      {
+        path: 'home',
+        name: 'AdminHome',
+        component: AdminHome,
+        meta: {title: 'Admin Estuday | Home'}
+      },
+      {
+        path: 'usuarios',
+        name: 'AdminUsers',
+        component: AdminUsers,
+        meta: {title: 'Admin Estuday | Lista de Usuários'}
+      }
+    ]
+  },
   // Area do Aluno do sistema
   {
     path: '/area-do-aluno',
