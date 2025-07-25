@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useAIStore } from '../stores/aiStore';
 import { marked } from 'marked';
 
@@ -8,16 +8,41 @@ const generatedPlan = ref('');
 const generating = ref(false);
 
 // Dados do cronograma
+const cargo = ref('')
 const startDate = ref('')
 const endDate = ref('')
 const dailyHours = ref(2)
 const method = ref('manual') // 'manual' ou 'import'
+const editalText = ref('')
 
 // Matérias com tópicos
 const subjects = ref([])
 const newSubject = ref('')
 const newTopic = ref('')
 const selectedSubjectIndex = ref(null)
+
+const weeklyTables = computed(() => {
+  return generatedPlan.value.split(/(?=📅 Semana \d+)/g) // mantém o cabeçalho
+})
+
+const exportToPDF = async () => {
+  const element = document.getElementById('study-plan')
+  if (!element) return
+
+  const { default: html2pdf } = await import('html2pdf.js')
+
+  html2pdf()
+    .set({
+      margin: 0.5,
+      filename: 'cronograma-de-estudos.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    })
+    .from(element)
+    .save()
+}
+
 
 // Dias da semana disponíveis para estudar
 const availableDays = ref([
@@ -64,32 +89,65 @@ const generateStudyPlanWithAI = async () => {
     aiStore.$reset()
 
     // Organizar dados
-    const selectedDays = availableDays.value.filter(day => day.checked).map(d => d.name).join(', ')
+    const selectedDays = availableDays.value
+        .filter(day => day.checked)
+        .map(d => d.name)
+        .join(', ')
+
     const resumoMaterias = subjects.value.map(subject => {
-        const topicos = subject.topics.length ? subject.topics.join(', ') : 'Sem tópicos definidos'
-        return `- ${subject.name}: ${topicos}`
+        const diasComTopicos = Object.entries(subject.topicsByDay || {})
+            .map(([dia, topicos]) => {
+                const lista = topicos.length ? topicos.join(', ') : 'Sem tópicos definidos'
+                return `  - ${dia}: ${lista}`
+            }).join('\n')
+        return `- ${subject.name}:\n${diasComTopicos}`
     }).join('\n')
 
     const prompt = `
-Você é um especialista em planejamento de estudos para concursos públicos.
+    Você é um especialista em planejamento de estudos para concursos públicos.
 
-Crie um cronograma de estudos de forma equilibrada com base nas seguintes informações definidas pelo aluno:
+Com base nas informações abaixo, crie um CRONOGRAMA DE ESTUDOS semanal em formato de tabela, até que todo o conteúdo listado seja completamente estudado.
 
-- Data de início: ${startDate.value}
+⚠️ INSTRUÇÕES IMPORTANTES:
+- Você **DEVE incluir todas as disciplinas mencionadas no conteúdo abaixo**, sem ignorar nenhuma (por exemplo: "Legislação e Ética", "Língua Inglesa", etc.).
+- Distribua todas as matérias de forma **equilibrada e proporcional ao longo das semanas**.
+- **A carga horária diária deve ser preenchida com múltiplas disciplinas por dia**, especialmente quando o aluno dispõe de 3h, 4h ou mais por dia. Evite repetir apenas uma matéria por dia.
+- O número de tarefas por dia deve ser proporcional à carga horária. Por exemplo:
+  - 2h/dia → 2 tarefas (1h cada)
+  - 4h/dia → 3 a 4 tarefas (1h a 1h20 cada)
+  - 6h/dia → 4 ou mais tarefas
+- Se o aluno ativou "revisões" ou "simulados", inclua essas atividades **ao longo das semanas**, sempre respeitando a carga horária diária.
+- O conteúdo está completo. NÃO solicite nenhum dado adicional.
+- NÃO inclua tarefas como lazer, descanso ou pausas.
+
+📘 FORMATO DAS TABELAS:
+Cada semana deve conter uma tabela com o seguinte modelo:
+
+| TAREFA | DISCIPLINA             | ATIVIDADES |
+|--------|------------------------|------------|
+| 01     | Nome da Matéria        | Estudo da aula X; revisão da aula Y; resolução de 30 questões... |
+
+🔁 Continue gerando SEMANAS até cobrir todo o conteúdo.
+
+📌 Após cada tabela semanal, escreva:
+- Um **bloco com recomendações práticas** para o aluno naquela semana.
+- Uma **mensagem motivacional curta**.
+
+📌 Ao final da última semana:
+- Faça um breve texto de encerramento com incentivo e dicas finais para a véspera da prova.
+
+DADOS DO PLANO:
+- Cargo: ${cargo.value}
+- Início dos estudos: ${startDate.value}
 - Data da prova: ${endDate.value}
-- Horas disponíveis por dia: ${dailyHours.value}
+- Horas por dia: ${dailyHours.value}
 - Dias da semana disponíveis: ${selectedDays}
-- Deseja incluir revisões? ${includeRevisions.value ? 'Sim' : 'Não'}
-- Deseja incluir simulados? ${includeSimulados.value ? 'Sim' : 'Não'}
-- Lista de matérias e tópicos:
+- Incluir revisões periódicas? ${includeRevisions.value ? 'Sim' : 'Não'}
+- Incluir simulados? ${includeSimulados.value ? 'Sim' : 'Não'}
+
+🧠 CONTEÚDO PROGRAMÁTICO COMPLETO:
 ${resumoMaterias}
-
-Monte um cronograma semanal detalhado (por dia da semana), com sugestão de distribuição dos tópicos, tempo dedicado por matéria, quando fazer revisões e simulados, e dê orientações práticas para o aluno manter o foco.
-
-No final, inclua uma recomendação motivacional.
-
-**Formato:** markdown básico
-  `.trim()
+`.trim()
 
     try {
         await aiStore.sendMessage(prompt)
@@ -125,6 +183,11 @@ No final, inclua uma recomendação motivacional.
 
         <div class="max-w-4xl mx-auto mt-8 bg-white p-6 rounded shadow">
             <form class="space-y-6">
+                <!-- Cargo -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Cargo</label>
+                    <input type="text" v-model="cargo" class="mt-1 block w-full border rounded p-2">
+                </div>
                 <!-- Datas -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -228,8 +291,17 @@ No final, inclua uma recomendação motivacional.
                 </div>
             </form>
 
-            <!-- Exibição do plano gerado -->
-            <div v-if="generatedPlan" class="mt-6 bg-blue-50 border border-blue-200 p-4 rounded text-sm prose max-w-none" v-html="generatedPlan"></div>
+            <!-- Exportar PDF -->
+            <div v-if="weeklyTables.length" class="mt-6 text-right">
+              <button @click="exportToPDF" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                Exportar para PDF
+              </button>
+            </div>
+
+            <!-- Exibição modular por semana -->
+            <div id="study-plan" class="mt-4 space-y-6">
+              <div v-for="(week, index) in weeklyTables" :key="index" class="bg-blue-50 border border-blue-200 p-4 rounded text-sm prose max-w-none" v-html="week" />
+            </div>
         </div>
     </div>
 </template>
