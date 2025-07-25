@@ -69,6 +69,11 @@ const menuItems = [
     route: '/area-do-aluno'
   },
   {
+    label: 'Cronograma',
+    icon: 'fas fa-calendar-days',
+    route: '/area-do-aluno/cronograma'
+  },
+  {
     label: 'Estudar',
     icon: 'fa-solid fa-stopwatch',
     route: '/area-do-aluno/estudar'

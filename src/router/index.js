@@ -3,6 +3,7 @@ import { auth } from '../firebase';
 import { waitForAuthReady } from '../utils/authReady';
 import { useUserStore } from '../stores/useUserStore';
 
+// Rotas de Alunos
 import Home from '../views/Home.vue';
 import Career from '../views/CareerSelection.vue';
 import Subjects from '../views/Subjects.vue';
@@ -10,6 +11,7 @@ import StudyCycle from '../views/StudyCycle.vue';
 import OpenCompetitions from '../views/OpenCompetitions.vue';
 import StudyStart from '../views/StudyStart.vue';
 import ErrorPage from '../views/ErrorPage.vue';
+import StudySchedule from '../views/StudySchedule.vue'
 
 //Rotas em teste
 import SubscriptionsPage from '../views/SubscriptionsPage.vue';
@@ -123,6 +125,12 @@ const routes = [
         component: DashboardHome,
         meta: { title: 'Área do Aluno | Estuday' }
       },
+      // {
+      //   path: 'cronograma',
+      //   name: 'Cronograma de Estudos',
+      //   component: StudySchedule,
+      //   meta: { title: 'Criar Cronograma | Estuday'}
+      // },
       {
         path: 'estudar',
         name: 'Estudar',
