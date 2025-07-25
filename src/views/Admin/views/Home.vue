@@ -1,5 +1,10 @@
 <script setup>
 import Card from '../components/ui/Card.vue';
+import StudySessionChart from '../components/charts/StudySessionChart.vue';
+
+import { useUserStore } from '../../../stores/useUserStore';
+
+const userStore = useUserStore();
 
 const datas = [
     { title: 'Total de usuários', icon: 'fa-solid fa-users', info: '51' },
@@ -26,9 +31,10 @@ const datas = [
                 </template>
             </Card>
         </div>
-        <div>
-            <p>Espaço para os gráficos</p>
-        </div>
+        
+        <!-- Gráfico de sessões -->
+        <StudySessionChart class="w-full my-4" />
+        
         <div class="mt-2">
             <p>Essa tela tera as seguintes informações GERAIS:</p>
             <ul class="p-2">
