@@ -11,10 +11,10 @@ const datas = [
 </script>
 
 <template>
-    <header class="bg-white p-6 shadow-md">
-        <h1>Administrador | Home</h1>
+    <header class="bg-white text-center shadow-md p-4 md:p-6">
+        <p class="font-bold">Administrador | Home</p>
     </header>
-    <div class="min-h-screen p-8">
+    <div class="min-h-screen p-4 md:p-8">
         <div class="flex flex-1 gap-2 flex-wrap">
             <Card class="flex-1" v-for="item in datas" :key="item.name">
                 <template #title>

@@ -103,7 +103,7 @@ const routes = [
   //       meta: {title: 'Admin Estuday | Home'}
   //     },
   //     {
-  //       path: '/usuarios',
+  //       path: 'usuarios',
   //       name: 'AdminUsers',
   //       component: AdminUsers,
   //       meta: {title: 'Admin Estuday | Lista de Usuários'}
