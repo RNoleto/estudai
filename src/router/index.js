@@ -11,7 +11,7 @@ import StudyCycle from '../views/StudyCycle.vue';
 import OpenCompetitions from '../views/OpenCompetitions.vue';
 import StudyStart from '../views/StudyStart.vue';
 import ErrorPage from '../views/ErrorPage.vue';
-import StudySchedule from '../views/StudySchedule.vue'
+import StudySchedule from '../views/StudyScheduleOld.vue'
 
 //Rotas em teste
 import SubscriptionsPage from '../views/SubscriptionsPage.vue';
