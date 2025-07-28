@@ -18,6 +18,7 @@ import { useUserStore } from "../stores/useUserStore";
 import { useStudyStore } from "../stores/useStudyStore";
 import { useSubjectStore } from "../stores/useSubjectStore";
 import { useTimeFormatter } from '../composables/useTimeFormatter';
+import { useScheduleStore } from '../stores/useScheduleStore';
 import { useHead } from '@vueuse/head';
 
 
@@ -27,6 +28,7 @@ const { formatStudyTime } = useTimeFormatter();
 const studyStore = useStudyStore();
 const userStore = useUserStore();
 const subjectStore = useSubjectStore();
+const scheduleStore = useScheduleStore();
 
 const selectedSubject = ref(null);
 const chartData = ref();
@@ -50,12 +52,42 @@ onMounted(async () => {
       userStore.fetchUserSubjects(),
       subjectStore.fetchSubjects(),
       userStore.fetchUserStudyRecords(),
+      scheduleStore.loadWeekPlan(),
+      scheduleStore.loadDailyProgress(),
     ]);
     isLoading.value = false;
   } catch (error) {
     console.error("Error loading data: ", error);
   }
 });
+
+const todaysSubjects = computed(() => {
+  // Pega o nome do dia da semana atual em português
+  const todayName = new Date().toLocaleDateString('pt-BR', { weekday: 'long' })
+    .replace(/^\w/, c => c.toUpperCase());
+
+  // Encontra o plano para o dia de hoje
+  const dayPlan = scheduleStore.weeklyPlan.find(d => d.day === todayName);
+
+  if (!dayPlan || !dayPlan.subjects) {
+    return [];
+  }
+
+  // Retorna as matérias do dia, adicionando o status de 'completed'
+  return dayPlan.subjects.map(subject => ({
+    ...subject,
+    completed: scheduleStore.isCompleted(subject.id)
+  }));
+});
+
+// [NOVO] Função para selecionar uma matéria sugerida
+function selectSuggestedSubject(subject) {
+  // Encontra o objeto completo da matéria na lista de matérias do usuário
+  const fullSubjectObject = userSubjects.value.find(s => s.name === subject.name);
+  if (fullSubjectObject) {
+    handleSubjectSelection(fullSubjectObject);
+  }
+}
 
 // Trecho responsável pelo StudySummaryModal
 const handleTimerStopped = () => {
@@ -68,9 +100,9 @@ const handleCloseModal = () => {
   isOpen.value = false;
 }
 
-const handleSaveSuccess = () =>{
+const handleSaveSuccess = () => {
   selectedSubject.value = null;
-  studyStore.topic = "";   
+  studyStore.topic = "";
 }
 
 // Gera os dados do gráfico para cada registro
@@ -177,7 +209,7 @@ const userSubjects = computed(() => {
 // Define a matéria selecionada na store
 const handleSubjectSelection = (subject) => {
   selectedSubject.value = subject;
-  studyStore.setSubject(subject.id); // Apenas atualiza o ID na store
+  studyStore.setSubject(subject.id);
 };
 
 const isSubjectSelected = computed(() => !!selectedSubject.value);
@@ -301,59 +333,68 @@ useHead({
       </div>
     </div>
 
-        <!-- Main Content -->
+    <!-- Main Content -->
     <div class="mx-auto min-h-[750px] overflow-hidden px-4 py-6 sm:px-6 lg:px-8">
+
       <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 min-h-[600px] items-stretch">
-        
+
         <!-- Left Column: Timer and Study Setup -->
         <div class="xl:col-span-1 flex flex-col space-y-4 h-fit">
-          
+
+          <div v-if="todaysSubjects.length > 0" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-calendar-day text-primary"></i>
+              Para estudar hoje
+            </h2>
+            <div class="space-y-2">
+              <div v-for="subject in todaysSubjects" :key="subject.id">
+                <button @click="selectSuggestedSubject(subject)"
+                  class="w-full flex items-center p-3 rounded-md text-left transition-all duration-200" :class="subject.completed
+                    ? 'bg-green-50 text-gray-500 cursor-not-allowed'
+                    : 'bg-gray-50 hover:bg-primary-light'" :disabled="subject.completed">
+                  <div class="w-5 h-5 flex items-center justify-center rounded-full mr-3"
+                    :class="subject.completed ? 'bg-green-500' : 'bg-gray-300'">
+                    <i v-if="subject.completed" class="fa-solid fa-check text-white text-xs"></i>
+                  </div>
+                  <span class="font-medium text-gray-800" :class="{ 'line-through': subject.completed }">
+                    {{ subject.name }}
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
           <!-- Study Setup Card -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <i class="fa-solid fa-gear text-primary"></i>
               Configuração do Estudo
             </h2>
-            
+
             <div class="space-y-4">
               <!-- Subject Selection -->
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                   Matéria
                 </label>
-                <ComboBox 
-                  :options="userSubjects" 
-                  :placeholder="'Selecione uma matéria...'" 
-                  v-model="selectedSubject"
-                  :key="selectedSubject ? selectedSubject.id : 'empty'" 
-                  @select="handleSubjectSelection" 
-                  class="w-full" 
-                />
+                <ComboBox :options="userSubjects" :placeholder="'Selecione uma matéria...'" v-model="selectedSubject"
+                  :key="selectedSubject ? selectedSubject.id : 'empty'" @select="handleSubjectSelection" class="w-full" />
               </div>
-              
+
               <!-- Topic Input -->
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                   Tópico
                 </label>
-                <Input 
-                  placeholder="Qual tópico você vai estudar?" 
-                  :showLabel="false" 
-                  class="w-full"
-                  v-model="studyStore.topic" 
-                />
+                <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-full"
+                  v-model="studyStore.topic" />
               </div>
-              
+
               <!-- Manual Entry Button -->
               <div>
-                <Button 
-                  :variant="isSubjectSelected ? 'base' : 'baseDisable'" 
-                  :disabled="!isSubjectSelected" 
-                  size="xs"
-                  class="w-full" 
-                  @click="openManualEntryModal"
-                  :title="!isSubjectSelected ? 'Você precisa selecionar uma matéria' : ''"
-                >
+                <Button :variant="isSubjectSelected ? 'base' : 'baseDisable'" :disabled="!isSubjectSelected" size="xs"
+                  class="w-full" @click="openManualEntryModal"
+                  :title="!isSubjectSelected ? 'Você precisa selecionar uma matéria' : ''">
                   <i class="fa-solid fa-plus mr-2"></i>
                   Inserir Manualmente
                 </Button>
@@ -363,57 +404,41 @@ useHead({
 
           <!-- Timer Card -->
           <div class="h-fit">
-            <Timer 
-              :isDisabled="!isSubjectSelected" 
-              @timerStopped="handleTimerStopped" 
-              @openFocus="openFocus"
-              class="w-full" 
-            />
+            <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus"
+              class="w-full" />
           </div>
         </div>
 
         <!-- Right Column: Statistics and Records -->
         <div class="xl:col-span-2 flex flex-col space-y-4 h-fit">
-          
+
           <!-- Today's Statistics -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <i class="fa-solid fa-chart-line text-primary"></i>
               Estatísticas de Hoje
             </h2>
-            
+
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <Card 
-                v-if="totalTimeStudyToday" 
-                title="Tempo de Estudo" 
-                icon="fa-solid fa-stopwatch-20" 
-                class="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200"
-              >
+              <Card v-if="totalTimeStudyToday" title="Tempo de Estudo" icon="fa-solid fa-stopwatch-20"
+                class="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
                 <template #content>
                   <p class="text-blue-700">{{ formatStudyTime(totalTimeStudyToday) }}</p>
                 </template>
               </Card>
-                <Card 
-                  v-if="questionResolved" 
-                  title="Total de Questões" 
-                  icon="fa-solid fa-pen-clip" 
-                  class="bg-gradient-to-br from-green-50 to-green-100 border-green-200"
-                >
-                  <template #content>
-                    <p class="text-green-700">{{ questionResolved }}</p>
-                  </template>
-                </Card>
-                
-                <Card 
-                  v-if="totalCorrectAnswers" 
-                  title="Acertos" 
-                  icon="fa-solid fa-check" 
-                  class="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200"
-                >
-                  <template #content>
-                    <p class="text-emerald-700">{{ totalCorrectAnswers }}</p>
-                  </template>
-                </Card>
+              <Card v-if="questionResolved" title="Total de Questões" icon="fa-solid fa-pen-clip"
+                class="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+                <template #content>
+                  <p class="text-green-700">{{ questionResolved }}</p>
+                </template>
+              </Card>
+
+              <Card v-if="totalCorrectAnswers" title="Acertos" icon="fa-solid fa-check"
+                class="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200">
+                <template #content>
+                  <p class="text-emerald-700">{{ totalCorrectAnswers }}</p>
+                </template>
+              </Card>
             </div>
           </div>
 
@@ -424,27 +449,19 @@ useHead({
                 <i class="fa-solid fa-book-open text-primary"></i>
                 Registros de Estudo
               </h2>
-              
+
               <div class="text-sm text-gray-500">
                 {{ todayStudyRecords.length }} registro{{ todayStudyRecords.length !== 1 ? 's' : '' }} hoje
               </div>
             </div>
-            
+
             <!-- Records Grid -->
             <div v-if="todayStudyRecords.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <StudyCard 
-                v-for="(record, index) in todayStudyRecords" 
-                :key="record.id"
-                :record="record" 
-                :isLoading="isLoading" 
-                :chartData="chartData[index]" 
-                :chartOptions="chartOptions[index]"
-                @edit="openModal" 
-                @delete="openDeleteModal(record)" 
-                class="w-full"
-              />
+              <StudyCard v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record"
+                :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal"
+                @delete="openDeleteModal(record)" class="w-full" />
             </div>
-            
+
             <!-- Empty State -->
             <div v-else class="text-center py-12">
               <div class="mx-auto h-24 w-24 text-gray-300 mb-4">
@@ -461,46 +478,26 @@ useHead({
     </div>
 
     <!-- Modals -->
-    <StudySummaryModal 
-      :isOpen="isOpen" 
-      @onClose="handleCloseModal" 
-      @onSaveSuccess="handleSaveSuccess"
-    />
-    
-    <EditModal 
-      v-if="isModalVisible" 
-      :isVisible="isModalVisible" 
-      :record="selectedRecord"
-      @update="userStore.fetchUserStudyRecords" 
-      @close="isModalVisible = false" 
-    />
-    
-    <ManualStudyEntryModal 
-      :isVisible="isManualEntryModalVisible" 
-      :selectedSubject="selectedSubject"
-      @close="isManualEntryModalVisible = false" 
-      :onSave="handleSaveManualEntry" 
-    />
-    
-    <!-- Alert Modals -->
-    <AlertModal 
-      :visible="showConfirmModal" 
-      title="Deletar Registro"
-      message="Tem certeza que deseja deletar este registro? Esta ação não pode ser desfeita."
-      @confirm="handleDeleteRecord" 
-      @close="showConfirmModal = false" 
-      :showConfirm="true" 
-      type="delete" 
-    />
+    <StudySummaryModal :isOpen="isOpen" @onClose="handleCloseModal" @onSaveSuccess="handleSaveSuccess" />
 
-    <AlertModal 
-      :visible="showSuccessModal" 
-      title="Sucesso" 
-      message="Registro deletado com sucesso!"
-      @close="showSuccessModal = false" 
-      :showButton="false" 
-      :showConfirm="false" 
-      type="success" 
-    />
+    <EditModal v-if="isModalVisible" :isVisible="isModalVisible" :record="selectedRecord"
+      @update="userStore.fetchUserStudyRecords" @close="isModalVisible = false" />
+
+    <ManualStudyEntryModal :isVisible="isManualEntryModalVisible" :selectedSubject="selectedSubject"
+      @close="isManualEntryModalVisible = false" :onSave="handleSaveManualEntry" />
+
+    <!-- Alert Modals -->
+    <AlertModal :visible="showConfirmModal" title="Deletar Registro"
+      message="Tem certeza que deseja deletar este registro? Esta ação não pode ser desfeita."
+      @confirm="handleDeleteRecord" @close="showConfirmModal = false" :showConfirm="true" type="delete" />
+
+    <AlertModal :visible="showSuccessModal" title="Sucesso" message="Registro deletado com sucesso!"
+      @close="showSuccessModal = false" :showButton="false" :showConfirm="false" type="success" />
   </div>
 </template>
+
+<style scoped>
+.hover\:bg-primary-light:hover {
+    background-color: #E0E7FF; /* Ex: light-indigo-100 */
+}
+</style>
