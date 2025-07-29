@@ -1,5 +1,6 @@
-import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { defineStore } from 'pinia';
+import { useUserStore } from './useUserStore';
 
 // Função utilitária para obter a data de hoje no formato 'AAAA-MM-DD'
 function getTodayDateString() {
@@ -35,19 +36,37 @@ export const useScheduleStore = defineStore('schedule', () => {
   // Carrega o MOLDE do cronograma
   function loadWeekPlan() {
     return new Promise(resolve => {
-        console.log("Carregando cronograma (mock)...");
-        isLoading.value = true;
-        const savedPlan = localStorage.getItem('userWeeklyPlan');
-        if (savedPlan) {
-          weeklyPlan.value = JSON.parse(savedPlan);
-        }
-        // Simula um pequeno delay de rede
-        setTimeout(() => {
-          isLoading.value = false;
-          console.log("Cronograma carregado.");
-          resolve(); // Avisa que a operação terminou
-        }, 200); // Reduzi o delay para a UI parecer mais rápida
-      });
+      console.log("Carregando cronograma (mock)...");
+      isLoading.value = true;
+      const savedPlan = localStorage.getItem('userWeeklyPlan');
+      
+      if (savedPlan) {
+        let parsedPlan = JSON.parse(savedPlan);
+      
+        // [VERIFICAÇÃO DE SEGURANÇA]
+        // Garante que cada instância de matéria tenha um ID único.
+        // Isso corrige dados antigos e previne bugs futuros.
+        let idCounter = Date.now();
+        parsedPlan.forEach(day => {
+          if (day.subjects) {
+            day.subjects.forEach(subject => {
+              // Se o ID não for único (ou não existir), gera um novo.
+              // Para simplificar, estamos gerando um novo ID para todos ao carregar.
+              subject.id = idCounter++;
+            });
+          }
+        });
+        // Fim da verificação
+      
+        weeklyPlan.value = parsedPlan;
+      }
+    
+      setTimeout(() => {
+        isLoading.value = false;
+        console.log("Cronograma carregado.");
+        resolve();
+      }, 200);
+    });
   }
 
   // Salva o MOLDE do cronograma
@@ -104,6 +123,51 @@ export const useScheduleStore = defineStore('schedule', () => {
     return dailyProgress.value[today]?.has(subjectId) || false;
   }
 
+  function syncProgressWithStudyRecords() {
+    const userStore = useUserStore();
+    
+    // [LÓGICA DE DATA CORRIGIDA] - Usa objetos Date para comparar, igual ao seu componente
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+    const todayRecords = userStore.userStudyRecords.filter(record => {
+        if (!record.created_at) return false;
+        const recordDate = new Date(record.created_at);
+        return recordDate >= startOfToday && recordDate < endOfToday;
+    });
+    // Fim da lógica corrigida
+
+    if (todayRecords.length === 0) {
+      return;
+    }
+
+    const todayDayName = new Date().toLocaleDateString('pt-BR', { weekday: 'long' }).replace(/^\w/, c => c.toUpperCase());
+    const dayPlan = weeklyPlan.value.find(d => d.day === todayDayName);
+
+    if (!dayPlan || dayPlan.subjects.length === 0) {
+      return;
+    }
+
+    const today = getTodayDateString();
+    if (!dailyProgress.value[today]) {
+        dailyProgress.value[today] = new Set();
+    }
+    
+    // A lógica a seguir para preencher os checks já está correta
+    const recordsToCheck = [...todayRecords];
+    dayPlan.subjects.forEach(subjectInstance => {
+        const recordIndex = recordsToCheck.findIndex(record => record.subjectName === subjectInstance.name);
+        if (recordIndex !== -1) {
+            dailyProgress.value[today].add(subjectInstance.id);
+            recordsToCheck.splice(recordIndex, 1);
+        }
+    });
+
+    saveDailyProgress();
+    console.log("Progresso do cronograma sincronizado com os registros de estudo.");
+  }
+
   return {
     weeklyPlan,
     isLoading,
@@ -113,5 +177,6 @@ export const useScheduleStore = defineStore('schedule', () => {
     loadDailyProgress,
     toggleCompletion,
     isCompleted,
+    syncProgressWithStudyRecords,
   };
 });

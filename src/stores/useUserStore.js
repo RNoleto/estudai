@@ -381,6 +381,17 @@ export const useUserStore = defineStore('user', {
         return (totalIncorrectAnswers / totalQuestionsResolved) * 100;
       }
       return 0;
-    }
+    },
+    todayStudyRecords(state) {
+      const now = new Date();
+      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+      return state.userStudyRecords.filter(record => {
+        if (!record.created_at) return false;
+        const recordDate = new Date(record.created_at);
+        return recordDate >= startOfToday && recordDate < endOfToday;
+      });
+    },
   }
 });

@@ -55,6 +55,9 @@ onMounted(async () => {
       scheduleStore.loadWeekPlan(),
       scheduleStore.loadDailyProgress(),
     ]);
+
+    scheduleStore.syncProgressWithStudyRecords();
+
     isLoading.value = false;
   } catch (error) {
     console.error("Error loading data: ", error);
@@ -103,6 +106,10 @@ const handleCloseModal = () => {
 const handleSaveSuccess = () => {
   selectedSubject.value = null;
   studyStore.topic = "";
+
+  setTimeout(() => {
+    scheduleStore.syncProgressWithStudyRecords();
+  }, 100);
 }
 
 // Gera os dados do gráfico para cada registro
@@ -155,28 +162,28 @@ const getChartOptions = (record) => {
   };
 };
 
-const todayStudyRecords = computed(() => {
-  // Data atual no fuso horário do navegador (local)
-  const now = new Date();
-  // Início de hoje (00:00:00) no horário local
-  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  // Início do dia seguinte (00:00:00), que será o limite superior (não incluso)
-  const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+const todayStudyRecords = computed(() => userStore.todayStudyRecords);
 
-  return userStore.userStudyRecords.filter((record) => {
-    if (!record.created_at) return false;
-    try {
-      // Converte a string da API em objeto Date
-      const recordDate = new Date(record.created_at);
-      // Retorna true se o registro estiver entre o início e o final do dia
-      return recordDate >= startOfToday && recordDate < endOfToday;
-    } catch (error) {
-      console.error("Erro ao processar a data do registro:", error);
-      return false;
-    }
-  });
+const todayProgress = computed(() => {
+  // Pega a lista de matérias de hoje que já criamos
+  const subjects = todaysSubjects.value;
+
+  // Total de matérias planejadas para hoje
+  const totalCount = subjects.length;
+
+  // Se não há matérias, o progresso é zero
+  if (totalCount === 0) {
+    return { percentage: 0, completedCount: 0, totalCount: 0 };
+  }
+
+  // Conta quantas matérias na lista têm a propriedade 'completed' como true
+  const completedCount = subjects.filter(subject => subject.completed).length;
+
+  // Calcula a porcentagem e arredonda para um número inteiro
+  const percentage = Math.round((completedCount / totalCount) * 100);
+
+  return { percentage, completedCount, totalCount };
 });
-
 
 const updateChartData = () => {
   try {
@@ -260,6 +267,9 @@ const handleSaveManualEntry = async (newRecord) => {
   try {
     await userStore.saveUserStudyRecord(newRecord);
     await userStore.fetchUserStudyRecords();
+
+    scheduleStore.syncProgressWithStudyRecords();
+
   } catch (error) {
     console.error("Erro ao salvar o registro de estudo:", error.message);
   }
@@ -341,11 +351,24 @@ useHead({
         <!-- Left Column: Timer and Study Setup -->
         <div class="xl:col-span-1 flex flex-col space-y-4 h-fit">
 
+          <!-- Matérias configurada no cronograma -->
           <div v-if="todaysSubjects.length > 0" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <h2 class="text-lg font-semibold text-gray-900 mb-2 flex items-center gap-2">
               <i class="fa-solid fa-calendar-day text-primary"></i>
               Para estudar hoje
             </h2>
+
+            <div class="mb-4">
+              <div class="flex justify-between items-center mb-1 text-sm">
+                <span class="font-bold text-primary">{{ todayProgress.percentage }}% Concluído</span>
+                <span class="text-gray-500">{{ todayProgress.completedCount }} de {{ todayProgress.totalCount }}</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                <div class="bg-primary h-2.5 rounded-full transition-all duration-500"
+                  :style="{ width: todayProgress.percentage + '%' }"></div>
+              </div>
+            </div>
+
             <div class="space-y-2">
               <div v-for="subject in todaysSubjects" :key="subject.id">
                 <button @click="selectSuggestedSubject(subject)"
@@ -378,7 +401,8 @@ useHead({
                   Matéria
                 </label>
                 <ComboBox :options="userSubjects" :placeholder="'Selecione uma matéria...'" v-model="selectedSubject"
-                  :key="selectedSubject ? selectedSubject.id : 'empty'" @select="handleSubjectSelection" class="w-full" />
+                  :key="selectedSubject ? selectedSubject.id : 'empty'" @select="handleSubjectSelection"
+                  class="w-full" />
               </div>
 
               <!-- Topic Input -->
@@ -458,8 +482,8 @@ useHead({
             <!-- Records Grid -->
             <div v-if="todayStudyRecords.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <StudyCard v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record"
-                :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal"
-                @delete="openDeleteModal(record)" class="w-full" />
+                :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]"
+                @edit="openModal" @delete="openDeleteModal(record)" class="w-full" />
             </div>
 
             <!-- Empty State -->
@@ -498,6 +522,7 @@ useHead({
 
 <style scoped>
 .hover\:bg-primary-light:hover {
-    background-color: #E0E7FF; /* Ex: light-indigo-100 */
+  background-color: #E0E7FF;
+  /* Ex: light-indigo-100 */
 }
 </style>
