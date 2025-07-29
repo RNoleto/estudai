@@ -125,12 +125,12 @@ const routes = [
         component: DashboardHome,
         meta: { title: 'Área do Aluno | Estuday' }
       },
-      // {
-      //   path: 'cronograma',
-      //   name: 'Cronograma de Estudos',
-      //   component: StudySchedule,
-      //   meta: { title: 'Criar Cronograma | Estuday'}
-      // },
+      {
+        path: 'cronograma',
+        name: 'Cronograma de Estudos',
+        component: StudySchedule,
+        meta: { title: 'Criar Cronograma | Estuday'}
+      },
       {
         path: 'estudar',
         name: 'Estudar',
