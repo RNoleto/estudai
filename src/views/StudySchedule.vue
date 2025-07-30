@@ -159,7 +159,8 @@ useHead({
             
             <h2 class="text-lg font-semibold text-gray-800 mb-4">Matérias</h2>
 
-            <draggable v-model="availableSubjects" item-key="id" tag="div" class="space-y-2"
+            <draggable v-model="availableSubjects" item-key="id" tag="div" 
+              class="space-y-2 max-h-[60vh] overflow-y-auto pr-2"
               :group="{ name: 'subjects', pull: 'clone', put: false }" :sort="false">
               <template #item="{ element: subject }">
                 <div class="bg-gray-100 p-3 rounded-md cursor-grab text-sm font-medium text-gray-700 hover:bg-gray-200">
