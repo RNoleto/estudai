@@ -31,9 +31,6 @@ export const useScheduleStore = defineStore('schedule', () => {
 
   const isLoading = ref(false);
 
-  // --- ACTIONS ---
-
-  // Carrega o MOLDE do cronograma
   async function loadWeekPlan() {
     const userStore = useUserStore();
     if (!userStore.userId) return;
@@ -43,27 +40,22 @@ export const useScheduleStore = defineStore('schedule', () => {
       const response = await axios.get(`schedule/${userStore.userId}`);
       const itemsFromDb = response.data;
 
-      // Limpa o plano atual
       weeklyPlan.value.forEach(day => day.subjects = []);
 
-      // [MAPA CORRIGIDO E SIMPLIFICADO]
-      // O índice do array corresponde ao 'day_of_week' - 1
-      // (Segunda=1 -> índice 0, Terça=2 -> índice 1, ..., Domingo=7 -> índice 6)
       const dayMap = [
         'Segunda-feira', 'Terça-feira', 'Quarta-feira',
         'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'
       ];
 
       itemsFromDb.forEach(item => {
-        // Acessa o nome do dia diretamente pelo índice
         const dayName = dayMap[item.day_of_week - 1];
         const dayObject = weeklyPlan.value.find(d => d.day === dayName);
 
-        if (dayObject && item.subject) { // Adicionada verificação para 'item.subject'
+        if (dayObject && item.subject) {
           dayObject.subjects.push({
             id: item.id,
             name: item.subject.name,
-            subject_id: item.subject_id
+            subject_id: item.subject_id // O ID real da matéria
           });
         }
       });
@@ -74,128 +66,161 @@ export const useScheduleStore = defineStore('schedule', () => {
     }
   }
 
-  // Salva o MOLDE do cronograma
   async function saveWeeklyPlan() {
     const userStore = useUserStore();
     if (!userStore.userId) return;
 
     isLoading.value = true;
     try {
+      // [LÓGICA SIMPLIFICADA]
+      // Agora podemos confiar que cada 'subject' no nosso plano já tem o 'subject_id' correto.
       const payload = {
         user_id: userStore.userId,
-        weeklyPlan: weeklyPlan.value.map(day => {
-          const subjectsWithIds = day.subjects.map(subject => ({
-            ...subject,
-            subject_id: userStore.combinedSubjects.find(s => s.name === subject.name)?.id
-          }))
-            // [FILTRO DE SEGURANÇA]
-            .filter(subject => subject.subject_id != null);
-
-          return { ...day, subjects: subjectsWithIds };
-        })
+        weeklyPlan: weeklyPlan.value, // A estrutura já está pronta!
       };
 
-      await axios.post('schedule', payload);
-      await loadWeekPlan();
+      const response = await axios.post('schedule', payload);
+
+      // A resposta da API já contém o cronograma salvo com os IDs permanentes
+      const itemsFromDb = response.data.schedule;
+
+      // Atualiza o estado local com os dados do banco (a "fonte da verdade")
+      weeklyPlan.value.forEach(day => day.subjects = []);
+      const dayMap = [
+        'Segunda-feira', 'Terça-feira', 'Quarta-feira',
+        'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'
+      ];
+      itemsFromDb.forEach(item => {
+        const dayName = dayMap[item.day_of_week - 1];
+        const dayObject = weeklyPlan.value.find(d => d.day === dayName);
+        if (dayObject && item.subject) {
+          dayObject.subjects.push({
+            id: item.id,
+            name: item.subject.name,
+            subject_id: item.subject_id
+          });
+        }
+      });
     } catch (error) {
       console.error("Erro ao salvar o cronograma:", error);
+      // Analise a resposta do erro para ver as mensagens de validação do Laravel
+      if (error.response && error.response.status === 422) {
+        console.error("Erros de validação:", error.response.data.errors);
+        alert("Erro de validação. Verifique o console.");
+      }
+      throw error;
     } finally {
       isLoading.value = false;
     }
   }
 
-  // [NOVO] Carrega o PROGRESSO salvo
-  function loadDailyProgress() {
-    const savedProgress = localStorage.getItem('dailyProgress');
-    if (savedProgress) {
-      const parsed = JSON.parse(savedProgress);
-      Object.keys(parsed).forEach(date => {
-        dailyProgress.value[date] = new Set(parsed[date]);
+  async function loadDailyProgress() {
+    const userStore = useUserStore();
+    if (!userStore.userId) return;
+    const today = getTodayDateString();
+    try {
+      const response = await axios.get(`/progress/${userStore.userId}`, {
+        params: { date: today }
       });
+      const completedIds = response.data.map(item => item.schedule_item_id);
+      dailyProgress.value[today] = new Set(completedIds);
+    } catch (error) {
+      console.error("Erro ao carregar progresso diário:", error);
+      dailyProgress.value[today] = new Set();
     }
   }
 
-  // [NOVO] Salva o PROGRESSO
-  function saveDailyProgress() {
-    const serializableProgress = {};
-    Object.keys(dailyProgress.value).forEach(date => {
-      // Converte o Set para um Array para que possa ser salvo como JSON
-      serializableProgress[date] = Array.from(dailyProgress.value[date]);
-    });
-    localStorage.setItem('dailyProgress', JSON.stringify(serializableProgress));
-  }
-
-  // [NOVO] Ação principal para marcar/desmarcar uma matéria HOJE
-  function toggleCompletion(subjectId) {
+  async function toggleCompletion(subjectId) {
+    const userStore = useUserStore();
+    if (!userStore.userId) return;
     const today = getTodayDateString();
-
-    // Garante que existe um Set para o dia de hoje
     if (!dailyProgress.value[today]) {
       dailyProgress.value[today] = new Set();
     }
 
-    const todayProgress = dailyProgress.value[today];
-
-    if (todayProgress.has(subjectId)) {
-      todayProgress.delete(subjectId);
+    // Atualização Otimista: Muda a UI primeiro
+    if (dailyProgress.value[today].has(subjectId)) {
+      dailyProgress.value[today].delete(subjectId);
     } else {
-      todayProgress.add(subjectId);
+      dailyProgress.value[today].add(subjectId);
     }
 
-    // Salva o progresso a cada mudança
-    saveDailyProgress();
+    try {
+      await axios.post('/progress/toggle', {
+        user_id: userStore.userId,
+        schedule_item_id: subjectId,
+      });
+    } catch (error) {
+      console.error("Falha ao sincronizar o toggle com o servidor:", error);
+      // Desfaz a mudança na UI em caso de erro
+      if (dailyProgress.value[today].has(subjectId)) {
+        dailyProgress.value[today].delete(subjectId);
+      } else {
+        dailyProgress.value[today].add(subjectId);
+      }
+      alert("Não foi possível salvar seu progresso.");
+    }
   }
 
-  // [NOVO] Getter/Função para verificar se uma matéria está completa HOJE
   function isCompleted(subjectId) {
     const today = getTodayDateString();
     return dailyProgress.value[today]?.has(subjectId) || false;
   }
 
-  function syncProgressWithStudyRecords() {
+  async function syncProgressWithStudyRecords() {
     const userStore = useUserStore();
+    if (!userStore.userId) return;
+    
+    // A função agora confia que a userStore.todayStudyRecords já está atualizada.
+    const todayRecords = userStore.todayStudyRecords;
+    const today = getTodayDateString();
 
-    // [LÓGICA DE DATA CORRIGIDA] - Usa objetos Date para comparar, igual ao seu componente
-    const now = new Date();
-    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-
-    const todayRecords = userStore.userStudyRecords.filter(record => {
-      if (!record.created_at) return false;
-      const recordDate = new Date(record.created_at);
-      return recordDate >= startOfToday && recordDate < endOfToday;
-    });
-    // Fim da lógica corrigida
-
-    if (todayRecords.length === 0) {
-      return;
+    if (todayRecords.length === 0 && (!dailyProgress.value[today] || dailyProgress.value[today].size === 0)) {
+        console.log("Nenhum registro de estudo ou progresso para sincronizar. Saindo.");
+        
+        // Se não há registros, garante que o progresso do dia seja limpo no backend
+        await axios.post('/progress/sync', {
+            user_id: userStore.userId,
+            date: today,
+            completed_ids: [], // Envia um array vazio para limpar
+        });
+        await loadDailyProgress(); // Recarrega o estado limpo
+        return;
     }
-
+    
+    // O weeklyPlan já está na memória, não precisa recarregar.
     const todayDayName = new Date().toLocaleDateString('pt-BR', { weekday: 'long' }).replace(/^\w/, c => c.toUpperCase());
     const dayPlan = weeklyPlan.value.find(d => d.day === todayDayName);
 
     if (!dayPlan || dayPlan.subjects.length === 0) {
       return;
     }
-
-    const today = getTodayDateString();
-    if (!dailyProgress.value[today]) {
-      dailyProgress.value[today] = new Set();
-    }
-
-    // A lógica a seguir para preencher os checks já está correta
+    
     const recordsToCheck = [...todayRecords];
+    const completedIds = [];
+    
     dayPlan.subjects.forEach(subjectInstance => {
-      const recordIndex = recordsToCheck.findIndex(record => record.subjectName === subjectInstance.name);
-      if (recordIndex !== -1) {
-        dailyProgress.value[today].add(subjectInstance.id);
-        recordsToCheck.splice(recordIndex, 1);
-      }
+        const recordIndex = recordsToCheck.findIndex(record => record.subjectName === subjectInstance.name);
+        if (recordIndex !== -1) {
+            completedIds.push(subjectInstance.id);
+            recordsToCheck.splice(recordIndex, 1);
+        }
     });
 
-    saveDailyProgress();
-    console.log("Progresso do cronograma sincronizado com os registros de estudo.");
-  }
+    try {
+        await axios.post('/progress/sync', {
+            user_id: userStore.userId,
+            date: today,
+            completed_ids: completedIds,
+        });
+        
+        await loadDailyProgress();
+        console.log("Progresso sincronizado com sucesso.");
+
+    } catch (error) {
+        console.error("Erro ao sincronizar progresso com o servidor:", error);
+    }
+}
 
   return {
     weeklyPlan,

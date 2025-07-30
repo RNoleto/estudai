@@ -68,12 +68,17 @@ onMounted(async () => {
 
 // --- MÉTODOS ---
 function onAddSubject(event) {
-  const list = event.to;
-  const index = event.newIndex;
-  const dayName = list.dataset.day;
+  const dayName = event.to.dataset.day;
   const day = scheduleStore.weeklyPlan.find(d => d.day === dayName);
-  if (day && day.subjects[index]) {
-    day.subjects[index].id = Date.now();
+  const newItem = day.subjects[event.newIndex]; // O item que acabou de ser adicionado
+
+  if (day && newItem) {
+    // 1. Preserva o ID original da matéria como 'subject_id'
+    // O clone vem com o 'id' da tabela de matérias, então copiamos ele.
+    newItem.subject_id = newItem.id; 
+    
+    // 2. Cria um novo ID único APENAS para esta instância no frontend (para o :key e remoção)
+    newItem.id = Date.now(); 
   }
 }
 
