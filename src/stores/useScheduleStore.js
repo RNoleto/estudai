@@ -2,12 +2,14 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useUserStore } from './useUserStore';
 
+import axios from 'axios';
+
 // Função utilitária para obter a data de hoje no formato 'AAAA-MM-DD'
 function getTodayDateString() {
   const today = new Date();
   // Ajusta para o fuso horário local para evitar problemas de data
   const offset = today.getTimezoneOffset();
-  const adjustedToday = new Date(today.getTime() - (offset*60*1000));
+  const adjustedToday = new Date(today.getTime() - (offset * 60 * 1000));
   return adjustedToday.toISOString().split('T')[0];
 }
 
@@ -25,53 +27,81 @@ export const useScheduleStore = defineStore('schedule', () => {
     { day: 'Domingo', subjects: [] },
   ]);
 
-  // [NOVO] O progresso diário. Armazena os IDs das matérias concluídas por data.
-  // Ex: { '2025-07-28': Set(167..., 168...) }
   const dailyProgress = ref({});
-  
+
   const isLoading = ref(false);
 
   // --- ACTIONS ---
 
   // Carrega o MOLDE do cronograma
-  function loadWeekPlan() {
-    return new Promise(resolve => {
-      console.log("Carregando cronograma (mock)...");
-      isLoading.value = true;
-      const savedPlan = localStorage.getItem('userWeeklyPlan');
-      
-      if (savedPlan) {
-        let parsedPlan = JSON.parse(savedPlan);
-      
-        // [VERIFICAÇÃO DE SEGURANÇA]
-        // Garante que cada instância de matéria tenha um ID único.
-        // Isso corrige dados antigos e previne bugs futuros.
-        let idCounter = Date.now();
-        parsedPlan.forEach(day => {
-          if (day.subjects) {
-            day.subjects.forEach(subject => {
-              // Se o ID não for único (ou não existir), gera um novo.
-              // Para simplificar, estamos gerando um novo ID para todos ao carregar.
-              subject.id = idCounter++;
-            });
-          }
-        });
-        // Fim da verificação
-      
-        weeklyPlan.value = parsedPlan;
-      }
-    
-      setTimeout(() => {
-        isLoading.value = false;
-        console.log("Cronograma carregado.");
-        resolve();
-      }, 200);
-    });
+  async function loadWeekPlan() {
+    const userStore = useUserStore();
+    if (!userStore.userId) return;
+
+    isLoading.value = true;
+    try {
+      const response = await axios.get(`schedule/${userStore.userId}`);
+      const itemsFromDb = response.data;
+
+      // Limpa o plano atual
+      weeklyPlan.value.forEach(day => day.subjects = []);
+
+      // [MAPA CORRIGIDO E SIMPLIFICADO]
+      // O índice do array corresponde ao 'day_of_week' - 1
+      // (Segunda=1 -> índice 0, Terça=2 -> índice 1, ..., Domingo=7 -> índice 6)
+      const dayMap = [
+        'Segunda-feira', 'Terça-feira', 'Quarta-feira',
+        'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'
+      ];
+
+      itemsFromDb.forEach(item => {
+        // Acessa o nome do dia diretamente pelo índice
+        const dayName = dayMap[item.day_of_week - 1];
+        const dayObject = weeklyPlan.value.find(d => d.day === dayName);
+
+        if (dayObject && item.subject) { // Adicionada verificação para 'item.subject'
+          dayObject.subjects.push({
+            id: item.id,
+            name: item.subject.name,
+            subject_id: item.subject_id
+          });
+        }
+      });
+    } catch (error) {
+      console.error("Erro ao carregar o cronograma:", error);
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   // Salva o MOLDE do cronograma
-  function saveWeeklyPlan() {
-    localStorage.setItem('userWeeklyPlan', JSON.stringify(weeklyPlan.value));
+  async function saveWeeklyPlan() {
+    const userStore = useUserStore();
+    if (!userStore.userId) return;
+
+    isLoading.value = true;
+    try {
+      const payload = {
+        user_id: userStore.userId,
+        weeklyPlan: weeklyPlan.value.map(day => {
+          const subjectsWithIds = day.subjects.map(subject => ({
+            ...subject,
+            subject_id: userStore.combinedSubjects.find(s => s.name === subject.name)?.id
+          }))
+            // [FILTRO DE SEGURANÇA]
+            .filter(subject => subject.subject_id != null);
+
+          return { ...day, subjects: subjectsWithIds };
+        })
+      };
+
+      await axios.post('schedule', payload);
+      await loadWeekPlan();
+    } catch (error) {
+      console.error("Erro ao salvar o cronograma:", error);
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   // [NOVO] Carrega o PROGRESSO salvo
@@ -80,7 +110,6 @@ export const useScheduleStore = defineStore('schedule', () => {
     if (savedProgress) {
       const parsed = JSON.parse(savedProgress);
       Object.keys(parsed).forEach(date => {
-        // Converte o array salvo de volta para um Set para performance
         dailyProgress.value[date] = new Set(parsed[date]);
       });
     }
@@ -112,7 +141,7 @@ export const useScheduleStore = defineStore('schedule', () => {
     } else {
       todayProgress.add(subjectId);
     }
-    
+
     // Salva o progresso a cada mudança
     saveDailyProgress();
   }
@@ -125,16 +154,16 @@ export const useScheduleStore = defineStore('schedule', () => {
 
   function syncProgressWithStudyRecords() {
     const userStore = useUserStore();
-    
+
     // [LÓGICA DE DATA CORRIGIDA] - Usa objetos Date para comparar, igual ao seu componente
     const now = new Date();
     const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 
     const todayRecords = userStore.userStudyRecords.filter(record => {
-        if (!record.created_at) return false;
-        const recordDate = new Date(record.created_at);
-        return recordDate >= startOfToday && recordDate < endOfToday;
+      if (!record.created_at) return false;
+      const recordDate = new Date(record.created_at);
+      return recordDate >= startOfToday && recordDate < endOfToday;
     });
     // Fim da lógica corrigida
 
@@ -151,17 +180,17 @@ export const useScheduleStore = defineStore('schedule', () => {
 
     const today = getTodayDateString();
     if (!dailyProgress.value[today]) {
-        dailyProgress.value[today] = new Set();
+      dailyProgress.value[today] = new Set();
     }
-    
+
     // A lógica a seguir para preencher os checks já está correta
     const recordsToCheck = [...todayRecords];
     dayPlan.subjects.forEach(subjectInstance => {
-        const recordIndex = recordsToCheck.findIndex(record => record.subjectName === subjectInstance.name);
-        if (recordIndex !== -1) {
-            dailyProgress.value[today].add(subjectInstance.id);
-            recordsToCheck.splice(recordIndex, 1);
-        }
+      const recordIndex = recordsToCheck.findIndex(record => record.subjectName === subjectInstance.name);
+      if (recordIndex !== -1) {
+        dailyProgress.value[today].add(subjectInstance.id);
+        recordsToCheck.splice(recordIndex, 1);
+      }
     });
 
     saveDailyProgress();

@@ -78,14 +78,15 @@ const summarizedData = computed(() => {
   <!-- <IsLoading v-if="isLoading" /> -->
   <div class="hidden sm:block sm:w-full">  
     <table  class="bg-white shadow-md rounded-xl overflow-hidden sm:w-full">
-      <thead class="bg-primary text-white sm:text-xs">
+      <thead class="bg-primary text-white sm:text-sm">
         <tr>
-          <th class="px-4 py-2 text-left">Matérias</th>
-          <th class="px-4 py-2 text-left">Tempo de Estudo</th>
-          <th class="px-4 py-2 text-left">Pausas</th>
-          <th class="px-4 py-2 text-left">Questões Resolvidas</th>
-          <th class="px-4 py-2 text-left">Respostas Corretas</th>
-          <th class="px-4 py-2 text-left">Respostas Incorretas</th>
+          <th class="px-4 py-2 text-left">Matéria</th>
+          <th class="px-4 py-2 text-left">Tempo</th>
+          <!-- <th class="px-4 py-2 text-left">Pausas</th> -->
+          <!-- <th class="px-4 py-2 text-left">Questões Resolvidas</th> -->
+           <th class="px-4 py-2 text-center"><i class="fa-solid fa-file-pen"></i></th>
+          <th class="px-4 py-2 text-center"><i class="fa-solid fa-circle-check"></i></th>
+          <th class="px-4 py-2 text-center"><i class="fa-solid fa-circle-xmark"></i></th>
         </tr>
       </thead>
       <tbody>
@@ -93,10 +94,10 @@ const summarizedData = computed(() => {
           :class="index % 2 === 0 ? 'bg-gray-100' : 'bg-white'" class="text-sm border-b last:border-b-0 hover:bg-gray-200">
           <td class="px-4 py-2 text-gray-700 border">{{ subject.subjectName }}</td>
           <td class="px-4 py-2 text-gray-700 border text-center">{{ formatStudyTime(subject.totalStudyTime) }}</td>
-          <td class="px-4 py-2 text-gray-700 border text-center">{{ subject.totalPauses }}</td>
+          <!-- <td class="px-4 py-2 text-gray-700 border text-center">{{ subject.totalPauses }}</td> -->
           <td class="px-4 py-2 text-gray-700 border text-center">{{ subject.totalQuestionsResolved }}</td>
-          <td class="px-4 py-2 text-gray-700 border text-center">{{ subject.totalCorrectAnswers }}</td>
-          <td class="px-4 py-2 text-gray-700 border text-center">{{ subject.totalIncorrectAnswers }}</td>
+          <td class="px-4 py-2 text-green-700 font-semibold border text-center">{{ subject.totalCorrectAnswers }}</td>
+          <td class="px-4 py-2 text-red-700 border font-semibold text-center">{{ subject.totalIncorrectAnswers }}</td>
         </tr>
       </tbody>
     </table>
