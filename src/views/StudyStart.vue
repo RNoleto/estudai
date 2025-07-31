@@ -53,7 +53,7 @@ onMounted(async () => {
       subjectStore.fetchSubjects(),
       userStore.fetchUserStudyRecords(),
       scheduleStore.loadWeekPlan(),
-      scheduleStore.loadDailyProgress(),
+      scheduleStore.loadWeeklyProgress(),
     ]);
 
     scheduleStore.syncProgressWithStudyRecords();
@@ -72,24 +72,25 @@ function getTodayDateString() {
 }
 
 const todaysSubjects = computed(() => {
-  // 💡 ACIONADOR DE REATIVIDADE: Ao acessar dailyProgress aqui,
-  // esta computed será recalculada sempre que o progresso mudar.
-  const progressToday = scheduleStore.dailyProgress[getTodayDateString()];
+    // Gatilho de reatividade (já está correto)
+    const today = getTodayDateString();
+    const progressToday = scheduleStore.dailyProgress[today];
 
-  const todayName = new Date().toLocaleDateString('pt-BR', { weekday: 'long' })
-    .replace(/^\w/, c => c.toUpperCase());
+    const todayName = new Date().toLocaleDateString('pt-BR', { weekday: 'long' })
+                                .replace(/^\w/, c => c.toUpperCase());
 
-  const dayPlan = scheduleStore.weeklyPlan.find(d => d.day === todayName);
+    const dayPlan = scheduleStore.weeklyPlan.find(d => d.day === todayName);
 
-  if (!dayPlan || !dayPlan.subjects) {
-    return [];
-  }
+    if (!dayPlan || !dayPlan.subjects) {
+        return [];
+    }
 
-  // A lógica de mapeamento continua a mesma
-  return dayPlan.subjects.map(subject => ({
-    ...subject,
-    completed: scheduleStore.isCompleted(subject.id)
-  }));
+    // [CORREÇÃO APLICADA AQUI]
+    // A função map agora passa o 'todayName' para isCompleted
+    return dayPlan.subjects.map(subject => ({
+        ...subject,
+        completed: scheduleStore.isCompleted(subject.id, todayName) 
+    }));
 });
 
 // [NOVO] Função para selecionar uma matéria sugerida

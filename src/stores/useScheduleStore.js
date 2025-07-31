@@ -13,6 +13,36 @@ function getTodayDateString() {
   return adjustedToday.toISOString().split('T')[0];
 }
 
+// Retorna a data de início (Segunda) e fim (Domingo) da semana atual
+function getWeekRange() {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const dayOfWeek = today.getDay(); // 0=Dom, 1=Seg, ..., 6=Sáb
+
+  const startOfWeek = new Date(today);
+  const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Ajuste para a Segunda
+  startOfWeek.setDate(diff);
+
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6); // Domingo é 6 dias depois
+
+  return {
+    start: startOfWeek.toISOString().split('T')[0],
+    end: endOfWeek.toISOString().split('T')[0],
+  };
+}
+
+// Retorna a data em formato 'AAAA-MM-DD' para um dia específico da semana atual
+function getDateStringForDay(dayName) {
+  const weekRange = getWeekRange();
+  const startDate = new Date(weekRange.start + 'T00:00:00');
+  const dayMap = { 'Segunda-feira': 0, 'Terça-feira': 1, 'Quarta-feira': 2, 'Quinta-feira': 3, 'Sexta-feira': 4, 'Sábado': 5, 'Domingo': 6 };
+  const dayOffset = dayMap[dayName] ?? 0;
+  const targetDate = new Date(startDate);
+  targetDate.setDate(startDate.getDate() + dayOffset);
+  return targetDate.toISOString().split('T')[0];
+}
+
 export const useScheduleStore = defineStore('schedule', () => {
 
   // --- STATE ---
@@ -30,6 +60,8 @@ export const useScheduleStore = defineStore('schedule', () => {
   const dailyProgress = ref({});
 
   const isLoading = ref(false);
+
+  const userStore = useUserStore();
 
   async function loadWeekPlan() {
     const userStore = useUserStore();
@@ -114,19 +146,25 @@ export const useScheduleStore = defineStore('schedule', () => {
     }
   }
 
-  async function loadDailyProgress() {
-    const userStore = useUserStore();
+  async function loadWeeklyProgress() {
     if (!userStore.userId) return;
-    const today = getTodayDateString();
+    const { start, end } = getWeekRange();
     try {
-      const response = await axios.get(`/progress/${userStore.userId}`, {
-        params: { date: today }
-      });
-      const completedIds = response.data.map(item => item.schedule_item_id);
-      dailyProgress.value[today] = new Set(completedIds);
+        const response = await axios.get(`/progress/${userStore.userId}`, {
+            // [CORREÇÃO] O backend agora espera 'startDate' e 'endDate'
+            params: { startDate: start, endDate: end }
+        });
+        const newProgress = {};
+        response.data.forEach(progressItem => {
+            const date = progressItem.completion_date;
+            if (!newProgress[date]) {
+                newProgress[date] = new Set();
+            }
+            newProgress[date].add(progressItem.schedule_item_id);
+        });
+        dailyProgress.value = newProgress;
     } catch (error) {
-      console.error("Erro ao carregar progresso diário:", error);
-      dailyProgress.value[today] = new Set();
+        console.error("Erro ao carregar o progresso semanal:", error);
     }
   }
 
@@ -162,43 +200,35 @@ export const useScheduleStore = defineStore('schedule', () => {
     }
   }
 
-  function isCompleted(subjectId) {
-    const today = getTodayDateString();
-    return dailyProgress.value[today]?.has(subjectId) || false;
+  function isCompleted(subjectId, dayName) {
+    const dateString = getDateStringForDay(dayName);
+    return dailyProgress.value[dateString]?.has(subjectId) || false;
   }
 
   async function syncProgressWithStudyRecords() {
-    const userStore = useUserStore();
     if (!userStore.userId) return;
+    await userStore.fetchUserStudyRecords();
     
-    // A função agora confia que a userStore.todayStudyRecords já está atualizada.
     const todayRecords = userStore.todayStudyRecords;
-    const today = getTodayDateString();
+    const today = getDateStringForDay(new Date().toLocaleDateString('pt-BR', { weekday: 'long' }).replace(/^\w/, c => c.toUpperCase()));
 
     if (todayRecords.length === 0 && (!dailyProgress.value[today] || dailyProgress.value[today].size === 0)) {
-        console.log("Nenhum registro de estudo ou progresso para sincronizar. Saindo.");
-        
-        // Se não há registros, garante que o progresso do dia seja limpo no backend
         await axios.post('/progress/sync', {
             user_id: userStore.userId,
             date: today,
-            completed_ids: [], // Envia um array vazio para limpar
+            completed_ids: [],
         });
-        await loadDailyProgress(); // Recarrega o estado limpo
+        await loadWeeklyProgress(); // ✅ CHAMA A FUNÇÃO CORRETA
         return;
     }
     
-    // O weeklyPlan já está na memória, não precisa recarregar.
+    await loadWeekPlan();
     const todayDayName = new Date().toLocaleDateString('pt-BR', { weekday: 'long' }).replace(/^\w/, c => c.toUpperCase());
     const dayPlan = weeklyPlan.value.find(d => d.day === todayDayName);
-
-    if (!dayPlan || dayPlan.subjects.length === 0) {
-      return;
-    }
+    if (!dayPlan || dayPlan.subjects.length === 0) return;
     
     const recordsToCheck = [...todayRecords];
     const completedIds = [];
-    
     dayPlan.subjects.forEach(subjectInstance => {
         const recordIndex = recordsToCheck.findIndex(record => record.subjectName === subjectInstance.name);
         if (recordIndex !== -1) {
@@ -213,14 +243,11 @@ export const useScheduleStore = defineStore('schedule', () => {
             date: today,
             completed_ids: completedIds,
         });
-        
-        await loadDailyProgress();
-        console.log("Progresso sincronizado com sucesso.");
-
+        await loadWeeklyProgress(); // ✅ CHAMA A FUNÇÃO CORRETA
     } catch (error) {
-        console.error("Erro ao sincronizar progresso com o servidor:", error);
+        console.error("Erro ao sincronizar progresso:", error);
     }
-}
+  }
 
   return {
     weeklyPlan,
@@ -228,7 +255,7 @@ export const useScheduleStore = defineStore('schedule', () => {
     loadWeekPlan,
     saveWeeklyPlan,
     dailyProgress,
-    loadDailyProgress,
+    loadWeeklyProgress,
     toggleCompletion,
     isCompleted,
     syncProgressWithStudyRecords,

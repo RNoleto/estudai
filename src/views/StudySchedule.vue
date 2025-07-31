@@ -47,7 +47,7 @@ watch(() => userStore.combinedSubjects, (newSubjects) => {
 
 onMounted(async () => {
   await scheduleStore.loadWeekPlan();
-  scheduleStore.loadDailyProgress();
+  scheduleStore.loadWeeklyProgress();
   if (subjectStore.subjects.length === 0) {
     await subjectStore.fetchSubjects();
   }
@@ -56,7 +56,7 @@ onMounted(async () => {
   }
 
   scheduleStore.syncProgressWithStudyRecords();
-  
+
   const hasContent = scheduleStore.weeklyPlan.some(day => day.subjects.length > 0);
   if (hasContent) {
     isEditMode.value = false;
@@ -75,10 +75,10 @@ function onAddSubject(event) {
   if (day && newItem) {
     // 1. Preserva o ID original da matéria como 'subject_id'
     // O clone vem com o 'id' da tabela de matérias, então copiamos ele.
-    newItem.subject_id = newItem.id; 
-    
+    newItem.subject_id = newItem.id;
+
     // 2. Cria um novo ID único APENAS para esta instância no frontend (para o :key e remoção)
-    newItem.id = Date.now(); 
+    newItem.id = Date.now();
   }
 }
 
@@ -139,7 +139,7 @@ useHead({
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900 lg:text-3xl xl:text-4xl">
               Cronograma de <span class="text-primary">Estudos</span>
             </h1>
-            <p class="text-gray-600 mt-1">{{ isEditMode ? 'Arraste as matérias para montar seu plano.' : 'Marque suas tarefas concluídas de hoje.' }}</p>
+            <p class="text-gray-600 mt-1">{{ isEditMode ? 'Arraste as matérias para montar seu plano.' : 'Marque suastarefas concluídas de hoje.' }}</p>
           </div>
 
           <div class="flex items-center gap-4">
@@ -161,12 +161,12 @@ useHead({
       <div v-if="isEditMode" class="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div class="lg:col-span-1">
           <div class="bg-white p-6 rounded-lg shadow sticky top-6">
-            
+
             <h2 class="text-lg font-semibold text-gray-800 mb-4">Matérias</h2>
 
-            <draggable v-model="availableSubjects" item-key="id" tag="div" 
-              class="space-y-2 max-h-[60vh] overflow-y-auto pr-2"
-              :group="{ name: 'subjects', pull: 'clone', put: false }" :sort="false">
+            <draggable v-model="availableSubjects" item-key="id" tag="div"
+              class="space-y-2 max-h-[60vh] overflow-y-auto pr-2" :group="{ name: 'subjects', pull: 'clone', put: false }"
+              :sort="false">
               <template #item="{ element: subject }">
                 <div class="bg-gray-100 p-3 rounded-md cursor-grab text-sm font-medium text-gray-700 hover:bg-gray-200">
                   <div class="flex flex-col gap-1">
@@ -187,7 +187,7 @@ useHead({
             </draggable>
           </div>
         </div>
-        
+
         <div class="lg:col-span-3">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div v-for="day in scheduleStore.weeklyPlan" :key="day.day"
@@ -212,19 +212,18 @@ useHead({
       </div>
 
       <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        <div v-for="day in scheduleStore.weeklyPlan" :key="day.day"
-          class="bg-white rounded-lg shadow p-5 transition-all"
+        <div v-for="day in scheduleStore.weeklyPlan" :key="day.day" class="bg-white rounded-lg shadow p-5 transition-all"
           :class="{ 'border-2 border-primary': isToday(day.day), 'opacity-70': !isToday(day.day) }">
           <h3 class="text-xl font-bold text-gray-800 border-b pb-3 mb-4">{{ day.day }}</h3>
           <div class="flex-grow min-h-[10rem] space-y-2">
             <p v-if="day.subjects.length === 0" class="text-sm text-gray-400 text-center py-4">Nenhuma matéria
               planejada.</p>
             <div v-else v-for="subject in day.subjects" :key="subject.id">
-              <label class="flex items-center p-3 rounded-md transition-all duration-200" 
-                :class="[ scheduleStore.isCompleted(subject.id) ? 'bg-green-100' : 'bg-gray-100', isToday(day.day) ? 'cursor-pointer hover:bg-gray-200' : 'cursor-not-allowed']">
+              <label class="flex items-center p-3 rounded-md transition-all duration-200"
+                :class="[scheduleStore.isCompleted(subject.id, day.day) ? 'bg-green-100' : 'bg-gray-100', isToday(day.day) ? 'cursor-pointer hover:bg-gray-200' : 'cursor-not-allowed']">
                 <input type="checkbox"
                   class="h-5 w-5 rounded border-gray-400 text-green-600 focus:ring-green-500 disabled:cursor-not-allowed"
-                  :checked="scheduleStore.isCompleted(subject.id)" :disabled="!isToday(day.day)"
+                  :checked="scheduleStore.isCompleted(subject.id, day.day)" :disabled="!isToday(day.day)"
                   @change="scheduleStore.toggleCompletion(subject.id)" />
                 <span class="ml-3 text-sm font-medium text-gray-800"
                   :class="{ 'line-through text-gray-500': scheduleStore.isCompleted(subject.id) }">
