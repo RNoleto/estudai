@@ -158,15 +158,22 @@ useHead({
 
     <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8">
       <!-- Modo de Edição -->
-      <div v-if="isEditMode" class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div v-if="isEditMode" class="flex flex-col lg:grid lg:grid-cols-4 lg:gap-8 gap-6">
         <div class="lg:col-span-1">
-          <div class="bg-white p-6 rounded-lg shadow sticky top-6">
+          <div class="bg-white p-6 rounded-lg shadow">
 
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Matérias</h2>
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Matérias Disponíveis</h2>
 
-            <draggable v-model="availableSubjects" item-key="id" tag="div"
-              class="space-y-2 max-h-[60vh] overflow-y-auto pr-2" :group="{ name: 'subjects', pull: 'clone', put: false }"
-              :sort="false">
+            <draggable 
+              v-model="availableSubjects" 
+              :delay="100"
+              :delay-on-touch-only="true"
+              item-key="id" 
+              tag="div"
+              class="space-y-2 max-h-[60vh] overflow-y-auto pr-2" 
+              :group="{ name: 'subjects', pull: 'clone', put: false }"
+              :sort="false"
+            >
               <template #item="{ element: subject }">
                 <div class="bg-gray-100 p-3 rounded-md cursor-grab text-sm font-medium text-gray-700 hover:bg-gray-200">
                   <div class="flex flex-col gap-1">
@@ -189,11 +196,17 @@ useHead({
         </div>
 
         <div class="lg:col-span-3">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             <div v-for="day in scheduleStore.weeklyPlan" :key="day.day"
               class="bg-white rounded-lg shadow p-5 flex flex-col">
               <h3 class="text-xl font-bold text-gray-800 border-b pb-3 mb-4">{{ day.day }}</h3>
-              <draggable v-model="day.subjects" item-key="id" tag="div" group="subjects"
+              <draggable 
+                v-model="day.subjects"
+                :delay="100"
+                :delay-on-touch-only="true"
+                item-key="id" 
+                tag="div" 
+                group="subjects"
                 class="flex-grow min-h-[10rem] bg-gray-50 rounded-lg p-2 space-y-2" :data-day="day.day"
                 @add="onAddSubject">
                 <template #item="{ element: subject }">
