@@ -3,6 +3,7 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
 import { useSubjectStore } from '../stores/useSubjectStore';
 import { useScheduleStore } from '../stores/useScheduleStore';
+import { useBreakpoints } from '@vueuse/core';
 import { useHead } from '@vueuse/head';
 import draggable from 'vuedraggable';
 
@@ -13,6 +14,13 @@ const scheduleStore = useScheduleStore();
 // --- STATE DO COMPONENTE ---
 const isEditMode = ref(true); // Começa em modo de edição por padrão
 const availableSubjects = ref([]);
+
+const breakpoints = useBreakpoints({
+  tablet: 768,
+  desktop: 1024, // O breakpoint 'lg' do Tailwind
+});
+
+const isDesktop = breakpoints.greaterOrEqual('desktop');
 
 const subjectUsage = computed(() => {
   const usageMap = {};
@@ -36,6 +44,16 @@ const subjectUsage = computed(() => {
   });
 
   return usageMap;
+});
+
+const sortedAvailableSubjects = computed(() => {
+  // Usamos .slice() para criar uma cópia antes de ordenar,
+  // evitando modificar a lista original 'availableSubjects'.
+  return availableSubjects.value.slice().sort((a, b) => {
+    // localeCompare é a forma correta de comparar strings alfabeticamente,
+    // lidando bem com acentos e caracteres especiais.
+    return a.name.localeCompare(b.name);
+  });
 });
 
 // --- WATCHER E LIFECYCLE HOOKS ---
@@ -67,6 +85,21 @@ onMounted(async () => {
 });
 
 // --- MÉTODOS ---
+function addSubjectToDay(dayName, subject) {
+  if (!subject) return;
+
+  const day = scheduleStore.weeklyPlan.find(d => d.day === dayName);
+  if (day) {
+    day.subjects.push({
+      // Preserva o ID original da matéria (subject_id)
+      subject_id: subject.id,
+      // Gera um ID único para a instância
+      id: Date.now(),
+      name: subject.name,
+    });
+  }
+}
+
 function onAddSubject(event) {
   const dayName = event.to.dataset.day;
   const day = scheduleStore.weeklyPlan.find(d => d.day === dayName);
@@ -158,74 +191,95 @@ useHead({
 
     <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8">
       <!-- Modo de Edição -->
-      <div v-if="isEditMode" class="flex flex-col lg:grid lg:grid-cols-4 lg:gap-8 gap-6">
-        <div class="lg:col-span-1">
-          <div class="bg-white p-6 rounded-lg shadow">
+      <div v-if="isEditMode">
 
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Matérias Disponíveis</h2>
-
-            <draggable 
-              v-model="availableSubjects" 
-              :delay="100"
-              :delay-on-touch-only="true"
-              item-key="id" 
-              tag="div"
-              class="space-y-2 max-h-[60vh] overflow-y-auto pr-2" 
-              :group="{ name: 'subjects', pull: 'clone', put: false }"
-              :sort="false"
-            >
-              <template #item="{ element: subject }">
-                <div class="bg-gray-100 p-3 rounded-md cursor-grab text-sm font-medium text-gray-700 hover:bg-gray-200">
-                  <div class="flex flex-col gap-1">
-                    <span class="flex items-center">
-                      <i class="fa-solid fa-grip-vertical mr-2 text-gray-400"></i>
-                      {{ subject.name }}
-                    </span>
-
-                    <div class="flex justify-end items-center gap-1">
-                      <span v-for="initial in subjectUsage[subject.name]" :key="initial"
-                        class="flex items-center justify-center h-5 w-5 bg-primary text-white text-xs rounded-full font-bold">
-                        {{ initial }}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </template>
-            </draggable>
-          </div>
-        </div>
-
-        <div class="lg:col-span-3">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            <div v-for="day in scheduleStore.weeklyPlan" :key="day.day"
-              class="bg-white rounded-lg shadow p-5 flex flex-col">
-              <h3 class="text-xl font-bold text-gray-800 border-b pb-3 mb-4">{{ day.day }}</h3>
-              <draggable 
-                v-model="day.subjects"
-                :delay="100"
-                :delay-on-touch-only="true"
-                item-key="id" 
-                tag="div" 
-                group="subjects"
-                class="flex-grow min-h-[10rem] bg-gray-50 rounded-lg p-2 space-y-2" :data-day="day.day"
-                @add="onAddSubject">
+        <div v-if="isDesktop" class="grid grid-cols-4 gap-8">
+          <div class="col-span-1">
+            <div class="bg-white p-6 rounded-lg shadow sticky top-24">
+              <h2 class="text-lg font-semibold text-gray-800 mb-4">Matérias</h2>
+              <draggable v-model="availableSubjects" item-key="id" tag="div"
+                class="space-y-2 max-h-[65vh] overflow-y-auto pr-2"
+                :group="{ name: 'subjects', pull: 'clone', put: false }" :sort="false" :delay="100"
+                :delay-on-touch-only="true">
                 <template #item="{ element: subject }">
                   <div
-                    class="flex items-center justify-between bg-blue-100 text-blue-800 text-sm font-medium px-3 py-2 rounded-md cursor-grab">
-                    <span>{{ subject.name }}</span>
-                    <button @click="removeSubjectFromDay(day.day, subject.id)"
-                      class="ml-2 text-blue-800 hover:bg-blue-800/20 rounded-full w-5 h-5 flex items-center justify-center"
-                      title="Remover">&times;</button>
+                    class="bg-gray-100 p-3 rounded-md cursor-grab text-sm font-medium text-gray-700 hover:bg-gray-200">
+                    <div class="flex flex-col gap-1">
+                      <span class="flex items-center">
+                        <i class="fa-solid fa-grip-vertical mr-2 text-gray-400"></i>
+                        {{ subject.name }}
+                      </span>
+                      <div class="flex justify-end items-center gap-1">
+                        <span v-for="initial in subjectUsage[subject.name]" :key="initial"
+                          class="flex items-center justify-center h-5 w-5 bg-primary text-white text-xs rounded-full font-bold">
+                          {{ initial }}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </template>
               </draggable>
+            </div>
+          </div>
+          <div class="col-span-3">
+            <div class="grid grid-cols-2 xl:grid-cols-3 gap-6">
+              <div v-for="day in scheduleStore.weeklyPlan" :key="day.day"
+                class="bg-white rounded-lg shadow p-5 flex flex-col">
+                <h3 class="text-xl font-bold text-gray-800 border-b pb-3 mb-4">{{ day.day }}</h3>
+                <draggable v-model="day.subjects" item-key="id" tag="div" group="subjects"
+                  class="flex-grow min-h-[10rem] bg-gray-50 rounded-lg p-2 space-y-2" :data-day="day.day"
+                  @add="onAddSubject" :delay="100" :delay-on-touch-only="true">
+                  <template #item="{ element: subject }">
+                    <div
+                      class="flex items-center justify-between bg-blue-100 text-blue-800 text-sm font-medium px-3 py-2 rounded-md cursor-grab">
+                      <span>{{ subject.name }}</span>
+                      <button @click="removeSubjectFromDay(day.day, subject.id)"
+                        class="ml-2 text-blue-800 hover:bg-blue-800/20 rounded-full w-5 h-5 flex items-center justify-center"
+                        title="Remover">&times;
+                      </button>
+                    </div>
+                  </template>
+                </draggable>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="space-y-6">
+          <div v-for="(day, index) in scheduleStore.weeklyPlan" :key="day.day"
+            class="bg-white rounded-lg shadow p-5 flex flex-col">
+            <h3 class="text-xl font-bold text-gray-800 border-b pb-3 mb-4">{{ day.day }}</h3>
+
+            <div class="flex-grow min-h-[6rem] space-y-2">
+              <p v-if="day.subjects.length === 0" class="text-sm text-gray-400 text-center py-4">Nenhuma matéria.</p>
+              <div v-else v-for="subject in day.subjects" :key="subject.id"
+                class="flex items-center justify-between bg-blue-100 text-blue-800 text-sm font-medium px-3 py-2 rounded-md">
+                <span>{{ subject.name }}</span>
+                <button @click="removeSubjectFromDay(day.day, subject.id)"
+                  class="ml-2 text-blue-800 hover:bg-blue-800/20 rounded-full w-5 h-5 flex items-center justify-center"
+                  title="Remover">&times;</button>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-t">
+              <div class="flex items-center gap-2">
+                <select @change="addSubjectToDay(day.day, availableSubjects.find(s => s.id == $event.target.value))"
+                  :value="''"
+                  class="w-full border-gray-300 rounded-md shadow-sm text-sm focus:ring-primary focus:border-primary">
+                  <option value="" disabled>+ Adicionar matéria...</option>
+                  <option v-for="subject in sortedAvailableSubjects" :key="subject.id" :value="subject.id">
+                    {{ subject.name }}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        <div v-for="day in scheduleStore.weeklyPlan" :key="day.day" class="bg-white rounded-lg shadow p-5 transition-all"
+        <div v-for="day in scheduleStore.weeklyPlan" :key="day.day"
+          class="bg-white rounded-lg shadow p-5 transition-all"
           :class="{ 'border-2 border-primary': isToday(day.day), 'opacity-70': !isToday(day.day) }">
           <h3 class="text-xl font-bold text-gray-800 border-b pb-3 mb-4">{{ day.day }}</h3>
           <div class="flex-grow min-h-[10rem] space-y-2">
