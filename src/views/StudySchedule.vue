@@ -103,15 +103,16 @@ function addSubjectToDay(dayName, subject) {
 function onAddSubject(event) {
   const dayName = event.to.dataset.day;
   const day = scheduleStore.weeklyPlan.find(d => d.day === dayName);
-  const newItem = day.subjects[event.newIndex]; // O item que acabou de ser adicionado
+  const newItem = day.subjects[event.newIndex];
 
   if (day && newItem) {
-    // 1. Preserva o ID original da matéria como 'subject_id'
-    // O clone vem com o 'id' da tabela de matérias, então copiamos ele.
-    newItem.subject_id = newItem.id;
-
-    // 2. Cria um novo ID único APENAS para esta instância no frontend (para o :key e remoção)
-    newItem.id = Date.now();
+    if (newItem.subject_id === undefined) { 
+      console.log("Item novo detectado. Gerando IDs...");
+      
+      newItem.subject_id = newItem.id;
+      
+      newItem.id = Date.now();
+    }
   }
 }
 
