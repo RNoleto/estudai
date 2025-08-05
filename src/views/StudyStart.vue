@@ -53,7 +53,7 @@ onMounted(async () => {
       subjectStore.fetchSubjects(),
       userStore.fetchUserStudyRecords(),
       scheduleStore.loadWeekPlan(),
-      scheduleStore.loadDailyProgress(),
+      scheduleStore.loadWeeklyProgress(),
     ]);
 
     scheduleStore.syncProgressWithStudyRecords();
@@ -64,23 +64,33 @@ onMounted(async () => {
   }
 });
 
+function getTodayDateString() {
+  const today = new Date();
+  const offset = today.getTimezoneOffset();
+  const adjustedToday = new Date(today.getTime() - (offset * 60 * 1000));
+  return adjustedToday.toISOString().split('T')[0];
+}
+
 const todaysSubjects = computed(() => {
-  // Pega o nome do dia da semana atual em português
-  const todayName = new Date().toLocaleDateString('pt-BR', { weekday: 'long' })
-    .replace(/^\w/, c => c.toUpperCase());
+    // Gatilho de reatividade (já está correto)
+    const today = getTodayDateString();
+    const progressToday = scheduleStore.dailyProgress[today];
 
-  // Encontra o plano para o dia de hoje
-  const dayPlan = scheduleStore.weeklyPlan.find(d => d.day === todayName);
+    const todayName = new Date().toLocaleDateString('pt-BR', { weekday: 'long' })
+                                .replace(/^\w/, c => c.toUpperCase());
 
-  if (!dayPlan || !dayPlan.subjects) {
-    return [];
-  }
+    const dayPlan = scheduleStore.weeklyPlan.find(d => d.day === todayName);
 
-  // Retorna as matérias do dia, adicionando o status de 'completed'
-  return dayPlan.subjects.map(subject => ({
-    ...subject,
-    completed: scheduleStore.isCompleted(subject.id)
-  }));
+    if (!dayPlan || !dayPlan.subjects) {
+        return [];
+    }
+
+    // [CORREÇÃO APLICADA AQUI]
+    // A função map agora passa o 'todayName' para isCompleted
+    return dayPlan.subjects.map(subject => ({
+        ...subject,
+        completed: scheduleStore.isCompleted(subject.id, todayName) 
+    }));
 });
 
 // [NOVO] Função para selecionar uma matéria sugerida
@@ -103,13 +113,12 @@ const handleCloseModal = () => {
   isOpen.value = false;
 }
 
-const handleSaveSuccess = () => {
+const handleSaveSuccess = async () => {
   selectedSubject.value = null;
   studyStore.topic = "";
-
-  setTimeout(() => {
-    scheduleStore.syncProgressWithStudyRecords();
-  }, 100);
+  
+  await userStore.fetchUserStudyRecords(); 
+  await scheduleStore.syncProgressWithStudyRecords();
 }
 
 // Gera os dados do gráfico para cada registro
@@ -238,22 +247,24 @@ function openDeleteModal(record) {
 // Função para deletar o registro
 async function handleDeleteRecord() {
   if (!recordToDelete.value || !recordToDelete.value.id) return;
-
   try {
+    // 1. Deleta o registro no banco de dados
     await userStore.deleteUserStudyRecord(recordToDelete.value.id);
-    // Recarrega a lista de registros após a exclusão
+
+    // 2. Busca a NOVA lista de registros (agora menor)
     await userStore.fetchUserStudyRecords();
 
-    // Exibe o modal de sucesso
+    // 3. AGORA chama a sincronização, que usará a lista atualizada
+    await scheduleStore.syncProgressWithStudyRecords();
+
     showSuccessModal.value = true;
-    // Opcional: fecha automaticamente o modal de sucesso após 2 segundos
     setTimeout(() => {
       showSuccessModal.value = false;
     }, 2000);
+
   } catch (error) {
     console.error("Erro ao deletar o registro:", error.message);
   } finally {
-    // Fecha o modal de confirmação e reseta o registro selecionado
     showConfirmModal.value = false;
     recordToDelete.value = null;
   }
@@ -265,10 +276,14 @@ const openManualEntryModal = () => {
 
 const handleSaveManualEntry = async (newRecord) => {
   try {
+    // 1. Salva o novo registro no banco de dados
     await userStore.saveUserStudyRecord(newRecord);
+
+    // 2. [PASSO CRUCIAL] Busca a lista de registros novamente para incluir o novo item
     await userStore.fetchUserStudyRecords();
 
-    scheduleStore.syncProgressWithStudyRecords();
+    // 3. AGORA chama a sincronização, que usará a lista completa e atualizada
+    await scheduleStore.syncProgressWithStudyRecords();
 
   } catch (error) {
     console.error("Erro ao salvar o registro de estudo:", error.message);
@@ -401,8 +416,7 @@ useHead({
                   Matéria
                 </label>
                 <ComboBox :options="userSubjects" :placeholder="'Selecione uma matéria...'" v-model="selectedSubject"
-                  :key="selectedSubject ? selectedSubject.id : 'empty'" @select="handleSubjectSelection"
-                  class="w-full" />
+                  :key="selectedSubject ? selectedSubject.id : 'empty'" @select="handleSubjectSelection" class="w-full" />
               </div>
 
               <!-- Topic Input -->
@@ -482,8 +496,8 @@ useHead({
             <!-- Records Grid -->
             <div v-if="todayStudyRecords.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <StudyCard v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record"
-                :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]"
-                @edit="openModal" @delete="openDeleteModal(record)" class="w-full" />
+                :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal"
+                @delete="openDeleteModal(record)" class="w-full" />
             </div>
 
             <!-- Empty State -->

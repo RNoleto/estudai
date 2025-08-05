@@ -3,16 +3,29 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
 import { useSubjectStore } from '../stores/useSubjectStore';
 import { useScheduleStore } from '../stores/useScheduleStore';
+import { useBreakpoints } from '@vueuse/core';
 import { useHead } from '@vueuse/head';
 import draggable from 'vuedraggable';
+
+import AlertModal from '../components/ui/AlertModal.vue';
 
 const userStore = useUserStore();
 const subjectStore = useSubjectStore();
 const scheduleStore = useScheduleStore();
 
+// Ref para controlar modal
+const showSuccessModal = ref(false);
+
 // --- STATE DO COMPONENTE ---
 const isEditMode = ref(true); // Começa em modo de edição por padrão
 const availableSubjects = ref([]);
+
+const breakpoints = useBreakpoints({
+  tablet: 768,
+  desktop: 1024, // O breakpoint 'lg' do Tailwind
+});
+
+const isDesktop = breakpoints.greaterOrEqual('desktop');
 
 const subjectUsage = computed(() => {
   const usageMap = {};
@@ -38,6 +51,16 @@ const subjectUsage = computed(() => {
   return usageMap;
 });
 
+const sortedAvailableSubjects = computed(() => {
+  // Usamos .slice() para criar uma cópia antes de ordenar,
+  // evitando modificar a lista original 'availableSubjects'.
+  return availableSubjects.value.slice().sort((a, b) => {
+    // localeCompare é a forma correta de comparar strings alfabeticamente,
+    // lidando bem com acentos e caracteres especiais.
+    return a.name.localeCompare(b.name);
+  });
+});
+
 // --- WATCHER E LIFECYCLE HOOKS ---
 watch(() => userStore.combinedSubjects, (newSubjects) => {
   if (newSubjects && newSubjects.length > 0) {
@@ -47,7 +70,7 @@ watch(() => userStore.combinedSubjects, (newSubjects) => {
 
 onMounted(async () => {
   await scheduleStore.loadWeekPlan();
-  scheduleStore.loadDailyProgress();
+  scheduleStore.loadWeeklyProgress();
   if (subjectStore.subjects.length === 0) {
     await subjectStore.fetchSubjects();
   }
@@ -56,24 +79,43 @@ onMounted(async () => {
   }
 
   scheduleStore.syncProgressWithStudyRecords();
-  
+
   const hasContent = scheduleStore.weeklyPlan.some(day => day.subjects.length > 0);
   if (hasContent) {
     isEditMode.value = false;
   } else {
     isEditMode.value = true;
   }
-  console.log(`Iniciando no modo ${isEditMode.value ? 'de Edição' : 'de Visualização'}`);
+  // console.log(`Iniciando no modo ${isEditMode.value ? 'de Edição' : 'de Visualização'}`);
 });
 
 // --- MÉTODOS ---
-function onAddSubject(event) {
-  const list = event.to;
-  const index = event.newIndex;
-  const dayName = list.dataset.day;
+function addSubjectToDay(dayName, subject) {
+  if (!subject) return;
+
   const day = scheduleStore.weeklyPlan.find(d => d.day === dayName);
-  if (day && day.subjects[index]) {
-    day.subjects[index].id = Date.now();
+  if (day) {
+    day.subjects.push({
+      // Preserva o ID original da matéria (subject_id)
+      subject_id: subject.id,
+      // Gera um ID único para a instância
+      id: Date.now(),
+      name: subject.name,
+    });
+  }
+}
+
+function onAddSubject(event) {
+  const dayName = event.to.dataset.day;
+  const day = scheduleStore.weeklyPlan.find(d => d.day === dayName);
+  const newItem = day.subjects[event.newIndex];
+
+  if (day && newItem) {
+    if (newItem.subject_id === undefined) { 
+      // console.log("Item novo detectado. Gerando IDs...");
+      newItem.subject_id = newItem.id;
+      newItem.id = Date.now();
+    }
   }
 }
 
@@ -86,8 +128,12 @@ function removeSubjectFromDay(dayName, subjectId) {
 
 function handleSave() {
   scheduleStore.saveWeeklyPlan();
-  alert("Molde do cronograma salvo com sucesso!");
+  // alert("Molde do cronograma salvo com sucesso!");
   isEditMode.value = false; // Muda para o modo de visualização após salvar
+  showSuccessModal.value = true;
+  setTimeout(() => {
+    showSuccessModal.value = false;
+  }, 2000);
 }
 
 // Função para destacar o dia atual no modo de visualização
@@ -134,7 +180,7 @@ useHead({
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900 lg:text-3xl xl:text-4xl">
               Cronograma de <span class="text-primary">Estudos</span>
             </h1>
-            <p class="text-gray-600 mt-1">{{ isEditMode ? 'Arraste as matérias para montar seu plano.' : 'Marque suas tarefas concluídas de hoje.' }}</p>
+            <p class="text-gray-600 mt-1">{{ isEditMode ? 'Arraste as matérias para montar seu plano.' : 'Marque suastarefas concluídas de hoje.' }}</p>
           </div>
 
           <div class="flex items-center gap-4">
@@ -144,7 +190,7 @@ useHead({
             </button>
             <button v-else @click="isEditMode = true"
               class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-sm hover:bg-blue-700">
-              Editar Molde
+              Editar Cronograma
             </button>
           </div>
         </div>
@@ -153,54 +199,87 @@ useHead({
 
     <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8">
       <!-- Modo de Edição -->
-      <div v-if="isEditMode" class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <div class="lg:col-span-1">
-          <div class="bg-white p-6 rounded-lg shadow sticky top-6">
-            
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Matérias</h2>
+      <div v-if="isEditMode">
 
-            <draggable v-model="availableSubjects" item-key="id" tag="div" 
-              class="space-y-2 max-h-[60vh] overflow-y-auto pr-2"
-              :group="{ name: 'subjects', pull: 'clone', put: false }" :sort="false">
-              <template #item="{ element: subject }">
-                <div class="bg-gray-100 p-3 rounded-md cursor-grab text-sm font-medium text-gray-700 hover:bg-gray-200">
-                  <div class="flex flex-col gap-1">
-                    <span class="flex items-center">
-                      <i class="fa-solid fa-grip-vertical mr-2 text-gray-400"></i>
-                      {{ subject.name }}
-                    </span>
-
-                    <div class="flex justify-end items-center gap-1">
-                      <span v-for="initial in subjectUsage[subject.name]" :key="initial"
-                        class="flex items-center justify-center h-5 w-5 bg-primary text-white text-xs rounded-full font-bold">
-                        {{ initial }}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </template>
-            </draggable>
-          </div>
-        </div>
-        
-        <div class="lg:col-span-3">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div v-for="day in scheduleStore.weeklyPlan" :key="day.day"
-              class="bg-white rounded-lg shadow p-5 flex flex-col">
-              <h3 class="text-xl font-bold text-gray-800 border-b pb-3 mb-4">{{ day.day }}</h3>
-              <draggable v-model="day.subjects" item-key="id" tag="div" group="subjects"
-                class="flex-grow min-h-[10rem] bg-gray-50 rounded-lg p-2 space-y-2" :data-day="day.day"
-                @add="onAddSubject">
+        <div v-if="isDesktop" class="grid grid-cols-4 gap-8">
+          <div class="col-span-1">
+            <div class="bg-white p-6 rounded-lg shadow sticky top-24">
+              <h2 class="text-lg font-semibold text-gray-800 mb-4">Matérias</h2>
+              <draggable v-model="availableSubjects" item-key="id" tag="div"
+                class="space-y-2 max-h-[65vh] overflow-y-auto pr-2"
+                :group="{ name: 'subjects', pull: 'clone', put: false }" :sort="false" :delay="100"
+                :delay-on-touch-only="true">
                 <template #item="{ element: subject }">
                   <div
-                    class="flex items-center justify-between bg-blue-100 text-blue-800 text-sm font-medium px-3 py-2 rounded-md cursor-grab">
-                    <span>{{ subject.name }}</span>
-                    <button @click="removeSubjectFromDay(day.day, subject.id)"
-                      class="ml-2 text-blue-800 hover:bg-blue-800/20 rounded-full w-5 h-5 flex items-center justify-center"
-                      title="Remover">&times;</button>
+                    class="bg-gray-100 p-3 rounded-md cursor-grab text-sm font-medium text-gray-700 hover:bg-gray-200">
+                    <div class="flex flex-col gap-1">
+                      <span class="flex items-center">
+                        <i class="fa-solid fa-grip-vertical mr-2 text-gray-400"></i>
+                        {{ subject.name }}
+                      </span>
+                      <div class="flex justify-end items-center gap-1">
+                        <span v-for="initial in subjectUsage[subject.name]" :key="initial"
+                          class="flex items-center justify-center h-5 w-5 bg-primary text-white text-xs rounded-full font-bold">
+                          {{ initial }}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </template>
               </draggable>
+            </div>
+          </div>
+          <div class="col-span-3">
+            <div class="grid grid-cols-2 xl:grid-cols-3 gap-6">
+              <div v-for="day in scheduleStore.weeklyPlan" :key="day.day"
+                class="bg-white rounded-lg shadow p-5 flex flex-col">
+                <h3 class="text-xl font-bold text-gray-800 border-b pb-3 mb-4">{{ day.day }}</h3>
+                <draggable v-model="day.subjects" item-key="id" tag="div" group="subjects"
+                  class="flex-grow min-h-[10rem] bg-gray-50 rounded-lg p-2 space-y-2" :data-day="day.day"
+                  @add="onAddSubject" :delay="100" :delay-on-touch-only="true">
+                  <template #item="{ element: subject }">
+                    <div
+                      class="flex items-center justify-between bg-blue-100 text-blue-800 text-sm font-medium px-3 py-2 rounded-md cursor-grab">
+                      <span>{{ subject.name }}</span>
+                      <button @click="removeSubjectFromDay(day.day, subject.id)"
+                        class="ml-2 text-blue-800 hover:bg-blue-800/20 rounded-full w-5 h-5 flex items-center justify-center"
+                        title="Remover">&times;
+                      </button>
+                    </div>
+                  </template>
+                </draggable>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="space-y-6">
+          <div v-for="(day, index) in scheduleStore.weeklyPlan" :key="day.day"
+            class="bg-white rounded-lg shadow p-5 flex flex-col">
+            <h3 class="text-xl font-bold text-gray-800 border-b pb-3 mb-4">{{ day.day }}</h3>
+
+            <div class="flex-grow min-h-[6rem] space-y-2">
+              <p v-if="day.subjects.length === 0" class="text-sm text-gray-400 text-center py-4">Nenhuma matéria.</p>
+              <div v-else v-for="subject in day.subjects" :key="subject.id"
+                class="flex items-center justify-between bg-blue-100 text-blue-800 text-sm font-medium px-3 py-2 rounded-md">
+                <span>{{ subject.name }}</span>
+                <button @click="removeSubjectFromDay(day.day, subject.id)"
+                  class="ml-2 text-blue-800 hover:bg-blue-800/20 rounded-full w-5 h-5 flex items-center justify-center"
+                  title="Remover">&times;</button>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-t">
+              <div class="flex items-center gap-2">
+                <select @change="addSubjectToDay(day.day, availableSubjects.find(s => s.id == $event.target.value))"
+                  :value="''"
+                  class="w-full border-gray-300 rounded-md shadow-sm text-sm focus:ring-primary focus:border-primary">
+                  <option value="" disabled>+ Adicionar matéria...</option>
+                  <option v-for="subject in sortedAvailableSubjects" :key="subject.id" :value="subject.id">
+                    {{ subject.name }}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -215,11 +294,11 @@ useHead({
             <p v-if="day.subjects.length === 0" class="text-sm text-gray-400 text-center py-4">Nenhuma matéria
               planejada.</p>
             <div v-else v-for="subject in day.subjects" :key="subject.id">
-              <label class="flex items-center p-3 rounded-md transition-all duration-200" 
-                :class="[ scheduleStore.isCompleted(subject.id) ? 'bg-green-100' : 'bg-gray-100', isToday(day.day) ? 'cursor-pointer hover:bg-gray-200' : 'cursor-not-allowed']">
+              <label class="flex items-center p-3 rounded-md transition-all duration-200"
+                :class="[scheduleStore.isCompleted(subject.id, day.day) ? 'bg-green-100' : 'bg-gray-100', isToday(day.day) ? 'cursor-pointer hover:bg-gray-200' : 'cursor-not-allowed']">
                 <input type="checkbox"
                   class="h-5 w-5 rounded border-gray-400 text-green-600 focus:ring-green-500 disabled:cursor-not-allowed"
-                  :checked="scheduleStore.isCompleted(subject.id)" :disabled="!isToday(day.day)"
+                  :checked="scheduleStore.isCompleted(subject.id, day.day)" :disabled="!isToday(day.day)"
                   @change="scheduleStore.toggleCompletion(subject.id)" />
                 <span class="ml-3 text-sm font-medium text-gray-800"
                   :class="{ 'line-through text-gray-500': scheduleStore.isCompleted(subject.id) }">
@@ -232,4 +311,7 @@ useHead({
       </div>
     </div>
   </div>
+
+  <AlertModal :visible="showSuccessModal" title="Sucesso" message="Cronograma Salvo com sucesso"
+   @close="showSuccessModal = false" :showButton="false" :showConfirm="false" type="success" />
 </template>

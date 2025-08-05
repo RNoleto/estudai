@@ -3,25 +3,7 @@ import { auth } from '../firebase';
 import { waitForAuthReady } from '../utils/authReady';
 import { useUserStore } from '../stores/useUserStore';
 
-// Rotas de Alunos
-import Home from '../views/Home.vue';
-import Career from '../views/CareerSelection.vue';
-import Subjects from '../views/Subjects.vue';
-import StudyCycle from '../views/StudyCycle.vue';
-import OpenCompetitions from '../views/OpenCompetitions.vue';
-import StudyStart from '../views/StudyStart.vue';
-import ErrorPage from '../views/ErrorPage.vue';
-import StudySchedule from '../views/StudySchedule.vue'
-
-//Rotas em teste
-import SubscriptionsPage from '../views/SubscriptionsPage.vue';
-import SupportPage from '../views/SupportPage.vue';
-
-import Dashboard from '../views/Dashboard.vue';
-import DashboardHome from '../views/DashboardHome.vue';
-import StudyHistory from '../views/StudyHistory.vue';
-
-// Partes da landing page que não estão no dashboard
+// Partes da landing page
 import LanginPage from '../views/LandingPage/LanginPage.vue';
 
 //Rotas Administrativas
@@ -29,10 +11,27 @@ import AdminDashboard from '../views/Admin/components/Dashboard.vue';
 import AdminHome from '../views/Admin/views/Home.vue';
 import AdminUsers from '../views/Admin/views/Users.vue';
 
-// Rotas comentadas estão em desenvolvimento e não estão sendo utilizadas no momento
-
-//Rota em teste
+// Rotas de Alunos
+import Dashboard from '../views/Dashboard.vue';
+import DashboardHome from '../views/DashboardHome.vue';
+import StudyHistory from '../views/StudyHistory.vue';
+import Home from '../views/Home.vue';
+import Career from '../views/CareerSelection.vue';
+import Subjects from '../views/Subjects.vue';
+import StudyCycle from '../views/StudyCycle.vue';
+import OpenCompetitions from '../views/OpenCompetitions.vue';
+import StudyStart from '../views/StudyStart.vue';
+import StudySchedule from '../views/StudySchedule.vue'
 import Challenges from '../views/Challenges.vue';
+import SupportPage from '../views/SupportPage.vue';
+
+
+//Rotas em teste para Alunos
+import SubscriptionsPage from '../views/SubscriptionsPage.vue';
+
+// Rotas Globais (LandingPage, Admin e Alunos)
+import ErrorPage from '../views/ErrorPage.vue';
+
 
 const routes = [
   {
@@ -173,15 +172,15 @@ const routes = [
           description: 'Precisa de suporte? Entre em contato com Estuday.'
         }
       },
-      {
-        path: 'desafios',
-        name: 'Challenges',
-        component: Challenges,
-        meta: { 
-          title: 'Desafios | Estuday',
-          description: 'Que tal fazer um desafio? Chegue mais perto da sua aprovação com Estuday.'
-        }
-      },
+      // {
+      //   path: 'desafios',
+      //   name: 'Challenges',
+      //   component: Challenges,
+      //   meta: { 
+      //     title: 'Desafios | Estuday',
+      //     description: 'Que tal fazer um desafio? Chegue mais perto da sua aprovação com Estuday.'
+      //   }
+      // },
       // {
       //   path: 'ciclo-de-estudos',
       //   name: 'DashboardCiclo',

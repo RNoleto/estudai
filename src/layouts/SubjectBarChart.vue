@@ -131,7 +131,8 @@ const updateChartData = () => {
         label: metricOptions.value.find(opt => opt.value === selectedMetric.value).label,
         backgroundColor: metricColors[selectedMetric.value].background,
         borderColor: metricColors[selectedMetric.value].border,
-        data: metricData
+        data: metricData,
+        borderRadius: 8
       }
     ]
   };
