@@ -155,7 +155,7 @@ const handleCancel = () => {
 
 <template>
     <div v-if="isVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm z-50">
-        <Card title="Inserir Informações de Estudo" icon="" class="shadow-lg relative">
+        <Card title="Registro de Estudo" icon="" class="shadow-lg relative border-secondary sm:w-[350px]">
             <template #content>
                 <div class="px-2 text-base flex flex-col w-full text-gray-700 font-normal">
                     <div class="text-sm mb-4 sm:text-base">

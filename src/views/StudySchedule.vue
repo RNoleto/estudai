@@ -7,9 +7,14 @@ import { useBreakpoints } from '@vueuse/core';
 import { useHead } from '@vueuse/head';
 import draggable from 'vuedraggable';
 
+import AlertModal from '../components/ui/AlertModal.vue';
+
 const userStore = useUserStore();
 const subjectStore = useSubjectStore();
 const scheduleStore = useScheduleStore();
+
+// Ref para controlar modal
+const showSuccessModal = ref(false);
 
 // --- STATE DO COMPONENTE ---
 const isEditMode = ref(true); // Começa em modo de edição por padrão
@@ -81,7 +86,7 @@ onMounted(async () => {
   } else {
     isEditMode.value = true;
   }
-  console.log(`Iniciando no modo ${isEditMode.value ? 'de Edição' : 'de Visualização'}`);
+  // console.log(`Iniciando no modo ${isEditMode.value ? 'de Edição' : 'de Visualização'}`);
 });
 
 // --- MÉTODOS ---
@@ -107,10 +112,8 @@ function onAddSubject(event) {
 
   if (day && newItem) {
     if (newItem.subject_id === undefined) { 
-      console.log("Item novo detectado. Gerando IDs...");
-      
+      // console.log("Item novo detectado. Gerando IDs...");
       newItem.subject_id = newItem.id;
-      
       newItem.id = Date.now();
     }
   }
@@ -125,8 +128,12 @@ function removeSubjectFromDay(dayName, subjectId) {
 
 function handleSave() {
   scheduleStore.saveWeeklyPlan();
-  alert("Molde do cronograma salvo com sucesso!");
+  // alert("Molde do cronograma salvo com sucesso!");
   isEditMode.value = false; // Muda para o modo de visualização após salvar
+  showSuccessModal.value = true;
+  setTimeout(() => {
+    showSuccessModal.value = false;
+  }, 2000);
 }
 
 // Função para destacar o dia atual no modo de visualização
@@ -183,7 +190,7 @@ useHead({
             </button>
             <button v-else @click="isEditMode = true"
               class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-sm hover:bg-blue-700">
-              Editar Molde
+              Editar Cronograma
             </button>
           </div>
         </div>
@@ -304,4 +311,7 @@ useHead({
       </div>
     </div>
   </div>
+
+  <AlertModal :visible="showSuccessModal" title="Sucesso" message="Cronograma Salvo com sucesso"
+   @close="showSuccessModal = false" :showButton="false" :showConfirm="false" type="success" />
 </template>
