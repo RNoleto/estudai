@@ -8,38 +8,22 @@ import {
   CategoryScale,
   LinearScale,
   PointElement
-} from 'chart.js'
+} from 'chart.js';
+import { Line } from 'vue-chartjs';
 
-import { Line } from 'vue-chartjs'
+ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
-ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement)
+// 1. Defina a propriedade que o componente irá receber
+const props = defineProps({
+  chartData: {
+    type: Object,
+    required: true,
+    // Valor padrão para evitar erros antes dos dados carregarem
+    default: () => ({ labels: [], datasets: [] }) 
+  }
+});
 
-// Dados de exemplo para mock
-const chartData = {
-  labels: ['17 Jul', '18 Jul', '19 Jul', '20 Jul', '21 Jul', '22 Jul', '23 Jul'],
-  datasets: [
-    {
-      label: 'Sessões de Estudo',
-      data: [15, 23, 12, 30, 27, 18, 35],
-      borderColor: '#3B82F6',
-      backgroundColor: 'rgba(59, 130, 246, 0.2)',
-      tension: 0.4,
-      fill: true,
-      pointRadius: 4,
-      pointHoverRadius: 7
-    },
-    {
-      label: 'Questões Respondidas',
-      data: [50, 100, 300, 250, 120, 442, 560],
-      borderColor: '#20B2AA',
-      backgroundColor: 'rgba(32, 178, 170, 0.2)',
-      tension: 0.4,
-      fill: true,
-      pointRadius: 4,
-      pointHoverRadius: 7,
-    }
-  ]
-}
+// Os dados mockados foram removidos. O gráfico agora depende da prop.
 
 const chartOptions = {
   responsive: true,
@@ -50,22 +34,23 @@ const chartOptions = {
     },
     title: {
       display: true,
-      text: 'Sessões de Estudo por Dia'
+      text: 'Sessões de Estudo por Dia (Últimos 7 dias)'
     }
   },
   scales: {
     y: {
       beginAtZero: true,
       ticks: {
-        stepSize: 5
+        // Deixar o Chart.js calcular o passo é geralmente melhor
       }
     }
   }
-}
+};
 </script>
 
 <template>
   <div class="bg-white rounded-xl shadow p-4 h-[350px]">
-    <Line :data="chartData" :options="chartOptions" />
+    <!-- 2. Use a prop 'chartData' para alimentar o componente Line -->
+    <Line :data="props.chartData" :options="chartOptions" />
   </div>
 </template>

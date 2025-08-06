@@ -7,7 +7,12 @@ export const useAdminStore = defineStore('admin', {
             totalUsers: 0,
             latestRegistrationDate: null,
         },
+        studySessionChartData: {
+            labels: [],
+            datasets: [],
+        },
         isLoading: false,
+        isChartLoading: false,
     }),
 
     getters:{
@@ -25,6 +30,23 @@ export const useAdminStore = defineStore('admin', {
             } finally {
                 this.isLoading = false;
             }
-        }
+        },
+        async fetchStudySessionChartData() {
+            this.isChartLoading = true;
+            try {
+                const response = await axios.get('/admin/charts/study-sessions');
+                // Se a resposta vier vazia, preenche com dados padrão para não quebrar o gráfico
+                if (response.data && response.data.labels.length > 0) {
+                    this.studySessionChartData = response.data;
+                } else {
+                    // Garante que o gráfico não quebre se a API não retornar dados
+                    this.studySessionChartData = { labels: [], datasets: [] };
+                }
+            } catch (error) {
+                console.error('Erro ao buscar dados do gráfico de sessões:', error);
+            } finally {
+                this.isChartLoading = false;
+            }
+        },
     }
 })
