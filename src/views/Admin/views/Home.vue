@@ -29,6 +29,7 @@ const cardData = computed(() => [
 onMounted(() => {
     adminStore.fetchDashboardStats();
     adminStore.fetchStudySessionChartData();
+    adminStore.fetchCareerDistributionData();
 });
 
 </script>
@@ -60,7 +61,15 @@ onMounted(() => {
             class="w-full mb-4" 
         />
         <!-- <StudySessionChart class="w-full mb-4" /> -->
-        <CareerDistributionChart class="w-full mb-4" />
+        <!-- <CareerDistributionChart class="w-full mb-4" /> -->
+        <div v-if="adminStore.isCareerChartLoading" class="bg-white rounded-xl shadow p-4 h-[350px] flex items-center justify-center">
+            <p class="text-gray-500">Carregando dados do gráfico...</p>
+        </div>
+        <CareerDistributionChart
+            v-else
+            :chart-data="adminStore.careerDistributionChartData"
+            class="w-full mb-4"
+        />
         
         <div class="mt-2">
             <p>Essa tela tera as seguintes informações GERAIS:</p>
@@ -78,10 +87,12 @@ onMounted(() => {
                 <li>## INFOS DE ESTUDOS ##</li>
                 <li># OK - Sessões de estudos</li>
                 <li># OK - Questões Respondidas</li>
+                <li># OK - Horas Estudadas</li>
             </ul>
             <ul class="p-2">
                 <li>## INFOS DE CARREIRAS ##</li>
                 <li># Total de carreiras cadastradas</li>
+                <li># OK - Distribuição de usuário por Carreira</li>
                 <li># Rank de carreira com total de usuários em cada uma</li>
             </ul>
             <p>Ainda é um rascunho de tela com base nas infos do banco de dados</p>

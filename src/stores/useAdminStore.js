@@ -11,8 +11,13 @@ export const useAdminStore = defineStore('admin', {
             labels: [],
             datasets: [],
         },
+        careerDistributionChartData: {
+            labels: [],
+            datasets: [],
+        },
         isLoading: false,
         isChartLoading: false,
+        isCareerChartLoading: false,
     }),
 
     getters:{
@@ -46,6 +51,18 @@ export const useAdminStore = defineStore('admin', {
                 console.error('Erro ao buscar dados do gráfico de sessões:', error);
             } finally {
                 this.isChartLoading = false;
+            }
+        },
+        async fetchCareerDistributionData() {
+            this.isCareerChartLoading = true;
+            try {
+                const response = await axios.get('/admin/charts/career-distribution');
+                this.careerDistributionChartData = response.data;
+            } catch (error) {
+                console.error('Erro ao buscar dados de distribuição de carreiras:', error);
+                this.careerDistributionChartData = { labels: [], datasets: [] };
+            } finally {
+                this.isCareerChartLoading = false;
             }
         },
     }
