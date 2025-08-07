@@ -4,6 +4,9 @@ import axios from 'axios';
 export const useAdminStore = defineStore('admin', {
     state: () => ({
         dashboardStats: {
+            users: [],
+            pagination: {},
+            isUsersLoading: false,
             totalUsers: 0,
             latestRegistrationDate: null,
             totalCareers: 0,
@@ -28,6 +31,20 @@ export const useAdminStore = defineStore('admin', {
     },
 
     actions:{
+        async fetchUsers(page = 1) {
+            this.isUsersLoading = true;
+            try {
+                const response = await axios.get(`/users?page=${page}`);
+                this.users = response.data.data;
+                delete response.data.data;
+                this.pagination = response.data;
+            } catch (error) { // <-- A variável 'error' é definida aqui
+                // E agora pode ser usada aqui dentro
+                console.error('Erro ao buscar usuários:', error);
+            } finally {
+                this.isUsersLoading = false;
+            }
+        },
         async fetchDashboardStats(){
             this.isLoading = true;
             try {
