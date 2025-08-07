@@ -4,8 +4,6 @@ import { Bar } from 'vue-chartjs';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
-// 1. O componente agora recebe os dados prontos via 'props'
-// Não precisamos mais da useCareerStore aqui.
 const props = defineProps({
   chartData: {
     type: Object,
@@ -13,8 +11,6 @@ const props = defineProps({
     default: () => ({ labels: [], datasets: [] })
   }
 });
-
-// 2. Removemos os dados mockados e a lógica de fetch.
 
 const chartOptions = {
   indexAxis: 'x',
@@ -26,7 +22,7 @@ const chartOptions = {
     },
     title: {
       display: true,
-      text: 'Distribuição de Usuários por Carreira'
+      text: 'Usuários por Carreira'
     }
   },
   scales: {

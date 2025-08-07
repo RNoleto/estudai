@@ -13,17 +13,13 @@ import { Line } from 'vue-chartjs';
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
-// 1. Defina a propriedade que o componente irá receber
 const props = defineProps({
   chartData: {
     type: Object,
     required: true,
-    // Valor padrão para evitar erros antes dos dados carregarem
     default: () => ({ labels: [], datasets: [] }) 
   }
 });
-
-// Os dados mockados foram removidos. O gráfico agora depende da prop.
 
 const chartOptions = {
   responsive: true,
@@ -34,7 +30,7 @@ const chartOptions = {
     },
     title: {
       display: true,
-      text: 'Sessões de Estudo por Dia (Últimos 7 dias)'
+      text: 'Dados Gerais de Estudos (Últimos 7 dias)'
     }
   },
   scales: {
@@ -50,7 +46,6 @@ const chartOptions = {
 
 <template>
   <div class="bg-white rounded-xl shadow p-4 h-[350px]">
-    <!-- 2. Use a prop 'chartData' para alimentar o componente Line -->
     <Line :data="props.chartData" :options="chartOptions" />
   </div>
 </template>

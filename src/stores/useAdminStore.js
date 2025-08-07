@@ -6,6 +6,9 @@ export const useAdminStore = defineStore('admin', {
         dashboardStats: {
             totalUsers: 0,
             latestRegistrationDate: null,
+            totalCareers: 0,
+            totalSubjects: 0,
+            totalHoursStudy: 0,
         },
         studySessionChartData: {
             labels: [],
