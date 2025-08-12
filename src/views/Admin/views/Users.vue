@@ -15,6 +15,13 @@ function changePage(page) {
         adminStore.fetchUsers(page);
     }
 }
+
+async function handleDelete(user){
+    if(window.confirm(`Tem certeza que deseja deletar o usuário ${user.name}? Está ação não pode ser desfeita.`)){
+        await adminStore.deleteUser(user.id);
+        adminStore.fetchUsers(adminStore.pagination.current_page);
+    }
+}
 </script>
 
 <template>
@@ -35,6 +42,7 @@ function changePage(page) {
                         <th scope="col" class="px-6 py-3">Email</th>
                         <th scope="col" class="px-6 py-3">Carreira</th>
                         <th scope="col" class="px-6 py-3">Status da Carreira</th>
+                        <th scope="col" class="px-6 py-3">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,6 +62,14 @@ function changePage(page) {
                                 N/A
                             </span>
                         </td>
+                        <div class="flex gap-4">
+                            <router-link :to="{ name: 'admin-user-edit', params: { id: user.id } }" class="font-medium text-blue-600 hover:underline">
+                                Editar
+                            </router-link>
+                            <button @click="handleDelete(user)" class="font-medium text-red-600 hover:underline">
+                                Deletar
+                            </button>
+                        </div>
                     </tr>
                 </tbody>
             </table>

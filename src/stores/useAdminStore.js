@@ -85,5 +85,34 @@ export const useAdminStore = defineStore('admin', {
                 this.isCareerChartLoading = false;
             }
         },
+        async fetchUser(userId) {
+            try {
+                const response = await axios.get(`/users/${userId}`);
+                return response.data;
+            } catch (error) {
+                console.error('Erro ao buscar usuário:', error);
+            }
+        },
+        async updateUser(userId, userData) {
+            try {
+                await axios.put(`/users/${userId}`, userData);
+                return true;
+            } catch (error) {
+                console.error('Erro ao atualizar usuário:', error);
+                return false;
+            }
+        },
+        async deleteUser(userId){
+            const currentPage = this.pagination.current_page || 1;
+            try{
+                await axios.delete(`/users/${userId}`);
+
+                this.fetchUsers(currentPage);
+                return true;
+            } catch (error) {
+                console.error('Erro ao deletar usuário:', error);
+                return false;
+            }
+        }
     }
 })

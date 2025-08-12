@@ -10,6 +10,7 @@ import LanginPage from '../views/LandingPage/LanginPage.vue';
 import AdminDashboard from '../views/Admin/components/Dashboard.vue';
 import AdminHome from '../views/Admin/views/Home.vue';
 import AdminUsers from '../views/Admin/views/Users.vue';
+import UserEdit from '../views/Admin/views/UserEdit.vue';
 
 // Rotas de Alunos
 import Dashboard from '../views/Dashboard.vue';
@@ -108,6 +109,12 @@ const routes = [
         name: 'AdminUsers',
         component: AdminUsers,
         meta: {title: 'Admin Estuday | Lista de Usuários'}
+      },
+      {
+        path: '/usuario/:id/edit',
+        name: 'admin-user-edit',
+        component: UserEdit,
+        meta: { title: 'Admin Estuday | Editar Usuário' }
       }
     ]
   },
