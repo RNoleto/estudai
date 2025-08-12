@@ -62,14 +62,14 @@ async function handleDelete(user){
                                 N/A
                             </span>
                         </td>
-                        <div class="flex gap-4">
+                        <td class="px-6 py-4 flex gap-4">
                             <router-link :to="{ name: 'admin-user-edit', params: { id: user.id } }" class="font-medium text-blue-600 hover:underline">
-                                Editar
+                                <i class="fa-solid fa-user-pen"></i>
                             </router-link>
                             <button @click="handleDelete(user)" class="font-medium text-red-600 hover:underline">
-                                Deletar
+                                <i class="fa-solid fa-trash"></i>
                             </button>
-                        </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
