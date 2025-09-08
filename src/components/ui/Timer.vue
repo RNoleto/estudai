@@ -1,10 +1,9 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useTimerStore } from '../../stores/useTimerStore';
 import Button from './Button.vue';
 import Input from './Input.vue';
 
-const isFocusMode = ref(false);
 const timerStore = useTimerStore();
 
 const props = defineProps({
@@ -14,19 +13,31 @@ const props = defineProps({
   }
 });
 
+const isFocusMode = computed({
+  get: () => timerStore.isFocusModeActive,
+  set: (value) => {
+    timerStore.isFocusModeActive = value;
+  }
+});
+
 const enterFocusMode = () => {
   isFocusMode.value = true;
   document.body.style.overflow = 'hidden'; // Desabilita a rolagem da página
 };
+
+watch(isFocusMode, (newValue) => {
+  if (newValue) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+});
 
 const emit = defineEmits(['timerStopped', 'openFocus']);
 
 const stopTimer = () => {
   timerStore.stop();
   emit('timerStopped');
-  if (isFocusMode.value === true) {
-    isFocusMode.value = false;
-  }
 };
 
 const exitFocusMode = () => {
@@ -65,7 +76,7 @@ const addCustomTime = () => {
       <div class="font-mono text-6xl flex-1 flex items-center">{{ timerStore.formattedTime }}</div>
       <div class="flex space-x-2">
         <Button variant="play" 
-                @click="timerStore.isRunning ? timerStore.togglePause() : timerStore.start()" 
+                @click="timerStore.isRunning ? timerStore.togglePause() : timerStore.startAndEnterFocus()" 
                 :disabled="props.isDisabled">
           {{ timerStore.isRunning ? (timerStore.isPaused ? 'CONTINUAR' : 'PAUSAR') : 'INICIAR' }}
         </Button>

@@ -13,6 +13,7 @@ export const useTimerStore = defineStore('timer', () => {
   let timerId = null;
   let lastPauseDuration = 0;
   let lastTimestamp = null;
+  const isFocusModeActive = ref(false);
 
   // Função para adicionar tempo (em segundos) somente quando o timer não estiver rodando
   const addTime = (seconds) => {
@@ -39,6 +40,11 @@ export const useTimerStore = defineStore('timer', () => {
       tick();
     }
   };
+
+  const startAndEnterFocus = () => {
+    isFocusModeActive.value = true;
+    start();
+  }
 
   const togglePause = () => {
     if (isRunning.value) {
@@ -72,6 +78,7 @@ export const useTimerStore = defineStore('timer', () => {
     clearTimeout(timerId);
     isRunning.value = false;
     isPaused.value = false;
+    isFocusModeActive.value = false;
 
     // Reinicia o timer
     // elapsedTime.value = 0; // Não resetar o timer do usuário ao parar o tempo
@@ -118,6 +125,7 @@ export const useTimerStore = defineStore('timer', () => {
     elapsedTime,
     pauses,
     start,
+    startAndEnterFocus,
     resetTimer,
     togglePause,
     stop,
@@ -128,6 +136,7 @@ export const useTimerStore = defineStore('timer', () => {
     finalFormattedPauseTime,
     finalTotalPausesLength,
     finalElapsedTime,
-    addTime // Função para adicionar tempo customizado
+    isFocusModeActive,
+    addTime
   };
 });
