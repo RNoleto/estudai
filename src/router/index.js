@@ -93,31 +93,31 @@ const routes = [
     }
   },
   // Area Administrativa do sistema
-  {
-    path: '/admin',
-    name: 'Admin',
-    component: AdminDashboard,
-    children: [
-      {
-        path: 'home',
-        name: 'AdminHome',
-        component: AdminHome,
-        meta: {title: 'Admin Estuday | Home'}
-      },
-      {
-        path: 'usuarios',
-        name: 'AdminUsers',
-        component: AdminUsers,
-        meta: {title: 'Admin Estuday | Lista de Usuários'}
-      },
-      {
-        path: '/usuario/:id/edit',
-        name: 'admin-user-edit',
-        component: UserEdit,
-        meta: { title: 'Admin Estuday | Editar Usuário' }
-      }
-    ]
-  },
+  // {
+  //   path: '/admin',
+  //   name: 'Admin',
+  //   component: AdminDashboard,
+  //   children: [
+  //     {
+  //       path: 'home',
+  //       name: 'AdminHome',
+  //       component: AdminHome,
+  //       meta: {title: 'Admin Estuday | Home'}
+  //     },
+  //     {
+  //       path: 'usuarios',
+  //       name: 'AdminUsers',
+  //       component: AdminUsers,
+  //       meta: {title: 'Admin Estuday | Lista de Usuários'}
+  //     },
+  //     {
+  //       path: '/usuario/:id/edit',
+  //       name: 'admin-user-edit',
+  //       component: UserEdit,
+  //       meta: { title: 'Admin Estuday | Editar Usuário' }
+  //     }
+  //   ]
+  // },
   // Area do Aluno do sistema
   {
     path: '/area-do-aluno',
