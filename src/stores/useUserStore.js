@@ -61,6 +61,19 @@ export const useUserStore = defineStore('user', {
       if (name) {
         await updateProfile(userCredential.user, { displayName: name });
       }
+      const idToken = await userCredential.user.getIdToken();
+      try {
+        const response = await axios.post('/users/sync-on-register', {},
+          {
+            headers: {
+              'Authorization': `Bearer ${idToken}`
+            }
+          }
+        );
+        console.log('Usuário sincronizado com o backend:', response.data.message);
+      } catch (error) {
+        console.error('Erro ao sincronizar usuário com o backend:', error.response?.data || error);
+      }
     },
     async loginWithGoogle(){
       await AuthService.loginWithGoogle();

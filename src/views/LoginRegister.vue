@@ -41,8 +41,31 @@ const handleGoogleLogin = async () => {
   }
 }
 
-const handleRegister = () => {
-  console.log('Cadastro:', name.value, email.value, password.value);
+const handleRegister = async () => {
+  // Verificação básica para garantir que os campos não estão vazios
+  if (!name.value || !email.value || !password.value) {
+    console.error('Por favor, preencha todos os campos para se cadastrar.');
+    // Opcional: mostrar uma mensagem de erro para o usuário
+    return;
+  }
+  
+  try {
+    // Chama a ação 'register' do seu store, que agora faz todo o trabalho
+    await userStore.register({
+      name: name.value,
+      email: email.value,
+      password: password.value,
+    });
+    
+    // Opcional: Redirecionar o usuário ou mostrar uma mensagem de sucesso após o cadastro.
+    console.log('Cadastro realizado com sucesso!');
+    // Exemplo: router.push('/dashboard');
+    
+  } catch (error) {
+    console.error('Erro ao registrar usuário:', error);
+    // Opcional: Mostrar uma mensagem de erro específica para o usuário
+    // (ex: "Este e-mail já está em uso.")
+  }
 };
 </script>
 
