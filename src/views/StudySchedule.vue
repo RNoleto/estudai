@@ -136,6 +136,14 @@ function handleSave() {
   }, 2000);
 }
 
+function clearSchedule() {
+  if(window.confirm("Tem certeza que deseja limpar todo o cronograma? Esta ação não pode ser desfeita.")) {
+    scheduleStore.weeklyPlan.forEach(day => {
+      day.subjects = [];
+    });
+  }
+}
+
 // Função para destacar o dia atual no modo de visualização
 function isToday(dayName) {
   const today = new Date().toLocaleDateString('pt-BR', { weekday: 'long' });
@@ -184,6 +192,10 @@ useHead({
           </div>
 
           <div class="flex items-center gap-4">
+            <button v-if="isEditMode" @click="clearSchedule"
+              class="px-6 py-2 bg-red-600 text-white font-semibold rounded-md shadow-sm hover:bg-red-700">
+              Limpar Tudo
+            </button>
             <button v-if="isEditMode" @click="handleSave"
               class="px-6 py-2 bg-green-600 text-white font-semibold rounded-md shadow-sm hover:bg-green-700">
               Salvar e Visualizar
