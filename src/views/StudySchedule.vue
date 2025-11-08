@@ -15,6 +15,8 @@ const scheduleStore = useScheduleStore();
 
 // Ref para controlar modal
 const showSuccessModal = ref(false);
+const showClearModal = ref(false);
+const successMessage = ref('');
 
 // --- STATE DO COMPONENTE ---
 const isEditMode = ref(true); // Começa em modo de edição por padrão
@@ -26,6 +28,10 @@ const breakpoints = useBreakpoints({
 });
 
 const isDesktop = breakpoints.greaterOrEqual('desktop');
+
+const isSchedulePopulated = computed(() => {
+  return scheduleStore.weeklyPlan.some(day => day.subjects.length > 0);
+});
 
 const subjectUsage = computed(() => {
   const usageMap = {};
@@ -128,21 +134,42 @@ function removeSubjectFromDay(dayName, subjectId) {
 
 function handleSave() {
   scheduleStore.saveWeeklyPlan();
-  // alert("Molde do cronograma salvo com sucesso!");
-  isEditMode.value = false; // Muda para o modo de visualização após salvar
+  isEditMode.value = false;
+
+  successMessage.value = "Cronograma salvo com sucesso!";
   showSuccessModal.value = true;
+  
   setTimeout(() => {
     showSuccessModal.value = false;
   }, 2000);
 }
 
 function clearSchedule() {
-  if(window.confirm("Tem certeza que deseja limpar todo o cronograma? Esta ação não pode ser desfeita.")) {
-    scheduleStore.weeklyPlan.forEach(day => {
-      day.subjects = [];
-    });
-  }
+  showClearModal.value = true;
 }
+
+function handleConfirmClear() {
+  showClearModal.value = false;
+
+  scheduleStore.weeklyPlan.forEach(day => {
+    day.subjects = [];
+  });
+
+  successMessage.value = "Cronograma limpo com sucesso!";
+  showSuccessModal.value = true;
+  setTimeout(() => {
+    showSuccessModal.value = false;
+  }, 2000);
+}
+
+// function clearSchedule() {
+//   // usar modal de confirmação
+//   if(window.confirm("Tem certeza que deseja limpar todo o cronograma? Esta ação não pode ser desfeita.")) {
+//     scheduleStore.weeklyPlan.forEach(day => {
+//       day.subjects = [];
+//     });
+//   }
+// }
 
 // Função para destacar o dia atual no modo de visualização
 function isToday(dayName) {
@@ -192,7 +219,7 @@ useHead({
           </div>
 
           <div class="flex items-center gap-4">
-            <button v-if="isEditMode" @click="clearSchedule"
+            <button v-if="isEditMode && isSchedulePopulated" @click="clearSchedule"
               class="px-6 py-2 bg-red-600 text-white font-semibold rounded-md shadow-sm hover:bg-red-700">
               Limpar Tudo
             </button>
@@ -324,6 +351,7 @@ useHead({
     </div>
   </div>
 
-  <AlertModal :visible="showSuccessModal" title="Sucesso" message="Cronograma Salvo com sucesso"
-   @close="showSuccessModal = false" :showButton="false" :showConfirm="false" type="success" />
+  <AlertModal :visible="showSuccessModal" title="Sucesso" :message="successMessage" @close="showSuccessModal = false" :showButton="false" :showConfirm="false" type="success" 
+  />
+  <AlertModal :visible="showClearModal" title="Confirmar Limpeza" message="Tem certeza que deseja limpar todo o cronograma? Esta ação não pode ser desfeita."@close="showClearModal = false"@confirm="handleConfirmClear":showButton="true" :showConfirm="true" type="warning"/>
 </template>
