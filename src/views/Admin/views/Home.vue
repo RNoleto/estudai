@@ -22,12 +22,12 @@ const cardData = computed(() => [
         info: adminStore.dashboardStats.latestRegistrationDate || 'N/A' 
     },
     {
-        title: 'Total de carreiras',
+        title: 'Total de carreiras cadastradas',
         icon: 'fa-solid fa-briefcase',
         info: adminStore.dashboardStats.totalCareers || 'N/A'
     },
     {
-        title: 'Total de Matérias',
+        title: 'Total de matérias cadastradas',
         icon: 'fa-solid fa-book',
         info: adminStore.dashboardStats.totalSubjects || 'N/A'
     },
@@ -64,21 +64,24 @@ onMounted(() => {
                 </template>
             </Card>
         </div>
-            <div v-if="adminStore.isChartLoading" class="bg-white rounded-xl shadow p-4 h-[350px] flex items-center justify-center">
-                <p class="text-gray-500">Carregando dados do gráfico...</p>
+            <div class="grid grid-cols-2 gap-2">
+                <div v-if="adminStore.isChartLoading" class="bg-white rounded-xl shadow p-4 h-[350px] flex items-center justify-center">
+                    <p class="text-gray-500">Carregando dados do gráfico...</p>
+                </div>
+
+                <StudySessionChart 
+                    v-else 
+                    :chart-data="adminStore.studySessionChartData" 
+                    class="w-full mb-4" 
+                />
+                <div v-if="adminStore.isCareerChartLoading" class="bg-white rounded-xl shadow p-4 h-[350px] flex items-center justify-center">
+                    <p class="text-gray-500">Carregando dados do gráfico...</p>
+                </div>
+                <CareerDistributionChart
+                    v-else
+                    :chart-data="adminStore.careerDistributionChartData"
+                    class="w-full mb-4"
+                />
             </div>
-            <StudySessionChart 
-                v-else 
-                :chart-data="adminStore.studySessionChartData" 
-                class="w-full mb-4" 
-            />
-            <div v-if="adminStore.isCareerChartLoading" class="bg-white rounded-xl shadow p-4 h-[350px] flex items-center justify-center">
-                <p class="text-gray-500">Carregando dados do gráfico...</p>
-            </div>
-            <CareerDistributionChart
-                v-else
-                :chart-data="adminStore.careerDistributionChartData"
-                class="w-full mb-4"
-            />
     </div>
 </template>

@@ -25,6 +25,7 @@ const toggleMenu = () => {
 const menuItems = [
     { name: 'Home', routeName: 'AdminHome', icon: 'fa-solid fa-house' },
     { name: 'Usuários', routeName: 'AdminUsers', icon: 'fa-solid fa-users' },
+    { name: 'Configurações', routeName: 'AdminSettings', icon: 'fa-solid fa-cog' },
     // { name: 'Carreiras', routeName: '', icon: 'fa-solid fa-brefcase' },
     // { name: 'Matérias', routeName: '', icon: 'fa-solid fa-book-open' }
 ];

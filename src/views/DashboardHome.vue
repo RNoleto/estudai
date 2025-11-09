@@ -1,8 +1,10 @@
 <script setup>
+
 import { computed, onMounted, ref } from 'vue';
 import SubjectSummaryTable from '../layouts/SubjectSummaryTable.vue';
 import Card from '../components/Card.vue';
 import SubjectBarChart from '../layouts/SubjectBarChart.vue';
+import StudyStreak from '../components/StudyStreak.vue';
 
 import { useHead } from '@vueuse/head';
 
@@ -10,8 +12,10 @@ import { useHead } from '@vueuse/head';
 import { useUserStore } from '../stores/useUserStore';
 import { useTimeFormatter } from '../composables/useTimeFormatter';
 
+
 const userStore = useUserStore();
 const { formatStudyTime } = useTimeFormatter();
+
 
 const totalStudyTime = computed(() => {
   return userStore.userStudyRecords.reduce((sum, record) => sum + record.study_time, 0);
@@ -224,10 +228,10 @@ useHead({
       </div>
 
       <!-- Charts and Tables Section -->
-      <div v-if="hasStudyRecords" class="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
+      <div v-if="hasStudyRecords" class="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4 sm:gap-6">
 
         <!-- Subject Summary Table -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 2xl:col-span-2">
           <h2 class="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
             <i class="fa-solid fa-table text-primary"></i>
             Resumo por Matéria
@@ -235,14 +239,19 @@ useHead({
           <SubjectSummaryTable />
         </div>
 
-        <!-- Subject Bar Chart -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
-          <h2 class="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
-            <i class="fa-solid fa-chart-bar text-primary"></i>
-            Gráfico de Desempenho
-          </h2>
-          <SubjectBarChart />
+        <div>
+          <!-- Constância dos Estudos -->
+          <StudyStreak :study-records="userStore.userStudyRecords" :days-to-show="7" />
+          <!-- Subject Bar Chart -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+            <h2 class="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-chart-bar text-primary"></i>
+              Gráfico de Desempenho
+            </h2>
+            <SubjectBarChart />
+          </div>
         </div>
+
       </div>
 
       <!-- Empty State -->

@@ -193,7 +193,7 @@ const initialize = () => {
     });
   
   if (weeks.value.length > 0) {
-    selectedWeek.value = weeks.value[0].number;
+    selectedWeek.value = weeks.value[weeks.value.length - 1].number; // Seleciona a última semana
     updateChartData();
   }
   chartOptions.value = setChartOptions();
