@@ -16,8 +16,10 @@ export const useUserStore = defineStore('user', {
     userName: null,
     careerId: null,
     careerName: '',
+    isPremium: false,
+    premiumExpiresAt: null,
     userSubjects: [],
-    subjects:[],
+    subjects: [],
     userStudyRecords: [],
   }),
   actions: {
@@ -53,7 +55,7 @@ export const useUserStore = defineStore('user', {
         console.error("Erro ao buscar o ID do usuário:", error);
       }
     },
-    async login({ email, password }){
+    async login({ email, password }) {
       await AuthService.login(email, password);
     },
     async register({ email, password, name }) {
@@ -75,10 +77,10 @@ export const useUserStore = defineStore('user', {
         console.error('Erro ao sincronizar usuário com o backend:', error.response?.data || error);
       }
     },
-    async loginWithGoogle(){
+    async loginWithGoogle() {
       await AuthService.loginWithGoogle();
     },
-    async logout(){
+    async logout() {
       await AuthService.logout();
     },
     clearUserData() {
@@ -88,19 +90,21 @@ export const useUserStore = defineStore('user', {
       this.careerName = '';
       this.userSubjects = [];
       this.userStudyRecords = [];
+      this.isPremium = false;
+      this.premiumExpiresAt = null;
     },
     async saveUserCareer(careerId, careerName) {
       this.careerId = careerId;
       this.careerName = careerName;
-    
+
       const userCareerData = {
         user_id: this.userId,
         career_id: careerId,
       };
-    
+
       try {
         const response = await axios.post('user-career', userCareerData);
-    
+
         if (response.status === 200 || response.status === 201) {
           return { success: true, message: response.data.message };
         } else {
@@ -120,17 +124,17 @@ export const useUserStore = defineStore('user', {
         const response = await axios.get(`user-career/${this.userId}`);
         this.careerId = response.data?.career_id || null;
 
-        if(!this.careerId){
+        if (!this.careerId) {
           console.warn("Usuário sem carreira registrada.");
           return false;
         }
-    
+
         const response_name = await axios.get(`user-career/career_name/${this.userId}`);
         this.careerName = response_name.data?.career_name || null;
 
         return true;
       } catch (error) {
-        if(error.response && error.response.status === 404){
+        if (error.response && error.response.status === 404) {
           console.warn("usuário sem carreira registrada.");
           this.careerId = null;
           this.careerName = null;
@@ -143,24 +147,24 @@ export const useUserStore = defineStore('user', {
     async createUserSubject(subjectName) {
       try {
         const response = await axios.post('subjects', { name: subjectName });
-    
+
         if (response.status === 201) {
           this.subjects.push(response.data);
           return { success: true, message: response.data.message };
         }
       } catch (error) {
         console.error("Erro ao salvar nova matéria:", error);
-        
+
         if (error.response) {
-          return { 
-            success: false, 
-            message: error.response.data.message || "Erro desconhecido frontend.", 
+          return {
+            success: false,
+            message: error.response.data.message || "Erro desconhecido frontend.",
             errors: error.response.data.errors || null
           };
         }
-        return { success: false, message: "Erro de conexão com o servidor."};
+        return { success: false, message: "Erro de conexão com o servidor." };
       }
-    },    
+    },
     async addUserSubjects(subjectIds) {
       try {
         const response = await axios.post('user-subjects', {
@@ -226,20 +230,20 @@ export const useUserStore = defineStore('user', {
         console.error("ID do usuário não encontrado.");
         return;
       }
-    
+
       try {
         const response = await axios.get(`user-study-records/user/${this.userId}`);
-    
+
         if (response.status === 200) {
           const subjectStore = useSubjectStore();
-    
+
           // Aguarda o carregamento das matérias, caso ainda não tenham sido carregadas
           if (!subjectStore.subjects.length) {
             await subjectStore.fetchSubjects();
           }
-    
+
           const activeRecords = response.data.filter(record => record.ativo === 1);
-    
+
           this.userStudyRecords = activeRecords.map((record) => {
             const subject = subjectStore.subjects.find(sub => sub.id === record.subject_id);
             return {
@@ -251,25 +255,25 @@ export const useUserStore = defineStore('user', {
       } catch (error) {
         console.error("Erro ao carregar registros de estudo do usuário fetchUserStudyRecords:", error);
       }
-    },    
+    },
     async saveUserStudyRecord(newRecord) {
       const timerStore = useTimerStore();
       const studyStore = useStudyStore();
-    
+
       if (!this.userId) {
         console.error("ID do usuário não encontrado.");
         return;
       }
-    
+
       let studyTimeInSeconds = 0;
-    
+
       // Verificar se o tempo de estudo foi passado manualmente
       if (newRecord.totalStudyTime) {
         const timeParts = newRecord.totalStudyTime.split(':');
         let hoursInSeconds = 0;
         let minutesInSeconds = 0;
         let seconds = 0;
-    
+
         // Verificar se o formato é "HH:MM:SS" ou "MM:SS"
         if (timeParts.length === 3) {
           // Formato "HH:MM:SS"
@@ -283,7 +287,7 @@ export const useUserStore = defineStore('user', {
         }
 
         // console.log("Horas em segundos:", timeParts);
-    
+
         // Soma os valores em segundos
         studyTimeInSeconds = hoursInSeconds + minutesInSeconds + seconds;
       } else if (newRecord.study_time) {
@@ -293,14 +297,14 @@ export const useUserStore = defineStore('user', {
         console.error("Tempo de estudo não fornecido.");
         return;
       }
-    
+
       try {
         const payload = {
           user_id: this.userId,
           subject_id: newRecord.subject_id || studyStore.subject,
           topic: newRecord.topic || studyStore.topic,
           questions_resolved: newRecord.totalQuestions || 0,
-          correct_answers: 
+          correct_answers:
             newRecord.totalQuestions && newRecord.incorrectAnswers !== undefined
               ? newRecord.totalQuestions - newRecord.incorrectAnswers
               : 0,
@@ -308,16 +312,16 @@ export const useUserStore = defineStore('user', {
           total_pauses: newRecord.totalPauses || 0,
           study_time: studyTimeInSeconds, // Agora em segundos
         };
-    
+
         // Exibe o valor de estudo em segundos para verificar a conversão
         // console.log("Estudo em segundos:", studyTimeInSeconds);
-    
+
         const response = await axios.post('user-study-records', payload);
         // console.log('Registro salvo com sucesso:', response.data);
       } catch (error) {
         console.error("Erro ao salvar os dados de estudos no banco de dados:", error);
       }
-    },        
+    },
     async updateUserStudyRecord(recordId, updatedData) {
 
       if (!this.userId) {
