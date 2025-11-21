@@ -126,11 +126,12 @@ const menuItems = [
     icon: 'fa-solid fa-headset',
     route: '/area-do-aluno/suporte'
   },
-  {
-    label: 'Planos',
-    icon: 'fa-solid fa-star',
-    route: '/area-do-aluno/planos'
-  }
+  // Temporario, enquanto não estiver completo o sistema de planos e conta no abacatepay
+  // {
+  //   label: 'Planos',
+  //   icon: 'fa-solid fa-star',
+  //   route: '/area-do-aluno/planos'
+  // }
 ];
 
 const isSettingsMenuActive = () => {
