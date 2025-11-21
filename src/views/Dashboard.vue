@@ -1,6 +1,6 @@
 <script setup>
 import { RouterView, useRoute, RouterLink } from 'vue-router';
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
 
 import { useRouter } from 'vue-router';
@@ -11,6 +11,20 @@ const router = useRouter();
 
 const userStore = useUserStore();
 const user = userStore.userName;
+const isPremium = computed(() => userStore.isPremium);
+
+const subscriptionBadge = computed(() => {
+  if (isPremium.value) {
+    return {
+      label: 'Premium',
+      classes: 'bg-green-100 text-green-700 border border-green-200'
+    };
+  }
+  return {
+    label: 'Gratuito',
+    classes: 'bg-gray-100 text-gray-600 border border-gray-200'
+  }
+})
 
 const route = useRoute();
 
@@ -59,7 +73,7 @@ const handleSettingsLinkClick = () => {
 };
 
 onMounted(async () => {
-  await userStore.checkUserCareer();
+  await userStore.initializeUser();
 });
 
 const menuItems = [
@@ -111,6 +125,11 @@ const menuItems = [
     label: 'Suporte ao Usuário',
     icon: 'fa-solid fa-headset',
     route: '/area-do-aluno/suporte'
+  },
+  {
+    label: 'Planos',
+    icon: 'fa-solid fa-star',
+    route: '/area-do-aluno/planos'
   }
 ];
 
@@ -119,7 +138,7 @@ const isSettingsMenuActive = () => {
   return settingsRoutes.includes(route.path);
 };
 
-async function handleLogout(){
+async function handleLogout() {
   await userStore.logout();
   router.push('/login');
 }
@@ -136,11 +155,9 @@ async function handleLogout(){
         </div>
         <span class="font-bold text-lg text-gray-900">Estuday</span>
       </router-link>
-      <button 
-        @click="toggleMenu" 
+      <button @click="toggleMenu"
         class="w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
-        :aria-label="isMenuMobileOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação'"
-      >
+        :aria-label="isMenuMobileOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação'">
         <i :class="[
           'text-gray-600 transition-transform duration-200',
           isMenuMobileOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'
@@ -155,7 +172,8 @@ async function handleLogout(){
             <!-- Header do menu mobile -->
             <div class="flex items-center justify-between p-6 border-b border-gray-100">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-primary to-blue-600 rounded-xl flex items-center justify-center">
+                <div
+                  class="w-10 h-10 bg-gradient-to-br from-primary to-blue-600 rounded-xl flex items-center justify-center">
                   <i class="fa-solid fa-graduation-cap text-white text-lg"></i>
                 </div>
                 <div>
@@ -163,11 +181,9 @@ async function handleLogout(){
                   <p class="text-sm text-gray-500">Menu de navegação</p>
                 </div>
               </div>
-              <button 
-                @click="toggleMenu" 
+              <button @click="toggleMenu"
                 class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
-                aria-label="Fechar menu"
-              >
+                aria-label="Fechar menu">
                 <i class="fa-solid fa-xmark text-gray-600"></i>
               </button>
             </div>
@@ -177,12 +193,19 @@ async function handleLogout(){
               <!-- Seção do usuário -->
               <div class="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
                 <div class="flex items-center gap-3">
-                  <div class="w-12 h-12 bg-gradient-to-br from-primary to-blue-600 rounded-full flex items-center justify-center">
+                  <div
+                    class="w-12 h-12 bg-gradient-to-br from-primary to-blue-600 rounded-full flex items-center justify-center">
                     <i class="fa-solid fa-user text-white"></i>
                   </div>
                   <div>
                     <p class="font-semibold text-gray-900">Bem-vindo!</p>
                     <p class="text-sm text-gray-600">{{ user }}</p>
+
+                    <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full w-fit"
+                      :class="subscriptionBadge.classes">
+                      <i v-if="isPremium" class="fa-solid fa-crown mr-1 text-xs"></i>
+                      {{ subscriptionBadge.label }}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -192,15 +215,14 @@ async function handleLogout(){
                 <template v-for="item in menuItems" :key="item.label">
                   <!-- Links simples -->
                   <div v-if="!item.subItems">
-                    <router-link 
-                      :to="item.route" 
-                      @click="toggleMenu"
+                    <router-link :to="item.route" @click="toggleMenu"
                       class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-700 hover:bg-primary/10 hover:text-primary font-medium transition-all duration-200 group"
-                      :class="route.path === item.route ? 'bg-primary/15 text-primary shadow-sm' : ''"
-                    >
-                      <div class="w-10 h-10 rounded-lg bg-gray-100 group-hover:bg-primary/20 flex items-center justify-center transition-colors"
-                           :class="route.path === item.route ? 'bg-primary/20' : ''">
-                        <i :class="[item.icon, 'text-lg', route.path === item.route ? 'text-primary' : 'text-gray-600 group-hover:text-primary']"></i>
+                      :class="route.path === item.route ? 'bg-primary/15 text-primary shadow-sm' : ''">
+                      <div
+                        class="w-10 h-10 rounded-lg bg-gray-100 group-hover:bg-primary/20 flex items-center justify-center transition-colors"
+                        :class="route.path === item.route ? 'bg-primary/20' : ''">
+                        <i
+                          :class="[item.icon, 'text-lg', route.path === item.route ? 'text-primary' : 'text-gray-600 group-hover:text-primary']"></i>
                       </div>
                       <span class="flex-1">{{ item.label }}</span>
                       <i v-if="route.path === item.route" class="fa-solid fa-check text-primary text-sm"></i>
@@ -209,14 +231,14 @@ async function handleLogout(){
 
                   <!-- Links com submenu -->
                   <div v-else>
-                    <button
-                      @click="toggleMenu3"
+                    <button @click="toggleMenu3"
                       class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-700 hover:bg-primary/10 hover:text-primary font-medium transition-all duration-200 w-full group"
-                      :class="isSettingsMenuActive() ? 'bg-primary/15 text-primary shadow-sm' : ''"
-                    >
-                      <div class="w-10 h-10 rounded-lg bg-gray-100 group-hover:bg-primary/20 flex items-center justify-center transition-colors"
-                           :class="isSettingsMenuActive() ? 'bg-primary/20' : ''">
-                        <i :class="[item.icon, 'text-lg', isSettingsMenuActive() ? 'text-primary' : 'text-gray-600 group-hover:text-primary']"></i>
+                      :class="isSettingsMenuActive() ? 'bg-primary/15 text-primary shadow-sm' : ''">
+                      <div
+                        class="w-10 h-10 rounded-lg bg-gray-100 group-hover:bg-primary/20 flex items-center justify-center transition-colors"
+                        :class="isSettingsMenuActive() ? 'bg-primary/20' : ''">
+                        <i
+                          :class="[item.icon, 'text-lg', isSettingsMenuActive() ? 'text-primary' : 'text-gray-600 group-hover:text-primary']"></i>
                       </div>
                       <span class="flex-1 text-left">{{ item.label }}</span>
                       <i :class="[
@@ -224,19 +246,14 @@ async function handleLogout(){
                         isMenu3Open ? 'fa-chevron-up text-primary' : 'fa-chevron-down text-gray-400'
                       ]"></i>
                     </button>
-                    
+
                     <transition name="submenu">
                       <div v-if="isMenu3Open" class="ml-14 mt-2 space-y-1">
-                        <router-link
-                          v-for="sub in item.subItems"
-                          :key="sub.label"
-                          :to="sub.route"
-                          @click="toggleMenu"
+                        <router-link v-for="sub in item.subItems" :key="sub.label" :to="sub.route" @click="toggleMenu"
                           class="flex items-center gap-3 px-4 py-2 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-primary/5 transition-all duration-200"
-                          :class="route.path === sub.route ? 'text-primary font-medium bg-primary/10' : ''"
-                        >
+                          :class="route.path === sub.route ? 'text-primary font-medium bg-primary/10' : ''">
                           <div class="w-2 h-2 rounded-full bg-gray-300"
-                               :class="route.path === sub.route ? 'bg-primary' : ''"></div>
+                            :class="route.path === sub.route ? 'bg-primary' : ''"></div>
                           <span>{{ sub.label }}</span>
                         </router-link>
                       </div>
@@ -248,10 +265,8 @@ async function handleLogout(){
 
             <!-- Footer do menu -->
             <div class="p-4 border-t border-gray-100">
-              <button
-                @click="handleLogout"
-                class="w-full flex items-center justify-center gap-3 px-4 py-3 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl font-medium transition-colors duration-200"
-              >
+              <button @click="handleLogout"
+                class="w-full flex items-center justify-center gap-3 px-4 py-3 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl font-medium transition-colors duration-200">
                 <i class="fa-solid fa-sign-out-alt"></i>
                 <span>Sair da conta</span>
               </button>
@@ -276,8 +291,32 @@ async function handleLogout(){
           </button>
         </div>
         <nav class="flex flex-col h-full gap-1" :class="isSidebarCollapsed ? 'p-1 items-center' : 'p-2'">
-          <div class="flex items-center gap-2 mb-4 text-sm text-gray-700" :class="isSidebarCollapsed ? 'justify-center' : ''">
-            <p v-if="!isSidebarCollapsed">Bem vindo {{ user }}!</p>
+          <div class="flex items-center gap-3 mb-6 px-2 transition-all duration-300"
+            :class="isSidebarCollapsed ? 'justify-center' : ''">
+
+            <div v-if="!isSidebarCollapsed"
+              class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center shrink-0 text-gray-500">
+              <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div v-if="!isSidebarCollapsed" class="flex flex-col overflow-hidden">
+              <p class="text-xs text-gray-500">Bem vindo,</p>
+              <p class="text-sm font-bold text-gray-800 truncate">{{ user }}</p>
+
+              <div class="mt-1">
+                <span
+                  class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full inline-flex items-center"
+                  :class="subscriptionBadge.classes">
+                  <i v-if="isPremium" class="fa-solid fa-crown mr-1 text-[10px]"></i>
+                  {{ subscriptionBadge.label }}
+                </span>
+              </div>
+            </div>
+
+            <div v-else class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-500"
+              title="Perfil">
+              <i class="fa-solid fa-user text-xs"></i>
+            </div>
           </div>
           <!-- Home da Dashboard -->
           <div v-for="item in menuItems" :key="item.label">
@@ -294,27 +333,19 @@ async function handleLogout(){
               </router-link>
             </div>
             <div v-else>
-              <button
-                @click="toggleMenu3"
-                :class="[
-                  'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md text-gray-700 w-full',
-                  isSettingsMenuActive() ? 'bg-secondary text-gray-700 shadow-sm' : 'hover:bg-gray-100'
-                ]"
-              >
+              <button @click="toggleMenu3" :class="[
+                'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md text-gray-700 w-full',
+                isSettingsMenuActive() ? 'bg-secondary text-gray-700 shadow-sm' : 'hover:bg-gray-100'
+              ]">
                 <i :class="item.icon"></i>
                 <span v-show="!isSidebarCollapsed">{{ item.label }}</span>
               </button>
               <transition name="fade-slide" mode="out-in" appear>
                 <div v-if="isMenu3Open && !isSidebarCollapsed" class="ml-8 flex flex-col gap-1">
-                  <router-link
-                    v-for="sub in item.subItems"
-                    :key="sub.label"
-                    :to="sub.route"
-                    :class="[
-                      'text-sm text-gray-700 hover:text-blue-800',
-                      route.path === sub.route ? 'font-bold text-blue-800' : ''
-                    ]"
-                  >
+                  <router-link v-for="sub in item.subItems" :key="sub.label" :to="sub.route" :class="[
+                    'text-sm text-gray-700 hover:text-blue-800',
+                    route.path === sub.route ? 'font-bold text-blue-800' : ''
+                  ]">
                     {{ sub.label }}
                   </router-link>
                 </div>

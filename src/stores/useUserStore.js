@@ -42,7 +42,9 @@ export const useUserStore = defineStore('user', {
     async initializeUser() {
       // await this.fetchToken();
       await this.fetchUserId();
+      await this.fetchUserData();
     },
+    // Buscar o ID do usuário atual do Firebase Auth
     async fetchUserId() {
       try {
         const user = auth.currentUser;
@@ -53,6 +55,30 @@ export const useUserStore = defineStore('user', {
         }
       } catch (error) {
         console.error("Erro ao buscar o ID do usuário:", error);
+      }
+    },
+    //Buscar dados do usuario no banco de dados usando o ID do Firebase(firebase_uid)
+    async fetchUserData() {
+      if (!this.userId) {
+        this.userId = localStorage.getItem('userId');
+      }
+
+      if (!this.userId) {
+        console.warn("Impossível buscar dados: ID do usuário não encontrado.");
+        return;
+      }
+
+      try {
+        const userFirebaseUid = this.userId; 
+        const response = await axios.get(`user/${userFirebaseUid}`);
+        
+        const userData = response.data;
+        
+        this.isPremium = Boolean(userData.is_premium);
+        this.premiumExpiresAt = userData.premium_expires_at;
+
+      } catch (error) {
+        console.error("Erro ao buscar dados do usuário:", error);
       }
     },
     async login({ email, password }) {
