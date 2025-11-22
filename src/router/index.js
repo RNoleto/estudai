@@ -11,6 +11,7 @@ import AdminDashboard from '../views/Admin/components/Dashboard.vue';
 import AdminHome from '../views/Admin/views/Home.vue';
 import AdminUsers from '../views/Admin/views/Users.vue';
 import UserEdit from '../views/Admin/views/UserEdit.vue';
+import AdminSettings from '../views/Admin/views/AdminSettings.vue';
 
 // Rotas de Alunos
 import Dashboard from '../views/Dashboard.vue';
@@ -25,10 +26,8 @@ import StudyStart from '../views/StudyStart.vue';
 import StudySchedule from '../views/StudySchedule.vue'
 import Challenges from '../views/Challenges.vue';
 import SupportPage from '../views/SupportPage.vue';
-
-
-//Rotas em teste para Alunos
 import SubscriptionsPage from '../views/SubscriptionsPage.vue';
+import PaymentSuccessPage from '../views/PaymentSuccessPage.vue';
 
 // Rotas Globais (LandingPage, Admin e Alunos)
 import ErrorPage from '../views/ErrorPage.vue';
@@ -115,6 +114,12 @@ const routes = [
   //       name: 'admin-user-edit',
   //       component: UserEdit,
   //       meta: { title: 'Admin Estuday | Editar Usuário' }
+  //     },
+  //     {
+  //       path: 'configuracoes',
+  //       name: "AdminSettings",
+  //       component: AdminSettings,
+  //       meta: { title: 'Admin Estuday | Configurações' }
   //     }
   //   ]
   // },
@@ -200,6 +205,12 @@ const routes = [
       //   component: SubscriptionsPage,
       //   meta: { title: 'Planos de Assinatura | Estuday' }
       // },
+      // {
+      //   path: '/checkout/concluido', 
+      //   name: 'CheckoutSuccess',
+      //   component: PaymentSuccessPage,
+      //   meta: {requiresAuth: true}
+      // },
       {
         path: '/:pathMatch(.*)*', 
         name: 'DashboardNotFound', 
@@ -230,9 +241,13 @@ router.beforeEach(async (to, from, next) => {
 
   if (currentUser) {
     try {
-      await userStore.fetchUserId();
+      if (!userStore.userId) await userStore.fetchUserId();
+      
       const hasCareer = await userStore.checkUserCareer();
-      await userStore.fetchUserSubjects();
+      
+      if (userStore.userSubjects.length === 0) {
+       await userStore.fetchUserSubjects();
+      }
 
       if (to.path === '/' && currentUser) {
         if (!hasCareer) {

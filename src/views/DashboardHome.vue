@@ -66,7 +66,9 @@ const totalValue = computed(() => {
 
 onMounted(async () => {
   try {
-    await userStore.fetchUserStudyRecords();
+    if (userStore.userStudyRecords.length === 0) {
+      await userStore.fetchUserStudyRecords();
+    }
     const activeRecords = userStore.userStudyRecords.filter(record => record.ativo === 1);
     hasStudyRecords.value = activeRecords.length > 0;
   } catch (error) {
