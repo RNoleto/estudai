@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref } from "vue";
 import { useUserStore } from "../stores/useUserStore";
 import { useAIStore } from "../stores/aiStore"; 
 import { marked } from "marked";
@@ -12,20 +12,28 @@ const studyRecords = ref([]);
 const insights = ref("");
 const localLoading = ref(false);
 
-onMounted(async () => {
-    await userStore.fetchUserStudyRecords();
-    studyRecords.value = userStore.userStudyRecords;
-});
+// onMounted(async () => {
+//     await userStore.fetchUserStudyRecords();
+//     studyRecords.value = userStore.userStudyRecords;
+// });
 
-watch(() => userStore.userStudyRecords, (newRecords) => {
-    studyRecords.value = newRecords;
-});
+// watch(() => userStore.userStudyRecords, (newRecords) => {
+//     studyRecords.value = newRecords;
+// });
 
-const openModal = async () => {
+// const openModal = async () => {
+//     isOpen.value = true;
+//     await userStore.fetchUserStudyRecords();
+//     await generateAIInsights();
+// };
+
+const openModal = async (records) => {
     isOpen.value = true;
-    await userStore.fetchUserStudyRecords();
+
+    studyRecords.value = records || [];
+
     await generateAIInsights();
-};
+}
 
 const closeModal = () => {
     isOpen.value = false;
@@ -53,7 +61,9 @@ const generateAIInsights = async () => {
     try {
         const studyData = studyRecords.value.map(record => `Matéria: ${record.subjectName}\nTópico: ${record.topic || 'N/A'}\nTempo de estudo: ${formatTime(record.study_time)}\nAcertos: ${record.correct_answers}\nErros: ${record.incorrect_answers}`).join('\n');
 
-        const prompt = `Atue como um coaching especialista em estudo para concursos publicos. Analise os seguintes dados de estudo e gere insights detalhados:\n\nDados do Estudante:\n${studyData}\n\nGere um relatório com:\n1. Análise de desempenho por matéria, organize em tabela com nome da matéria, tempor de estudo, acertos, erros e precisão, não incluir tópicos\n2. Sugestões de melhoria baseadas nas estatísticas incluindo os tópicos\n3. Recomendações personalizadas de estudo incluindo os tópicos\n4. Faça uma conclusão com sugestão de estudos que ajude o aluno a melhorar seus resultados\n5. Formate a resposta usando markdown básico, essa informação não precisa aparecer no insight\n6. Escreva o insight como se estivesse falando com a pessoa\n7. Escreva uma frase motivacional em italico`;
+        // const prompt = `Atue como um coaching especialista em estudo para concursos publicos. Analise os seguintes dados de estudo e gere insights detalhados:\n\nDados do Estudante:\n${studyData}\n\nGere um relatório com:\n1. Análise de desempenho por matéria, organize em tabela com nome da matéria, tempor de estudo, acertos, erros e precisão, não incluir tópicos\n2. Sugestões de melhoria baseadas nas estatísticas incluindo os tópicos\n3. Recomendações personalizadas de estudo incluindo os tópicos\n4. Faça uma conclusão com sugestão de estudos que ajude o aluno a melhorar seus resultados\n5. Formate a resposta usando markdown básico, essa informação não precisa aparecer no insight\n6. Escreva o insight como se estivesse falando com a pessoa\n7. Escreva uma frase motivacional em italico`;
+
+        const prompt = `Atue como um coaching especialista em estudo para concursos publicos. Analise os seguintes dados de estudo (referentes a um período específico filtrado pelo aluno) e gere insights detalhados:\n\nDados do Estudante:\n${studyData}\n\nGere um relatório com:\n1. Análise de desempenho por matéria, organize em tabela com nome da matéria, tempor de estudo, acertos, erros e precisão, não incluir tópicos\n2. Sugestões de melhoria baseadas nas estatísticas incluindo os tópicos\n3. Recomendações personalizadas de estudo incluindo os tópicos\n4. Faça uma conclusão com sugestão de estudos que ajude o aluno a melhorar seus resultados\n5. Formate a resposta usando markdown básico, essa informação não precisa aparecer no insight\n6. Escreva o insight como se estivesse falando com a pessoa\n7. Escreva uma frase motivacional em italico`;
 
         await aiStore.sendMessage(prompt);
         

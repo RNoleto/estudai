@@ -13,7 +13,8 @@ import Button from '../components/ui/Button.vue';
 const studyModal = ref(null);
 
 const openReport = () => {
-  studyModal.value.openModal();
+  // studyModal.value.openModal();
+  studyModal.value.openModal(filteredRecords.value);
 };
 
 const userStore = useUserStore();
@@ -21,13 +22,11 @@ const subjectStore = useSubjectStore();
 const isLoading = ref(true);
 const { formatStudyTime } = useTimeFormatter();
 
-const startDate = ref(null); // Data inicial do filtro
-const endDate = ref(null); // Data final do filtro
+const startDate = ref(null);
+const endDate = ref(null);
 
-// Critério de ordenação: tempo de estudo ou porcentagem de acertos
-const sortBy = ref('studyTime'); // Valor inicial: ordenar por tempo de estudo
+const sortBy = ref('studyTime'); 
 
-// Para controlar qual lista de tópicos está aberta
 const activeTopic = ref(null);
 
 const toggleTopics = (index) => {
@@ -49,7 +48,7 @@ onMounted(async () => {
   }
 });
 
-// Computada para filtrar os registros pelo período selecionado
+
 const filteredRecords = computed(() => {
   return userStore.userStudyRecords.filter(record => {
     const recordDate = new Date(record.created_at);
@@ -63,12 +62,12 @@ const filteredRecords = computed(() => {
   });
 });
 
-// Computada para calcular o tempo total de estudo no período filtrado
+
 const totalStudyTime = computed(() => {
   return filteredRecords.value.reduce((acc, record) => acc + record.study_time, 0);
 });
 
-// Computada para resumir os dados com base nos registros filtrados
+
 const summarizedData = computed(() => {
   const summary = filteredRecords.value.reduce((acc, record) => {
     const { subject, study_time, total_pauses, questions_resolved, correct_answers, incorrect_answers } = record;
@@ -180,45 +179,71 @@ useHead({
 <template>
   <div>
     <!-- Filtros e ações agrupados em um card -->
-    <div class="bg-white rounded-xl shadow-md p-4 mb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-      <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full">
-        <div class="flex flex-col w-full sm:w-auto">
-          <label for="start-date" class="ml-1 font-semibold text-zinc-700">Data inicial</label>
-          <div class="relative">
-            <i class="fa-regular fa-calendar absolute left-2 top-2 text-zinc-400"></i>
-            <input id="start-date" type="date" class="rounded-md p-2 pl-8 text-zinc-700 shadow-sm border border-zinc-200 w-full" v-model="startDate" />
-          </div>
-        </div>
-        <div class="flex flex-col w-full sm:w-auto">
-          <label for="end-date" class="ml-1 font-semibold text-zinc-700">Data final</label>
-          <div class="relative">
-            <i class="fa-regular fa-calendar-check absolute left-2 top-2 text-zinc-400"></i>
-            <input id="end-date" type="date" class="rounded-md p-2 pl-8 text-zinc-700 shadow-sm border border-zinc-200 w-full" v-model="endDate" />
-          </div>
-        </div>
-        <div class="flex flex-col w-full sm:w-auto">
-          <label for="sort-by" class="ml-1 font-semibold text-zinc-700">Ordenar por</label>
-          <select id="sort-by" v-model="sortBy" class="w-full p-2 rounded-md border border-zinc-200 text-zinc-700 shadow-sm">
-            <option value="studyTime">Tempo de Estudo</option>
-            <option value="accuracy">Porcentagem de Acertos</option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="flex justify-end w-full sm:w-auto">
-        <Button 
-          @click="openReport" 
-          :variant="summarizedData.length <= 0 ? 'baseDisable' : 'base'"
-          size="md"
-          :disabled="summarizedData.length <= 0"
-          :title="summarizedData.length <= 0 ? 'Você precisa criar registro de estudo antes!' : ''"
-          class="w-full sm:w-auto"
-        >
-          <i class="fa-solid fa-lightbulb mr-2"></i> Gerar Insight
-        </Button>
-        <StudyReportModal ref="studyModal" />
+    <div class="bg-white rounded-xl shadow-md p-4 mb-4 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+  
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full lg:w-auto lg:flex-1">
+    
+    <div class="w-full">
+      <label for="start-date" class="block ml-1 mb-1 font-semibold text-zinc-700 text-sm">
+        Data inicial
+      </label>
+      <div class="relative">
+        <input 
+          id="start-date" 
+          type="date" 
+          class="w-full rounded-md p-2 text-zinc-700 shadow-sm border border-zinc-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" 
+          :class="{'pl-8': false}" 
+          v-model="startDate" 
+        />
       </div>
     </div>
+
+    <div class="w-full">
+      <label for="end-date" class="block ml-1 mb-1 font-semibold text-zinc-700 text-sm">
+        Data final
+      </label>
+      <div class="relative">
+        <input 
+          id="end-date" 
+          type="date" 
+          class="w-full rounded-md p-2 text-zinc-700 shadow-sm border border-zinc-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+          :class="{'pl-8': false}" 
+          v-model="endDate" 
+        />
+      </div>
+    </div>
+
+    <div class="w-full sm:col-span-2 md:col-span-1">
+      <label for="sort-by" class="block ml-1 mb-1 font-semibold text-zinc-700 text-sm">
+        Ordenar por
+      </label>
+      <select 
+        id="sort-by" 
+        v-model="sortBy" 
+        class="w-full p-2 rounded-md border border-zinc-200 text-zinc-700 shadow-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+      >
+        <option value="studyTime">Tempo de Estudo</option>
+        <option value="accuracy">Porcentagem de Acertos</option>
+      </select>
+    </div>
+  </div>
+
+  <div v-if="userStore.isPremium" class="w-full lg:w-auto flex-shrink-0">
+    <Button 
+      @click="openReport" 
+      :variant="summarizedData.length <= 0 ? 'baseDisable' : 'base'"
+      size="md"
+      :disabled="summarizedData.length <= 0"
+      :title="summarizedData.length <= 0 ? 'Você precisa criar registro de estudo antes!' : ''"
+      class="w-full flex justify-center items-center"
+    >
+      <i class="fa-solid fa-lightbulb mr-2"></i>
+      Gerar Insight
+    </Button>
+    <StudyReportModal ref="studyModal" />
+  </div>
+
+</div>
 
     <!-- Cards de resumo -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
