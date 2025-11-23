@@ -7,7 +7,11 @@ export const useSubjectStore = defineStore('subject', {
     }),
     actions:{
         //Listar matérias da API
-        async fetchSubjects(){
+        async fetchSubjects(forceRefresh = false) {
+            if (this.subjects.length > 0 && !forceRefresh) {
+                console.log("Matérias já carregadas, evitando requisição duplicada.");
+                return; // Já temos as matérias carregadas, não faz nada
+            }
             try {
                 const response = await axios.get('subjects');
                 this.subjects = response.data;

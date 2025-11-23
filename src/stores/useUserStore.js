@@ -297,14 +297,10 @@ export const useUserStore = defineStore('user', {
     async fetchUserStudyRecords(forceRefresh = false) {
       if (!this.userId) return;
     
-      // --- A MÁGICA DA PERFORMANCE ---
-      // Se já existem registros no Pinia e não estamos forçando atualização,
-      // NÃO fazemos nada. Usamos o que já está na memória.
       if (this.userStudyRecords.length > 0 && !forceRefresh) {
           console.log("Usando cache de histórico de estudos.");
           return; 
       }
-      // ------------------------------
 
       try {
         const response = await axios.get(`user-study-records/user/${this.userId}`);
