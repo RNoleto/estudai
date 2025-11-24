@@ -14,6 +14,7 @@ export const useTimerStore = defineStore('timer', () => {
   let lastPauseDuration = 0;
   let lastTimestamp = null;
   const isFocusModeActive = ref(false);
+  const sessionStartTime = ref(null);
 
   // Função para adicionar tempo (em segundos) somente quando o timer não estiver rodando
   const addTime = (seconds) => {
@@ -27,6 +28,10 @@ export const useTimerStore = defineStore('timer', () => {
       isRunning.value = true;
       isPaused.value = false;
       lastTimestamp = Date.now();
+
+      if(!sessionStartTime.value){
+        sessionStartTime.value = new Date().toISOString();
+      }
 
       const tick = () => {
         if (!isPaused.value && isRunning.value) {
@@ -91,6 +96,8 @@ export const useTimerStore = defineStore('timer', () => {
     finalElapsedTime.value = 0;
     finalElapsedTime.value = 0;
     finalTotalPausesLength.value = 0;
+
+    sessionStartTime.value = null;
   };
 
   const formattedTime = computed(() => {
@@ -137,6 +144,7 @@ export const useTimerStore = defineStore('timer', () => {
     finalTotalPausesLength,
     finalElapsedTime,
     isFocusModeActive,
-    addTime
+    addTime,
+    sessionStartTime
   };
 });
