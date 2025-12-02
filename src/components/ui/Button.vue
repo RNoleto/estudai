@@ -5,7 +5,7 @@ import { RouterLink } from 'vue-router';
 
 // Definindo os estilos do botão
 const button = tv({
-    base: 'flex items-center justify-center gap-2 rounded-lg text-sm font-medium shadow-sm shadow-zinc-200',
+    base: 'flex items-center justify-center gap-2 rounded-lg text-sm font-medium shadow-sm shadow-zinc-200 cursor-pointer',
     variants: {
         variant: {
             base: 'bg-primary text-white font-bold px-[16px] py-[10px] border-[1px] border-tertiary hover:bg-hoverGreen', //Novo Layout

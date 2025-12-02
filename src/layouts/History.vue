@@ -228,20 +228,28 @@ useHead({
     </div>
   </div>
 
-  <div v-if="userStore.isPremium" class="w-full lg:w-auto flex-shrink-0">
+  <div class="w-full lg:w-auto flex-shrink-0">
     <Button 
       @click="openReport" 
-      :variant="summarizedData.length <= 0 ? 'baseDisable' : 'base'"
+      
+      :variant="(!userStore.isPremium || summarizedData.length <= 0) ? 'baseDisable' : 'base'"
+      
       size="md"
-      :disabled="summarizedData.length <= 0"
-      :title="summarizedData.length <= 0 ? 'Você precisa criar registro de estudo antes!' : ''"
+      
+      :disabled="!userStore.isPremium || summarizedData.length <= 0"
+      
+      :title="!userStore.isPremium ? 'Função liberada para usuário premium' : (summarizedData.length <= 0 ? 'Você precisa criar registro de estudo antes!' : '')"
+      
       class="w-full flex justify-center items-center"
     >
       <i class="fa-solid fa-lightbulb mr-2"></i>
       Gerar Insight
+      
+      <i v-if="!userStore.isPremium" class="fa-solid fa-lock ml-2 text-zinc-400"></i>
     </Button>
+    
     <StudyReportModal ref="studyModal" />
-  </div>
+</div>
 
 </div>
 
