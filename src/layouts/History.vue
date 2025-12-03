@@ -25,7 +25,7 @@ const { formatStudyTime } = useTimeFormatter();
 const startDate = ref(null);
 const endDate = ref(null);
 
-const sortBy = ref('studyTime'); 
+const sortBy = ref('studyTime');
 
 const activeTopic = ref(null);
 
@@ -161,8 +161,8 @@ const totalQuestionsAndAccuracy = computed(() => {
 import { useHead } from '@vueuse/head';
 
 useHead({
-    title: "Estuday | Histórico de Estudos - Acompanhe Seu Progresso e Melhore com IA",
-    meta:[
+  title: "Estuday | Histórico de Estudos - Acompanhe Seu Progresso e Melhore com IA",
+  meta: [
     { name: 'description', content: "Veja todo o seu histórico de estudo em um só lugar! Filtre matérias, analise seu desempenho e receba insights com IA para melhorar sua aprendizagem. Estude de forma inteligente com o Estuday!" },
     { property: 'og:title', content: "Estuday | Histórico de Estudos - Acompanhe Seu Progresso e Melhore com IA" },
     { property: 'og:description', content: "Veja todo o seu histórico de estudo em um só lugar! Filtre matérias, analise seu desempenho e receba insights com IA para melhorar sua aprendizagem. Estude de forma inteligente com o Estuday!" },
@@ -172,7 +172,7 @@ useHead({
     { name: 'twitter:description', content: "Veja todo o seu histórico de estudo em um só lugar! Filtre matérias, analise seu desempenho e receba insights com IA para melhorar sua aprendizagem. Estude de forma inteligente com o Estuday!" },
     { name: 'twitter:image', content: "https://estuday.com.br/img/metaImg.webp" },
     { name: 'keywords', content: "concursos públicos, gestão do tempo de estudo, organização de estudos, preparação para concurso, questões de concurso, acompanhamento de desempenho, planejamento de estudos" }
-    ]
+  ]
 })
 </script>
 
@@ -180,84 +180,61 @@ useHead({
   <div>
     <!-- Filtros e ações agrupados em um card -->
     <div class="bg-white rounded-xl shadow-md p-4 mb-4 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-  
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full lg:w-auto lg:flex-1">
-    
-    <div class="w-full">
-      <label for="start-date" class="block ml-1 mb-1 font-semibold text-zinc-700 text-sm">
-        Data inicial
-      </label>
-      <div class="relative">
-        <input 
-          id="start-date" 
-          type="date" 
-          class="w-full rounded-md p-2 text-zinc-700 shadow-sm border border-zinc-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" 
-          :class="{'pl-8': false}" 
-          v-model="startDate" 
-        />
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full lg:w-auto lg:flex-1">
+
+        <div class="w-full">
+          <label for="start-date" class="block ml-1 mb-1 font-semibold text-zinc-700 text-sm">
+            Data inicial
+          </label>
+          <div class="relative">
+            <input id="start-date" type="date"
+              class="w-full rounded-md p-2 text-zinc-700 shadow-sm border border-zinc-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              :class="{ 'pl-8': false }" v-model="startDate" />
+          </div>
+        </div>
+
+        <div class="w-full">
+          <label for="end-date" class="block ml-1 mb-1 font-semibold text-zinc-700 text-sm">
+            Data final
+          </label>
+          <div class="relative">
+            <input id="end-date" type="date"
+              class="w-full rounded-md p-2 text-zinc-700 shadow-sm border border-zinc-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              :class="{ 'pl-8': false }" v-model="endDate" />
+          </div>
+        </div>
+
+        <div class="w-full sm:col-span-2 md:col-span-1">
+          <label for="sort-by" class="block ml-1 mb-1 font-semibold text-zinc-700 text-sm">
+            Ordenar por
+          </label>
+          <select id="sort-by" v-model="sortBy"
+            class="w-full p-2 rounded-md border border-zinc-200 text-zinc-700 shadow-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+            <option value="studyTime">Tempo de Estudo</option>
+            <option value="accuracy">Porcentagem de Acertos</option>
+          </select>
+        </div>
       </div>
-    </div>
 
-    <div class="w-full">
-      <label for="end-date" class="block ml-1 mb-1 font-semibold text-zinc-700 text-sm">
-        Data final
-      </label>
-      <div class="relative">
-        <input 
-          id="end-date" 
-          type="date" 
-          class="w-full rounded-md p-2 text-zinc-700 shadow-sm border border-zinc-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-          :class="{'pl-8': false}" 
-          v-model="endDate" 
-        />
+      <div v-if="userStore.isPremium" class="w-full lg:w-auto flex-shrink-0">
+        <Button @click="openReport" :variant="summarizedData.length <= 0 ? 'baseDisable' : 'base'" size="md"
+          :disabled="summarizedData.length <= 0"
+          :title="summarizedData.length <= 0 ? 'Você precisa criar registro de estudo antes!' : ''"
+          class="w-full flex justify-center items-center">
+          <i class="fa-solid fa-lightbulb mr-2"></i>
+          Gerar Insight
+        </Button>
+        <StudyReportModal ref="studyModal" />
       </div>
+
     </div>
-
-    <div class="w-full sm:col-span-2 md:col-span-1">
-      <label for="sort-by" class="block ml-1 mb-1 font-semibold text-zinc-700 text-sm">
-        Ordenar por
-      </label>
-      <select 
-        id="sort-by" 
-        v-model="sortBy" 
-        class="w-full p-2 rounded-md border border-zinc-200 text-zinc-700 shadow-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-      >
-        <option value="studyTime">Tempo de Estudo</option>
-        <option value="accuracy">Porcentagem de Acertos</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="w-full lg:w-auto flex-shrink-0">
-    <Button 
-      @click="openReport" 
-      
-      :variant="(!userStore.isPremium || summarizedData.length <= 0) ? 'baseDisable' : 'base'"
-      
-      size="md"
-      
-      :disabled="!userStore.isPremium || summarizedData.length <= 0"
-      
-      :title="!userStore.isPremium ? 'Função liberada para usuário premium' : (summarizedData.length <= 0 ? 'Você precisa criar registro de estudo antes!' : '')"
-      
-      class="w-full flex justify-center items-center"
-    >
-      <i class="fa-solid fa-lightbulb mr-2"></i>
-      Gerar Insight
-      
-      <i v-if="!userStore.isPremium" class="fa-solid fa-lock ml-2 text-zinc-400"></i>
-    </Button>
-    
-    <StudyReportModal ref="studyModal" />
-</div>
-
-</div>
 
     <!-- Cards de resumo -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
       <Card title="Tempo total de estudo" icon="fa-solid fa-stopwatch-20" class="col-span-1">
         <template #content>
-            <span class="flex-1 text-end text-2xl font-bold text-primary">{{ formatStudyTime(totalStudyTime) }}</span>
+          <span class="flex-1 text-end text-2xl font-bold text-primary">{{ formatStudyTime(totalStudyTime) }}</span>
         </template>
       </Card>
       <Card title="Total de questões" icon="fa-solid fa-pen-clip" class="col-span-1">
@@ -267,8 +244,10 @@ useHead({
       </Card>
       <Card title="Total de acertos" icon="fa-solid fa-check" class="col-span-1">
         <template #content>
-          <span class="flex-1 text-end text-2xl font-bold text-green-700">{{ totalQuestionsAndAccuracy.totalCorrectAnswers }}</span>
-          <span class="ml-2 text-sm font-semibold text-zinc-500">({{ totalQuestionsAndAccuracy.accuracyPercentage }}%)</span>
+          <span class="flex-1 text-end text-2xl font-bold text-green-700">{{
+            totalQuestionsAndAccuracy.totalCorrectAnswers }}</span>
+          <span class="ml-2 text-sm font-semibold text-zinc-500">({{ totalQuestionsAndAccuracy.accuracyPercentage
+          }}%)</span>
         </template>
       </Card>
     </div>
@@ -281,9 +260,12 @@ useHead({
         <div class="flex items-center justify-between p-4 cursor-pointer select-none" @click="toggleTopics(index)">
           <div class="flex items-center gap-3">
             <span class="text-xl font-bold">{{ subject.subjectName }}</span>
-            <span v-if="subject.accuracyPercentage >= 70" class="ml-2 text-green-600" title="Ótimo desempenho"><i class="fa-solid fa-circle-check"></i></span>
-            <span v-else-if="subject.accuracyPercentage > 50" class="ml-2 text-yellow-500" title="Desempenho razoável"><i class="fa-solid fa-circle-exclamation"></i></span>
-            <span v-else class="ml-2 text-red-600" title="Precisa melhorar"><i class="fa-solid fa-circle-xmark"></i></span>
+            <span v-if="subject.accuracyPercentage >= 70" class="ml-2 text-green-600" title="Ótimo desempenho"><i
+                class="fa-solid fa-circle-check"></i></span>
+            <span v-else-if="subject.accuracyPercentage > 50" class="ml-2 text-yellow-500"
+              title="Desempenho razoável"><i class="fa-solid fa-circle-exclamation"></i></span>
+            <span v-else class="ml-2 text-red-600" title="Precisa melhorar"><i
+                class="fa-solid fa-circle-xmark"></i></span>
           </div>
           <div class="flex items-center gap-6">
             <div class="flex flex-col items-center">
@@ -330,15 +312,20 @@ useHead({
               class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3">
               <div class="flex-1">
                 <span :class="[
-                  'font-semibold','text-zinc-700'
+                  'font-semibold', 'text-zinc-700'
                 ]">{{ topic.topic ? topic.topic : 'Tópico não informado' }}</span>
               </div>
               <div class="flex flex-wrap gap-3 sm:gap-6 text-xs sm:text-sm justify-between sm:justify-end">
-                <span :class="['flex items-center gap-1','text-zinc-700']"><i class="fa-solid fa-stopwatch"></i> {{ formatStudyTime(topic.studyTime) }}</span>
-                <span :class="['flex items-center gap-1','text-green-700']"><i class="fa-solid fa-check"></i> {{ topic.correctAnswers }} acertos</span>
-                <span :class="['flex items-center gap-1','text-red-700']"><i class="fa-solid fa-xmark"></i> {{ topic.incorrectAnswers }} erros</span>
-                <span :class="['flex items-center gap-1','text-blue-700']"><i class="fa-solid fa-pen-clip"></i> {{ topic.questionsResolved }} questões</span>
-                <span :class="['flex items-center gap-1','text-yellow-700']"><i class="fa-solid fa-percentage"></i> {{ getAccuracyPercentage(topic.correctAnswers, topic.questionsResolved) }}%</span>
+                <span :class="['flex items-center gap-1', 'text-zinc-700']"><i class="fa-solid fa-stopwatch"></i> {{
+                  formatStudyTime(topic.studyTime) }}</span>
+                <span :class="['flex items-center gap-1', 'text-green-700']"><i class="fa-solid fa-check"></i> {{
+                  topic.correctAnswers }} acertos</span>
+                <span :class="['flex items-center gap-1', 'text-red-700']"><i class="fa-solid fa-xmark"></i> {{
+                  topic.incorrectAnswers }} erros</span>
+                <span :class="['flex items-center gap-1', 'text-blue-700']"><i class="fa-solid fa-pen-clip"></i> {{
+                  topic.questionsResolved }} questões</span>
+                <span :class="['flex items-center gap-1', 'text-yellow-700']"><i class="fa-solid fa-percentage"></i> {{
+                  getAccuracyPercentage(topic.correctAnswers, topic.questionsResolved) }}%</span>
               </div>
             </li>
           </ul>
