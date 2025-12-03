@@ -72,6 +72,10 @@ const handleSettingsLinkClick = () => {
   }
 };
 
+const isItemLocked = (item) => {
+  return item.premiumOnly && !isPremium.value;
+};
+
 onMounted(async () => {
   await userStore.initializeUser();
 });
@@ -85,7 +89,8 @@ const menuItems = [
   {
     label: 'Cronograma',
     icon: 'fas fa-calendar-days',
-    route: '/area-do-aluno/cronograma'
+    route: '/area-do-aluno/cronograma',
+    premiumOnly: true
   },
   {
     label: 'Estudar',
@@ -216,18 +221,29 @@ async function handleLogout() {
                 <template v-for="item in menuItems" :key="item.label">
                   <!-- Links simples -->
                   <div v-if="!item.subItems">
-                    <router-link :to="item.route" @click="toggleMenu"
-                      class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-700 hover:bg-primary/10 hover:text-primary font-medium transition-all duration-200 group"
-                      :class="route.path === item.route ? 'bg-primary/15 text-primary shadow-sm' : ''">
-                      <div
-                        class="w-10 h-10 rounded-lg bg-gray-100 group-hover:bg-primary/20 flex items-center justify-center transition-colors"
-                        :class="route.path === item.route ? 'bg-primary/20' : ''">
-                        <i
-                          :class="[item.icon, 'text-lg', route.path === item.route ? 'text-primary' : 'text-gray-600 group-hover:text-primary']"></i>
+                    <component :is="isItemLocked(item) ? 'div' : 'router-link'"
+                      :to="!isItemLocked(item) ? item.route : undefined" @click="!isItemLocked(item) && toggleMenu()"
+                      class="flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all duration-200 group relative select-none"
+                      :class="[
+                        isItemLocked(item)
+                          ? 'text-gray-400 cursor-not-allowed bg-gray-50 opacity-70'
+                          : (route.path === item.route ? 'bg-primary/15 text-primary shadow-sm' : 'text-gray-700 hover:bg-primary/10 hover:text-primary')
+                      ]" :title="isItemLocked(item) ? 'Função liberada para usuário premium' : ''">
+                      <div class="w-10 h-10 rounded-lg flex items-center justify-center transition-colors" :class="[
+                        isItemLocked(item)
+                          ? 'bg-gray-200 text-gray-500'
+                          : (route.path === item.route ? 'bg-primary/20 text-primary' : 'bg-gray-100 text-gray-600 group-hover:bg-primary/20 group-hover:text-primary')
+                      ]">
+                        <i :class="[item.icon, 'text-lg']"></i>
                       </div>
+
                       <span class="flex-1">{{ item.label }}</span>
-                      <i v-if="route.path === item.route" class="fa-solid fa-check text-primary text-sm"></i>
-                    </router-link>
+
+                      <i v-if="!isItemLocked(item) && route.path === item.route"
+                        class="fa-solid fa-check text-primary text-sm"></i>
+
+                      <i v-if="isItemLocked(item)" class="fa-solid fa-lock text-gray-400 text-sm"></i>
+                    </component>
                   </div>
 
                   <!-- Links com submenu -->
@@ -322,16 +338,22 @@ async function handleLogout() {
           <!-- Home da Dashboard -->
           <div v-for="item in menuItems" :key="item.label">
             <div v-if="!item.subItems">
-              <router-link :to="item.route" :class="[
-                'flex items-center gap-2 px-4 py-2 rounded-lg hover:shadow-md',
-                route.path === item.route
-                  ? 'bg-secondary text-gray-700 shadow-sm'
-                  : 'text-gray-700 hover:bg-gray-100'
-              ]">
-                <i
-                  :class="[item.icon, route.path === item.route ? 'text-gray-700' : 'text-primary hover:text-gray-500']"></i>
+              <component :is="isItemLocked(item) ? 'div' : 'router-link'"
+                :to="!isItemLocked(item) ? item.route : undefined" :class="[
+                  'flex items-center gap-2 px-4 py-2 rounded-lg transition-colors relative select-none',
+                  isItemLocked(item)
+                    ? 'text-gray-400 cursor-not-allowed opacity-70 hover:bg-transparent'
+                    : (route.path === item.route ? 'bg-secondary text-gray-700 shadow-sm' : 'text-gray-700 hover:bg-gray-100 hover:shadow-md')
+                ]" :title="isItemLocked(item) ? 'Função liberada para usuário premium' : ''">
+                <i :class="[item.icon,
+                isItemLocked(item) ? 'text-gray-400' : (route.path === item.route ? 'text-gray-700' : 'text-primary hover:text-gray-500')
+                ]"></i>
+
                 <span v-show="!isSidebarCollapsed">{{ item.label }}</span>
-              </router-link>
+
+                <i v-if="isItemLocked(item) && !isSidebarCollapsed"
+                  class="fa-solid fa-lock text-xs ml-auto text-gray-400"></i>
+              </component>
             </div>
             <div v-else>
               <button @click="toggleMenu3" :class="[

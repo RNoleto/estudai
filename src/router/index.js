@@ -140,7 +140,10 @@ const routes = [
         path: 'cronograma',
         name: 'Cronograma de Estudos',
         component: StudySchedule,
-        meta: { title: 'Criar Cronograma | Estuday'}
+        meta: { 
+          title: 'Criar Cronograma | Estuday',
+          requiresPremium: true
+        }
       },
       {
         path: 'estudar',
@@ -247,6 +250,11 @@ router.beforeEach(async (to, from, next) => {
       
       if (userStore.userSubjects.length === 0) {
        await userStore.fetchUserSubjects();
+      }
+
+      if(to.meta.requiresPremium && !userStore.isPremium){
+        next({ path: '/area-do-aluno' });
+        return;
       }
 
       if (to.path === '/' && currentUser) {
