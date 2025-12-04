@@ -44,6 +44,22 @@ const isManualEntryModalVisible = ref(false);
 // Ref para controlar o modal de sucesso (após a deleção)
 const showSuccessModal = ref(false);
 
+const DAILY_LIMIT = 5;
+
+const canAddStudyRecord = computed(() => {
+  if(userStore.isPremium) return true;
+
+  return todayStudyRecords.value.length < DAILY_LIMIT;
+});
+
+const checkLimitAndExecute = (action) => {
+  if(canAddStudyRecord.value) {
+    action();
+  } else {
+    alert(`Você atingiu o limite diário de ${DAILY_LIMIT} estudos no plano Gratuito. Vire Premium para estudar sem limites!`);
+  }
+};
+
 
 // Carregar as matérias da API
 onMounted(async () => {
@@ -387,9 +403,11 @@ useHead({
             <div class="space-y-2">
               <div v-for="subject in todaysSubjects" :key="subject.id">
                 <button @click="selectSuggestedSubject(subject)"
-                  class="w-full flex items-center p-3 rounded-md text-left transition-all duration-200" :class="subject.completed
+                  class="w-full flex items-center p-3 rounded-md text-left transition-all duration-200" 
+                  :class="subject.completed
                     ? 'bg-green-50 text-gray-500 cursor-not-allowed'
-                    : 'bg-gray-50 hover:bg-primary-light'" :disabled="subject.completed">
+                    : 'bg-gray-50 hover:bg-primary-light'" 
+                  :disabled="subject.completed">
                   <div class="w-5 h-5 flex items-center justify-center rounded-full mr-3"
                     :class="subject.completed ? 'bg-green-500' : 'bg-gray-300'">
                     <i v-if="subject.completed" class="fa-solid fa-check text-white text-xs"></i>
@@ -402,8 +420,26 @@ useHead({
             </div>
           </div>
 
-          <!-- Study Setup Card -->
-          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div class="flex flex-col gap-2 rounded-xl" :class="{ 'relative overflow-hidden': !canAddStudyRecord }">
+            <div v-if="!canAddStudyRecord" class="absolute inset-0 bg-white/70 z-10 flex items-center justify-center backdrop-blur-[1px]">
+                  <div class="bg-white p-4 shadow-lg rounded-lg border border-red-100 text-center">
+                      <i class="fa-solid fa-lock text-red-500 text-xl mb-2"></i>
+                      <p class="text-sm font-bold text-gray-800">Limite Diário Atingido</p>
+                      <p class="text-xs text-gray-500 mb-3">Você já registrou 5 estudos hoje.</p>
+                      <!-- Esperando rota de planos -->
+                      <!-- 
+                       <router-link to="/area-do-aluno/planos" class="text-xs bg-red-500 text-white px-3 py-1.5 rounded hover:bg-red-600 font-bold">
+                         Virar Premium
+                       </router-link>
+                       -->
+                  </div>
+            </div>
+
+            <!-- Study Setup Card -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6"
+            
+          >
+
             <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <i class="fa-solid fa-gear text-primary"></i>
               Configuração do Estudo
@@ -416,7 +452,7 @@ useHead({
                   Matéria
                 </label>
                 <ComboBox :options="userSubjects" :placeholder="'Selecione uma matéria...'" v-model="selectedSubject"
-                  :key="selectedSubject ? selectedSubject.id : 'empty'" @select="handleSubjectSelection"
+                  :key="selectedSubject ? selectedSubject.id : 'empty'" @select="handleSubjectSelection" :disabled="!canAddStudyRecord"
                   class="w-full" />
               </div>
 
@@ -425,17 +461,23 @@ useHead({
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                   Tópico
                 </label>
-                <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" class="w-full"
+                <Input placeholder="Qual tópico você vai estudar?" :showLabel="false" :disabled="!canAddStudyRecord" class="w-full"
                   v-model="studyStore.topic" />
               </div>
 
               <!-- Manual Entry Button -->
               <div>
-                <Button :variant="isSubjectSelected ? 'base' : 'baseDisable'" :disabled="!isSubjectSelected" size="xs"
-                  class="w-full" @click="openManualEntryModal"
-                  :title="!isSubjectSelected ? 'Você precisa selecionar uma matéria' : ''">
+                <Button 
+                  :variant="isSubjectSelected ? 'base' : 'baseDisable'" 
+                  :disabled="!isSubjectSelected || !canAddStudyRecord" 
+                  size="xs"
+                  class="w-full relative" 
+                  @click="checkLimitAndExecute(openManualEntryModal)"
+                  :title="!isSubjectSelected ? 'Você precisa selecionar uma matéria' : ''"
+                >
                   <i class="fa-solid fa-plus mr-2"></i>
                   Inserir Manualmente
+                  <i v-if="!canAddStudyRecord" class="fa-solid fa-lock text-red-500 absolute right-3"></i>
                 </Button>
               </div>
             </div>
@@ -443,9 +485,14 @@ useHead({
 
           <!-- Timer Card -->
           <div class="h-fit">
-            <Timer :isDisabled="!isSubjectSelected" @timerStopped="handleTimerStopped" @openFocus="openFocus"
+            <Timer :isDisabled="!isSubjectSelected || !canAddStudyRecord" @timerStopped="handleTimerStopped" @openFocus="openFocus"
               class="w-full" />
           </div>
+
+
+          </div>
+
+          
         </div>
 
         <!-- Right Column: Statistics and Records -->
