@@ -367,7 +367,7 @@ useHead({
         <div class="xl:col-span-1 flex flex-col space-y-4 h-fit">
 
           <!-- Matérias configurada no cronograma -->
-          <div v-if="todaysSubjects.length > 0" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div v-if="todaysSubjects.length > 0 && userStore.isPremium" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h2 class="text-lg font-semibold text-gray-900 mb-2 flex items-center gap-2">
               <i class="fa-solid fa-calendar-day text-primary"></i>
               Para estudar hoje
@@ -416,7 +416,8 @@ useHead({
                   Matéria
                 </label>
                 <ComboBox :options="userSubjects" :placeholder="'Selecione uma matéria...'" v-model="selectedSubject"
-                  :key="selectedSubject ? selectedSubject.id : 'empty'" @select="handleSubjectSelection" class="w-full" />
+                  :key="selectedSubject ? selectedSubject.id : 'empty'" @select="handleSubjectSelection"
+                  class="w-full" />
               </div>
 
               <!-- Topic Input -->
@@ -496,8 +497,8 @@ useHead({
             <!-- Records Grid -->
             <div v-if="todayStudyRecords.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <StudyCard v-for="(record, index) in todayStudyRecords" :key="record.id" :record="record"
-                :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]" @edit="openModal"
-                @delete="openDeleteModal(record)" class="w-full" />
+                :isLoading="isLoading" :chartData="chartData[index]" :chartOptions="chartOptions[index]"
+                @edit="openModal" @delete="openDeleteModal(record)" class="w-full" />
             </div>
 
             <!-- Empty State -->
