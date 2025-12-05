@@ -4,7 +4,7 @@ import { waitForAuthReady } from '../utils/authReady';
 import { useUserStore } from '../stores/useUserStore';
 
 // Partes da landing page
-import LanginPage from '../views/LandingPage/LanginPage.vue';
+import LangingPage from '../views/LandingPage/LangingPage.vue';
 
 //Rotas Administrativas
 import AdminDashboard from '../views/Admin/components/Dashboard.vue';
@@ -37,7 +37,7 @@ const routes = [
   {
     path: '/',
     name: 'LandingPage',
-    component: LanginPage,
+    component: LangingPage,
     meta: {
       requiresAuth: false,
       title: 'Estuday - Landing Page',
