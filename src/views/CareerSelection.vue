@@ -201,7 +201,8 @@ useHead({
 
         <!-- Action Buttons -->
         <div class="flex flex-col sm:flex-row justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
-          <Button 
+        <!-- 
+        <Button 
             variant="base" 
             @click="createCareer"
             class="w-full sm:w-auto"
@@ -209,6 +210,7 @@ useHead({
             <i class="fa-solid fa-plus mr-2"></i>
             Criar Nova Carreira
           </Button>
+        -->          
           
           <Button 
             :variant="selectedCareer ? 'base' : 'baseDisable'" 

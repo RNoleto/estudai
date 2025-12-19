@@ -205,6 +205,7 @@ useHead({
             Voltar
           </Button>
           
+          <!--
           <Button 
             variant="base" 
             @click="isModal = true"
@@ -213,6 +214,7 @@ useHead({
             <i class="fa-solid fa-plus mr-2"></i>
             Criar Matéria
           </Button>
+          -->
           
           <Button 
             :variant="selectedSubjects.length ? 'base' : 'baseDisable'" 
