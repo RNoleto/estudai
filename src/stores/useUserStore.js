@@ -104,8 +104,8 @@ export const useUserStore = defineStore('user', {
         // Verifica se o dataLayer existe (injetado pelo GTM) e dispara o evento
         if (window.dataLayer) {
             window.dataLayer.push({
-                'event': 'sign_up', // Nome do evento que você usará no GTM
-                // 'user_email': email // Opcional: Cuidado com LGPD ao enviar dados pessoais
+                'event': 'sign_up', 
+                'user_email': email
             });
         }
         // ----------------------------------
