@@ -92,37 +92,37 @@ const routes = [
     }
   },
   // Area Administrativa do sistema
-  // {
-  //   path: '/admin',
-  //   name: 'Admin',
-  //   component: AdminDashboard,
-  //   children: [
-  //     {
-  //       path: 'home',
-  //       name: 'AdminHome',
-  //       component: AdminHome,
-  //       meta: {title: 'Admin Estuday | Home'}
-  //     },
-  //     {
-  //       path: 'usuarios',
-  //       name: 'AdminUsers',
-  //       component: AdminUsers,
-  //       meta: {title: 'Admin Estuday | Lista de Usuários'}
-  //     },
-  //     {
-  //       path: '/usuario/:id/edit',
-  //       name: 'admin-user-edit',
-  //       component: UserEdit,
-  //       meta: { title: 'Admin Estuday | Editar Usuário' }
-  //     },
-  //     {
-  //       path: 'configuracoes',
-  //       name: "AdminSettings",
-  //       component: AdminSettings,
-  //       meta: { title: 'Admin Estuday | Configurações' }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: AdminDashboard,
+    children: [
+      {
+        path: 'home',
+        name: 'AdminHome',
+        component: AdminHome,
+        meta: {title: 'Admin Estuday | Home'}
+      },
+      {
+        path: 'usuarios',
+        name: 'AdminUsers',
+        component: AdminUsers,
+        meta: {title: 'Admin Estuday | Lista de Usuários'}
+      },
+      {
+        path: '/usuario/:id/edit',
+        name: 'admin-user-edit',
+        component: UserEdit,
+        meta: { title: 'Admin Estuday | Editar Usuário' }
+      },
+      {
+        path: 'configuracoes',
+        name: "AdminSettings",
+        component: AdminSettings,
+        meta: { title: 'Admin Estuday | Configurações' }
+      }
+    ]
+  },
   // Area do Aluno do sistema
   {
     path: '/area-do-aluno',
@@ -298,6 +298,15 @@ router.afterEach((to) => {
   const metaDescription = document.querySelector("meta[name='description']");
   if (metaDescription) {
     metaDescription.setAttribute("content", to.meta.description || 'A melhor plataforma de estudos online.');
+  }
+
+  // Envia dados de páginas alteradas para o Google Tag Manager
+  if (window.dataLayer) {
+      window.dataLayer.push({
+          'event': 'page_view',
+          'page_path': to.path,
+          'page_title': to.meta.title || 'Estuday'
+      });
   }
 });
 
