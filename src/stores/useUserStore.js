@@ -107,14 +107,11 @@ export const useUserStore = defineStore('user', {
             }
           }
         );
-        // console.log('Usuário sincronizado com o backend:', response.data.message);
-
         // --- CÓDIGO NOVO PARA CONVERSÃO ---
-        // Verifica se o dataLayer existe (injetado pelo GTM) e dispara o evento
         if (window.dataLayer) {
             window.dataLayer.push({
                 'event': 'sign_up', 
-                'user_email': email
+                'user_email': 'email'
             });
         }
         // ----------------------------------
@@ -129,7 +126,7 @@ export const useUserStore = defineStore('user', {
       if (window.dataLayer) {
         window.dataLayer.push({
           'event': 'login',
-          'method': 'google' // Identifica que foi pelo Google
+          'method': 'google'
         });
       }
       // -------------------------
