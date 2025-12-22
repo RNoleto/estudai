@@ -27,7 +27,7 @@ const toggleMode = () => {
 // Funções de login e cadastro
 const handleLogin = async () => {
   try {
-    await useUserStore.login({email: email.value, password: password.value});
+    await userStore.login({email: email.value, password: password.value});
   } catch (error) {
     console.error('Erro ao fazer login:', error);
   }

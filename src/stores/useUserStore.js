@@ -83,6 +83,15 @@ export const useUserStore = defineStore('user', {
     },
     async login({ email, password }) {
       await AuthService.login(email, password);
+
+      // --- CÓDIGO GTM GA4 LOGIN ---
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          'event': 'login',
+          'method': 'email'
+        });
+      }
+      // -------------------------
     },
     async register({ email, password, name }) {
       const userCredential = await AuthService.register(email, password);
@@ -115,6 +124,15 @@ export const useUserStore = defineStore('user', {
     },
     async loginWithGoogle() {
       await AuthService.loginWithGoogle();
+
+      // --- CÓDIGO GTM ---
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          'event': 'login',
+          'method': 'google' // Identifica que foi pelo Google
+        });
+      }
+      // -------------------------
     },
     async logout() {
       await AuthService.logout();
