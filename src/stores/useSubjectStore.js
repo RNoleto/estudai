@@ -1,19 +1,30 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import { auth } from "../firebase";
 
 export const useSubjectStore = defineStore('subject', {
     state: () => ({
-        subjects:[],
+        subjects: [],
     }),
-    actions:{
+    actions: {
+        async getAuthHeaders() {
+            const user = auth.currentUser;
+            if (!user) return {};
+            const token = await user.getIdToken();
+            return {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+        },
         //Listar matérias da API
         async fetchSubjects(forceRefresh = false) {
             if (this.subjects.length > 0 && !forceRefresh) {
-                console.log("Matérias já carregadas, evitando requisição duplicada.");
-                return; // Já temos as matérias carregadas, não faz nada
+                return;
             }
             try {
-                const response = await axios.get('subjects');
+                const config = await this.getAuthHeaders();
+                const response = await axios.get('subjects', config);
                 this.subjects = response.data;
             } catch (error) {
                 console.error('Erro ao buscar matérias:', error);
