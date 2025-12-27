@@ -57,6 +57,15 @@ const addCustomTime = () => {
     customMinutes.value = ''; // Limpa o input após adicionar
   }
 };
+
+const handlePlayPause = () => {
+  if (timerStore.isRunning) {
+    timerStore.togglePause();
+  } else {
+    timerStore.start();
+    enterFocusMode();
+  }
+}
 </script>
 
 <template>
@@ -76,7 +85,7 @@ const addCustomTime = () => {
       <div class="font-mono text-6xl flex-1 flex items-center">{{ timerStore.formattedTime }}</div>
       <div class="flex space-x-2">
         <Button variant="play" 
-                @click="timerStore.isRunning ? timerStore.togglePause() : timerStore.startAndEnterFocus()" 
+                @click="handlePlayPause" 
                 :disabled="props.isDisabled">
           {{ timerStore.isRunning ? (timerStore.isPaused ? 'CONTINUAR' : 'PAUSAR') : 'INICIAR' }}
         </Button>
