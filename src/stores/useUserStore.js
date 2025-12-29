@@ -2,6 +2,7 @@ import * as AuthService from '../services/AuthService';
 import { defineStore } from 'pinia';
 // import { useAuth } from 'vue-clerk';
 import axios from 'axios';
+import api from '../services/api';
 import { auth } from '../firebase';
 import { updateProfile } from "firebase/auth";
 
@@ -175,7 +176,7 @@ export const useUserStore = defineStore('user', {
       }
       try {
         // Fazendo uma requisição para o backend Laravel para verificar se já existe uma carreira
-        const response = await axios.get(`user-career/${this.userId}`);
+        const response = await api.get(`user-career/${this.userId}`);
         this.careerId = response.data?.career_id || null;
 
         if (!this.careerId) {
@@ -183,7 +184,7 @@ export const useUserStore = defineStore('user', {
           return false;
         }
 
-        const response_name = await axios.get(`user-career/career_name/${this.userId}`);
+        const response_name = await api.get(`user-career/career_name/${this.userId}`);
         this.careerName = response_name.data?.career_name || null;
 
         return true;
@@ -251,7 +252,7 @@ export const useUserStore = defineStore('user', {
         return; // Já carregado, não faz nada
       }
       try {
-        const response = await axios.get(`user-subjects/${this.userId}`);
+        const response = await api.get(`user-subjects/${this.userId}`);
         this.userSubjects = response.data.map((subject) => subject.subject_id);
       } catch (error) {
         console.error("Erro ao carregar matérias do usuário:", error);
