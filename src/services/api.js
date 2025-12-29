@@ -4,8 +4,8 @@ import { auth } from '../firebase'; // Verifique o caminho do seu firebase.js
 // Criação da instância dedicada
 const api = axios.create({
     // Aqui usamos a lógica de URL que estava no seu main.js
-    baseURL: 'http://127.0.0.1:8000/api',
-    // baseURL: 'https://gerenciamento-de-estudo-api.vercel.app/api/api', 
+    // baseURL: 'http://127.0.0.1:8000/api',
+    baseURL: 'https://gerenciamento-de-estudo-api.vercel.app/api/api', 
     
 });
 
