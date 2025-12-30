@@ -248,7 +248,7 @@ export const useUserStore = defineStore('user', {
     },
     async fetchUserSubjects(forceRefresh = false) {
       if(this.userSubjects.length > 0 && !forceRefresh) {
-        console.log("Cache de Matérias utilizado. Nenhuma requisição feita.")
+        // console.log("Cache de Matérias utilizado. Nenhuma requisição feita.")
         return; // Já carregado, não faz nada
       }
       try {
@@ -324,7 +324,7 @@ export const useUserStore = defineStore('user', {
       if (!this.userId) return;
     
       if (this.userStudyRecords.length > 0 && !forceRefresh) {
-          console.log("Usando cache de histórico de estudos.");
+          // console.log("Usando cache de histórico de estudos.");
           return; 
       }
 
