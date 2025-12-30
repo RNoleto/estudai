@@ -101,6 +101,17 @@ export const useUserStore = defineStore('user', {
       if (name) {
         await updateProfile(userCredential.user, { displayName: name });
       }
+      
+        // =========================
+        // EVENTO PARA O GOOGLE TAG
+        // =========================
+        if (window.dataLayer) {
+          window.dataLayer.push({
+              'event': 'sign_up', 
+              'method': 'email'
+          });
+      }
+
       const idToken = await userCredential.user.getIdToken();
       try {
         const response = await axios.post('/users/sync-on-register', {},
@@ -110,16 +121,6 @@ export const useUserStore = defineStore('user', {
             }
           }
         );
-
-        // =========================
-        // EVENTO PARA O GOOGLE TAG
-        // =========================
-        if (window.dataLayer) {
-            window.dataLayer.push({
-                'event': 'sign_up', 
-                'method': 'email'
-            });
-        }
 
       } catch (error) {
         console.error('Erro ao sincronizar usuário com o backend:', error.response?.data || error);
