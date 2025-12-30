@@ -141,7 +141,19 @@ export const useUserStore = defineStore('user', {
 
     },
     async logout() {
-      await AuthService.logout();
+      try {
+        await AuthService.logout();
+
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+
+        delete axios.defaults.headers.common['Authorization'];
+
+        this.clearUserData();
+        
+      } catch (error) {
+        console.error("Erro ao fazer logout:", error);
+      }
     },
     clearUserData() {
       // Limpa as propriedades do usuário no Pinia
