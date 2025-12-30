@@ -155,7 +155,7 @@ export const useUserStore = defineStore('user', {
       };
 
       try {
-        const response = await axios.post('user-career', userCareerData);
+        const response = await api.post('user-career', userCareerData);
 
         if (response.status === 200 || response.status === 201) {
           return { success: true, message: response.data.message };
@@ -274,7 +274,7 @@ export const useUserStore = defineStore('user', {
       };
 
       try {
-        const response = await axios.post('user-subjects', payload);
+        const response = await api.post('user-subjects', payload);
 
         if (response.status === 200) {
           // this.userSubjects = subjectIds;
