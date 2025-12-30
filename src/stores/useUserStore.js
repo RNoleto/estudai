@@ -85,14 +85,16 @@ export const useUserStore = defineStore('user', {
     async login({ email, password }) {
       await AuthService.login(email, password);
 
-      // --- CÓDIGO GTM GA4 LOGIN ---
+      // =========================
+      // EVENTO PARA O GOOGLE TAG
+      // =========================
       if (window.dataLayer) {
         window.dataLayer.push({
           'event': 'login',
           'method': 'email'
         });
       }
-      // -------------------------
+
     },
     async register({ email, password, name }) {
       const userCredential = await AuthService.register(email, password);
@@ -108,14 +110,17 @@ export const useUserStore = defineStore('user', {
             }
           }
         );
-        // --- CÓDIGO NOVO PARA CONVERSÃO ---
+
+        // =========================
+        // EVENTO PARA O GOOGLE TAG
+        // =========================
         if (window.dataLayer) {
             window.dataLayer.push({
                 'event': 'sign_up', 
-                'user_email': 'email'
+                'method': 'email'
             });
         }
-        // ----------------------------------
+
       } catch (error) {
         console.error('Erro ao sincronizar usuário com o backend:', error.response?.data || error);
       }
@@ -123,14 +128,16 @@ export const useUserStore = defineStore('user', {
     async loginWithGoogle() {
       await AuthService.loginWithGoogle();
 
-      // --- CÓDIGO GTM ---
+      // =========================
+      // EVENTO PARA O GOOGLE TAG
+      // =========================
       if (window.dataLayer) {
         window.dataLayer.push({
           'event': 'login',
           'method': 'google'
         });
       }
-      // -------------------------
+
     },
     async logout() {
       await AuthService.logout();
