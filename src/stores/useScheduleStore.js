@@ -2,7 +2,7 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useUserStore } from './useUserStore';
 
-import axios from 'axios';
+import api from '../services/api';
 
 // Função utilitária para obter a data de hoje no formato 'AAAA-MM-DD'
 function getTodayDateString() {
@@ -69,7 +69,7 @@ export const useScheduleStore = defineStore('schedule', () => {
 
     isLoading.value = true;
     try {
-      const response = await axios.get(`schedule/${userStore.userId}`);
+      const response = await api.get(`schedule/${userStore.userId}`);
       const itemsFromDb = response.data;
 
       weeklyPlan.value.forEach(day => day.subjects = []);
@@ -111,7 +111,7 @@ export const useScheduleStore = defineStore('schedule', () => {
         weeklyPlan: weeklyPlan.value, // A estrutura já está pronta!
       };
 
-      const response = await axios.post('schedule', payload);
+      const response = await api.post('schedule', payload);
 
       // A resposta da API já contém o cronograma salvo com os IDs permanentes
       const itemsFromDb = response.data.schedule;
@@ -150,7 +150,7 @@ export const useScheduleStore = defineStore('schedule', () => {
     if (!userStore.userId) return;
     const { start, end } = getWeekRange();
     try {
-        const response = await axios.get(`/progress/${userStore.userId}`, {
+        const response = await api.get(`/progress/${userStore.userId}`, {
             // [CORREÇÃO] O backend agora espera 'startDate' e 'endDate'
             params: { startDate: start, endDate: end }
         });
@@ -184,7 +184,7 @@ export const useScheduleStore = defineStore('schedule', () => {
     }
 
     try {
-      await axios.post('/progress/toggle', {
+      await api.post('/progress/toggle', {
         user_id: userStore.userId,
         schedule_item_id: subjectId,
       });
@@ -213,7 +213,7 @@ export const useScheduleStore = defineStore('schedule', () => {
     const today = getDateStringForDay(new Date().toLocaleDateString('pt-BR', { weekday: 'long' }).replace(/^\w/, c => c.toUpperCase()));
 
     if (todayRecords.length === 0 && (!dailyProgress.value[today] || dailyProgress.value[today].size === 0)) {
-        await axios.post('/progress/sync', {
+        await api.post('/progress/sync', {
             user_id: userStore.userId,
             date: today,
             completed_ids: [],
@@ -238,12 +238,12 @@ export const useScheduleStore = defineStore('schedule', () => {
     });
 
     try {
-        await axios.post('/progress/sync', {
+        await api.post('/progress/sync', {
             user_id: userStore.userId,
             date: today,
             completed_ids: completedIds,
         });
-        await loadWeeklyProgress(); // ✅ CHAMA A FUNÇÃO CORRETA
+        await loadWeeklyProgress();
     } catch (error) {
         console.error("Erro ao sincronizar progresso:", error);
     }

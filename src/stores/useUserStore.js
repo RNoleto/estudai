@@ -1,8 +1,7 @@
 import * as AuthService from '../services/AuthService';
 import { defineStore } from 'pinia';
-// import { useAuth } from 'vue-clerk';
-import axios from 'axios';
 import api from '../services/api';
+import axios from 'axios';
 import { auth } from '../firebase';
 import { updateProfile } from "firebase/auth";
 
@@ -85,33 +84,20 @@ export const useUserStore = defineStore('user', {
     async login({ email, password }) {
       await AuthService.login(email, password);
 
-      // =========================
-      // EVENTO PARA O GOOGLE TAG
-      // =========================
+      // --- CÓDIGO GTM GA4 LOGIN ---
       if (window.dataLayer) {
         window.dataLayer.push({
           'event': 'login',
           'method': 'email'
         });
       }
-
+      // -------------------------
     },
     async register({ email, password, name }) {
       const userCredential = await AuthService.register(email, password);
       if (name) {
         await updateProfile(userCredential.user, { displayName: name });
       }
-      
-        // =========================
-        // EVENTO PARA O GOOGLE TAG
-        // =========================
-        if (window.dataLayer) {
-          window.dataLayer.push({
-              'event': 'sign_up', 
-              'method': 'email'
-          });
-      }
-
       const idToken = await userCredential.user.getIdToken();
       try {
         const response = await axios.post('/users/sync-on-register', {},
@@ -121,7 +107,14 @@ export const useUserStore = defineStore('user', {
             }
           }
         );
-
+        // --- CÓDIGO NOVO PARA CONVERSÃO ---
+        if (window.dataLayer) {
+            window.dataLayer.push({
+                'event': 'sign_up', 
+                'user_email': 'email'
+            });
+        }
+        // ----------------------------------
       } catch (error) {
         console.error('Erro ao sincronizar usuário com o backend:', error.response?.data || error);
       }
@@ -129,31 +122,18 @@ export const useUserStore = defineStore('user', {
     async loginWithGoogle() {
       await AuthService.loginWithGoogle();
 
-      // =========================
-      // EVENTO PARA O GOOGLE TAG
-      // =========================
+      // --- CÓDIGO GTM ---
       if (window.dataLayer) {
         window.dataLayer.push({
           'event': 'login',
           'method': 'google'
         });
       }
-
+      // -------------------------
     },
     async logout() {
-      try {
-        await AuthService.logout();
-
-        localStorage.removeItem('token');
-        localStorage.removeItem('userId');
-
-        delete axios.defaults.headers.common['Authorization'];
-
-        this.clearUserData();
-        
-      } catch (error) {
-        console.error("Erro ao fazer logout:", error);
-      }
+      await AuthService.logout();
+      this.clearUserData();
     },
     clearUserData() {
       // Limpa as propriedades do usuário no Pinia
@@ -221,7 +201,7 @@ export const useUserStore = defineStore('user', {
     },
     async createUserSubject(subjectName) {
       try {
-        const response = await axios.post('subjects', { name: subjectName });
+        const response = await api.post('subjects', { name: subjectName });
 
         if (response.status === 201) {
           this.subjects.push(response.data);
@@ -242,7 +222,7 @@ export const useUserStore = defineStore('user', {
     },
     async addUserSubjects(subjectIds) {
       try {
-        const response = await axios.post('user-subjects', {
+        const response = await api.post('user-subjects', {
           user_id: this.userId,
           subject_ids: subjectIds,
         });
@@ -255,7 +235,7 @@ export const useUserStore = defineStore('user', {
     },
     async removeUserSubject(subjectId) {
       try {
-        const response = await axios.patch('user-subjects/deactivate', {
+        const response = await api.patch('user-subjects/deactivate', {
           user_id: this.userId,
           subject_id: subjectId,
         });
@@ -349,7 +329,7 @@ export const useUserStore = defineStore('user', {
       }
 
       try {
-        const response = await axios.get(`user-study-records/user/${this.userId}`);
+        const response = await api.get(`user-study-records/user/${this.userId}`);
     
         if (response.status === 200) {
           const subjectStore = useSubjectStore();
@@ -484,28 +464,19 @@ export const useUserStore = defineStore('user', {
           notes: newRecord.notes,
         };
 
-        // 1. Envia para o Backend
-        const response = await axios.post('user-study-records', payload);
+        const response = await api.post('user-study-records', payload);
 
-        // 2. OTIMIZAÇÃO AQUI: Atualiza a lista LOCALMENTE sem buscar tudo de novo
         if (response.data) {
-            // O Laravel geralmente retorna o objeto criado. Vamos usá-lo.
-            // Se o Laravel retornar apenas { message: 'ok' }, você terá que montar o objeto manualmente com 'payload'
             
-            // Precisamos encontrar o nome da matéria para exibir na tabela
-            // (pois o banco só salvou o ID, mas a tabela quer o Nome)
             const subjectId = payload.subject_id;
             const subjectObj = subjectStore.subjects.find(s => s.id === subjectId);
-            
-            // Cria o objeto visualmente completo
+         
             const newLocalRecord = {
-                ...response.data, // Dados que vieram do banco (id, created_at, etc)
-                ...payload,       // Dados que acabamos de enviar
+                ...response.data, 
+                ...payload,       
                 subjectName: subjectObj ? subjectObj.name : 'Matéria Nova',
-                ativo: 1          // Garante que aparece na lista
+                ativo: 1 
             };
-
-            // Adiciona ao array local do Pinia
             this.userStudyRecords.push(newLocalRecord);
             
             console.log("Registro adicionado localmente com sucesso!");
@@ -534,7 +505,7 @@ export const useUserStore = defineStore('user', {
           incorrect_answers: updatedData.incorrect_answers // Atualiza respostas incorretas
         };
 
-        const response = await axios.put(`user-study-records/${recordId}`, payload);
+        const response = await api.put(`user-study-records/${recordId}`, payload);
 
         return response.data; // Retorna os dados atualizados para uso
       } catch (error) {
@@ -566,7 +537,7 @@ export const useUserStore = defineStore('user', {
 
       try {
         // 1. Deleta no Backend
-        const response = await axios.delete(`user-study-records/${recordId}`);
+        const response = await api.delete(`user-study-records/${recordId}`);
 
         // 2. OTIMIZAÇÃO AQUI: Atualiza a lista LOCALMENTE
         // Filtramos a lista para manter apenas os registros cujo ID seja DIFERENTE do ID deletado
@@ -574,7 +545,7 @@ export const useUserStore = defineStore('user', {
             (record) => record.id !== recordId
         );
 
-        console.log("Registro removido da lista local.");
+        // console.log("Registro removido da lista local.");
 
         return response.data;
 

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
+import api from '../services/api';
 
 export const useStudyStore = defineStore('study', {
     state: () => ({
@@ -17,7 +17,7 @@ export const useStudyStore = defineStore('study', {
     actions: {
         async fetchSubjects() {
             try {
-                const response = await axios.get('subjects');
+                const response = await api.get('subjects');
                 
                 this.subjectList = Array.isArray(response.data) ? response.data : [];
             } catch (error) {
