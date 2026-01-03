@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
-import axios from 'axios';
+// import axios from 'axios';
+import api from "../services/api";
+import { auth } from "../firebase";
 
 export const useAdminStore = defineStore('admin', {
     state: () => ({
@@ -31,10 +33,21 @@ export const useAdminStore = defineStore('admin', {
     },
 
     actions:{
+        async getAuthHeaders() {
+            const user = auth.currentUser;
+            if (!user) return {};
+            const token = await user.getIdToken();
+            return {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+        },
         async fetchUsers(page = 1) {
             this.isUsersLoading = true;
             try {
-                const response = await axios.get(`/users?page=${page}`);
+                const config = await this.getAuthHeaders();
+                const response = await api.get(`/users?page=${page}`, config);
                 this.users = response.data.data;
                 delete response.data.data;
                 this.pagination = response.data;
@@ -48,7 +61,8 @@ export const useAdminStore = defineStore('admin', {
         async fetchDashboardStats(){
             this.isLoading = true;
             try {
-                const response = await axios.get('/admin/stats');
+                const config = await this.getAuthHeaders();
+                const response = await api.get('/admin/stats', config);
                 this.dashboardStats = response.data;
             } catch (error) {
                 console.error('Erro ao buscar estatísticas do dashboard:', error);
@@ -59,7 +73,8 @@ export const useAdminStore = defineStore('admin', {
         async fetchStudySessionChartData() {
             this.isChartLoading = true;
             try {
-                const response = await axios.get('/admin/charts/study-sessions');
+                const config = await this.getAuthHeaders();
+                const response = await api.get('/admin/charts/study-sessions', config);
                 // Se a resposta vier vazia, preenche com dados padrão para não quebrar o gráfico
                 if (response.data && response.data.labels.length > 0) {
                     this.studySessionChartData = response.data;
@@ -76,7 +91,8 @@ export const useAdminStore = defineStore('admin', {
         async fetchCareerDistributionData() {
             this.isCareerChartLoading = true;
             try {
-                const response = await axios.get('/admin/charts/career-distribution');
+                const config = await this.getAuthHeaders();
+                const response = await api.get('/admin/charts/career-distribution', config);
                 this.careerDistributionChartData = response.data;
             } catch (error) {
                 console.error('Erro ao buscar dados de distribuição de carreiras:', error);
@@ -87,7 +103,8 @@ export const useAdminStore = defineStore('admin', {
         },
         async fetchUser(userId) {
             try {
-                const response = await axios.get(`/users/${userId}`);
+                const config = await this.getAuthHeaders();
+                const response = await api.get(`/users/${userId}`, config);
                 return response.data;
             } catch (error) {
                 console.error('Erro ao buscar usuário:', error);
@@ -95,7 +112,8 @@ export const useAdminStore = defineStore('admin', {
         },
         async updateUser(userId, userData) {
             try {
-                await axios.put(`/users/${userId}`, userData);
+                const config = await this.getAuthHeaders();
+                await axios.put(`/users/${userId}`, userData, config);
                 return true;
             } catch (error) {
                 console.error('Erro ao atualizar usuário:', error);
@@ -105,7 +123,8 @@ export const useAdminStore = defineStore('admin', {
         async deleteUser(userId){
             const currentPage = this.pagination.current_page || 1;
             try{
-                await axios.delete(`/users/${userId}`);
+                const config = await this.getAuthHeaders();
+                await api.delete(`/users/${userId}`, config);
 
                 this.fetchUsers(currentPage);
                 return true;
