@@ -1,22 +1,32 @@
 import axios from 'axios';
-import { auth } from '../firebase'; // Verifique o caminho do seu firebase.js
+import { auth } from '../firebase';
 
-// Criação da instância dedicada
 const api = axios.create({
-    // Aqui usamos a lógica de URL que estava no seu main.js
-    // baseURL: 'http://127.0.0.1:8000/api',
     baseURL: 'https://gerenciamento-de-estudo-api.vercel.app/api/api', 
-    
 });
 
-// Interceptor de Requisição (O "Pedágio" que insere o Token)
+// Função auxiliar para esperar o Firebase carregar
+const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            unsubscribe();
+            resolve(user);
+        }, reject);
+    });
+};
+
 api.interceptors.request.use(async (config) => {
-    const user = auth.currentUser;
+    // Tenta pegar o usuário atual, se for null, espera a inicialização
+    let user = auth.currentUser;
+    if (!user) {
+        user = await getCurrentUser();
+    }
 
     if (user) {
-        // Pega o token atualizado (se expirou, ele renova aqui)
         const token = await user.getIdToken();
         config.headers.Authorization = `Bearer ${token}`;
+    } else {
+        console.warn("Nenhum usuário logado encontrado para anexar o token.");
     }
 
     return config;
