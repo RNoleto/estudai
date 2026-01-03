@@ -143,6 +143,11 @@ useHead({
     { name: "keywords", content: "concursos públicos, escolha de carreira, preparação para concursos, planejamento de estudos, Estuday" }
   ]
 });
+
+async function handleLogout() {
+  await userStore.logout();
+  router.push('/login');
+}
 </script>
 
 <template>
@@ -160,6 +165,11 @@ useHead({
             </div>
           </div>
         </div>
+        <button @click="handleLogout"
+                class="w-full flex items-center justify-center gap-3 px-4 py-3 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl font-medium transition-colors duration-200">
+                <i class="fa-solid fa-sign-out-alt"></i>
+                <span>Sair da conta</span>
+              </button>
       </div>
 
       <!-- Main Content -->
