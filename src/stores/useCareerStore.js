@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import api from "../services/api";
+import axios from "axios";
 
 export const useCareerStore = defineStore('career', {
     state: () => ({
@@ -9,7 +10,7 @@ export const useCareerStore = defineStore('career', {
         //Função para buscar as carreiras da API
         async fetchCareers(){
             try {
-                const response = await api.get('careers');
+                const response = await axios.get('careers');
                 this.careers = response.data;
             } catch (error) {
                 console.error('Erro ao buscar carreiras:', error);
