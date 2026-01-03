@@ -2,6 +2,7 @@ import axios from 'axios';
 import { auth } from '../firebase';
 
 const api = axios.create({
+    // baseURL: 'http://127.0.0.1:8000/api', //Ambiente local
     baseURL: 'https://gerenciamento-de-estudo-api.vercel.app/api/api', 
 });
 
@@ -16,22 +17,18 @@ const getCurrentUser = () => {
 };
 
 api.interceptors.request.use(async (config) => {
-    // Tenta pegar o usuário atual, se for null, espera a inicialização
-    let user = auth.currentUser;
-    if (!user) {
-        user = await getCurrentUser();
-    }
+    const user = auth.currentUser || await new Promise((resolve) => {
+        const unsubscribe = auth.onAuthStateChanged((u) => {
+            unsubscribe();
+            resolve(u);
+        });
+    });
 
     if (user) {
         const token = await user.getIdToken();
         config.headers.Authorization = `Bearer ${token}`;
-    } else {
-        console.warn("Nenhum usuário logado encontrado para anexar o token.");
     }
-
     return config;
-}, (error) => {
-    return Promise.reject(error);
-});
+}, (error) => Promise.reject(error));
 
 export default api;

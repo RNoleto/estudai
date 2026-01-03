@@ -24,23 +24,25 @@ export const useUserStore = defineStore('user', {
   }),
   actions: {
     async fetchToken() {
-      const { getToken, isSignedIn } = useAuth();
       try {
-        if (isSignedIn.value) {
-          const token = await getToken.value();
+        const user = auth.currentUser;
+        if (user) {
+          const token = await user.getIdToken(true); // 'true' força a renovação se estiver perto de expirar
           this.token = token;
-          localStorage.setItem('token', token); // Armazena localmente para persistência
-          console.log("Token obtido no useUserStore:", token);
-          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Configura cabeçalhos globais
+          localStorage.setItem('token', token);
+          
+          api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          
+          console.log("Token populado no Pinia e Headers configurados.");
         } else {
-          console.warn("Usuário não está autenticado.");
+          console.warn("Usuário não está autenticado no Firebase.");
         }
       } catch (error) {
-        console.error("Erro ao buscar o token:", error);
+        console.error("Erro ao buscar o token no Firebase:", error);
       }
     },
     async initializeUser() {
-      // await this.fetchToken();
+      await this.fetchToken();
       await this.fetchUserId();
       await this.fetchUserData();
     },
@@ -57,7 +59,6 @@ export const useUserStore = defineStore('user', {
         console.error("Erro ao buscar o ID do usuário:", error);
       }
     },
-    //Buscar dados do usuario no banco de dados usando o ID do Firebase(firebase_uid)
     async fetchUserData() {
       if (!this.userId) {
         this.userId = localStorage.getItem('userId');
@@ -93,30 +94,55 @@ export const useUserStore = defineStore('user', {
       }
       // -------------------------
     },
+    // async register({ email, password, name }) {
+    //   const userCredential = await AuthService.register(email, password);
+    //   if (name) {
+    //     await updateProfile(userCredential.user, { displayName: name });
+    //   }
+    //   const idToken = await userCredential.user.getIdToken();
+    //   try {
+    //     const response = await axios.post('/users/sync-on-register', {},
+    //       {
+    //         headers: {
+    //           'Authorization': `Bearer ${idToken}`
+    //         }
+    //       }
+    //     );
+    //     // --- CÓDIGO NOVO PARA CONVERSÃO ---
+    //     if (window.dataLayer) {
+    //         window.dataLayer.push({
+    //             'event': 'sign_up', 
+    //             'user_email': 'email'
+    //         });
+    //     }
+    //     // ----------------------------------
+    //   } catch (error) {
+    //     console.error('Erro ao sincronizar usuário com o backend:', error.response?.data || error);
+    //   }
+    // },
     async register({ email, password, name }) {
       const userCredential = await AuthService.register(email, password);
+      const idToken = await userCredential.user.getIdToken();
       if (name) {
         await updateProfile(userCredential.user, { displayName: name });
       }
-      const idToken = await userCredential.user.getIdToken();
+      // Define os dados básicos no estado IMEDIATAMENTE
+      this.token = idToken;
+      this.userId = userCredential.user.uid; // Garante o UID para as rotas seguintes
+      localStorage.setItem('token', idToken);
+      localStorage.setItem('userId', this.userId);
+
       try {
-        const response = await axios.post('/users/sync-on-register', {},
-          {
-            headers: {
-              'Authorization': `Bearer ${idToken}`
-            }
-          }
-        );
-        // --- CÓDIGO NOVO PARA CONVERSÃO ---
-        if (window.dataLayer) {
-            window.dataLayer.push({
-                'event': 'sign_up', 
-                'user_email': 'email'
-            });
-        }
-        // ----------------------------------
+        // O interceptor do 'api' agora enviará o token, 
+        // o middleware injetará o uid, e o controller criará o usuário.
+        await api.post('/users/sync-on-register');
+
+        // Inicializa dados (agora o usuário existe no banco local)
+        await this.initializeUser();
+
+        router.push('/selecionar-carreira');
       } catch (error) {
-        console.error('Erro ao sincronizar usuário com o backend:', error.response?.data || error);
+        console.error('Erro no auto-sync:', error.response?.data || error);
       }
     },
     async loginWithGoogle() {
