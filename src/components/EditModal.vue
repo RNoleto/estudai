@@ -204,11 +204,13 @@ const saveChanges = async () => {
         <form @submit.prevent="saveChanges" class="font-normal">
           <div class="mb-4">
             <label for="subjectName" class="block text-sm font-medium text-gray-700">Matéria</label>
-            <ComboBox
-              :options="subjects" 
-              placeholder="Selecione uma matéria..." 
-              v-model="formData.subjectName"
-              class="block w-full" />
+            <Input 
+              v-model="formData.subjectName" 
+              type="text" 
+              id="subjectName" 
+              :disabled="true" 
+              class="bg-gray-100 cursor-not-allowed opacity-75" 
+            />
           </div>
           <div class="mb-4">
             <Input v-model="formData.topic" type="text" id="topic" showLabel="true" label="Tópico"/>
