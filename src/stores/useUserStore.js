@@ -513,7 +513,6 @@ export const useUserStore = defineStore('user', {
       }
     },
     async updateUserStudyRecord(recordId, updatedData) {
-
       if (!this.userId) {
         console.error("ID do usuário não encontrado.");
         return;
@@ -521,22 +520,38 @@ export const useUserStore = defineStore('user', {
 
       try {
         const payload = {
-          user_id: this.userId, // Mantém o ID do usuário
-          subject_id: updatedData.subject_id, // Atualiza o ID do assunto
-          topic: updatedData.topic, // Atualiza o tópico, se necessário
-          study_time: updatedData.study_time, // Valor imutável vindo do backend
-          total_pauses: updatedData.total_pauses, // Valor imutável vindo do backend
-          questions_resolved: updatedData.questions_resolved, // Atualiza questões resolvidas
-          correct_answers: updatedData.correct_answers, // Atualiza respostas corretas
-          incorrect_answers: updatedData.incorrect_answers // Atualiza respostas incorretas
+          user_id: this.userId,
+          subject_id: updatedData.subject_id,
+          topic: updatedData.topic,
+          study_time: updatedData.study_time,
+          total_pauses: updatedData.total_pauses,
+          questions_resolved: updatedData.questions_resolved,
+          correct_answers: updatedData.correct_answers,
+          incorrect_answers: updatedData.incorrect_answers,
+          notes: updatedData.notes
         };
 
         const response = await api.put(`user-study-records/${recordId}`, payload);
 
-        return response.data; // Retorna os dados atualizados para uso
+        const index = this.userStudyRecords.findIndex(r => r.id === recordId);
+
+        if (index !== -1) {
+          const subjectStore = useSubjectStore();
+          const subjectObj = subjectStore.subjects.find(s => s.id === payload.subject_id);
+
+          this.userStudyRecords[index] = {
+            ...this.userStudyRecords[index], 
+            ...response.data,                
+            ...payload,                     
+            subjectName: subjectObj ? subjectObj.name : this.userStudyRecords[index].subjectName 
+          };
+        }
+
+        return response.data;
+
       } catch (error) {
         console.error("Erro ao atualizar os dados de estudos no banco de dados:", error);
-        throw error; // Lança o erro para ser tratado no componente, se necessário
+        throw error;
       }
     },
     // async deleteUserStudyRecord(recordId) {
