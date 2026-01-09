@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCbj-twGxrMPWnxO-BmzS8ET_Nv8NDeQgA",
-    authDomain: "estuday-f8917.firebaseapp.com",
+    authDomain: "auth.estuday.com.br",
     projectId: "estuday-f8917",
     storageBucket: "estuday-f8917.firebasestorage.app",
     messagingSenderId: "925306273509",
