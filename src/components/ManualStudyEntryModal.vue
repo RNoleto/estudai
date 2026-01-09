@@ -19,7 +19,7 @@ const hours = ref('');
 const minutes = ref('');
 const totalQuestions = ref(0);
 const incorrectAnswers = ref(0);
-const questionsResolved = ref(null);
+const questionsResolved = ref('no');
 const pause = ref(null);
 const totalPauses = ref('null');
 
@@ -37,7 +37,7 @@ const resetForm = () => {
     minutes.value = '';
     totalQuestions.value = 0;
     incorrectAnswers.value = 0;
-    questionsResolved.value = null;
+    questionsResolved.value = 'no';
     pause.value = null;
     totalPauses.value = null;
 };

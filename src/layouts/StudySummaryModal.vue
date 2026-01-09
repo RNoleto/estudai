@@ -23,7 +23,7 @@ const formatedTime = computed(() => formatStudyTime(timerStore.finalElapsedTime)
 const totalPauses = computed(() => timerStore.finalTotalPausesLength);
 
 // Estado do modal
-const questionsResolved = ref(null);
+const questionsResolved = ref('no');
 const totalQuestions = ref(0);
 const incorrectAnswers = ref(0);
 const closeModal = () => {
@@ -78,7 +78,7 @@ const saveData = async () => {
 }
 
 const clearForm = () => {
-  questionsResolved.value = null;
+  questionsResolved.value = 'no';
   totalQuestions.value = 0;
   incorrectAnswers.value = 0;
 }
