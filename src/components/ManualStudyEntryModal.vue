@@ -133,7 +133,7 @@ const handleSave = () => {
 
         props.onSave(newRecord);
         showModal.value = true;
-        title.value = 'Successo';
+        title.value = 'Sucesso';
         type.value = 'success';
         message.value = 'Registro de estudo salvo com sucesso!';
         setTimeout(() => {
