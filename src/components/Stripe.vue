@@ -1,5 +1,5 @@
 <script setup>
-import axios from 'axios';
+import api from '../services/api';
 import Button from './ui/Button.vue';
 import { loadStripe } from '@stripe/stripe-js';
 import { useUser } from 'vue-clerk';
@@ -13,7 +13,7 @@ const clerkUserId = user?.value?.id; // Obtenha o ID do usuário do Clerk
 const handleCheckout = async () => {
     try {
         // Envie o clerk_user_id no corpo da requisição para criar a sessão
-        const { data } = await axios.post('/stripe/create-checkout', {
+        const { data } = await api.post('/stripe/create-checkout', {
             clerk_user_id: clerkUserId
         });
         if (data.sessionId) {
