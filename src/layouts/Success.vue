@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import axios from 'axios';
+import api from '../services/api';
 import { useRouter } from 'vue-router';
 import { useUser } from 'vue-clerk';
 
@@ -14,7 +14,7 @@ const stripeSubscriptionId = ref('');
 
 async function updateClerkMetadataOnServer(clerkUserId, stripeCustomerId, stripeSubscriptionId) {
     try {
-        const response = await axios.post('/update-clerk-metadata', {
+        const response = await api.post('/update-clerk-metadata', {
             clerk_user_id: clerkUserId,
             stripeCustomerId,
             stripeSubscriptionId,
@@ -32,7 +32,7 @@ onMounted(async () => {
     if (sessionId) {
         try {
             // Chama seu endpoint para confirmar a assinatura e recuperar os IDs do Stripe
-            const response = await axios.get(`/stripe/confirm-subscription?session_id=${sessionId}`);
+            const response = await api.get(`/stripe/confirm-subscription?session_id=${sessionId}`);
             console.log('response: ', response.data);
             if (response.data.message) {
                 confirmationMessage.value = "Assinatura feita com sucesso!";

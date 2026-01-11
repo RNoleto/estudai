@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios';
+import api from '../services/api';
 
 const form = ref({
   name: '',
@@ -16,7 +16,7 @@ const error = ref('');
 async function submitSupport() {
   try {
     error.value = '';
-    await axios.post('/support', form.value);
+    await api.post('/support', form.value);
     success.value = true;
 
     // Limpar os campos após enviar

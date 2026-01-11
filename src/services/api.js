@@ -2,8 +2,7 @@ import axios from 'axios';
 import { auth } from '../firebase';
 
 const api = axios.create({
-    // baseURL: 'http://127.0.0.1:8000/api', //Ambiente local
-    baseURL: 'https://gerenciamento-de-estudo-api.vercel.app/api/api', 
+    baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
 // Função auxiliar para esperar o Firebase carregar

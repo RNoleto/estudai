@@ -71,7 +71,7 @@ export const useUserStore = defineStore('user', {
 
       try {
         const userFirebaseUid = this.userId; 
-        const response = await axios.get(`user/${userFirebaseUid}`);
+        const response = await api.get(`user/${userFirebaseUid}`);
         
         const userData = response.data;
         

@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-// import axios from 'axios';
 import api from "../services/api";
 import { auth } from "../firebase";
 
@@ -113,7 +112,7 @@ export const useAdminStore = defineStore('admin', {
         async updateUser(userId, userData) {
             try {
                 const config = await this.getAuthHeaders();
-                await axios.put(`/users/${userId}`, userData, config);
+                await api.put(`/users/${userId}`, userData, config);
                 return true;
             } catch (error) {
                 console.error('Erro ao atualizar usuário:', error);
