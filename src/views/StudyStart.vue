@@ -4,7 +4,6 @@ import { onMounted, ref, computed, watch } from 'vue';
 import StudyCard from '../layouts/StudyCard.vue';
 import StudySummaryModal from '../layouts/StudySummaryModal.vue';
 
-import StudyNotes from '../components/StudyNotes.vue';
 
 import Input from '../components/ui/Input.vue';
 import Timer from '../components/ui/Timer.vue';
@@ -500,7 +499,7 @@ useHead({
 
         <!-- Right Column: Statistics and Records -->
         <div class="xl:col-span-2 flex flex-col space-y-4 h-fit">
-          <!-- <StudyNotes v-model="currentNotes" /> -->
+
           <!-- Today's Statistics -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
